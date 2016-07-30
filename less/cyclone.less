@@ -1,0 +1,87 @@
+.header {
+    .header__status {}
+    .header__version {
+        float: right;
+    }
+}
+
+.profileLink {
+    color: white;
+    cursor: pointer;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.timelog__entries {
+    margin: 0 auto;
+}
+
+.cyclone-table {
+    width: 100%;
+    border-collapse: collapse;
+    // hide the action per default
+    tr {
+
+        &.work {
+            background-color: lightyellow;
+            border-bottom: 1px solid orange;
+
+            &.done {
+                background-color: #c6ffc6;
+                border-bottom: 1px solid darkgreen;
+            }
+        }
+
+        &.private {
+            background-color: lightblue;
+            border-bottom: 1px solid blue;
+        }
+
+
+        .show-on-hover,
+        .options {
+            //display: none;
+            //visibility: hidden;
+            transition: opacity 400ms ease-in-out;
+            opacity: 0;
+        }
+        &:hover .show-on-hover,
+        &:hover .options {
+            //display: block;
+            //visibility: visible;
+            opacity: 1;
+        }
+
+        .options {
+            md-checkbox, md-switch, md-fab {
+                margin: 0 !important;
+            }
+        }
+
+        .duration {
+            text-align:center;
+        }
+
+        // Don't show the error spacer
+        .md-errors-spacer {
+            display: none;
+        }
+    }
+}
+
+.footer-stats {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+}
+.stats-entry {
+    padding: 10px;
+    text-align: center;
+}
+
+.page {
+    padding-bottom: 100px;
+}

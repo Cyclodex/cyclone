@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>Cyclone - v0.19 - Codepen clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDsWGJoeAa_1puNxV5gt0WMrtN12JIEKTk",
+            authDomain: "cyclone-806dd.firebaseapp.com",
+            databaseURL: "https://cyclone-806dd.firebaseio.com",
+            storageBucket: "cyclone-806dd.appspot.com",
+        };
+        firebase.initializeApp(config);
+    </script>
+
+
+    <link rel="stylesheet" href="//codepen.io/assets/reset/normalize.css">
+
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet prefetch" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet prefetch" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet prefetch" href="cyclone.css">
+
+</head>
+
+<body translate="no">
+
+<div ng-app="cycloneApp" class="page page--timelog">
+    <md-toolbar ng-controller="ConnectionCtrl">
+        <div class="header__status md-toolbar-tools">
+            <span>Status:&nbsp;</span>
+            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" class="md-accent" md-diameter="20px"></md-progress-circular>
+            <span class="status">
+                {{ connection }}
+            </span>
+            <span flex></span>
+            <div class="header__version right">
+                Version: {{ version }} <strong>BETA</strong>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <div class="md-primary">
+        <div ng-controller="ProfileCtrl" class="card-content white-text">
+            <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
+                <md-icon>account_circle</md-icon>
+                <span>{{ user }}</span>
+            </a>
+            <md-content ng-show="ProfileOpen || !user" id="ProfileOpen">
+                <div>
+
+                    <div id="account-details" ng-show="userIsAdmin"></div>
+
+                    <md-grid-list md-cols="5" md-row-height="4:1">
+                        <md-grid-tile>
+                            <a id="loginButton"
+                             href="http://s.codepen.io/Cyclodex/debug/e26f074cbffc4ad508239632a916df45"
+                             target="_parent"
+                             class=""
+                             ng-show="!user">
+                                <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
+                            </a>
+                            <a id="logoutButton"
+                             ng-click="logout()"
+                             class=""
+                             ng-show="user">
+                                <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
+                            </a>
+                        </md-grid-tile>
+                    </md-grid-list>
+                </div>
+            </md-content>
+
+            <!--Data: <pre>{{ profile | json }}</pre>-->
+        </div>
+    </div>
+
+    <div ng-controller="TimeCtrl"
+     ng-show="user"
+     class="container"
+     layout="row" layout-align="center center">
+        <div flex=90 flex-gt-md=80>
+            <!-- Add new entry -->
+            <md-card>
+                <md-card-title>
+                    <div class="md-headline">
+
+                        <span>What have you done in the last</span>
+                        <span ng-if="currentDurationHasHours">
+              <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
+            </span>
+
+                        <span ng-if="!currentDurationHasHours">
+              <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
+            </span>
+                    </div>
+                </md-card-title>
+                <md-card-content>
+                    <form ng-submit="addEntry()" layout="row">
+                        <md-input-container flex="33">
+                            <input id="newTaskText"
+                             type="text"
+                             class="validate"
+                             ng-model="newEntryText"
+                             autofocus
+                             focus-on="newTaskText">
+                            <label for="newTaskText">Description</label>
+                        </md-input-container>
+                        <md-input-container flex="20">
+                            <input id="newTaskProject"
+                             type="text"
+                             class="validate"
+                             ng-model="newEntryProject">
+                            <label for="newTaskProject">Project</label>
+                        </md-input-container>
+
+                        <md-input-container flex="15">
+                            <input type="time"
+                             id="newTaskManualTime"
+                             name="input"
+                             ng-model="newEntryManualTime.value"
+                             placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                            <label for="newTaskManualTime">Manual time</label>
+                        </md-input-container>
+                        <div class="flex">
+                            <a class=""
+                             ng-click="addEntry()">
+                                <md-button class="md-fab md-primary" aria-label="Add Entry">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                            </a>
+                        </div>
+
+                        <button type="submit" class="submitbutton hide">Submit</button>
+                    </form>
+                </md-card-content>
+            </md-card>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h1 class="inline">Timelog </h1>
+                    <span flex></span>
+                    <h1 class="inline">{{today | date : "d. MMM yyyy"}}</h1>
+                </div>
+            </md-toolbar>
+
+            <!-- Show table of entries-->
+            <md-card class="timelog__entries">
+                <table class="cyclone-table">
+                    <tr ng-repeat="entry in entries"
+                     class="row"
+                     ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
+                      {true: 'done', false: ''}[entry.checked == true]
+                      ]">
+                        <td class="text">
+                            <md-input-container>
+                                <input ng-model="entry.text"
+                                 ng-change="entries.$save(entry)"
+                                 id="text"
+                                 type="text"
+                                 class="validate222"
+                                 aria-label="Description"/>
+                            </md-input-container>
+                            <md-input-container>
+                                <input ng-model="entry.project"
+                                 ng-change="entries.$save(entry)"
+                                 id="project"
+                                 type="text"
+                                 class="validate"
+                                 aria-label="project"/>
+                            </md-input-container>
+                        </td>
+
+
+                        <td class="timestamp">
+                            {{ entry.timestamp | date:'HH:mm:ss' }}
+                        </td>
+                        <td class="duration">
+                            <div>
+                                <!-- TODO: manual time entries seem to not update these calcultaions -->
+                                <!-- Timezone (=0) is important, or the hours will not be correct! -->
+                                <!--
+                                  <div ng-show="{{ ( entry.timestampDuration / 1000 / 60 / 60 | number : 1) >= 1.0 }}">
+                                    {{ entry.timestampDuration | date : "H'h' m'min'" : '+0000'}}<br>
+                                  </div>
+
+                                  <div ng-hide="{{ ( entry.timestampDuration / 1000 / 60 / 60 | number : 1) >= 1.0 }}">
+                                    {{ entry.timestampDuration | date : "m:ss" :  '+0000'}} Minutes<br>
+                                  </div>
+                                -->
+                                <div>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</div>
+                                <!-- timediff / miliseconds (1000) / minutes(60) / calcuate decimal hours (60) -->
+                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+
+                            </div>
+                        </td>
+
+                        <!-- entry actions -->
+                        <td class="options">
+                            <div layout="row" layout=row layout-align="space-around center">
+                                <div>
+
+                                    <md-checkbox ng-model="entry.checked"
+                                     aria-label="checked"
+                                     ng-change="entries.$save(entry)"
+                                     class="md-primary">
+                                        Done
+                                    </md-checkbox>
+                                </div>
+                                <div>
+                                    <md-switch ng-model="entry.type"
+                                     aria-label="Work hours"
+                                     ng-true-value="'work'"
+                                     ng-false-value="'private'"
+                                     class="md-primary"
+                                     ng-change="entries.$save(entry)">
+                                        {{ entry.type }}
+                                    </md-switch>
+                                </div>
+                                <div>
+                                    <md-button ng-click="entries.$remove(entry)"
+                                     class="md-fab md-mini"
+                                     aria-label="Delete entry">
+                                        <md-tooltip md-direction="top">
+                                            Delete
+                                        </md-tooltip>
+                                        <md-icon>remove</md-icon>
+                                    </md-button>
+                                </div>
+                        </td>
+                    </tr>
+                </table>
+            </md-card>
+        </div>
+
+        <!-- <pre>{{ data | json }}</pre>
+        <pre>{{ profile | json }}</pre> -->
+    </div>
+
+    <md-toolbar ng-controller="StatsCtrl"
+     ng-show="user"
+     class="container footer-stats md-toolbar-tools md-accent"
+     layout="row" layout-align="center center">
+        <div class="stats-entry">
+            <h2><strong>Project stats:</strong></h2>
+        </div>
+        <div ng-repeat="entry in stats" class="stats-entry">
+            <strong>{{entry.project}}</strong><br>{{entry.duration | date : "H'h' m'min'" : '+0000'}}
+        </div>
+        <div>
+            <h2><strong>Total: {{statsTotal | date : "H'h' m'min'" : '+0000'}}</strong></h2>
+        </div>
+    </md-toolbar>
+
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+<script src="cyclone.js"></script>
+
+
+</body>
+</html>

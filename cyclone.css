@@ -1,0 +1,63 @@
+.header .header__version {
+    float: right;
+}
+.profileLink {
+    color: white;
+    cursor: pointer;
+}
+.inline {
+    display: inline-block;
+}
+.timelog__entries {
+    margin: 0 auto;
+}
+.cyclone-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.cyclone-table tr.work {
+    background-color: lightyellow;
+    border-bottom: 1px solid orange;
+}
+.cyclone-table tr.work.done {
+    background-color: #c6ffc6;
+    border-bottom: 1px solid darkgreen;
+}
+.cyclone-table tr.private {
+    background-color: lightblue;
+    border-bottom: 1px solid blue;
+}
+.cyclone-table tr .show-on-hover,
+.cyclone-table tr .options {
+    -webkit-transition: opacity 400ms ease-in-out;
+    transition: opacity 400ms ease-in-out;
+    opacity: 0;
+}
+.cyclone-table tr:hover .show-on-hover,
+.cyclone-table tr:hover .options {
+    opacity: 1;
+}
+.cyclone-table tr .options md-checkbox,
+.cyclone-table tr .options md-switch,
+.cyclone-table tr .options md-fab {
+    margin: 0 !important;
+}
+.cyclone-table tr .duration {
+    text-align: center;
+}
+.cyclone-table tr .md-errors-spacer {
+    display: none;
+}
+.footer-stats {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+}
+.stats-entry {
+    padding: 10px;
+    text-align: center;
+}
+.page {
+    padding-bottom: 100px;
+}

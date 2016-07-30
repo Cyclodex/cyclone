@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="robots" content="noindex">
+
+    <title>Cyclone - Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDsWGJoeAa_1puNxV5gt0WMrtN12JIEKTk",
+            authDomain: "cyclone-806dd.firebaseapp.com",
+            databaseURL: "https://cyclone-806dd.firebaseio.com",
+            storageBucket: "cyclone-806dd.appspot.com",
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css">
+
+    <link rel="stylesheet" href="//codepen.io/assets/reset/normalize.css">
+
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet prefetch" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet prefetch" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet prefetch" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css">
+
+
+</head>
+<body>
+
+<h1>Welcome to the login for Cyclone!</h1>
+<div id="firebaseui-auth-container"></div>
+
+<script>
+    // FirebaseUI config.
+    var uiConfig = {
+        'signInSuccessUrl': 'index.html',
+        'signInOptions': [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+            //firebase.auth.GithubAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID
+        ],
+        // Terms of service url.
+        'tosUrl': '',
+    };
+
+    // Initialize the FirebaseUI Widget using Firebase.
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+</script>
+
+</body>
+</html>
