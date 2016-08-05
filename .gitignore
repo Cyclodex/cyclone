@@ -3,3 +3,9 @@ node_modules
 
 # Ignore php storm
 .idea
+
+# Firebase related excludes
+public/*
+.firebaserc
+database.rules.json
+firebase.json
