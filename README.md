@@ -17,6 +17,6 @@ All browsers supporting HTML5 - time input fields
 
 The manual time input has limited functionality depending on Browser:
 
-Chrome: Works nicely!
-Safari & FF: Works if entered correctly (hh:mm)
-IE: unclear
+* **Chrome:** Works nicely!
+* **Safari & FF:** Works if entered correctly (hh:mm)
+* **IE:** unclear
