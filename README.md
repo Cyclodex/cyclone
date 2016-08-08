@@ -6,22 +6,17 @@ Simple time log tool.
 **Fabian Gander** (gander@jumps.ch) | **Cyclodex** (cyclodex@nothing.ch)
 
 ##Date:
-30.07.2016 - Initial git version migrated away from codepen.
+30.07.2016 - Initial version - see CHANGELOG
 
-## History
-Last codepen version was:
- * http://codepen.io/Cyclodex/details/d279d4a70473a392db655751ad0ccd63/
- 
- 
-## CHANGELOG from Codepen
+##Supported Browsers
 
-- Changed data entries to be saved under user (first part of email address).
-- Making Project "break" adding automatically "private" entries.
-- Fixed: Summary stats which broke because of user change
+Newest version of modern browsers.
 
-TODO for next version:
- * check script version which we are loading now.
- * fix issues if manual entry is the first one (and there are others)
- * clone entry?
- * stats (daily, weekly, monthly?)
- * show old entries
+### Manual time input:
+All browsers supporting HTML5 - time input fields
+
+The manual time input has limited functionality depending on Browser:
+
+Chrome: Works nicely!
+Safari & FF: Works if entered correctly (hh:mm)
+IE: unclear
