@@ -70,7 +70,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.20";
+        $scope.version = "0.21";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
@@ -162,16 +162,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                     console.log("The read failed: " + errorObject.code);
                 });
 
-
-
-
-
-
-
-
-
-
-
                 updateDurations();
 
             } else {
@@ -188,7 +178,14 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
             var duration = (timestamp - $scope.lastEntryTimestamp);
             var start = $scope.lastEntryTimestamp;
 
-            // But it can be that we have set a manual one, verify that it is set and not null!
+            // If the form is not valid, don't add content.
+            // TODO: we probably should display a information that it was not added
+            // The input field which is invalid however should be marked red already.
+            if ($scope.addEntryForm.$invalid){
+                return false;
+            }
+
+            // Check if we need to add some manual time.
             if ($scope.newEntryManualTime !== undefined &&
                 $scope.newEntryManualTime.value !== undefined &&
                 $scope.newEntryManualTime.value !== null
