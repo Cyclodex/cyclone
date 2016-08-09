@@ -213,11 +213,13 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             }
 
-            // check if the entry should be marked as private / break
+            // Check if the entry should be marked as private (break)
             var newEntryType = 'work';
-            if ($scope.newEntryProject == 'break') {
+            var breakMatches = $scope.newEntryProject.match(/break/i);
+            if (breakMatches) {
                 newEntryType = 'private';
             }
+
             //
             // ADD new entry into DB
             //
@@ -226,7 +228,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 project: $scope.newEntryProject,
                 checked: false,
                 type: newEntryType,
-                timestamp: timestamp, // we don't want miliseconds - just seconds! (rounds it as well),
+                timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
                 timestampStart: start,
                 timestampDuration: duration,
                 order: -timestamp,
