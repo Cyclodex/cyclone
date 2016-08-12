@@ -8,6 +8,12 @@ Simple time log tool.
 ##Date:
 30.07.2016 - Initial version - see CHANGELOG
 
+
+## Documentation
+* [CHANGELOG](CHANGELOG.md)
+* [TODO](TODO.md)
+
+
 ##Supported Browsers
 
 Newest version of modern browsers.
