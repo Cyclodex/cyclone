@@ -18,9 +18,6 @@
         firebase.initializeApp(config);
     </script>
 
-
-    <link rel="stylesheet" href="//codepen.io/assets/reset/normalize.css">
-
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
@@ -57,9 +54,7 @@
             </a>
             <md-content ng-show="ProfileOpen || !user" id="ProfileOpen">
                 <div>
-
                     <div id="account-details" ng-show="userIsAdmin"></div>
-
                     <md-grid-list md-cols="5" md-row-height="4:1">
                         <md-grid-tile>
                             <a id="loginButton"
@@ -93,15 +88,13 @@
             <md-card>
                 <md-card-title>
                     <div class="md-headline">
-
                         <span>What have you done in the last</span>
                         <span ng-if="currentDurationHasHours">
-              <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-            </span>
-
+                            <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
+                        </span>
                         <span ng-if="!currentDurationHasHours">
-              <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-            </span>
+                            <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
+                        </span>
                     </div>
                 </md-card-title>
                 <md-card-content>
@@ -112,14 +105,16 @@
                              class="validate"
                              ng-model="newEntryText"
                              autofocus
-                             focus-on="newTaskText">
+                             focus-on="newTaskText"
+                             aria-label="Description text of new task">
                             <label for="newTaskText">Description</label>
                         </md-input-container>
                         <md-input-container flex="20">
                             <input id="newTaskProject"
                              type="text"
                              class="validate"
-                             ng-model="newEntryProject">
+                             ng-model="newEntryProject"
+                             aria-label="Project name of new task">
                             <label for="newTaskProject">Project</label>
                         </md-input-container>
 
@@ -159,7 +154,8 @@
                      class="row"
                      ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
                       {true: 'done', false: ''}[entry.checked == true]
-                      ]">
+                      ]"
+                    >
                         <td class="text">
                             <md-input-container>
                                 <input ng-model="entry.text"
@@ -185,21 +181,9 @@
                         </td>
                         <td class="duration">
                             <div>
-                                <!-- TODO: manual time entries seem to not update these calcultaions -->
-                                <!-- Timezone (=0) is important, or the hours will not be correct! -->
-                                <!--
-                                  <div ng-show="{{ ( entry.timestampDuration / 1000 / 60 / 60 | number : 1) >= 1.0 }}">
-                                    {{ entry.timestampDuration | date : "H'h' m'min'" : '+0000'}}<br>
-                                  </div>
-
-                                  <div ng-hide="{{ ( entry.timestampDuration / 1000 / 60 / 60 | number : 1) >= 1.0 }}">
-                                    {{ entry.timestampDuration | date : "m:ss" :  '+0000'}} Minutes<br>
-                                  </div>
-                                -->
                                 <div>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</div>
                                 <!-- timediff / miliseconds (1000) / minutes(60) / calcuate decimal hours (60) -->
                                 <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
-
                             </div>
                         </td>
 
@@ -207,7 +191,6 @@
                         <td class="options">
                             <div layout="row" layout=row layout-align="space-around center">
                                 <div>
-
                                     <md-checkbox ng-model="entry.checked"
                                      aria-label="checked"
                                      ng-change="entries.$save(entry)"
@@ -235,6 +218,7 @@
                                         <md-icon>remove</md-icon>
                                     </md-button>
                                 </div>
+                            </div>
                         </td>
                     </tr>
                 </table>

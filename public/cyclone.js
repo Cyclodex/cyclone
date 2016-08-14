@@ -131,9 +131,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
             if (user) {
                 // We save the entries in the current week and day, but most important by every user ()
                 var user = user.email.substring(0, user.email.indexOf("@"));
-                console.log(user);
                 var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-                console.log(ref);
                 // Order the query, from recent to older entries
                 // However this only works withthe orderBy in the template right now.
                 var queryRef = ref.orderByChild("order");
