@@ -396,9 +396,19 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                         var obj = {};
                         obj["project"] = key;
                         obj["duration"] = statsCollection[key];
+
+                        // Check if its a break an mark it as such
+                        var breakMatches = key.match(/break/i);
+                        if (breakMatches) {
+                            obj["break"] = true;
+                        } else {
+                            // Create the sum of all hours for this day
+                            // This does not contain the break hours
+                            $scope.statsTotal += statsCollection[key];
+                        }
+
                         $scope.stats.push(obj);
-                        // Create the sum of all hours for this day
-                        $scope.statsTotal += statsCollection[key];
+
                     };
 
                 }, function (errorObject) {

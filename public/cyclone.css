@@ -74,3 +74,8 @@
 .page {
     padding-bottom: 100px;
 }
+
+/* Project styles */
+.project--break {
+    color: #3f51b5;
+}

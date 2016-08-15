@@ -237,7 +237,7 @@
         <div class="stats-entry">
             <h2><strong>Project stats:</strong></h2>
         </div>
-        <div ng-repeat="entry in stats" class="stats-entry">
+        <div ng-repeat="entry in stats" class="stats-entry project--{{entry.project}}" ng-class="[{true: 'project--break', false: 'private'}[entry.break == true]]">
             <strong>{{entry.project}}</strong><br>{{entry.duration | date : "H'h' m'min'" : '+0000'}}
         </div>
         <div>

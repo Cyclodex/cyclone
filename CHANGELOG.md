@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.22 - 15.08.2016
+* Fixed rendering issues (#4)
+* All entries which contain "break" as project name will not count as total hours (#3)
 
 ## 0.21
 * Improved the time validation on manual time input

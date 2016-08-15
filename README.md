@@ -1,6 +1,6 @@
 # Cyclone
 
-Simple time log tool.
+Simple web time log tool.
 
 ## Description
 
@@ -14,6 +14,7 @@ Cyclone allows you to track your tasks during a day.
  * simple email/password account
  * google account
 
+Firebase is used as Database
 
 ##Author
 **Fabian Gander** (gander@jumps.ch) aka **Cyclodex** (cyclodex@nothing.ch)
