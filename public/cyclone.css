@@ -11,41 +11,54 @@
 .timelog__entries {
     margin: 0 auto;
 }
+.time-information > div {
+    padding: 10px;
+    display: inline-block;
+}
 .cyclone-table {
     width: 100%;
     border-collapse: collapse;
+    display: table;
 }
-.cyclone-table tr.work {
+.cyclone-table > div {
+    display: table-row;
+}
+.cyclone-table > div > div {
+    display: table-cell;
+    vertical-align: middle;
+    /** make this on mobile 33% **/
+}
+.cyclone-table .work {
     background-color: lightyellow;
     border-bottom: 1px solid orange;
 }
-.cyclone-table tr.work.done {
+.cyclone-table .work.done {
     background-color: #c6ffc6;
     border-bottom: 1px solid darkgreen;
 }
-.cyclone-table tr.private {
+.cyclone-table .private {
     background-color: lightblue;
     border-bottom: 1px solid blue;
 }
-.cyclone-table tr .show-on-hover,
-.cyclone-table tr .options {
+.cyclone-table .show-on-hover,
+.cyclone-table .options > div {
     -webkit-transition: opacity 400ms ease-in-out;
     transition: opacity 400ms ease-in-out;
     opacity: 0;
 }
-.cyclone-table tr:hover .show-on-hover,
-.cyclone-table tr:hover .options {
+.cyclone-table :hover .show-on-hover,
+.cyclone-table :hover .options > div {
     opacity: 1;
 }
-.cyclone-table tr .options md-checkbox,
-.cyclone-table tr .options md-switch,
-.cyclone-table tr .options md-fab {
+.cyclone-table .options md-checkbox,
+.cyclone-table .options md-switch,
+.cyclone-table .options md-fab {
     margin: 0 !important;
 }
-.cyclone-table tr .duration {
+.cyclone-table .duration {
     text-align: center;
 }
-.cyclone-table tr .md-errors-spacer {
+.cyclone-table .md-errors-spacer {
     display: none;
 }
 .footer-stats {

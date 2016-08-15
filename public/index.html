@@ -149,14 +149,14 @@
 
             <!-- Show table of entries-->
             <md-card class="timelog__entries">
-                <table class="cyclone-table">
-                    <tr ng-repeat="entry in entries"
+                <div class="cyclone-table">
+                    <div ng-repeat="entry in entries"
                      class="row"
                      ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
                       {true: 'done', false: ''}[entry.checked == true]
                       ]"
                     >
-                        <td class="text">
+                        <div class="text">
                             <md-input-container>
                                 <input ng-model="entry.text"
                                  ng-change="entries.$save(entry)"
@@ -173,22 +173,23 @@
                                  class="validate"
                                  aria-label="project"/>
                             </md-input-container>
-                        </td>
+                        </div>
 
-
-                        <td class="timestamp">
-                            {{ entry.timestamp | date:'HH:mm:ss' }}
-                        </td>
-                        <td class="duration">
-                            <div>
-                                <div>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</div>
-                                <!-- timediff / miliseconds (1000) / minutes(60) / calcuate decimal hours (60) -->
-                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                        <div class="time-information">
+                            <div class="timestamp">
+                                {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
-                        </td>
+                            <div class="duration">
+                                <div>
+                                    <div>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</div>
+                                    <!-- timediff / miliseconds (1000) / minutes(60) / calcuate decimal hours (60) -->
+                                    <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- entry actions -->
-                        <td class="options">
+                        <div class="options">
                             <div layout="row" layout=row layout-align="space-around center">
                                 <div>
                                     <md-checkbox ng-model="entry.checked"
@@ -219,9 +220,9 @@
                                     </md-button>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
             </md-card>
         </div>
 
