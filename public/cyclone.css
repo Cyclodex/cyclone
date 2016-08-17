@@ -64,18 +64,31 @@
 .footer-stats {
     position: fixed;
     bottom: 0;
-    height: 50px;
     width: 100%;
+    height: 90px;
+    max-height: none;
+}
+.stats-title {
+    text-align: right;
+    padding-right: 20px;
+    border-right: 1px solid white;
 }
 .stats-entry {
     padding: 10px;
     text-align: center;
 }
+.stats-entry > div {
+    height: 25px;
+}
+.stats-total {
+    text-align: right;
+    padding-left: 20px;
+    border-left: 1px solid white;
+}
 .page {
     padding-bottom: 100px;
 }
-
-/* Project styles */
-.project--break {
+/* the private time entries look different */
+.footer-stats__private:last-child {
     color: #3f51b5;
 }

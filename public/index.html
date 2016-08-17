@@ -234,14 +234,20 @@
      ng-show="user"
      class="container footer-stats md-toolbar-tools md-accent"
      layout="row" layout-align="center center">
-        <div class="stats-entry">
-            <h2><strong>Project stats:</strong></h2>
+        <div class="stats-title">
+            <div><strong>Project:</strong></div>
+            <div>Work time:</div>
+            <div class="footer-stats__private">Private time:</div>
         </div>
         <div ng-repeat="entry in stats" class="stats-entry project--{{entry.project}}" ng-class="[{true: 'project--break', false: 'private'}[entry.break == true]]">
-            <strong>{{entry.project}}</strong><br>{{entry.duration | date : "H'h' m'min'" : '+0000'}}
+            <div><strong>{{entry.project}}</strong></div>
+            <div>{{entry.durationWork | date : "H'h' m'min'" : '+0000'}}</div>
+            <div class="footer-stats__private">{{entry.durationPrivate | date : "H'h' m'min'" : '+0000'}}</div>
         </div>
-        <div>
-            <h2><strong>Total: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</strong></h2>
+        <div class="stats-total">
+            <div><strong>TOTAL:</strong></div>
+            <div>{{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
+            <div class="footer-stats__private">{{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
         </div>
     </md-toolbar>
 

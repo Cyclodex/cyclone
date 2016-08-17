@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.23 - 17.08.2016
+* Project and day hours are now separated for work / private types. (#9)
+
 ## 0.22 - 15.08.2016
 * Fixed rendering issues (#4)
 * All entries which contain "break" as project name will not count as total hours (#3)
