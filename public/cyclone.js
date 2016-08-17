@@ -349,22 +349,23 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                 queryRef.on("value", function(snapshot) {
                     // TODO: perhaps we need to check if really an entry was changed (not text only)
                     // Clean up the stats first (so we can recalculate them all)
-                    var statsCollection = [];
+                    var statsCollectionWork = [];
                     snapshot.forEach(function(data) {
-                        if (statsCollection[data.val().project] === undefined) {
-                            statsCollection[data.val().project] = 0;
+                        if (statsCollectionWork[data.val().project] === undefined) {
+                            statsCollectionWork[data.val().project] = 0;
                         }
                         // Sum up the durations of every project
-                        statsCollection[data.val().project] += data.val().timestampDuration;
+                        statsCollectionWork[data.val().project] += data.val().timestampDuration;
                     });
 
                     $scope.stats = [];
-                    $scope.statsTotal = 0;
+                    $scope.statsTotalWork = 0;
+                    $scope.statsTotalPrivate = 0;
                     // Iterate over the object and give it to template (scope)
-                    for (var key in statsCollection) {
+                    for (var key in statsCollectionWork) {
                         var obj = {};
                         obj["project"] = key;
-                        obj["duration"] = statsCollection[key];
+                        obj["duration"] = statsCollectionWork[key];
 
                         // Check if its a break an mark it as such
                         var breakMatches = key.match(/break/i);
@@ -373,7 +374,8 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                         } else {
                             // Create the sum of all hours for this day
                             // This does not contain the break hours
-                            $scope.statsTotal += statsCollection[key];
+                            $scope.statsTotalWork += statsCollectionWork[key];
+                            $scope.statsTotalPrivate += statsCollectionWork[key];
                         }
 
                         $scope.stats.push(obj);
