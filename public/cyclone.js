@@ -1,7 +1,7 @@
 /**
  * Cyclone app
  *
- * Created by cyclodex on 30.07.16.
+ * Created by Cyclodex
  */
 var app = angular.module("cycloneApp", ["firebase", 'ngMaterial']);
 
@@ -70,7 +70,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.22 | 15.08.2016";
+        $scope.version = "0.22 | 15.8.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
@@ -343,38 +343,7 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                 var user = user.email.substring(0, user.email.indexOf("@"));
                 // We save the entries in the current week and day
                 var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-                // TODO: Verify with previous versions (like 0.14) if this is correct.
-                var queryRef = ref.orderByChild("project");
-                queryRef.on("value", function(snapshot) {
-                    // TODO: perhaps we need to check if really an entry was changed (not text only)
-                    // Clean up the stats first (so we can recalculate them all)
-                    var statsCollection = [];
-                    snapshot.forEach(function(data) {
-                        if (statsCollection[data.val().project] === undefined) {
-                            statsCollection[data.val().project] = 0;
-                        }
-                        // Sum up the durations of every project
-                        statsCollection[data.val().project] += data.val().timestampDuration;
-                    });
-
-                    $scope.stats = [];
-                    $scope.statsTotal = 0;
-                    // Iterate over the object and give it to template (scope)
-                    for (var key in statsCollection) {
-                        var obj = {};
-                        obj["project"] = key;
-                        obj["duration"] = statsCollection[key];
-                        $scope.stats.push(obj);
-                        // Create the sum of all hours for this day
-                        $scope.statsTotal += statsCollection[key];
-                    };
-
-                }, function(errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
-
-
-                // Order the queryby project
+                // Order the query by project
                 var queryRef = ref.orderByChild("project");
 
                 queryRef.on("value", function(snapshot) {
