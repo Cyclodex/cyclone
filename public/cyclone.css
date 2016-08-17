@@ -77,6 +77,8 @@
     padding: 10px;
     text-align: center;
 }
+.stats-title > div,
+.stats-total > div,
 .stats-entry > div {
     height: 25px;
 }

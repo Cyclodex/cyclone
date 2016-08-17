@@ -301,6 +301,12 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
         } // End of ADD
 
+        // Clone text and project to current timer
+        $scope.cloneEntry = function() {
+            $scope.newEntryText = this.entry.text;
+            $scope.newEntryProject = this.entry.project;
+        }
+
         // Update entries after saving a manual entry
         function updateEntries() {
             // change a message and save it

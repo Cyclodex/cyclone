@@ -162,7 +162,7 @@
                                  ng-change="entries.$save(entry)"
                                  id="text"
                                  type="text"
-                                 class="validate222"
+                                 class="validate"
                                  aria-label="Description"/>
                             </md-input-container>
                             <md-input-container>
@@ -210,13 +210,24 @@
                                     </md-switch>
                                 </div>
                                 <div>
+                                    <a class=""
+                                       ng-click="cloneEntry()">
+                                        <md-button class="md-fab md-mini" aria-label="Clone Entry">
+                                            <md-tooltip md-direction="top">
+                                                Clone project & description to current timer
+                                            </md-tooltip>
+                                            <md-icon>content_copy</md-icon>
+                                        </md-button>
+                                    </a>
+                                </div>
+                                <div>
                                     <md-button ng-click="entries.$remove(entry)"
                                      class="md-fab md-mini"
                                      aria-label="Delete entry">
                                         <md-tooltip md-direction="top">
                                             Delete
                                         </md-tooltip>
-                                        <md-icon>remove</md-icon>
+                                        <md-icon>delete_forever</md-icon>
                                     </md-button>
                                 </div>
                             </div>

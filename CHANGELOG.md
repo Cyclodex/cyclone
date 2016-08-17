@@ -1,6 +1,7 @@
 # CHANGELOG
 ## 0.23 - 17.08.2016
-* Project and day hours are now separated for work / private types. (#9)
+* Enhancement: Project and day hours are now separated for work / private types. (#9)
+* New feature: New possibility to clone project and description from an existing entry. (#1)
 
 ## 0.22 - 15.08.2016
 * Fixed rendering issues (#4)
