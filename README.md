@@ -7,8 +7,9 @@ Simple web time log tool.
 Cyclone allows you to track your tasks during a day.
 
 * **Grouping** possible with project name
-* **Breaks** can be switched per GUI or as project "break"
+* **Work/Private** separate your entries, which one do you wont as count for work time.
 * **Tracked** times can be marked as "done" with the checkbox.
+* **Summary** will show you how much you already worked on work/private projects.
 
 **Access** is done with authentication:
  * simple email/password account

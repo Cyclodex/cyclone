@@ -16,6 +16,4 @@ Change firebase permissions so every user can access only his data
 
 ##More ideas
  * Show entries of this week, not only today
- * fix issues if manual entry is the first one (and there are others)
- * clone entry?
  * stats (weekly, monthly?)
