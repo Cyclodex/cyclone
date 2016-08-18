@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.24 - 18.08.2016
+* Added a favicon to represent the cyclone better. (#7)
+
 ## 0.23 - 17.08.2016
 * Enhancement: Project and day hours are now separated for work / private types. (#9)
 * New feature: New possibility to clone project and description from an existing entry. (#1)
