@@ -70,7 +70,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.23 | 17.8.2016";
+        $scope.version = "0.24 | 19.8.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
@@ -173,7 +173,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             // Default time is now
             var timestamp = Date.now();
-            var duration = (timestamp - $scope.lastEntryTimestamp);
+            var duration = cleanupDuration(timestamp - $scope.lastEntryTimestamp);
             var start = $scope.lastEntryTimestamp;
 
             // If the form is not valid, don't add content.
@@ -257,27 +257,30 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 var prevEntryKey = $scope.entries.$keyAt(newEntryIndex + 1); // previous entry (if existing)
                 var prevEntry = $scope.entries.$getRecord(prevEntryKey); // record with $id === prevEntryKey or null
 
-                console.log("prev entry:" + prevEntry.$id);
-                console.log(prevEntry);
 
                 // If we have a prev entry we can check when it finished
                 // This will not happen if the entry is the first one
-                // TODO: verify how to deal with the first entry - should it show the time since 00:00 ?
                 if (prevEntry !== null) {
-
                     // Get prev timestamp which is the start of the new entry and calculate the duration
                     newEntry.timestampStart = prevEntry.timestamp;
-                    newEntry.timestampDuration = (newEntry.timestamp - newEntry.timestampStart);
+                    newEntry.timestampDuration = calculateDuration(newEntry);
                     console.log("new entry" + newEntry.$id);
                     console.log(newEntry);
-                    // Save new entry
-                    $scope.entries.$save(newEntry).then(function(queryRef) {
-                        // data has been saved to our database
-                        console.log("entry saved with index" + queryRef.key())
-                    });
+
+                } else {
+                    console.log("Seems to be the first entry in the timeline, What start point do we set ?");
+                    // We save the timestamp also as start, and duration is zero.
+                    // TODO: verify how to deal with the first entry - should it show the time since 00:00 ?
+                    newEntry.timestampStart = newEntry.timestamp;
+                    newEntry.timestampDuration = 0;
                 }
 
-                console.log("Now we want to update the next entry");
+                // Save new entry
+                $scope.entries.$save(newEntry).then(function(queryRef) {
+                    // data has been saved to our database
+                    console.log("entry saved with index" + queryRef.key())
+                });
+
                 //
                 // update next entry
                 //
@@ -287,7 +290,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 var nextEntry = $scope.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
                 if (nextEntry !== null) {
                     nextEntry.timestampStart = newEntry.timestamp;
-                    nextEntry.timestampDuration = (nextEntry.timestamp - nextEntry.timestampStart);
+                    nextEntry.timestampDuration = calculateDuration(nextEntry);
                     console.log("NEXT entry" + nextEntry.$id);
                     console.log(nextEntry);
                     // Save nextEntry
@@ -299,25 +302,62 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             });
 
-        } // End of ADD
+        };// End of ADD
+
+        // Calculates the difference for duration on entries.
+        function calculateDuration(entry) {
+            var timestampDuration = (cleanupDuration(entry.timestamp) - cleanupDuration(entry.timestampStart));
+            return cleanupDuration(timestampDuration);
+        }
+        // date function uses milliseconds, but it messes up when using directly.
+        // We need to cleanup (Math.floor) and count it *1000 again. Not sure if date object would be better...
+        function cleanupDuration(timestampDuration) {
+            //console.log('incomming timestamp' + timestampDuration);
+            timestampDuration = Math.floor(timestampDuration / 1000) * 1000;
+            //console.log('cleaned timestamp' + timestampDuration);
+            return timestampDuration;
+        }
 
         // Clone text and project to current timer
         $scope.cloneEntry = function() {
             $scope.newEntryText = this.entry.text;
             $scope.newEntryProject = this.entry.project;
-        }
+        };
 
-        // Update entries after saving a manual entry
-        function updateEntries() {
-            // change a message and save it
-            // foreach $scope.entrie
-            //var item = $scope.entries.$getRecord(someRecordKey);
-            // change values
-            // item.user = "alanisawesome";
-            messages.$save(item).then(function() {
-                // data has been saved to our database
+        // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
+        $scope.deleteEntry = function() {
+            // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
+            var deleteEntryTimestampStart = this.entry.timestampStart;
+            var deleteEntryKey = this.entry.$id;
+            console.log('entry we want to delete now' + deleteEntryKey);
+            var deleteEntryIndex = $scope.entries.$indexFor(deleteEntryKey); // returns location in the array
+            console.log("index: " + deleteEntryIndex);
+
+            //
+            // prepare update next entry
+            //
+            var nextEntryKey = $scope.entries.$keyAt(deleteEntryIndex - 1); // next entry (if existing)
+            var nextEntry = $scope.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
+
+            // Delete entry, and update the next one
+            $scope.entries.$remove(this.entry).then(function(ref) {
+                // Which id and location did we remove? We need to check the next entry to update the duration of it!
+                var deletedEntryKey = ref.key();
+                console.log("deleted record with key " + deletedEntryKey);
+
+                // Update the time range of the next entry to fill the gap
+                if (nextEntry !== null) {
+                    nextEntry.timestampStart = deleteEntryTimestampStart;
+                    // Update the duration entry
+                    nextEntry.timestampDuration = calculateDuration(nextEntry);
+                    // Save nextEntry
+                    $scope.entries.$save(nextEntry).then(function(queryRef) {
+                        // data has been saved to our database
+                        console.log("entry saved with index" + queryRef.key())
+                    });
+                }
             });
-        }
+        };
 
 
         // Realtime duration display

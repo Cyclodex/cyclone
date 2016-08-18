@@ -1,6 +1,14 @@
 # CHANGELOG
 ## 0.24 - 18.08.2016
+* Adding a manual entry as "first" entry on the time line (#6)
 * Added a favicon to represent the cyclone better. (#7)
+What should be solved with this commit is:
+* Deleting an entry will update the next entry automatically so there is no time gap. (#10)
+  * will now update correctly the next entry
+  * has now the same start and end timestamp to not break the logic later
+* Durations are not going over a mathematical cleanup function, to round away the milliseconds.
+  This should fix the wrong hours / minutes rounding. (#11)
+
 
 ## 0.23 - 17.08.2016
 * Enhancement: Project and day hours are now separated for work / private types. (#9)
