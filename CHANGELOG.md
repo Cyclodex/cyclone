@@ -4,6 +4,7 @@
 * Fixed the duration bug on first entries. (#6)
 * Changed the "Manual time" to "Manual end time" to make clear this is not a duration. (#12)
 * Further improved the text "What have you done" if the user entered a manual end time. (#12)
+* Small styling improvements, so the project name and description use more space.
 
 ## 0.24 - 18.08.2016
 * Adding a manual entry as "first" entry on the time line (#6)
