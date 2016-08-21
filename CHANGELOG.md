@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## 0.25 - 22.08.2016
+* Fixed the duration bug on first entries. (#6)
+
 ## 0.24 - 18.08.2016
 * Adding a manual entry as "first" entry on the time line (#6)
 * Added a favicon to represent the cyclone better. (#7)

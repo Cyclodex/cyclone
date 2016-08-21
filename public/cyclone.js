@@ -70,7 +70,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.24 | 19.8.2016";
+        $scope.version = "0.25 | 22.8.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
@@ -204,7 +204,9 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 //console.log(manualTime.getTime());
                 timestamp = manualTime.getTime();
                 duration = 0;
-                start = 0;
+                // For now we save the same start time as end time. If there is a previous entry, we will update it later in code.
+                // But this allows us to have first manual time entries which have 0 duration.
+                start = timestamp;
 
             }
 
@@ -267,12 +269,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                     console.log("new entry" + newEntry.$id);
                     console.log(newEntry);
 
-                } else {
-                    console.log("Seems to be the first entry in the timeline, What start point do we set ?");
-                    // We save the timestamp also as start, and duration is zero.
-                    // TODO: verify how to deal with the first entry - should it show the time since 00:00 ?
-                    newEntry.timestampStart = newEntry.timestamp;
-                    newEntry.timestampDuration = 0;
                 }
 
                 // Save new entry
