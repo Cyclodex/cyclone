@@ -183,12 +183,12 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 return false;
             }
 
-            // Check if we need to add some manual time.
+            // Check if we need to add some manual end time.
             if ($scope.newEntryManualTime !== undefined &&
                 $scope.newEntryManualTime.value !== undefined &&
                 $scope.newEntryManualTime.value !== null
             ) {
-                // If we have a manual time, we don't know the prev time entry
+                // If we have a manual end time, we don't know the prev time entry
                 // We need a date of today
                 var manualTime = new Date();
                 manualTime.setTime(Date.now());
@@ -205,7 +205,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 timestamp = manualTime.getTime();
                 duration = 0;
                 // For now we save the same start time as end time. If there is a previous entry, we will update it later in code.
-                // But this allows us to have first manual time entries which have 0 duration.
+                // But this allows us to have first manual end time entries which have 0 duration.
                 start = timestamp;
 
             }

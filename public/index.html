@@ -101,13 +101,18 @@
             <md-card>
                 <md-card-title>
                     <div class="md-headline">
-                        <span>What have you done in the last</span>
-                        <span ng-if="currentDurationHasHours">
-                            <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-                        </span>
-                        <span ng-if="!currentDurationHasHours">
-                            <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-                        </span>
+                        <div ng-if="!newEntryManualTime.value">
+                            <span>What have you done in the last</span>
+                            <span ng-if="currentDurationHasHours">
+                                <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
+                            </span>
+                            <span ng-if="!currentDurationHasHours">
+                                <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
+                            </span>
+                        </div>
+                        <div ng-if="newEntryManualTime.value">
+                            <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
+                        </div>
                     </div>
                 </md-card-title>
                 <md-card-content>
@@ -137,7 +142,7 @@
                              name="input"
                              ng-model="newEntryManualTime.value"
                              placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
-                            <label for="newTaskManualTime">Manual time</label>
+                            <label for="newTaskManualTime">Manual end time</label>
                         </md-input-container>
                         <div class="flex">
                             <a class=""
