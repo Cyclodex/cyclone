@@ -158,7 +158,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                             + '-' + $route.current.params.month
                             + '-' + $route.current.params.day;
                 // Parse the date from the URL with different formats
-                // TODO: add more nice formats like Month names
                 requestedDate = moment(requestedDate,
                     [
                         'YYYY-MMMM-DD'  // DE long month name
@@ -171,10 +170,8 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 );
 
                 console.log(requestedDate);
-                if (requestedDate.isValid()){
-                    console.log('valid');
-                } else {
-                    console.log('NOT valid');
+                if (!requestedDate.isValid()){
+                    console.log('URL date NOT valid');
                     $scope.error = 'Invalid date entered!';
                 }
 
@@ -184,6 +181,29 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 $scope.addEntryEnabled = false;
 
                 $scope.currentDate = requestedDate.toDate();
+            }
+
+            // ARCHIVE day jumping
+            // TODO: Make the current date recognized
+            // so if the next or prev date is today, go to today.
+            // prev + next day (archive day switching)
+            var currentDate = moment($scope.currentDate);
+            var prevDate = currentDate.clone();
+            var nextDate = currentDate.clone();
+            var today = moment();
+
+            // PREV
+            prevDate = prevDate.subtract(1, 'days');
+            $scope.prevDateLink = '#archive-date/' + prevDate.format("YYYY/MM/DD");
+
+            // NEXT (not for the future)
+            nextDate = nextDate.add(1, 'days');
+            if (nextDate.isBefore(today, 'day')) {
+                $scope.nextDateLink = '#archive-date/' + nextDate.format("YYYY/MM/DD");
+            } else if (nextDate.isSame(today, 'day')){
+                    $scope.nextDateLink = '#today';
+            } else {
+                $scope.nextDateLink = false;
             }
 
             var weekNumber = $rootScope.weekNumber;
