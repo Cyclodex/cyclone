@@ -97,3 +97,15 @@
 .footer-stats__private:last-child {
     color: #3f51b5;
 }
+
+/** Animate hide **/
+.animate-hide {
+    transition: all linear 0.5s;
+    opacity: 1;
+    height: 182px;
+}
+
+.animate-hide.ng-hide {
+    opacity: 0;
+    height: 0;
+}
