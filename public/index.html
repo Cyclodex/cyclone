@@ -98,7 +98,7 @@
      layout="row" layout-align="center center">
         <div flex=90 flex-gt-md=80>
             <!-- Add new entry -->
-            <md-card ng-if="addEntryEnabled">
+            <md-card ng-hide="!addEntryEnabled">
                 <md-card-title>
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
@@ -164,6 +164,17 @@
                     <h1 class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>
                 </div>
             </md-toolbar>
+
+            <md-card ng-if="error">
+                <md-card-title>
+                    <div class="md-headline">
+                        Error
+                    </div>
+                </md-card-title>
+                <md-card-content>
+                    {{error}}
+                </md-card-content>
+            </md-card>
 
             <!-- Show table of entries-->
             <md-card class="timelog__entries">

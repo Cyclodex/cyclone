@@ -9,6 +9,7 @@ var app = angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ngRoute']);
 app.config(function($routeProvider, $locationProvider) {
     $routeProvider
         .when('/:type', {templateUrl: 'index.html', controller: 'TimeCtrl'})
+        .when('/:type/:year/:month/:day*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
         .when('/:type/:weekNumber/:weekDay*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
         .otherwise({redirectTo: '/today'});
 
@@ -131,24 +132,59 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
         $rootScope.$on('$routeChangeSuccess', function () {
             $rootScope.viewType = $route.current.params.type;
 
+            $scope.error = false;
+
+            console.log($route);
             console.log($rootScope.viewType);
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
                 $rootScope.weekNumber = moment().week();
                 $rootScope.weekDay = moment().weekday();
                 $scope.addEntryEnabled = true;
+                $scope.currentDate = new Date;
             } else if ($rootScope.viewType == 'archive') {
                 $rootScope.weekDay = $route.current.params.weekDay;
                 $rootScope.weekNumber = $route.current.params.weekNumber;
                 $scope.addEntryEnabled = false;
-            }
 
-            // Read the date out of current week number and day number from current page
-            $scope.currentDate = moment()
-                .week($rootScope.weekNumber)
-                .weekday($rootScope.weekDay)
-                .toDate();
-            console.log($scope.currentDate);
+                // Read the date out of current week number and day number from current page
+                $scope.currentDate = moment()
+                    .week($rootScope.weekNumber)
+                    .weekday($rootScope.weekDay)
+                    .toDate();
+
+            } else if ($rootScope.viewType == 'archive-date') {
+                var requestedDate = $route.current.params.year
+                            + '-' + $route.current.params.month
+                            + '-' + $route.current.params.day;
+                // Parse the date from the URL with different formats
+                // TODO: add more nice formats like Month names
+                requestedDate = moment(requestedDate,
+                    [
+                        'YYYY-MMMM-DD'  // DE long month name
+                        ,'YYYY-MMM-DD'  // DE short month name
+                        ,'YYYY-MM-DD'   // DE date format short
+                        ,'YYYY-M-DD'   // DE date format short
+                        //,'YYYY-DD-MM'    // US - date format
+                    ],
+                    true // strict parsing
+                );
+
+                console.log(requestedDate);
+                if (requestedDate.isValid()){
+                    console.log('valid');
+                } else {
+                    console.log('NOT valid');
+                    $scope.error = 'Invalid date entered!';
+                }
+
+                // Convert the date to what we need:
+                $rootScope.weekDay = requestedDate.weekday();
+                $rootScope.weekNumber = requestedDate.week();
+                $scope.addEntryEnabled = false;
+
+                $scope.currentDate = requestedDate.toDate();
+            }
 
             var weekNumber = $rootScope.weekNumber;
             var todayNumber = $rootScope.weekDay;
