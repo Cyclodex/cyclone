@@ -1,4 +1,6 @@
 # CHANGELOG
+## 0.26 - 24.08.2016
+* Implemented archive which shows the old entries
 
 ## 0.25 - 22.08.2016
 * Fixed the duration bug on first entries. (#6)

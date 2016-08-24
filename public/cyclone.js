@@ -84,7 +84,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.25 | 22.8.2016";
+        $scope.version = "0.26 | 24.8.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
