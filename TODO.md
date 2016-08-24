@@ -1,5 +1,8 @@
 #Cyclone TODO
 
+## Build setup
+Setup a build
+
 ## Less
 Setup less compiler to create CSS output
 
@@ -15,5 +18,4 @@ Change firebase permissions so every user can access only his data
  
 
 ##More ideas
- * Show entries of this week, not only today
- * stats (weekly, monthly?)
+ * stats as time bars (weekly, monthly?)
