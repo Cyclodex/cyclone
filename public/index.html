@@ -120,7 +120,6 @@
                         <md-input-container flex="33">
                             <input id="newTaskText"
                              type="text"
-                             class="validate"
                              ng-model="newEntryText"
                              autofocus
                              focus-on="newTaskText"
@@ -130,7 +129,6 @@
                         <md-input-container flex="20">
                             <input id="newTaskProject"
                              type="text"
-                             class="validate"
                              ng-model="newEntryProject"
                              aria-label="Project name of new task">
                             <label for="newTaskProject">Project</label>
@@ -195,8 +193,8 @@
                       {true: 'done', false: ''}[entry.checked == true]
                       ]"
                     >
-                        <div class="text">
-                            <md-input-container>
+                        <div class="entry">
+                            <md-input-container class="entry__text">
                                 <input ng-model="entry.text"
                                  ng-change="entries.$save(entry)"
                                  id="text"
@@ -204,7 +202,7 @@
                                  class="validate"
                                  aria-label="Description"/>
                             </md-input-container>
-                            <md-input-container>
+                            <md-input-container class="entry__project">
                                 <input ng-model="entry.project"
                                  ng-change="entries.$save(entry)"
                                  id="project"

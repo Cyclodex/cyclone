@@ -260,8 +260,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 }
             }); // End of firebase.auth()
 
-
-        });
+        }); // END of $routeChangeSuccess
 
 
         // ADD
@@ -309,9 +308,20 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             // Check if the entry should be marked as private (break)
             var newEntryType = 'work';
-            var breakMatches = $scope.newEntryProject.match(/break/i);
-            if (breakMatches) {
-                newEntryType = 'private';
+            if ($scope.newEntryProject !== undefined) {
+                var breakMatches = $scope.newEntryProject.match(/break/i);
+                if (breakMatches) {
+                    newEntryType = 'private';
+                }
+            } else {
+                $scope.newEntryProject = '';
+            }
+
+            // newEntryText
+            if ($scope.newEntryText !== undefined) {
+
+            } else {
+                $scope.newEntryText = '';
             }
 
             //

@@ -55,8 +55,11 @@
 .cyclone-table .options md-fab {
     margin: 0 !important;
 }
-.cyclone-table .text .md-input-has-value {
-    width: 48%;
+.cyclone-table .entry__text {
+    width: 68%;
+}
+.cyclone-table .entry__project {
+    width: 28%;
 }
 .cyclone-table .duration {
     text-align: center;
