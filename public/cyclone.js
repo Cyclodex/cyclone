@@ -3,7 +3,21 @@
  *
  * Created by Cyclodex
  */
-var app = angular.module("cycloneApp", ["firebase", 'ngMaterial']);
+var app = angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ngRoute']);
+
+// Routing
+app.config(function($routeProvider, $locationProvider) {
+    $routeProvider
+        .when('/:type', {templateUrl: 'index.html', controller: 'TimeCtrl'})
+        .when('/:type/:year/:month/:day*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
+        .when('/:type/:weekNumber/:weekDay*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
+        .otherwise({redirectTo: '/today'});
+
+    $locationProvider.html5Mode({
+        enabled: false,
+        requireBase: false
+    });
+});
 
 // Profile controller
 app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootScope",
@@ -70,7 +84,7 @@ app.controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootSco
 app.controller("ConnectionCtrl", ["$scope", "$rootScope",
     function($scope, $rootScope) {
         // Version number
-        $scope.version = "0.25 | 22.8.2016";
+        $scope.version = "0.26 | 24.8.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
@@ -112,60 +126,142 @@ app.factory('focus', function($rootScope, $timeout) {
 //
 // TIME
 //
-app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$rootScope",
-    function($scope, $firebaseArray, focus, $timeout, $rootScope) {
-        var weekNumber = moment().week();
-        var todayNumber = moment().weekday();
-        var lastEntryTimestamp = Date.now();
+app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
+    function($scope, $firebaseArray, focus, $timeout, $rootScope, $route) {
+        // check the route when ready
+        $rootScope.$on('$routeChangeSuccess', function () {
+            $rootScope.viewType = $route.current.params.type;
 
-        // Duration
-        $scope.currentDuration = 0;
-        $scope.currentDurationHasHours = false;
-        $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
+            $scope.error = false;
 
-        // Show the current date
-        $scope.today = lastEntryTimestamp;
+            console.log($route);
+            console.log($rootScope.viewType);
+            // Note: This is defining the type and values also for the stats.
+            if ($rootScope.viewType == 'today') {
+                $rootScope.weekNumber = moment().week();
+                $rootScope.weekDay = moment().weekday();
+                $scope.addEntryEnabled = true;
+                $scope.currentDate = new Date;
+            } else if ($rootScope.viewType == 'archive') {
+                $rootScope.weekDay = $route.current.params.weekDay;
+                $rootScope.weekNumber = $route.current.params.weekNumber;
+                $scope.addEntryEnabled = false;
 
-        // Observe the user and then call the data
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // We save the entries in the current week and day, but most important by every user ()
-                var user = user.email.substring(0, user.email.indexOf("@"));
-                var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-                // Order the query, from recent to older entries
-                // However this only works withthe orderBy in the template right now.
-                var queryRef = ref.orderByChild("order");
+                // Read the date out of current week number and day number from current page
+                $scope.currentDate = moment()
+                    .week($rootScope.weekNumber)
+                    .weekday($rootScope.weekDay)
+                    .toDate();
 
+            } else if ($rootScope.viewType == 'archive-date') {
+                var requestedDate = $route.current.params.year
+                            + '-' + $route.current.params.month
+                            + '-' + $route.current.params.day;
+                // Parse the date from the URL with different formats
+                requestedDate = moment(requestedDate,
+                    [
+                        'YYYY-MMMM-DD'  // DE long month name
+                        ,'YYYY-MMM-DD'  // DE short month name
+                        ,'YYYY-MM-DD'   // DE date format short
+                        ,'YYYY-M-DD'   // DE date format short
+                        //,'YYYY-DD-MM'    // US - date format
+                    ],
+                    true // strict parsing
+                );
 
-                // User is signed in.
-                ////console.log("Loading data for user :" + $rootScope.user);
-                ////var queryRef = ref.orderByChild("user").equalTo(user.email);
-                // create a synchronized array
-                $scope.entries = $firebaseArray(queryRef);
+                console.log(requestedDate);
+                if (!requestedDate.isValid()){
+                    console.log('URL date NOT valid');
+                    $scope.error = 'Invalid date entered!';
+                }
 
+                // Convert the date to what we need:
+                $rootScope.weekDay = requestedDate.weekday();
+                $rootScope.weekNumber = requestedDate.week();
+                $scope.addEntryEnabled = false;
 
-                // Update current time
-                // Attach an asynchronous callback to read the data at our posts reference
-                var lastEntryRef = ref.orderByChild("order").limitToFirst(1);
-                lastEntryRef.on("value", function(snapshot) {
-                    // object in object (but only 1 because of limit above)
-                    snapshot.forEach(function(data) {
-                        //lastEntryTimestamp = data.val().timestamp;
-                        //$scope.lastEntryTimestamp = lastEntryTimestamp;
-                        $scope.lastEntryTimestamp = data.val().timestamp;
-                        // We use this also for knowing about the duration of every entry
-                        // TODO: if we add manual-time entries, this needs an update...
-                    });
-                }, function(errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
-
-                updateDurations();
-
-            } else {
-                // No user is signed in.
+                $scope.currentDate = requestedDate.toDate();
             }
-        }); // End of firebase.auth()
+
+            // ARCHIVE day jumping
+            // TODO: Make the current date recognized
+            // so if the next or prev date is today, go to today.
+            // prev + next day (archive day switching)
+            var currentDate = moment($scope.currentDate);
+            var prevDate = currentDate.clone();
+            var nextDate = currentDate.clone();
+            var today = moment();
+
+            // PREV
+            prevDate = prevDate.subtract(1, 'days');
+            $scope.prevDateLink = '#archive-date/' + prevDate.format("YYYY/MM/DD");
+
+            // NEXT (not for the future)
+            nextDate = nextDate.add(1, 'days');
+            if (nextDate.isBefore(today, 'day')) {
+                $scope.nextDateLink = '#archive-date/' + nextDate.format("YYYY/MM/DD");
+            } else if (nextDate.isSame(today, 'day')){
+                    $scope.nextDateLink = '#today';
+            } else {
+                $scope.nextDateLink = false;
+            }
+
+            var weekNumber = $rootScope.weekNumber;
+            var todayNumber = $rootScope.weekDay;
+
+            var lastEntryTimestamp = Date.now();
+
+            // Duration
+            $scope.currentDuration = 0;
+            $scope.currentDurationHasHours = false;
+            $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
+
+            // Show the current date
+            $scope.today = lastEntryTimestamp;
+
+            // Observe the user and then call the data
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // We save the entries in the current week and day, but most important by every user ()
+                    var user = user.email.substring(0, user.email.indexOf("@"));
+                    var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    // Order the query, from recent to older entries
+                    // However this only works withthe orderBy in the template right now.
+                    var queryRef = ref.orderByChild("order");
+
+
+                    // User is signed in.
+                    ////console.log("Loading data for user :" + $rootScope.user);
+                    ////var queryRef = ref.orderByChild("user").equalTo(user.email);
+                    // create a synchronized array
+                    $scope.entries = $firebaseArray(queryRef);
+
+
+                    // Update current time
+                    // Attach an asynchronous callback to read the data at our posts reference
+                    var lastEntryRef = ref.orderByChild("order").limitToFirst(1);
+                    lastEntryRef.on("value", function(snapshot) {
+                        // object in object (but only 1 because of limit above)
+                        snapshot.forEach(function(data) {
+                            //lastEntryTimestamp = data.val().timestamp;
+                            //$scope.lastEntryTimestamp = lastEntryTimestamp;
+                            $scope.lastEntryTimestamp = data.val().timestamp;
+                            // We use this also for knowing about the duration of every entry
+                            // TODO: if we add manual-time entries, this needs an update...
+                        });
+                    }, function(errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+
+                    updateDurations();
+
+                } else {
+                    // No user is signed in.
+                }
+            }); // End of firebase.auth()
+
+        }); // END of $routeChangeSuccess
+
 
         // ADD
         // Add new entry to current week and day
@@ -212,9 +308,20 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             // Check if the entry should be marked as private (break)
             var newEntryType = 'work';
-            var breakMatches = $scope.newEntryProject.match(/break/i);
-            if (breakMatches) {
-                newEntryType = 'private';
+            if ($scope.newEntryProject !== undefined) {
+                var breakMatches = $scope.newEntryProject.match(/break/i);
+                if (breakMatches) {
+                    newEntryType = 'private';
+                }
+            } else {
+                $scope.newEntryProject = '';
+            }
+
+            // newEntryText
+            if ($scope.newEntryText !== undefined) {
+
+            } else {
+                $scope.newEntryText = '';
             }
 
             //
@@ -376,81 +483,94 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 //
 app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
     function($scope, $firebaseArray, $rootScope) {
-        var weekNumber = moment().week();
-        var todayNumber = moment().weekday();
 
-        // Observe the user and then call the data
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                var user = user.email.substring(0, user.email.indexOf("@"));
-                // We save the entries in the current week and day
-                var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-                // Order the query by project
-                var queryRef = ref.orderByChild("project");
+        // check the route when ready
+        $rootScope.$on('$routeChangeSuccess', function () {
 
-                queryRef.on("value", function(snapshot) {
-                    // TODO: perhaps we need to check if really an entry was changed (not text only)
-                    // Clean up the stats first (so we can recalculate them all)
-                    var statsCollectionWork = [];
-                    var statsCollectionPrivate = [];
-                    var statsCollectionProjectStats = [];
-                    snapshot.forEach(function(data) {
-                        // General sum for projects (no matter if private or work)
-                        if (statsCollectionProjectStats[data.val().project] === undefined) {
-                            statsCollectionProjectStats[data.val().project] = 0;
-                        }
-                        // Sum up the durations of every project
-                        statsCollectionProjectStats[data.val().project] += data.val().timestampDuration;
+            console.log('view type in stats');
+            console.log($rootScope.viewType);
+            // TODO: $rootScope - This is probably not the right way how to deal with, but it works for now.
+            var weekNumber = $rootScope.weekNumber;
+            var todayNumber = $rootScope.weekDay;
+            console.log($rootScope.weekNumber);
+            console.log($rootScope.weekDay);
 
-                        // Check if work or private
-                        if (data.val().type == 'work') {
-                            // Work
-                            if (statsCollectionWork[data.val().project] === undefined) {
-                                statsCollectionWork[data.val().project] = 0;
+
+            // Observe the user and then call the data
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    var user = user.email.substring(0, user.email.indexOf("@"));
+                    // We save the entries in the current week and day
+                    var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    // Order the query by project
+                    var queryRef = ref.orderByChild("project");
+
+                    queryRef.on("value", function(snapshot) {
+                        // TODO: perhaps we need to check if really an entry was changed (not text only)
+                        // Clean up the stats first (so we can recalculate them all)
+                        var statsCollectionWork = [];
+                        var statsCollectionPrivate = [];
+                        var statsCollectionProjectStats = [];
+                        snapshot.forEach(function(data) {
+                            // General sum for projects (no matter if private or work)
+                            if (statsCollectionProjectStats[data.val().project] === undefined) {
+                                statsCollectionProjectStats[data.val().project] = 0;
                             }
-                            // Sum up the durations of every work project
-                            statsCollectionWork[data.val().project] += data.val().timestampDuration;
-                        } else {
-                            // Private
-                            if (statsCollectionPrivate[data.val().project] === undefined) {
-                                statsCollectionPrivate[data.val().project] = 0;
+                            // Sum up the durations of every project
+                            statsCollectionProjectStats[data.val().project] += data.val().timestampDuration;
+
+                            // Check if work or private
+                            if (data.val().type == 'work') {
+                                // Work
+                                if (statsCollectionWork[data.val().project] === undefined) {
+                                    statsCollectionWork[data.val().project] = 0;
+                                }
+                                // Sum up the durations of every work project
+                                statsCollectionWork[data.val().project] += data.val().timestampDuration;
+                            } else {
+                                // Private
+                                if (statsCollectionPrivate[data.val().project] === undefined) {
+                                    statsCollectionPrivate[data.val().project] = 0;
+                                }
+                                // Sum up the durations of every private project
+                                statsCollectionPrivate[data.val().project] += data.val().timestampDuration;
                             }
-                            // Sum up the durations of every private project
-                            statsCollectionPrivate[data.val().project] += data.val().timestampDuration;
-                        }
+                        });
+
+                        $scope.stats = [];
+                        $scope.statsTotalWork = 0;
+                        $scope.statsTotalPrivate = 0;
+                        // Iterate over the object and give it to template (scope)
+                        for (var key in statsCollectionProjectStats) {
+                            var obj = {};
+                            obj["project"] = key;
+                            obj["duration"] = statsCollectionProjectStats[key];
+                            obj["durationWork"] = statsCollectionWork[key];
+                            obj["durationPrivate"] = statsCollectionPrivate[key];
+                            $scope.stats.push(obj);
+                        };
+
+                        // Iterate over the object and give it to template (scope)
+                        for (var key in statsCollectionWork) {
+                            // Create the sum for work hours
+                            $scope.statsTotalWork += statsCollectionWork[key];
+                        };
+                        // Iterate over the object and give it to template (scope)
+                        for (var key in statsCollectionPrivate) {
+                            // Create the sum of all private hours
+                            $scope.statsTotalPrivate += statsCollectionPrivate[key];
+                        };
+
+                    }, function (errorObject) {
+                        console.log("The read failed: " + errorObject.code);
                     });
 
-                    $scope.stats = [];
-                    $scope.statsTotalWork = 0;
-                    $scope.statsTotalPrivate = 0;
-                    // Iterate over the object and give it to template (scope)
-                    for (var key in statsCollectionProjectStats) {
-                        var obj = {};
-                        obj["project"] = key;
-                        obj["duration"] = statsCollectionProjectStats[key];
-                        obj["durationWork"] = statsCollectionWork[key];
-                        obj["durationPrivate"] = statsCollectionPrivate[key];
-                        $scope.stats.push(obj);
-                    };
+                } else {
+                    // No user is signed in.
+                }
+            });
 
-                    // Iterate over the object and give it to template (scope)
-                    for (var key in statsCollectionWork) {
-                        // Create the sum for work hours
-                        $scope.statsTotalWork += statsCollectionWork[key];
-                    };
-                    // Iterate over the object and give it to template (scope)
-                    for (var key in statsCollectionPrivate) {
-                        // Create the sum of all private hours
-                        $scope.statsTotalPrivate += statsCollectionPrivate[key];
-                    };
 
-                }, function (errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
-
-            } else {
-                // No user is signed in.
-            }
         });
 
 

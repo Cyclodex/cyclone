@@ -55,8 +55,11 @@
 .cyclone-table .options md-fab {
     margin: 0 !important;
 }
-.cyclone-table .text .md-input-has-value {
-    width: 48%;
+.cyclone-table .entry__text {
+    width: 68%;
+}
+.cyclone-table .entry__project {
+    width: 28%;
 }
 .cyclone-table .duration {
     text-align: center;
@@ -96,4 +99,16 @@
 /* the private time entries look different */
 .footer-stats__private:last-child {
     color: #3f51b5;
+}
+
+/** Animate hide **/
+.animate-hide {
+    transition: all linear 0.5s;
+    opacity: 1;
+    height: 182px;
+}
+
+.animate-hide.ng-hide {
+    opacity: 0;
+    height: 0;
 }

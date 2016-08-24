@@ -98,7 +98,7 @@
      layout="row" layout-align="center center">
         <div flex=90 flex-gt-md=80>
             <!-- Add new entry -->
-            <md-card>
+            <md-card class="animate-hide" ng-hide="!addEntryEnabled">
                 <md-card-title>
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
@@ -120,7 +120,6 @@
                         <md-input-container flex="33">
                             <input id="newTaskText"
                              type="text"
-                             class="validate"
                              ng-model="newEntryText"
                              autofocus
                              focus-on="newTaskText"
@@ -130,7 +129,6 @@
                         <md-input-container flex="20">
                             <input id="newTaskProject"
                              type="text"
-                             class="validate"
                              ng-model="newEntryProject"
                              aria-label="Project name of new task">
                             <label for="newTaskProject">Project</label>
@@ -159,11 +157,32 @@
             </md-card>
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <h1 class="inline">Timelog </h1>
+                    <h1 class="inline">
+                        <a ng-href="#today">Timelog</a>
+                        <span ng-if="nextDateLink"> - Archive</span>
+                    </h1>
                     <span flex></span>
-                    <h1 class="inline">{{today | date : "d. MMM yyyy"}}</h1>
+                    <a ng-href="{{prevDateLink}}">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </a>
+                    <h1 ng-if="!nextDateLink" class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>
+                    <h1 ng-if="nextDateLink" class="inline">{{currentDate | date : "EEE d. MMM yyyy"}}</h1>
+                    <a ng-if="nextDateLink" ng-href="{{nextDateLink}}">
+                        <md-icon>keyboard_arrow_right</md-icon>
+                    </a>
                 </div>
             </md-toolbar>
+
+            <md-card ng-if="error">
+                <md-card-title>
+                    <div class="md-headline">
+                        Error
+                    </div>
+                </md-card-title>
+                <md-card-content>
+                    {{error}}
+                </md-card-content>
+            </md-card>
 
             <!-- Show table of entries-->
             <md-card class="timelog__entries">
@@ -174,8 +193,8 @@
                       {true: 'done', false: ''}[entry.checked == true]
                       ]"
                     >
-                        <div class="text">
-                            <md-input-container>
+                        <div class="entry">
+                            <md-input-container class="entry__text">
                                 <input ng-model="entry.text"
                                  ng-change="entries.$save(entry)"
                                  id="text"
@@ -183,7 +202,7 @@
                                  class="validate"
                                  aria-label="Description"/>
                             </md-input-container>
-                            <md-input-container>
+                            <md-input-container class="entry__project">
                                 <input ng-model="entry.project"
                                  ng-change="entries.$save(entry)"
                                  id="project"
@@ -288,6 +307,7 @@
 <script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
