@@ -112,3 +112,19 @@
     opacity: 0;
     height: 0;
 }
+
+.day-visualize {
+    height: 50px;
+    padding: 50px;
+    text-align: center;
+}
+
+.dayVisualize-entry {
+    display: inline-block;
+    min-width: initial;
+    margin: 1px;
+    height: 50px;
+}
+.dayVisualize-entry.work.checked--no {
+    height: 100px;
+}

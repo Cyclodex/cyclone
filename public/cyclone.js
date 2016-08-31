@@ -123,6 +123,21 @@ app.factory('focus', function($rootScope, $timeout) {
     }
 });
 
+// Help to order a object in the other way (limitation of firebase)
+app.filter('orderObjectBy', function() {
+    return function(items, field, reverse) {
+        var filtered = [];
+        angular.forEach(items, function(item) {
+            filtered.push(item);
+        });
+        filtered.sort(function (a, b) {
+            return (a[field] > b[field] ? 1 : -1);
+        });
+        if(reverse) filtered.reverse();
+        return filtered;
+    };
+});
+
 //
 // TIME
 //
@@ -484,6 +499,65 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
     function($scope, $firebaseArray, $rootScope) {
 
+        // Some random color handling
+        var Colors = {};
+        Colors.names = {
+            aqua: "#00ffff",
+            azure: "#f0ffff",
+            beige: "#f5f5dc",
+            // black: "#000000",
+            blue: "#0000ff",
+            // brown: "#a52a2a",
+            cyan: "#00ffff",
+            // darkblue: "#00008b",
+            // darkcyan: "#008b8b",
+            // darkgrey: "#a9a9a9",
+            // darkgreen: "#006400",
+            // darkkhaki: "#bdb76b",
+            // darkmagenta: "#8b008b",
+            // darkolivegreen: "#556b2f",
+            // darkorange: "#ff8c00",
+            // darkorchid: "#9932cc",
+            // darkred: "#8b0000",
+            // darksalmon: "#e9967a",
+            // darkviolet: "#9400d3",
+            fuchsia: "#ff00ff",
+            gold: "#ffd700",
+            green: "#008000",
+            indigo: "#4b0082",
+            khaki: "#f0e68c",
+            lightblue: "#add8e6",
+            lightcyan: "#e0ffff",
+            lightgreen: "#90ee90",
+            lightgrey: "#d3d3d3",
+            lightpink: "#ffb6c1",
+            lightyellow: "#ffffe0",
+            lime: "#00ff00",
+            magenta: "#ff00ff",
+            maroon: "#800000",
+            navy: "#000080",
+            olive: "#808000",
+            orange: "#ffa500",
+            pink: "#ffc0cb",
+            purple: "#800080",
+            violet: "#800080",
+            red: "#ff0000",
+            silver: "#c0c0c0",
+            white: "#ffffff",
+            yellow: "#ffff00"
+        };
+        Colors.random = function() {
+            var result;
+            var count = 0;
+            for (var prop in this.names)
+                if (Math.random() < 1/++count)
+                    result = prop;
+            return result;
+        };
+
+        // collect the projects colors
+        var projectsColor = [];
+
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
 
@@ -500,7 +574,52 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     var user = user.email.substring(0, user.email.indexOf("@"));
+
+
                     // We save the entries in the current week and day
+                    var refDayVis = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
+
+                    // If we don't order by "order" , manual time entries will not appear correctly
+                    var refDayVis = refDayVis.orderByChild("order");
+
+                    refDayVis.on("value", function(snapshot) {
+
+                        // Time bar / dayVisualize
+                        $scope.dayVisualize = [];
+                        var fullDayInSeconds = 60 * 60 * 12; // we can make it more flexible, but now we support 12h max
+                        // TODO: If we calculate the full time of tracked hours, we can make this more flexible (always full width)
+                        var percentageOfDay = 100 / fullDayInSeconds;
+
+                        snapshot.forEach(function(data) {
+                            // random project color
+                            if (projectsColor[data.val().project] === undefined) {
+                                projectsColor[data.val().project] = Colors.random();
+                            }
+
+                            // DayVisualize
+                            var dayVis = {};
+                            dayVis["project"] = data.val().project;
+                            dayVis["text"] = data.val().text;
+                            dayVis["order"] = data.val().order;
+                            dayVis["color"] = projectsColor[data.val().project]; // load the projects color
+                            dayVis["checked"] = data.val().checked; // Status checked
+                            dayVis["type"] = data.val().type; // work / private
+                            dayVis["duration"] = data.val().timestampDuration;
+                            dayVis["timestampStart"] = data.val().timestampStart;
+                            dayVis["timestamp"] = data.val().timestamp;
+                            dayVis["width"] = percentageOfDay * data.val().timestampDuration / 1000;
+                            console.log(dayVis);
+                            $scope.dayVisualize.push(dayVis);
+                        });
+
+                    }, function (errorObject) {
+                        console.log("The read failed: " + errorObject.code);
+                    });
+
+
+                    // New query which orders by project for the summaries
+                    // TODO: verify if we really need this per project.
+                    // TODO: Can probably be combined with the above project preparings. (dayViz)
                     var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
                     // Order the query by project
                     var queryRef = ref.orderByChild("project");
