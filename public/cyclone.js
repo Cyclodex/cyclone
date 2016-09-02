@@ -575,28 +575,30 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                         var statsCollectionPrivate = [];
                         var statsCollectionProjectStats = [];
                         snapshot.forEach(function(data) {
-                            // General sum for projects (no matter if private or work)
-                            if (statsCollectionProjectStats[data.val().project] === undefined) {
-                                statsCollectionProjectStats[data.val().project] = 0;
-                            }
-                            // Sum up the durations of every project
-                            statsCollectionProjectStats[data.val().project] += data.val().timestampDuration;
+                            var projectDuration = data.val().timestampDuration;
+                            var projectName     = data.val().project;
 
-                            // Check if work or private
+                            // Sum of all projects
+                            if (statsCollectionProjectStats[projectName] === undefined) {
+                                statsCollectionProjectStats[projectName] = 0;
+                            }
+                            statsCollectionProjectStats[projectName] += projectDuration;
+
+                            // Separate sums for work and private
                             if (data.val().type == 'work') {
                                 // Work
-                                if (statsCollectionWork[data.val().project] === undefined) {
-                                    statsCollectionWork[data.val().project] = 0;
+                                if (statsCollectionWork[projectName] === undefined) {
+                                    statsCollectionWork[projectName] = 0;
                                 }
                                 // Sum up the durations of every work project
-                                statsCollectionWork[data.val().project] += data.val().timestampDuration;
+                                statsCollectionWork[projectName] += projectDuration;
                             } else {
                                 // Private
-                                if (statsCollectionPrivate[data.val().project] === undefined) {
-                                    statsCollectionPrivate[data.val().project] = 0;
+                                if (statsCollectionPrivate[projectName] === undefined) {
+                                    statsCollectionPrivate[projectName] = 0;
                                 }
                                 // Sum up the durations of every private project
-                                statsCollectionPrivate[data.val().project] += data.val().timestampDuration;
+                                statsCollectionPrivate[projectName] += projectDuration;
                             }
                         });
 
