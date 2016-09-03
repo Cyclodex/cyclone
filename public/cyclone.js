@@ -526,104 +526,108 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                     // If we don't order by "order" , manual time entries will not appear correctly
                     var refDayVis = refDayVis.orderByChild("order");
 
+                    // TODO: the bars do get duplicated on every db change now, fix this.
                     refDayVis.on("value", function(snapshot) {
 
                         // Time bar / dayVisualize
                         $scope.dayVisualize = [];
+                        $scope.dayVisualizeProjectTotals = [];
+                        $scope.statsTotalWork = 0;
+                        $scope.statsTotalPrivate = 0;
+
                         var fullDayInSeconds = 60 * 60 * 12; // we can make it more flexible, but now we support 12h max
                         // TODO: If we calculate the full time of tracked hours, we can make this more flexible (always full width)
                         var percentageOfDay = 100 / fullDayInSeconds;
 
+                        var projects = {};
                         snapshot.forEach(function(data) {
-                            // random project color
-                            if (projectsColor[data.val().project] === undefined) {
-                                projectsColor[data.val().project] = randomColor({luminosity: 'light'});
+                            console.log(snapshot);
+
+                            var projectDuration = data.val().timestampDuration;
+                            var projectName     = data.val().project;
+
+                            // Random project color
+                            if (projectsColor[projectName] === undefined) {
+                                projectsColor[projectName] = randomColor({luminosity: 'light'});
                             }
 
                             // DayVisualize
                             var dayVis = {};
-                            dayVis["project"] = data.val().project;
+                            dayVis["project"] = projectName;
                             dayVis["text"] = data.val().text;
                             dayVis["order"] = data.val().order;
-                            dayVis["color"] = projectsColor[data.val().project]; // load the projects color
+                            dayVis["color"] = projectsColor[projectName]; // load the projects color
                             dayVis["checked"] = data.val().checked; // Status checked
                             dayVis["type"] = data.val().type; // work / private
                             dayVis["duration"] = data.val().timestampDuration;
                             dayVis["timestampStart"] = data.val().timestampStart;
                             dayVis["timestamp"] = data.val().timestamp;
                             dayVis["width"] = percentageOfDay * data.val().timestampDuration / 1000;
-                            console.log(dayVis);
                             $scope.dayVisualize.push(dayVis);
-                        });
-
-                    }, function (errorObject) {
-                        console.log("The read failed: " + errorObject.code);
-                    });
 
 
-                    // New query which orders by project for the summaries
-                    // TODO: verify if we really need this per project.
-                    // TODO: Can probably be combined with the above project preparings. (dayViz)
-                    var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-                    // Order the query by project
-                    var queryRef = ref.orderByChild("project");
+                            //
+                            // Stats project totals
+                            //
 
-                    queryRef.on("value", function(snapshot) {
-                        // TODO: perhaps we need to check if really an entry was changed (not text only)
-                        // Clean up the stats first (so we can recalculate them all)
-                        var statsCollectionWork = [];
-                        var statsCollectionPrivate = [];
-                        var statsCollectionProjectStats = [];
-                        snapshot.forEach(function(data) {
-                            var projectDuration = data.val().timestampDuration;
-                            var projectName     = data.val().project;
-
-                            // Sum of all projects
-                            if (statsCollectionProjectStats[projectName] === undefined) {
-                                statsCollectionProjectStats[projectName] = 0;
+                            if (projects[projectName] === undefined) {
+                                projects[projectName] = {};
                             }
-                            statsCollectionProjectStats[projectName] += projectDuration;
+                            // Sum of all projects
+                            if (projects[projectName].projectDurationSum === undefined) {
+                                projects[projectName].projectDurationSum = 0;
+                            }
+                            projects[projectName].projectDurationSum += projectDuration;
+
 
                             // Separate sums for work and private
                             if (data.val().type == 'work') {
                                 // Work
-                                if (statsCollectionWork[projectName] === undefined) {
-                                    statsCollectionWork[projectName] = 0;
+                                if (projects[projectName].projectDurationSumWork === undefined) {
+                                    projects[projectName].projectDurationSumWork = 0;
                                 }
                                 // Sum up the durations of every work project
-                                statsCollectionWork[projectName] += projectDuration;
+                                projects[projectName].projectDurationSumWork += projectDuration;
+
+                                // Sum of all work hours
+                                $scope.statsTotalWork += projectDuration;
                             } else {
                                 // Private
-                                if (statsCollectionPrivate[projectName] === undefined) {
-                                    statsCollectionPrivate[projectName] = 0;
+                                if (projects[projectName].projectDurationSumPrivate === undefined) {
+                                    projects[projectName].projectDurationSumPrivate = 0;
                                 }
                                 // Sum up the durations of every private project
-                                statsCollectionPrivate[projectName] += projectDuration;
+                                projects[projectName].projectDurationSumPrivate += projectDuration;
+
+                                // Sum of all private hours
+                                $scope.statsTotalPrivate += projectDuration;
                             }
+
                         });
 
-                        $scope.stats = [];
-                        $scope.statsTotalWork = 0;
-                        $scope.statsTotalPrivate = 0;
-                        // Iterate over the object and give it to template (scope)
-                        for (var key in statsCollectionProjectStats) {
-                            var obj = {};
-                            obj["project"] = key;
-                            obj["duration"] = statsCollectionProjectStats[key];
-                            obj["durationWork"] = statsCollectionWork[key];
-                            obj["durationPrivate"] = statsCollectionPrivate[key];
-                            $scope.stats.push(obj);
-                        };
+                        // Create an element for every work and/or private separated
+                        for (var projectName in projects) {
+                            if ( projects[projectName].projectDurationSumWork !== undefined ){
+                                var projectVisWork = {};
+                                projectVisWork["project"]  = projectName;
+                                projectVisWork["type"]     = 'work';
+                                projectVisWork["color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
+                                projectVisWork["width"]    = percentageOfDay * projectVisWork["duration"] / 1000;
 
-                        // Iterate over the object and give it to template (scope)
-                        for (var key in statsCollectionWork) {
-                            // Create the sum for work hours
-                            $scope.statsTotalWork += statsCollectionWork[key];
-                        };
-                        // Iterate over the object and give it to template (scope)
-                        for (var key in statsCollectionPrivate) {
-                            // Create the sum of all private hours
-                            $scope.statsTotalPrivate += statsCollectionPrivate[key];
+                                $scope.dayVisualizeProjectTotals.push(projectVisWork);
+                            }
+                            // if we have private
+                            if ( projects[projectName].projectDurationSumPrivate !== undefined ){
+                                var projectVisPrivate = {};
+                                projectVisPrivate["project"]  = projectName;
+                                projectVisPrivate["type"]     = 'private';
+                                projectVisPrivate["color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
+                                projectVisPrivate["width"]    = percentageOfDay * projectVisPrivate["duration"] / 1000;
+
+                                $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
+                            }
                         };
 
                     }, function (errorObject) {
