@@ -289,13 +289,13 @@
                 <div class="stats-title">
                     <strong>Tasks:</strong>
                 </div>
-                <md-button ng-repeat="entry in dayVisualize | orderObjectBy:'order':true"
+                <md-button ng-repeat="entry in refDayVisArray"
                            class="dayVisualize-entry project--{{entry.project}}"
                            ng-class="[
                     {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
                     {true: 'work', false: 'private'}[entry.type == 'work'],
                  ]"
-                           ng-style="{'background-color':'{{entry.color}}', width:'{{entry.width}}%'}"
+                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
                            aria-label="info">
                     <md-tooltip md-direction="top">
                         {{entry.project}}: {{entry.text}} - {{entry.duration | date : "H'h' m'min'" : '+0000'}}

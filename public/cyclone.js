@@ -526,12 +526,17 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                     // If we don't order by "order" , manual time entries will not appear correctly
                     var refDayVis = refDayVis.orderByChild("order");
 
-                    // TODO: the bars do get duplicated on every db change now, fix this.
-                    refDayVis.on("value", function(snapshot) {
+                    $scope.refDayVisArray = $firebaseArray(refDayVis);
+                    console.log('refDayVisArray');
+                    console.log($scope.refDayVisArray);
+
+                    $scope.dayVisualizeProjectTotals = [];
+
+                    // if the messages are empty, add something for fun!
+                    $scope.refDayVisArray.$watch(function(event) {
+
 
                         // Time bar / dayVisualize
-                        $scope.dayVisualize = [];
-                        $scope.dayVisualizeProjectTotals = [];
                         $scope.statsTotalWork = 0;
                         $scope.statsTotalPrivate = 0;
 
@@ -540,30 +545,23 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                         var percentageOfDay = 100 / fullDayInSeconds;
 
                         var projects = {};
-                        snapshot.forEach(function(data) {
-                            console.log(snapshot);
+                        $scope.refDayVisArray.forEach(function(data) {
+                            delete $scope.dayVisualizeProjectTotals;
+                            $scope.dayVisualizeProjectTotals = [];
 
-                            var projectDuration = data.val().timestampDuration;
-                            var projectName     = data.val().project;
+                            var projectDuration = data.timestampDuration;
+                            var projectName     = data.project;
 
                             // Random project color
                             if (projectsColor[projectName] === undefined) {
                                 projectsColor[projectName] = randomColor({luminosity: 'light'});
                             }
 
-                            // DayVisualize
-                            var dayVis = {};
-                            dayVis["project"] = projectName;
-                            dayVis["text"] = data.val().text;
-                            dayVis["order"] = data.val().order;
-                            dayVis["color"] = projectsColor[projectName]; // load the projects color
-                            dayVis["checked"] = data.val().checked; // Status checked
-                            dayVis["type"] = data.val().type; // work / private
-                            dayVis["duration"] = data.val().timestampDuration;
-                            dayVis["timestampStart"] = data.val().timestampStart;
-                            dayVis["timestamp"] = data.val().timestamp;
-                            dayVis["width"] = percentageOfDay * data.val().timestampDuration / 1000;
-                            $scope.dayVisualize.push(dayVis);
+                            // Get index of current data element
+                            var index = $scope.refDayVisArray.$indexFor(data.$id);
+                            // Add some none DB values (use _)
+                            $scope.refDayVisArray[index]._color = projectsColor[projectName]; // load the projects color
+                            $scope.refDayVisArray[index]._width = percentageOfDay * data.timestampDuration / 1000;
 
 
                             //
@@ -581,7 +579,7 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
 
 
                             // Separate sums for work and private
-                            if (data.val().type == 'work') {
+                            if (data.type == 'work') {
                                 // Work
                                 if (projects[projectName].projectDurationSumWork === undefined) {
                                     projects[projectName].projectDurationSumWork = 0;
@@ -605,8 +603,14 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
 
                         });
 
+
+                        // TODO: Make a sync as above, iterate over the DB entries and only add what needed.
+                        // This should fix the dublication issues...
+
                         // Create an element for every work and/or private separated
+                        var i = 0;
                         for (var projectName in projects) {
+                            i = i + 1;
                             if ( projects[projectName].projectDurationSumWork !== undefined ){
                                 var projectVisWork = {};
                                 projectVisWork["project"]  = projectName;
@@ -615,7 +619,8 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                                 projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
                                 projectVisWork["width"]    = percentageOfDay * projectVisWork["duration"] / 1000;
 
-                                $scope.dayVisualizeProjectTotals.push(projectVisWork);
+                                // $scope.dayVisualizeProjectTotals.push(projectVisWork);
+                                $scope.dayVisualizeProjectTotals[i] = projectVisWork;
                             }
                             // if we have private
                             if ( projects[projectName].projectDurationSumPrivate !== undefined ){
@@ -626,12 +631,14 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                                 projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
                                 projectVisPrivate["width"]    = percentageOfDay * projectVisPrivate["duration"] / 1000;
 
-                                $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
+                                // $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
+                                $scope.dayVisualizeProjectTotals[i] = projectVisPrivate;
                             }
                         };
 
-                    }, function (errorObject) {
-                        console.log("The read failed: " + errorObject.code);
+                        console.log('totals');
+                        console.log($scope.dayVisualizeProjectTotals);
+
                     });
 
                 } else {
