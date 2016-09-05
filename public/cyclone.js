@@ -501,16 +501,11 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                 if (user) {
                     var user = user.email.substring(0, user.email.indexOf("@"));
 
-
                     // We save the entries in the current week and day
                     var refDayVis = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
-
                     // If we don't order by "order" , manual time entries will not appear correctly
-                    var refDayVis = refDayVis.orderByChild("order");
-
+                    refDayVis = refDayVis.orderByChild("order");
                     $scope.refDayVisArray = $firebaseArray(refDayVis);
-                    console.log('refDayVisArray');
-                    console.log($scope.refDayVisArray);
 
                     $scope.dayVisualizeProjectTotals = [];
 
@@ -610,9 +605,6 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                                 $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
                             }
                         };
-
-                        console.log('totals');
-                        console.log($scope.dayVisualizeProjectTotals);
 
                     });
 
