@@ -1,0 +1,28 @@
+{
+  "name": "cyclone",
+  "author": "Cyclodex",
+  "version": "0.26.0",
+  "description": "Time tracking",
+  "private": true,
+  "scripts": {
+    "start": "node_modules/webpack/bin/webpack.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cyclodex/cyclone.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cyclodex/cyclone/issues"
+  },
+  "homepage": "https://github.com/Cyclodex/cyclone#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^0.25.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2"
+  }
+}
