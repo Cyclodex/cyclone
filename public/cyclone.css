@@ -75,9 +75,8 @@
     max-height: none;
 }
 .stats-title {
-    text-align: right;
-    padding: 20px;
-    position: absolute;
+    text-align: center;
+    font-size: 1rem;
 }
 .stats-entry {
     padding: 10px;
@@ -89,12 +88,14 @@
     padding: 5px;
 }
 .stats-total {
-    text-align: left;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    padding: 10px 25px;
+    text-align: center;
+    padding: 10px;
+    font-size: 1rem;
 }
+.stats-total > div {
+    display: inline-block;
+}
+
 .page {
     padding-bottom: 100px;
 }
