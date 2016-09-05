@@ -149,8 +149,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
             $scope.error = false;
 
-            console.log($route);
-            console.log($rootScope.viewType);
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
                 $rootScope.weekNumber = moment().week();
@@ -184,9 +182,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                     true // strict parsing
                 );
 
-                console.log(requestedDate);
                 if (!requestedDate.isValid()){
-                    console.log('URL date NOT valid');
                     $scope.error = 'Invalid date entered!';
                 }
 
@@ -365,10 +361,8 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
 
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key();
-                console.log("added record with key " + newEntryKey);
                 // Get location in the array
                 var newEntryIndex = $scope.entries.$indexFor(newEntryKey); // returns location in the array
-                console.log("index: " + newEntryIndex);
 
                 //
                 // check the previous entry to know when the new entry started, update timestampStart and duration of the new entry
@@ -388,8 +382,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                     // Get prev timestamp which is the start of the new entry and calculate the duration
                     newEntry.timestampStart = prevEntry.timestamp;
                     newEntry.timestampDuration = calculateDuration(newEntry);
-                    console.log("new entry" + newEntry.$id);
-                    console.log(newEntry);
 
                 }
 
@@ -409,8 +401,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
                 if (nextEntry !== null) {
                     nextEntry.timestampStart = newEntry.timestamp;
                     nextEntry.timestampDuration = calculateDuration(nextEntry);
-                    console.log("NEXT entry" + nextEntry.$id);
-                    console.log(nextEntry);
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
@@ -447,9 +437,7 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
             // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
             var deleteEntryTimestampStart = this.entry.timestampStart;
             var deleteEntryKey = this.entry.$id;
-            console.log('entry we want to delete now' + deleteEntryKey);
             var deleteEntryIndex = $scope.entries.$indexFor(deleteEntryKey); // returns location in the array
-            console.log("index: " + deleteEntryIndex);
 
             //
             // prepare update next entry
@@ -461,7 +449,6 @@ app.controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$r
             $scope.entries.$remove(this.entry).then(function(ref) {
                 // Which id and location did we remove? We need to check the next entry to update the duration of it!
                 var deletedEntryKey = ref.key();
-                console.log("deleted record with key " + deletedEntryKey);
 
                 // Update the time range of the next entry to fill the gap
                 if (nextEntry !== null) {
@@ -505,14 +492,9 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
 
-            console.log('view type in stats');
-            console.log($rootScope.viewType);
             // TODO: $rootScope - This is probably not the right way how to deal with, but it works for now.
             var weekNumber = $rootScope.weekNumber;
             var todayNumber = $rootScope.weekDay;
-            console.log($rootScope.weekNumber);
-            console.log($rootScope.weekDay);
-
 
             // Observe the user and then call the data
             firebase.auth().onAuthStateChanged(function(user) {
@@ -546,8 +528,8 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
 
                         var projects = {};
                         $scope.refDayVisArray.forEach(function(data) {
-                            delete $scope.dayVisualizeProjectTotals;
                             $scope.dayVisualizeProjectTotals = [];
+
 
                             var projectDuration = data.timestampDuration;
                             var projectName     = data.project;
@@ -604,35 +586,28 @@ app.controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
                         });
 
 
-                        // TODO: Make a sync as above, iterate over the DB entries and only add what needed.
-                        // This should fix the dublication issues...
-
                         // Create an element for every work and/or private separated
-                        var i = 0;
                         for (var projectName in projects) {
-                            i = i + 1;
                             if ( projects[projectName].projectDurationSumWork !== undefined ){
                                 var projectVisWork = {};
                                 projectVisWork["project"]  = projectName;
                                 projectVisWork["type"]     = 'work';
-                                projectVisWork["color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisWork["_color"]    = projectsColor[projectName]; // load the projects color
                                 projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
-                                projectVisWork["width"]    = percentageOfDay * projectVisWork["duration"] / 1000;
+                                projectVisWork["_width"]    = percentageOfDay * projectVisWork["duration"] / 1000;
 
-                                // $scope.dayVisualizeProjectTotals.push(projectVisWork);
-                                $scope.dayVisualizeProjectTotals[i] = projectVisWork;
+                                $scope.dayVisualizeProjectTotals.push(projectVisWork);
                             }
                             // if we have private
                             if ( projects[projectName].projectDurationSumPrivate !== undefined ){
                                 var projectVisPrivate = {};
                                 projectVisPrivate["project"]  = projectName;
                                 projectVisPrivate["type"]     = 'private';
-                                projectVisPrivate["color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisPrivate["_color"]    = projectsColor[projectName]; // load the projects color
                                 projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
-                                projectVisPrivate["width"]    = percentageOfDay * projectVisPrivate["duration"] / 1000;
+                                projectVisPrivate["_width"]    = percentageOfDay * projectVisPrivate["duration"] / 1000;
 
-                                // $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
-                                $scope.dayVisualizeProjectTotals[i] = projectVisPrivate;
+                                $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
                             }
                         };
 

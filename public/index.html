@@ -289,7 +289,7 @@
                 <div class="stats-title">
                     <strong>Tasks</strong>
                 </div>
-                <md-button ng-repeat="entry in refDayVisArray"
+                <md-button ng-repeat="entry in refDayVisArray | orderObjectBy:'order':true"
                            class="dayVisualize-entry project--{{entry.project}}"
                            ng-class="[
                     {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
@@ -309,14 +309,14 @@
 
             <div class="day-visualize project-sum">
                 <div class="stats-title">
-                    <strong>Project Total</strong>
+                    <strong>Project total</strong>
                 </div>
-                <md-button ng-repeat="entry in dayVisualizeProjectTotals | orderObjectBy:'project':false"
+                <md-button ng-repeat="entry in dayVisualizeProjectTotals track by $index"
                            class="dayVisualize-entry project--{{entry.project}}"
                            ng-class="[
                     {true: 'work', false: 'private'}[entry.type == 'work'],
                  ]"
-                           ng-style="{'background-color':'{{entry.color}}', width:'{{entry.width}}%'}"
+                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
                            aria-label="info">
                     <md-tooltip md-direction="top">
                         {{entry.project}}
