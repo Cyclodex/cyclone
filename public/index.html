@@ -278,26 +278,63 @@
         <pre>{{ profile | json }}</pre> -->
     </div>
 
-    <md-toolbar ng-controller="StatsCtrl"
-     ng-show="user"
-     class="container footer-stats md-toolbar-tools md-accent"
-     layout="row" layout-align="center center">
-        <div class="stats-title">
-            <div><strong>Project:</strong></div>
-            <div>Work time:</div>
-            <div class="footer-stats__private">Private time:</div>
-        </div>
-        <div ng-repeat="entry in stats" class="stats-entry project--{{entry.project}}" ng-class="[{true: 'project--break', false: 'private'}[entry.break == true]]">
-            <div><strong>{{entry.project}}</strong></div>
-            <div>{{entry.durationWork | date : "H'h' m'min'" : '+0000'}}</div>
-            <div class="footer-stats__private">{{entry.durationPrivate | date : "H'h' m'min'" : '+0000'}}</div>
-        </div>
-        <div class="stats-total">
-            <div><strong>TOTAL:</strong></div>
-            <div>{{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
-            <div class="footer-stats__private">{{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
-        </div>
-    </md-toolbar>
+    <div ng-controller="StatsCtrl">
+
+        <md-toolbar
+         ng-show="user"
+         class="container footer-stats md-toolbar-tools"
+         layout="column" layout-align="center center">
+
+            <div class="day-visualize">
+                <div class="stats-title">
+                    <strong>Tasks</strong>
+                </div>
+                <md-button ng-repeat="entry in refDayVisArray | orderObjectBy:'order':true"
+                           class="dayVisualize-entry project--{{entry.project}}"
+                           ng-class="[
+                    {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
+                    {true: 'work', false: 'private'}[entry.type == 'work'],
+                 ]"
+                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
+                           aria-label="info">
+                    <md-tooltip md-direction="top">
+                        {{entry.project}}: {{entry.text}} - {{entry.duration | date : "H'h' m'min'" : '+0000'}}
+                    </md-tooltip>
+                    <md-tooltip md-direction="bottom">
+                        {{entry.timestampStart | date:'H:mm'}} - {{entry.timestamp | date:'H:mm'}}
+                    </md-tooltip>
+                    {{entry.text}}
+                </md-button>
+            </div>
+
+            <div class="day-visualize project-sum">
+                <div class="stats-title">
+                    <strong>Project total</strong>
+                </div>
+                <md-button ng-repeat="entry in dayVisualizeProjectTotals track by $index"
+                           class="dayVisualize-entry project--{{entry.project}}"
+                           ng-class="[
+                    {true: 'work', false: 'private'}[entry.type == 'work'],
+                 ]"
+                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
+                           aria-label="info">
+                    <md-tooltip md-direction="top">
+                        {{entry.project}}
+                    </md-tooltip>
+                    <md-tooltip md-direction="bottom">
+                        {{entry.duration | date : "H'h' m'min'" : '+0000'}}
+                    </md-tooltip>
+                    {{entry.project}}
+                </md-button>
+                <div class="stats-total">
+                    <div><strong>TOTAL:</strong></div>
+                    <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
+                    <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
+                </div>
+            </div>
+
+        </md-toolbar>
+    </div>
 
 </div>
 
@@ -312,6 +349,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.min.js"></script>
 
 <script src="build/cyclone.js"></script>
 

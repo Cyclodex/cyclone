@@ -10,8 +10,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
 
             $scope.error = false;
 
-            console.log($route);
-            console.log($rootScope.viewType);
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
                 $rootScope.weekNumber = moment().week();
@@ -45,9 +43,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                     true // strict parsing
                 );
 
-                console.log(requestedDate);
                 if (!requestedDate.isValid()){
-                    console.log('URL date NOT valid');
                     $scope.error = 'Invalid date entered!';
                 }
 
@@ -226,10 +222,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
 
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key();
-                console.log("added record with key " + newEntryKey);
                 // Get location in the array
                 var newEntryIndex = $scope.entries.$indexFor(newEntryKey); // returns location in the array
-                console.log("index: " + newEntryIndex);
 
                 //
                 // check the previous entry to know when the new entry started, update timestampStart and duration of the new entry
@@ -249,8 +243,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                     // Get prev timestamp which is the start of the new entry and calculate the duration
                     newEntry.timestampStart = prevEntry.timestamp;
                     newEntry.timestampDuration = calculateDuration(newEntry);
-                    console.log("new entry" + newEntry.$id);
-                    console.log(newEntry);
 
                 }
 
@@ -270,8 +262,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                 if (nextEntry !== null) {
                     nextEntry.timestampStart = newEntry.timestamp;
                     nextEntry.timestampDuration = calculateDuration(nextEntry);
-                    console.log("NEXT entry" + nextEntry.$id);
-                    console.log(nextEntry);
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
@@ -308,9 +298,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
             // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
             var deleteEntryTimestampStart = this.entry.timestampStart;
             var deleteEntryKey = this.entry.$id;
-            console.log('entry we want to delete now' + deleteEntryKey);
             var deleteEntryIndex = $scope.entries.$indexFor(deleteEntryKey); // returns location in the array
-            console.log("index: " + deleteEntryIndex);
 
             //
             // prepare update next entry
@@ -322,7 +310,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
             $scope.entries.$remove(this.entry).then(function(ref) {
                 // Which id and location did we remove? We need to check the next entry to update the duration of it!
                 var deletedEntryKey = ref.key();
-                console.log("deleted record with key " + deletedEntryKey);
 
                 // Update the time range of the next entry to fill the gap
                 if (nextEntry !== null) {
