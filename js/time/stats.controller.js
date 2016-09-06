@@ -29,20 +29,14 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
 
                     // if the messages are empty, add something for fun!
                     $scope.refDayVisArray.$watch(function(event) {
-
+                        var secondsOfOneHour = 60 * 60;
 
                         // Time bar / dayVisualize
                         $scope.statsTotalWork = 0;
                         $scope.statsTotalPrivate = 0;
-
-                        var fullDayInSeconds = 60 * 60 * 12; // we can make it more flexible, but now we support 12h max
-                        // TODO: If we calculate the full time of tracked hours, we can make this more flexible (always full width)
-                        var percentageOfDay = 100 / fullDayInSeconds;
-
                         var projects = {};
                         $scope.refDayVisArray.forEach(function(data) {
                             $scope.dayVisualizeProjectTotals = [];
-
 
                             var projectDuration = data.timestampDuration;
                             var projectName     = data.project;
@@ -55,9 +49,10 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
                             // Get index of current data element
                             var index = $scope.refDayVisArray.$indexFor(data.$id);
                             // Add some none DB values (use _)
+                            // The width is defined as a flex-grow unit, which represents the amount of "hour" in decimal
+                            var width = data.timestampDuration / 1000 / secondsOfOneHour;
                             $scope.refDayVisArray[index]._color = projectsColor[projectName]; // load the projects color
-                            $scope.refDayVisArray[index]._width = percentageOfDay * data.timestampDuration / 1000;
-
+                            $scope.refDayVisArray[index]._width = width;
 
                             //
                             // Stats project totals
@@ -105,9 +100,9 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
                                 var projectVisWork = {};
                                 projectVisWork["project"]  = projectName;
                                 projectVisWork["type"]     = 'work';
-                                projectVisWork["_color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisWork["_color"]   = projectsColor[projectName]; // load the projects color
                                 projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
-                                projectVisWork["_width"]    = percentageOfDay * projectVisWork["duration"] / 1000;
+                                projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
 
                                 $scope.dayVisualizeProjectTotals.push(projectVisWork);
                             }
@@ -116,9 +111,9 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
                                 var projectVisPrivate = {};
                                 projectVisPrivate["project"]  = projectName;
                                 projectVisPrivate["type"]     = 'private';
-                                projectVisPrivate["_color"]    = projectsColor[projectName]; // load the projects color
+                                projectVisPrivate["_color"]   = projectsColor[projectName]; // load the projects color
                                 projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
-                                projectVisPrivate["_width"]    = percentageOfDay * projectVisPrivate["duration"] / 1000;
+                                projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
 
                                 $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
                             }

@@ -117,9 +117,12 @@
 }
 
 .day-visualize {
-    width: 100%;
+    width: 90%;
     text-align: center;
     margin: 10px;
+
+    display: flex;
+    align-items: center;
 }
 
 .dayVisualize-entry {
@@ -129,9 +132,24 @@
     transition: min-width 1s !important;
     min-width: 10px;
     color: black;
+
+    width: auto !important;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+.dayVisualize-entry-content {
+    line-height: 1rem;
+
+    &.dayVisualize-entry-content--project {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    &.dayVisualize-entry-content--text {
+        font-size: 0.8rem;
+    }
 }
 .dayVisualize-entry.work.checked--no {
-    height: 100px;
+    height: 80px;
 }
 .dayVisualize-entry.private {
     background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
@@ -141,7 +159,7 @@ button.dayVisualize-entry.md-button.md-button {
     font-size: 0.6rem;
 }
 button.dayVisualize-entry.md-button.md-button:hover {
-    min-width: 100px !important;
+    min-width: 150px !important;
 }
 
 .day-visualize.project-sum {

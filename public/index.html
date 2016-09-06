@@ -285,52 +285,49 @@
          class="container footer-stats md-toolbar-tools"
          layout="column" layout-align="center center">
 
+            <div class="stats-title">
+                <strong>Tasks</strong>
+            </div>
             <div class="day-visualize">
-                <div class="stats-title">
-                    <strong>Tasks</strong>
-                </div>
                 <md-button ng-repeat="entry in refDayVisArray | orderObjectBy:'order':true"
                            class="dayVisualize-entry project--{{entry.project}}"
                            ng-class="[
                     {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
                     {true: 'work', false: 'private'}[entry.type == 'work'],
                  ]"
-                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
+                           ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
                            aria-label="info">
                     <md-tooltip md-direction="top">
-                        {{entry.project}}: {{entry.text}} - {{entry.duration | date : "H'h' m'min'" : '+0000'}}
+                        {{entry.project}}: {{entry.text}}
                     </md-tooltip>
                     <md-tooltip md-direction="bottom">
                         {{entry.timestampStart | date:'H:mm'}} - {{entry.timestamp | date:'H:mm'}}
                     </md-tooltip>
-                    {{entry.text}}
+                    <div class="dayVisualize-entry-content dayVisualize-entry-content--text">{{entry.text}}</div>
+                    <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.timestampDuration | date : "H'h' m'min'" : '+0000'}}</div>
                 </md-button>
             </div>
 
+            <div class="stats-title">
+                <strong>Project total</strong>
+            </div>
             <div class="day-visualize project-sum">
-                <div class="stats-title">
-                    <strong>Project total</strong>
-                </div>
                 <md-button ng-repeat="entry in dayVisualizeProjectTotals track by $index"
                            class="dayVisualize-entry project--{{entry.project}}"
                            ng-class="[
                     {true: 'work', false: 'private'}[entry.type == 'work'],
                  ]"
-                           ng-style="{'background-color':'' + entry._color + '', width:'' + entry._width + '%'}"
+                           ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
                            aria-label="info">
-                    <md-tooltip md-direction="top">
-                        {{entry.project}}
                     </md-tooltip>
-                    <md-tooltip md-direction="bottom">
-                        {{entry.duration | date : "H'h' m'min'" : '+0000'}}
-                    </md-tooltip>
-                    {{entry.project}}
+                    <div class="dayVisualize-entry-content dayVisualize-entry-content--project">{{entry.project}}</div>
+                    <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | date : "H'h' m'min'" : '+0000'}}</div>
                 </md-button>
-                <div class="stats-total">
-                    <div><strong>TOTAL:</strong></div>
-                    <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
-                    <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
-                </div>
+            </div>
+            <div class="stats-total">
+                <div><strong>TOTAL:</strong></div>
+                <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
+                <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
             </div>
 
         </md-toolbar>
