@@ -71,13 +71,12 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 90px;
+    height: auto;
     max-height: none;
 }
 .stats-title {
-    text-align: right;
-    padding-right: 20px;
-    border-right: 1px solid white;
+    text-align: center;
+    font-size: 1rem;
 }
 .stats-entry {
     padding: 10px;
@@ -86,19 +85,23 @@
 .stats-title > div,
 .stats-total > div,
 .stats-entry > div {
-    height: 25px;
+    padding: 5px;
 }
 .stats-total {
-    text-align: right;
-    padding-left: 20px;
-    border-left: 1px solid white;
+    text-align: center;
+    padding: 10px;
+    font-size: 1rem;
 }
+.stats-total > div {
+    display: inline-block;
+}
+
 .page {
-    padding-bottom: 100px;
+    padding-bottom: 300px;
 }
 /* the private time entries look different */
 .footer-stats__private:last-child {
-    color: #3f51b5;
+    background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.2) 5px, rgba(255,255,255,.2) 15px);
 }
 
 /** Animate hide **/
@@ -111,4 +114,42 @@
 .animate-hide.ng-hide {
     opacity: 0;
     height: 0;
+}
+
+.day-visualize {
+    width: 100%;
+    text-align: center;
+    margin: 10px;
+}
+
+.dayVisualize-entry {
+    display: inline-block;
+    margin: 1px;
+    height: 50px;
+    transition: min-width 1s !important;
+    min-width: 10px;
+    color: black;
+}
+.dayVisualize-entry.work.checked--no {
+    height: 100px;
+}
+.dayVisualize-entry.private {
+    background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+}
+
+button.dayVisualize-entry.md-button.md-button {
+    font-size: 0.6rem;
+}
+button.dayVisualize-entry.md-button.md-button:hover {
+    min-width: 100px !important;
+}
+
+.day-visualize.project-sum {
+    transition: all 1s;
+    /*height: 0;*/
+    /*margin: 0;*/
+}
+.footer-stats.open .dayVisualize.project-sum {
+    height: 100%;
+    margin: 20px;
 }
