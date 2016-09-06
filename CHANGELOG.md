@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.28 - 06.09.2016
+* Merged "Stats" Branch - visual improvements on the statistics
+
 ## 0.27 - 06.09.2016
 * Merged Webpack build (by @pfiaux) (#17)
 * Merged browsersync setup (by @pfiaux) (#17)
