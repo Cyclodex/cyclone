@@ -5,7 +5,8 @@
   "description": "Time tracking",
   "private": true,
   "scripts": {
-    "start": "node_modules/webpack/bin/webpack.js",
+    "start": "node_modules/webpack/bin/webpack.js --watch",
+    "build": "node_modules/webpack/bin/webpack.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +20,8 @@
   "homepage": "https://github.com/Cyclodex/cyclone#readme",
   "dependencies": {},
   "devDependencies": {
+    "browser-sync": "^2.15.0",
+    "browser-sync-webpack-plugin": "^1.1.2",
     "css-loader": "^0.25.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
