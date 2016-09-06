@@ -1,10 +1,7 @@
 #Cyclone TODO
 
-## Build setup
-Setup a build
-
 ## Less
-Setup less compiler to create CSS output
+Create improved LESS file from the CSS Code we have.
 
 ## JS version
 Update JS version of scripts, migrate to keep it working.
@@ -15,7 +12,3 @@ Update JS version of scripts, migrate to keep it working.
 ## DB Access rules
 Change firebase permissions so every user can access only his data
  * https://firebase.google.com/docs/database/security/quickstart
- 
-
-##More ideas
- * stats as time bars (weekly, monthly?)

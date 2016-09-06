@@ -1,4 +1,9 @@
 # CHANGELOG
+## 0.27 - 06.09.2016
+* Merged Webpack build (by @pfiaux) (#17)
+* Merged browsersync setup (by @pfiaux) (#17)
+* General complete reorganization of the code (by @pfiaux) (#17)
+
 ## 0.26 - 24.08.2016
 * Implemented archive which shows the old entries
 
