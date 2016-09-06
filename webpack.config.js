@@ -29,12 +29,10 @@ module.exports = {
             }
         ]
     },
-    // Use the plugin to specify the resulting filename (and add needed behavior to the compiler)
+    devtool: 'inline-source-map',
     plugins: [
         new ExtractTextPlugin("cyclone.css"),
         new BrowserSyncPlugin({
-            // browse to http://localhost:3000/ during development,
-            // ./public directory is being served
             host: 'localhost',
             port: 3000,
             server: { baseDir: ['public'] }
