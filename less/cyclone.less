@@ -132,6 +132,7 @@
     transition: min-width 1s !important;
     min-width: 10px;
     color: black;
+    overflow: visible;
 
     width: auto !important;
     flex-basis: 0;
@@ -147,6 +148,18 @@
     &.dayVisualize-entry-content--text {
         font-size: 0.8rem;
     }
+    &.dayVisualize-entry-content--time-start {
+        position: absolute;
+        color: white;
+        bottom: -20px;
+        left: -10px;
+    }
+    &.dayVisualize-entry-content--time-end {
+        position: absolute;
+        color: white;
+        bottom: -20px;
+        right: -10px;
+    }
 }
 .dayVisualize-entry.work.checked--no {
     height: 80px;
@@ -156,7 +169,7 @@
 }
 
 button.dayVisualize-entry.md-button.md-button {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
 }
 button.dayVisualize-entry.md-button.md-button:hover {
     min-width: 150px !important;
