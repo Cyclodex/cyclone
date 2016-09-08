@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.29 - 08.09.2016
+* Small style update for the stats
+
 ## 0.28 - 06.09.2016
 * Merged "Stats" Branch - visual improvements on the statistics
 
