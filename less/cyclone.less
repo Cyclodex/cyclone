@@ -76,7 +76,8 @@
 }
 .stats-title {
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    padding: 5px;
 }
 .stats-entry {
     padding: 10px;
@@ -89,11 +90,17 @@
 }
 .stats-total {
     text-align: center;
-    padding: 10px;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    margin: 5px 0;
 }
 .stats-total > div {
     display: inline-block;
+    border: 1px solid white;
+    border-radius: 5px;
+
+    &:first-child {
+        border: none;
+    }
 }
 
 .page {
@@ -119,25 +126,26 @@
 .day-visualize {
     width: 90%;
     text-align: center;
-    margin: 10px;
+    margin: 0px 10px 20px;
 
     display: flex;
     align-items: center;
+
+    .dayVisualize-entry {
+        display: inline-block;
+        margin: 1px;
+        height: 50px;
+        min-width: 10px;
+        color: black;
+        overflow: visible;
+
+        width: auto !important;
+        flex-basis: 0;
+        flex-grow: 1;
+        transition: all .5s cubic-bezier(.35,0,.25,1);
+    }
 }
 
-.dayVisualize-entry {
-    display: inline-block;
-    margin: 1px;
-    height: 50px;
-    transition: min-width 1s !important;
-    min-width: 10px;
-    color: black;
-    overflow: visible;
-
-    width: auto !important;
-    flex-basis: 0;
-    flex-grow: 1;
-}
 .dayVisualize-entry-content {
     line-height: 1rem;
 
@@ -177,8 +185,7 @@ button.dayVisualize-entry.md-button.md-button:hover {
 
 .day-visualize.project-sum {
     transition: all 1s;
-    /*height: 0;*/
-    /*margin: 0;*/
+    margin: 0 10px;
 }
 .footer-stats.open .dayVisualize.project-sum {
     height: 100%;
