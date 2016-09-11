@@ -1,13 +1,13 @@
 // Connection controller
-angular.module('cycloneApp').controller("ConnectionCtrl", ["$scope", "$rootScope", "$firebaseAuth",
-    function($scope, $rootScope, $firebaseAuth) {
+angular.module('cycloneApp').controller("ConnectionCtrl", ["$scope", "$rootScope", "Auth",
+    function($scope, $rootScope, Auth) {
         // Version number
         $scope.version = "0.29 | 8.9.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
 
-        firebase.auth().onAuthStateChanged(function(user) {
+        Auth.$onAuthStateChanged(function(user) {
             if (user) {
                 // User signed in!
                 // TODO: probably not needed to check the token...

@@ -1,8 +1,8 @@
 //
 // Summary / Stats
 //
-angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray", "$rootScope",
-    function($scope, $firebaseArray, $rootScope) {
+angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "Auth", "$firebaseArray", "$rootScope",
+    function($scope, Auth, $firebaseArray, $rootScope) {
 
         // collect the projects colors
         var projectsColor = [];
@@ -15,7 +15,7 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
             var todayNumber = $rootScope.weekDay;
 
             // Observe the user and then call the data
-            firebase.auth().onAuthStateChanged(function(user) {
+            Auth.$onAuthStateChanged(function(user) {
                 if (user) {
                     var user = user.email.substring(0, user.email.indexOf("@"));
 

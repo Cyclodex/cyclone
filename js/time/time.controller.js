@@ -2,8 +2,8 @@
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseAuth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
-    function($scope, $firebaseAuth, $firebaseArray, focus, $timeout, $rootScope, $route) {
+angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
+    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route) {
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
             $rootScope.viewType = $route.current.params.type;
@@ -92,7 +92,10 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseAuth", 
             $scope.today = lastEntryTimestamp;
 
             // Observe the user and then call the data
-            firebase.auth().onAuthStateChanged(function(user) {
+            // TODO: not sure if we call Auth directly or need the $scope.auth...
+            // $scope.auth = Auth;
+            // $scope.auth.$onAuthStateChanged(function(user) {
+            Auth.$onAuthStateChanged(function(user) {
                 if (user) {
                     // We save the entries in the current week and day, but most important by every user ()
                     var user = user.email.substring(0, user.email.indexOf("@"));

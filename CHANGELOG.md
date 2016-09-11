@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.30 - TBD
+* Upgraded code to Firebase 3.x, AngularFire 2.x
+* Created auth factory and applying usage in code.
+
 ## 0.29 - 08.09.2016
 * Small style update for the stats
 
