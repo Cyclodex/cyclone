@@ -6,18 +6,6 @@
     <title>Cyclone</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDsWGJoeAa_1puNxV5gt0WMrtN12JIEKTk",
-            authDomain: "cyclone-806dd.firebaseapp.com",
-            databaseURL: "https://cyclone-806dd.firebaseio.com",
-            storageBucket: "cyclone-806dd.appspot.com",
-        };
-        firebase.initializeApp(config);
-    </script>
-
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
@@ -335,18 +323,48 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
-<script src="https://cdn.firebase.com/libs/angularfire/1.2.0/angularfire.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<!-- AngularJS 1.5.x -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+
+<!-- Firebase 3.x -->
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase-database.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDsWGJoeAa_1puNxV5gt0WMrtN12JIEKTk",
+        authDomain: "cyclone-806dd.firebaseapp.com",
+        databaseURL: "https://cyclone-806dd.firebaseio.com",
+        storageBucket: "cyclone-806dd.appspot.com",
+    };
+    firebase.initializeApp(config);
+
+</script>
+
+<!-- AngularFire 2.x -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>
+
+<!-- jQuery (TODO: needed?) -->
+<!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+
+<!-- Moment js (TODO: check angular implementation )-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+
+<!-- Angular JS 1.5 modules -->
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+<!-- Angular Material -->
 <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+
+<!-- Random Colors -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.min.js"></script>
 
+<!-- Cyclone app -->
 <script src="build/cyclone.js"></script>
 
 </body>

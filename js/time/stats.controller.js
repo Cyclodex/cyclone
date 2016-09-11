@@ -20,11 +20,12 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "$firebaseArray"
                     var user = user.email.substring(0, user.email.indexOf("@"));
 
                     // We save the entries in the current week and day
-                    var refDayVis = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    var ref = firebase.database().ref();
+                    var queryRef = ref.child("time/" + user + "/" + weekNumber + "/" + todayNumber);
                     // If we don't order by "order" , manual time entries will not appear correctly
-                    refDayVis = refDayVis.orderByChild("order");
-                    $scope.refDayVisArray = $firebaseArray(refDayVis);
+                    var refDayVis = queryRef.orderByChild("order");
 
+                    $scope.refDayVisArray = $firebaseArray(refDayVis);
                     $scope.dayVisualizeProjectTotals = [];
 
                     // if the messages are empty, add something for fun!

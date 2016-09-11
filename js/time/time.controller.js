@@ -2,8 +2,8 @@
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
-    function($scope, $firebaseArray, focus, $timeout, $rootScope, $route) {
+angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseAuth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
+    function($scope, $firebaseAuth, $firebaseArray, focus, $timeout, $rootScope, $route) {
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
             $rootScope.viewType = $route.current.params.type;
@@ -96,22 +96,19 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                 if (user) {
                     // We save the entries in the current week and day, but most important by every user ()
                     var user = user.email.substring(0, user.email.indexOf("@"));
-                    var ref = new Firebase("https://cyclone-806dd.firebaseio.com/time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    var ref = firebase.database().ref();
+                    var queryRef = ref.child("time/" + user + "/" + weekNumber + "/" + todayNumber);
                     // Order the query, from recent to older entries
-                    // However this only works withthe orderBy in the template right now.
-                    var queryRef = ref.orderByChild("order");
+                    // However this only works with the orderBy in the template right now.
+                    var query = queryRef.orderByChild("order");
 
-
-                    // User is signed in.
-                    ////console.log("Loading data for user :" + $rootScope.user);
-                    ////var queryRef = ref.orderByChild("user").equalTo(user.email);
                     // create a synchronized array
-                    $scope.entries = $firebaseArray(queryRef);
-
+                    $scope.entries = $firebaseArray(query);
 
                     // Update current time
                     // Attach an asynchronous callback to read the data at our posts reference
-                    var lastEntryRef = ref.orderByChild("order").limitToFirst(1);
+                    // TODO: Is it okey to reuse the queryRef ?
+                    var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
                     lastEntryRef.on("value", function(snapshot) {
                         // object in object (but only 1 because of limit above)
                         snapshot.forEach(function(data) {
@@ -221,7 +218,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                 focus('newTaskText');
 
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
-                var newEntryKey = queryRef.key();
+                var newEntryKey = queryRef.key;
                 // Get location in the array
                 var newEntryIndex = $scope.entries.$indexFor(newEntryKey); // returns location in the array
 
@@ -249,7 +246,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                 // Save new entry
                 $scope.entries.$save(newEntry).then(function(queryRef) {
                     // data has been saved to our database
-                    console.log("entry saved with index" + queryRef.key())
+                    console.log("entry saved with index" + queryRef.key)
                 });
 
                 //
@@ -265,7 +262,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
-                        console.log("entry saved with index" + queryRef.key())
+                        console.log("entry saved with index" + queryRef.key)
                     });
                 }
 
@@ -309,7 +306,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
             // Delete entry, and update the next one
             $scope.entries.$remove(this.entry).then(function(ref) {
                 // Which id and location did we remove? We need to check the next entry to update the duration of it!
-                var deletedEntryKey = ref.key();
+                var deletedEntryKey = ref.key;
 
                 // Update the time range of the next entry to fill the gap
                 if (nextEntry !== null) {
@@ -319,7 +316,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "$firebaseArray",
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
-                        console.log("entry saved with index" + queryRef.key())
+                        console.log("entry saved with index" + queryRef.key)
                     });
                 }
             });
