@@ -1,10 +1,10 @@
 // Profile controller
-angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "$location", "$firebaseAuth", "$rootScope",
-    function($scope, $location, $firebaseAuth, $rootScope) {
+angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "Auth", "$rootScope",
+    function($scope, Auth, $location, Auth, $rootScope) {
         $rootScope.user = '';
 
         initApp = function() {
-            firebase.auth().onAuthStateChanged(function(user) {
+            Auth.$onAuthStateChanged(function(user) {
                 if (user) {
                     // User is signed in.
                     var displayName = user.displayName;
