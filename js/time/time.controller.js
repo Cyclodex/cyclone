@@ -92,9 +92,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $scope.today = lastEntryTimestamp;
 
             // Observe the user and then call the data
-            // TODO: not sure if we call Auth directly or need the $scope.auth...
-            // $scope.auth = Auth;
-            // $scope.auth.$onAuthStateChanged(function(user) {
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
                     // We save the entries in the current week and day, but most important by every user ()

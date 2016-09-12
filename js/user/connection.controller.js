@@ -2,7 +2,7 @@
 angular.module('cycloneApp').controller("ConnectionCtrl", ["$scope", "$rootScope", "Auth",
     function($scope, $rootScope, Auth) {
         // Version number
-        $scope.version = "0.29 | 8.9.2016";
+        $scope.version = "0.30 | 12.9.2016";
 
         $scope.isLoading = true;
         $scope.connection = "connecting";
