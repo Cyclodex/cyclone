@@ -1,5 +1,10 @@
 # CHANGELOG
-## 0.30 - TBD
+## 0.31 - TBD
+* Using uid of users to allow any e-mail addresses
+* Using the year in the path, so we don't have issues next year
+* Defining new Database rules, so every user can only read and write data into his own path
+
+## 0.30 - 12.09.2016
 * Upgraded code to Firebase 3.x, AngularFire 2.x
 * Created auth factory and applying usage in code.
 

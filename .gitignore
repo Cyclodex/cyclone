@@ -9,9 +9,6 @@ node_modules
 
 # Firebase related excludes
 public/404.html
-.firebaserc
-database.rules.json
-firebase.json
 
 # Project build files
 public/build/

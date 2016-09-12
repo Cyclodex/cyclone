@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".write": false,
+    ".read" : false,
+    "time": {
+      "$uid": {
+        // Read and write access only to the users own path
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid"
+      }
+    }
+  }
+}
