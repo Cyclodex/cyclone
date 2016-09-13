@@ -1,8 +1,10 @@
 # CHANGELOG
-## 0.31 - TBD
-* Using uid of users to allow any e-mail addresses
-* Using the year in the path, so we don't have issues next year
-* Defining new Database rules, so every user can only read and write data into his own path
+## 0.31 - 13.09.2016
+* Using uid of users to allow any e-mail addresses (#13)
+* Using the year in the path, so we don't have issues next year (#21)
+* Defining new Database rules, so every user can only read and write data into his own path (#20)
+* Adding manually the users into a new structure "users", where profiles can be saved later on
+* Merge branch (#24)
 
 ## 0.30 - 12.09.2016
 * Upgraded code to Firebase 3.x, AngularFire 2.x
