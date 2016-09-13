@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.33 - TBD
+* Automatically adding a start day entry to improve user experience.
+
 ## 0.32 - 13.09.2016
 * Separating the firebase config, removing it from the index file.
 * Real config excluded from git and adding an example config.

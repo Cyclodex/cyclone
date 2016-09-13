@@ -109,8 +109,41 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // However this only works with the orderBy in the template right now.
                     var query = queryRef.orderByChild("order");
 
-                    // create a synchronized array
+                    // Create a synchronized array
                     $scope.entries = $firebaseArray(query);
+
+                    /**
+                     * Check if there is any entry, if not we add a manual start entry.
+                     * This helps to not loose the time in specific situations.
+                     */
+                    if ($rootScope.viewType == 'today') {
+                        queryRef.once("value")
+                            .then(function(snapshot) {
+                                if (snapshot.numChildren() == 0) {
+                                    //
+                                    // ADD an automatic entry as start of the day
+                                    // The user can still delete if he wants.
+                                    //
+                                    var timestamp = Date.now();
+                                    var duration = 0;
+                                    var start = timestamp;
+                                    $scope.entries.$add({
+                                        text: 'Starting the day',
+                                        project: 'CYCLONE',
+                                        checked: true,
+                                        type: 'private',
+                                        timestamp: timestamp,
+                                        timestampStart: start,
+                                        timestampDuration: duration,
+                                        order: -timestamp,
+                                        user: $rootScope.user // Now it takes the first part of the email address of the logged in user
+                                    }).then(function(queryRef) {
+                                        // Entry added, now do something
+                                        console.log("Auto starting the day entry added!");
+                                    });
+                                }
+                            });
+                    }
 
                     // Update current time
                     // Attach an asynchronous callback to read the data at our posts reference
@@ -118,12 +151,9 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
                     lastEntryRef.on("value", function(snapshot) {
                         // object in object (but only 1 because of limit above)
+                        // console.log(snapshot);
                         snapshot.forEach(function(data) {
-                            //lastEntryTimestamp = data.val().timestamp;
-                            //$scope.lastEntryTimestamp = lastEntryTimestamp;
                             $scope.lastEntryTimestamp = data.val().timestamp;
-                            // We use this also for knowing about the duration of every entry
-                            // TODO: if we add manual-time entries, this needs an update...
                         });
                     }, function(errorObject) {
                         console.log("The read failed: " + errorObject.code);
