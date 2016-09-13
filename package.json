@@ -1,7 +1,7 @@
 {
   "name": "cyclone",
   "author": "Cyclodex",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Time tracking",
   "private": true,
   "scripts": {

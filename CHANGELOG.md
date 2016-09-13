@@ -1,4 +1,9 @@
 # CHANGELOG
+## 0.32 - 13.09.2016
+* Separating the firebase config, removing it from the index file.
+* Real config excluded from git and adding an example config.
+* Authentication temporarily also loads cyclone.js, however this needs to be improved later.
+
 ## 0.31 - 13.09.2016
 * Using uid of users to allow any e-mail addresses (#13)
 * Using the year in the path, so we don't have issues next year (#21)
