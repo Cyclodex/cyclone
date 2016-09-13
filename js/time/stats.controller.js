@@ -11,17 +11,16 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "Auth", "$fireba
         $rootScope.$on('$routeChangeSuccess', function () {
 
             // TODO: $rootScope - This is probably not the right way how to deal with, but it works for now.
+            var year = $rootScope.year;
             var weekNumber = $rootScope.weekNumber;
             var todayNumber = $rootScope.weekDay;
 
             // Observe the user and then call the data
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
-                    var user = user.email.substring(0, user.email.indexOf("@"));
-
                     // We save the entries in the current week and day
                     var ref = firebase.database().ref();
-                    var queryRef = ref.child("time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    var queryRef = ref.child("time/" + user.uid + "/" + year  + "/" + weekNumber + "/" + todayNumber);
                     // If we don't order by "order" , manual time entries will not appear correctly
                     var refDayVis = queryRef.orderByChild("order");
 

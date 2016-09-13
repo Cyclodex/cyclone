@@ -12,13 +12,16 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
+                $rootScope.year = moment().year();
                 $rootScope.weekNumber = moment().week();
                 $rootScope.weekDay = moment().weekday();
                 $scope.addEntryEnabled = true;
                 $scope.currentDate = new Date;
             } else if ($rootScope.viewType == 'archive') {
+                // TODO: do we need this?
                 $rootScope.weekDay = $route.current.params.weekDay;
                 $rootScope.weekNumber = $route.current.params.weekNumber;
+                $rootScope.year = $route.current.params.year;
                 $scope.addEntryEnabled = false;
 
                 // Read the date out of current week number and day number from current page
@@ -28,6 +31,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     .toDate();
 
             } else if ($rootScope.viewType == 'archive-date') {
+                // This is the archive in use, simple by using real dates
+                // eg. index.html#/archive-date/2016/09/12
                 var requestedDate = $route.current.params.year
                             + '-' + $route.current.params.month
                             + '-' + $route.current.params.day;
@@ -50,6 +55,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 // Convert the date to what we need:
                 $rootScope.weekDay = requestedDate.weekday();
                 $rootScope.weekNumber = requestedDate.week();
+                $rootScope.year = requestedDate.year();
                 $scope.addEntryEnabled = false;
 
                 $scope.currentDate = requestedDate.toDate();
@@ -78,6 +84,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 $scope.nextDateLink = false;
             }
 
+            // Define the path for reading and saving the entries
+            var year = $rootScope.year;
             var weekNumber = $rootScope.weekNumber;
             var todayNumber = $rootScope.weekDay;
 
@@ -94,10 +102,9 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             // Observe the user and then call the data
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
-                    // We save the entries in the current week and day, but most important by every user ()
-                    var user = user.email.substring(0, user.email.indexOf("@"));
+                    // We save the entries in the current year, week and day, but most important by every user ()
                     var ref = firebase.database().ref();
-                    var queryRef = ref.child("time/" + user + "/" + weekNumber + "/" + todayNumber);
+                    var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
                     // Order the query, from recent to older entries
                     // However this only works with the orderBy in the template right now.
                     var query = queryRef.orderByChild("order");
