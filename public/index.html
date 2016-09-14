@@ -174,7 +174,7 @@
             </md-card>
 
             <!-- Show table of entries-->
-            <md-card class="timelog__entries">
+            <div class="timelog__entries">
                 <div class="cyclone-table">
                     <div ng-repeat="entry in entries"
                      class="row"
@@ -182,85 +182,104 @@
                       {true: 'done', false: ''}[entry.checked == true]
                       ]"
                     >
-                        <div class="entry">
-                            <md-input-container class="entry__text">
-                                <input ng-model="entry.text"
-                                 ng-change="entries.$save(entry)"
-                                 id="text"
-                                 type="text"
-                                 class="validate"
-                                 aria-label="Description"/>
-                            </md-input-container>
-                            <md-input-container class="entry__project">
-                                <input ng-model="entry.project"
-                                 ng-change="entries.$save(entry)"
-                                 id="project"
-                                 type="text"
-                                 class="validate"
-                                 aria-label="project"/>
-                            </md-input-container>
-                        </div>
-
-                        <div class="time-information">
-                            <div class="timestamp">
+                        <div ng-if=$last
+                             class="timelog__entries__entry--last start-of-day"
+                             layout="row">
+                            <div>
                                 {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
-                            <div class="duration">
-                                <div>
-                                    <div>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</div>
-                                    <!-- timediff / miliseconds (1000) / minutes(60) / calcuate decimal hours (60) -->
-                                    <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                </div>
-                            </div>
+                            <md-card>
+                                {{entry.text}}
+                            </md-card>
                         </div>
 
-                        <!-- entry actions -->
-                        <div class="options">
-                            <div layout="row" layout=row layout-align="space-around center">
-                                <div>
-                                    <md-checkbox ng-model="entry.checked"
-                                     aria-label="checked"
-                                     ng-change="entries.$save(entry)"
-                                     class="md-primary">
-                                        Done
-                                    </md-checkbox>
-                                </div>
-                                <div>
-                                    <md-switch ng-model="entry.type"
-                                     aria-label="Work hours"
-                                     ng-true-value="'work'"
-                                     ng-false-value="'private'"
-                                     class="md-primary"
-                                     ng-change="entries.$save(entry)">
-                                        {{ entry.type }}
-                                    </md-switch>
-                                </div>
-                                <div>
-                                    <a class=""
-                                       ng-click="cloneEntry()">
-                                        <md-button class="md-fab md-mini" aria-label="Clone Entry">
-                                            <md-tooltip md-direction="top">
-                                                Clone project & description to current timer
-                                            </md-tooltip>
-                                            <md-icon>content_copy</md-icon>
-                                        </md-button>
-                                    </a>
-                                </div>
-                                <div>
-                                    <md-button ng-click="deleteEntry();"
-                                     class="md-fab md-mini"
-                                     aria-label="Delete entry">
-                                        <md-tooltip md-direction="top">
-                                            Delete
-                                        </md-tooltip>
-                                        <md-icon>delete_forever</md-icon>
-                                    </md-button>
-                                </div>
+
+                        <div ng-if=!$last
+                             class="entry"
+                             layout="row">
+                            <div class="entry__timestamp">
+                                {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
+                            <md-card layout=row layout-align="space-around">
+                                <div class="entry__info">
+                                    <md-input-container class="entry__info__input entry__info__input--project">
+                                        <input ng-model="entry.project"
+                                         ng-change="entries.$save(entry)"
+                                         id="project"
+                                         type="text"
+                                         aria-label="project"/>
+                                    </md-input-container>
+                                    <md-input-container class="entry__info__input entry__info__input--text">
+                                        <input ng-model="entry.text"
+                                         ng-change="entries.$save(entry)"
+                                         id="text"
+                                         type="text"
+                                         class="validate"
+                                         aria-label="Description"/>
+                                        <label for="text">Task</label>
+                                    </md-input-container>
+                                </div>
+                                <!-- entry actions -->
+                                <div layout=column layout-align="space-between">
+                                    <div class="entry__options">
+                                        <div layout=row layout-align="space-around center">
+                                            <div>
+                                                <md-checkbox ng-model="entry.checked"
+                                                             aria-label="checked"
+                                                             ng-change="entries.$save(entry)"
+                                                             class="md-primary">
+                                                    Done
+                                                </md-checkbox>
+                                            </div>
+                                            <div>
+                                                <md-switch ng-model="entry.type"
+                                                           aria-label="Work or private hours"
+                                                           ng-true-value="'work'"
+                                                           ng-false-value="'private'"
+                                                           class="md-primary"
+                                                           ng-change="entries.$save(entry)">
+                                                    {{ entry.type }}
+                                                </md-switch>
+                                            </div>
+                                            <div>
+                                                <a class=""
+                                                   ng-click="cloneEntry()">
+                                                    <md-button class="md-fab md-mini" aria-label="Clone Entry">
+                                                        <md-tooltip md-direction="top">
+                                                            Clone project & description to current timer
+                                                        </md-tooltip>
+                                                        <md-icon>content_copy</md-icon>
+                                                    </md-button>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <md-button ng-click="deleteEntry();"
+                                                           class="md-fab md-mini"
+                                                           aria-label="Delete entry">
+                                                    <md-tooltip md-direction="top">
+                                                        Delete
+                                                    </md-tooltip>
+                                                    <md-icon>delete_forever</md-icon>
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="entry__time-information" layout=row layout-align="center center">
+                                        <div class="duration duration--human">
+                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                        </div>
+                                        <div>&nbsp;|&nbsp;</div>
+                                        <div class="duration duration--decimal">
+                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        </div>
+                                    </div>
+                                </div>
+                            </md-card>
                         </div>
                     </div>
                 </div>
-            </md-card>
+            </div>
         </div>
 
         <!-- <pre>{{ data | json }}</pre>

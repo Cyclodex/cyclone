@@ -131,7 +131,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                         text: 'Starting the day',
                                         project: 'CYCLONE',
                                         checked: true,
-                                        type: 'private',
+                                        type: 'system',
                                         timestamp: timestamp,
                                         timestampStart: start,
                                         timestampDuration: duration,

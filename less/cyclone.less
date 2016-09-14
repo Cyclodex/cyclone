@@ -15,41 +15,52 @@
     padding: 10px;
     display: inline-block;
 }
+.entry {
+    position: relative;
+
+    .md-input-has-value {
+        margin: 0;
+        display: block;
+    }
+    .entry__info__input--text {
+        margin: 15px 0 0 0 ;
+        padding: 0;
+
+    }
+    .entry__info__input--project input {
+        font-weight: bold;
+    }
+    .md-errors-spacer {
+        min-height: auto;
+    }
+}
 .cyclone-table {
-    width: 100%;
-    border-collapse: collapse;
-    display: table;
+    .work md-card{
+        background-color: lightyellow;
+        border-bottom: 1px solid orange;
+    }
+    .work.done md-card{
+        background-color: #c6ffc6;
+        border-bottom: 1px solid darkgreen;
+    }
+    .private md-card{
+        background-color: lightblue;
+        border-bottom: 1px solid blue;
+    }
+
+    .show-on-hover,
+    .entry__options {
+        -webkit-transition: opacity 400ms ease-in-out;
+        transition: opacity 400ms ease-in-out;
+        opacity: 0;
+    }
+    .row:hover .show-on-hover,
+    .row:hover .entry__options {
+        opacity: 1;
+    }
 }
-.cyclone-table > div {
-    display: table-row;
-}
-.cyclone-table > div > div {
-    display: table-cell;
-    vertical-align: middle;
-    /** make this on mobile 33% **/
-}
-.cyclone-table .work {
-    background-color: lightyellow;
-    border-bottom: 1px solid orange;
-}
-.cyclone-table .work.done {
-    background-color: #c6ffc6;
-    border-bottom: 1px solid darkgreen;
-}
-.cyclone-table .private {
-    background-color: lightblue;
-    border-bottom: 1px solid blue;
-}
-.cyclone-table .show-on-hover,
-.cyclone-table .options > div {
-    -webkit-transition: opacity 400ms ease-in-out;
-    transition: opacity 400ms ease-in-out;
-    opacity: 0;
-}
-.cyclone-table :hover .show-on-hover,
-.cyclone-table :hover .options > div {
-    opacity: 1;
-}
+/*
+
 .cyclone-table .options md-checkbox,
 .cyclone-table .options md-switch,
 .cyclone-table .options md-fab {
@@ -66,7 +77,7 @@
 }
 .cyclone-table .md-errors-spacer {
     display: none;
-}
+}*/
 .footer-stats {
     position: fixed;
     bottom: 0;
