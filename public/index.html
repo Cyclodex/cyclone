@@ -185,7 +185,7 @@
                         <div ng-if=$last
                              class="timelog__entries__entry--last start-of-day"
                              layout="row">
-                            <div>
+                            <div class="entry__timestamp">
                                 {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
                             <md-card>
@@ -201,6 +201,13 @@
                                 {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
                             <md-card layout=row layout-align="space-around">
+                                <div class="entry__checked">
+                                    <md-checkbox ng-model="entry.checked"
+                                                 aria-label="checked"
+                                                 ng-change="entries.$save(entry)"
+                                                 class="md-primary">
+                                    </md-checkbox>
+                                </div>
                                 <div class="entry__info">
                                     <md-input-container class="entry__info__input entry__info__input--project">
                                         <input ng-model="entry.project"
@@ -216,21 +223,12 @@
                                          type="text"
                                          class="validate"
                                          aria-label="Description"/>
-                                        <label for="text">Task</label>
                                     </md-input-container>
                                 </div>
                                 <!-- entry actions -->
                                 <div layout=column layout-align="space-between">
                                     <div class="entry__options">
                                         <div layout=row layout-align="space-around center">
-                                            <div>
-                                                <md-checkbox ng-model="entry.checked"
-                                                             aria-label="checked"
-                                                             ng-change="entries.$save(entry)"
-                                                             class="md-primary">
-                                                    Done
-                                                </md-checkbox>
-                                            </div>
                                             <div>
                                                 <md-switch ng-model="entry.type"
                                                            aria-label="Work or private hours"
