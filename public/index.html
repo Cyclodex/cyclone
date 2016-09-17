@@ -183,7 +183,7 @@
                       ]"
                     >
                         <div ng-if=$last
-                             class="timelog__entries__entry--last start-of-day"
+                             class="entry start-of-day"
                              layout="row">
                             <div class="entry__timestamp">
                                 {{ entry.timestamp | date:'HH:mm:ss' }}
@@ -191,6 +191,16 @@
                             <md-card>
                                 {{entry.text}}
                             </md-card>
+                            <div>
+                                <md-button ng-click="deleteEntry();"
+                                           class="md-fab md-mini"
+                                           aria-label="Delete entry">
+                                    <md-tooltip md-direction="top">
+                                        Delete
+                                    </md-tooltip>
+                                    <md-icon>delete_forever</md-icon>
+                                </md-button>
+                            </div>
                         </div>
 
 
