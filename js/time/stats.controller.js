@@ -27,7 +27,6 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "Auth", "$fireba
                     $scope.refDayVisArray = $firebaseArray(refDayVis);
                     $scope.dayVisualizeProjectTotals = [];
 
-                    // if the messages are empty, add something for fun!
                     $scope.refDayVisArray.$watch(function(event) {
                         var secondsOfOneHour = 60 * 60;
 

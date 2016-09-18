@@ -104,6 +104,60 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 if (user) {
                     // We save the entries in the current year, week and day, but most important by every user ()
                     var ref = firebase.database().ref();
+
+                    // New grouped current time entries
+                    var queryGroupRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                    // Order the query, from recent to older entries
+                    // However this only works with the orderBy in the template right now.
+                    // var queryGroup = queryGroupRef.orderByChild("order");
+                    // TODO: thats not working out, what heppens when we check a group as "checked", it would disappear and we don't know anymore about it.
+                    // TODO: That means we have to make sure we still know about the group...
+                    var queryGroup = queryGroupRef.orderByChild("checked").equalTo(false);
+                    var groups = {};
+
+                    // Lets call this only once, and for all updates
+                    // TODO: implement this when there are child__changes / updates.
+                    // TODO: make the entries editable (saving the data one changes).
+                    queryGroup.once('value').then(function(snapshot) {
+                        $scope.entriesCurrentGroups = [];
+                        // Iterate over all the data and prepare new object
+                        snapshot.forEach(function(data) {
+                            entry = data.val();
+
+                            var projectName     = entry.project;
+                            var projectTask     = entry.text;
+                            // Make sure the elements are set
+                            // The project object
+                            if (groups[projectName] === undefined) {
+                                groups[projectName] = {};
+                            }
+                            // The specific task
+                            if (groups[projectName][projectTask] === undefined) {
+                                groups[projectName][projectTask] = {};
+                            }
+                            // All the tasks will saved within the task id
+                            if (groups[projectName][projectTask]['tasks'] === undefined) {
+                                groups[projectName][projectTask]['tasks'] = {};
+                            }
+                            if (groups[projectName][projectTask].duration === undefined) {
+                                groups[projectName][projectTask].duration = 0;
+                                groups[projectName][projectTask].amount = 0;
+                            }
+
+                            // Sum up the durations of every project with same task description
+                            groups[projectName][projectTask].duration += entry.timestampDuration;
+                            groups[projectName][projectTask].amount += 1;
+                            groups[projectName][projectTask]['tasks'][data.key] = entry;
+                        });
+
+                        console.log("groups:");
+                        console.log(groups);
+                        $scope.entriesCurrentGroups = groups;
+                    });
+
+
+
+                    // Timelog entries:
                     var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
                     // Order the query, from recent to older entries
                     // However this only works with the orderBy in the template right now.
@@ -141,6 +195,9 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                         // Entry added, now do something
                                         console.log("Auto starting the day entry added!");
                                     });
+                                } else {
+                                    // Prepare the grouped current list
+
                                 }
                             });
                     }
@@ -327,6 +384,23 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $scope.newEntryProject = this.entry.project;
         };
 
+        // Group checked update
+
+        $scope.updateGroup = function(groupData) {
+            console.log("update group");
+            console.log(groupData);
+            for (var taskKey in groupData.tasks) {
+                var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
+                console.log(Entry);
+                console.log(groupData);
+                Entry.checked = groupData.checked;
+                // Save nextEntry
+                $scope.entries.$save(Entry).then(function(queryRef) {
+                    // data has been saved to our database
+                    console.log("entry saved with index" + queryRef.key)
+                });
+            }
+        };
         // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
         $scope.deleteEntry = function() {
             // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.

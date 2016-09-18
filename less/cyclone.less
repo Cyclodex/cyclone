@@ -19,10 +19,21 @@
 .entry__timestamp {
     position: relative;
     top: -10px;
+    margin: 0 10px;
+
+    .cyclone-table--grouped & {
+        top: 0;
+    }
+
+    .entry__timestamp__start {
+        position: absolute;
+        bottom: 0;
+    }
 }
 
 .entry {
     position: relative;
+    margin: 10px 0;
 
     .md-input-has-value {
         margin: 0;
@@ -44,7 +55,8 @@
     }
     md-card {
         position: relative;
-        padding:10px;
+        padding: 10px;
+        margin: 0 0 0 10px;
     }
 
     .entry__checked {
@@ -94,7 +106,7 @@
         transition: opacity 400ms ease-in-out;
         opacity: 0;
     }
-    .row:hover {
+    .entry:hover {
         .show-on-hover,
         .entry__options {
             opacity: 1;
@@ -108,7 +120,16 @@
             border-left: 1px dashed gray;
         }
     }
+
+    &.cyclone-table--grouped {
+        outline: 1px solid red;
+
+        .project-card {
+            padding: 10px;
+        }
+    }
 }
+
 /*
 
 .cyclone-table .options md-checkbox,

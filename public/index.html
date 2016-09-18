@@ -175,6 +175,79 @@
 
             <!-- Show table of entries-->
             <div class="timelog__entries">
+                <div class="cyclone-table cyclone-table--grouped">
+                    <div ng-repeat="(project, projectData) in entriesCurrentGroups">
+                        <strong>{{project}}</strong>
+                        <md-card ng-repeat="(groupedTask, groupedTaskData) in projectData"
+                                 ng-if="groupedTaskData.amount > 1"
+                                 layout="column"
+                                 layout-align="center start"
+                                 class="project-card">
+                            <strong>{{groupedTask}}</strong>
+                            <div layout="row"
+                                 layout-align="center center">
+                                <div layout="column"
+                                layout-align="center center">
+                                    <div class="entry__checked">
+                                        <md-checkbox ng-model="groupedTaskData.checked"
+                                                     aria-label="groupChecked"
+                                                     ng-change="updateGroup(groupedTaskData);"
+                                                     class="md-primary">
+                                        </md-checkbox>
+                                    </div>
+                                    <div class="entry__time-information" layout=row layout-align="center center">
+                                        <div class="duration duration--human">
+                                            <span>{{ groupedTaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
+                                        </div>
+                                        <div>&nbsp;|&nbsp;</div>
+                                        <div class="duration duration--decimal">
+                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                            <strong>{{ groupedTaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        </div>
+                                    </div>
+                                </div>
+                                <div layout="column"
+                                     layout-align="space-around start">
+                                    <div ng-repeat="entry in groupedTaskData.tasks"
+                                         layout="row"
+                                         class="entry"
+                                         ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
+                                      {true: 'done', false: ''}[entry.checked == true]
+                                      ]"
+                                    >
+                                        <div class="entry__timestamp">
+                                            <div class="entry__timestamp__end">
+                                                {{ entry.timestamp | date:'HH:mm:ss' }}
+                                            </div>
+                                            <div class="entry__timestamp__start">
+                                                {{ entry.timestampStart | date:'HH:mm:ss' }}
+                                            </div>
+                                        </div>
+                                        <md-card class="" layout=row layout-align="center center">
+
+                                            <!-- entry actions -->
+                                            <div layout=column layout-align="space-between">
+                                                <div class="entry__time-information" layout=row layout-align="center center">
+                                                    <div class="duration duration--human">
+                                                        <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                                    </div>
+                                                    <div>&nbsp;|&nbsp;</div>
+                                                    <div class="duration duration--decimal">
+                                                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                        <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </md-card>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-card>
+                    </div>
+                </div>
+
+
+
                 <div class="cyclone-table">
                     <div ng-repeat="entry in entries"
                      class="row"
