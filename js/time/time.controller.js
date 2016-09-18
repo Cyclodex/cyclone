@@ -112,20 +112,28 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // var queryGroup = queryGroupRef.orderByChild("order");
                     // TODO: thats not working out, what heppens when we check a group as "checked", it would disappear and we don't know anymore about it.
                     // TODO: That means we have to make sure we still know about the group...
-                    var queryGroup = queryGroupRef.orderByChild("checked").equalTo(false);
+                    var queryGroup = queryGroupRef.orderByChild("order");
+                    // var queryGroup = queryGroupRef.orderByChild("checked").equalTo(false);
                     var groups = {};
 
                     // Lets call this only once, and for all updates
                     // TODO: implement this when there are child__changes / updates.
-                    // TODO: make the entries editable (saving the data one changes).
                     queryGroup.once('value').then(function(snapshot) {
                         $scope.entriesCurrentGroups = [];
                         // Iterate over all the data and prepare new object
                         snapshot.forEach(function(data) {
                             entry = data.val();
 
-                            var projectName     = entry.project;
-                            var projectTask     = entry.text;
+                            var projectName        = entry.project;
+                            var projectTask        = entry.text;
+                            var projectTaskChecked = entry.checked;
+                            var groupID            = 'noGroup';
+
+                            if (entry.groupID !== undefined) {
+                                groupID         = entry.groupID;
+                            }
+                            console.log("groupID : " + groupID);
+
                             // Make sure the elements are set
                             // The project object
                             if (groups[projectName] === undefined) {
@@ -135,19 +143,32 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                             if (groups[projectName][projectTask] === undefined) {
                                 groups[projectName][projectTask] = {};
                             }
-                            // All the tasks will saved within the task id
-                            if (groups[projectName][projectTask]['tasks'] === undefined) {
-                                groups[projectName][projectTask]['tasks'] = {};
+                            // The group handling of a specific task
+                            if (groups[projectName][projectTask]['groups'] === undefined) {
+                                groups[projectName][projectTask]['groups'] = {};
                             }
-                            if (groups[projectName][projectTask].duration === undefined) {
-                                groups[projectName][projectTask].duration = 0;
-                                groups[projectName][projectTask].amount = 0;
+                            // The group handling of a specific task
+                            if (groups[projectName][projectTask]['groups'][groupID] === undefined) {
+                                groups[projectName][projectTask]['groups'][groupID] = {};
+                            }
+                            // All the tasks will saved within the task id
+                            if (groups[projectName][projectTask]['groups'][groupID]['tasks'] === undefined) {
+                                groups[projectName][projectTask]['groups'][groupID]['tasks'] = {};
+                            }
+                            if (groups[projectName][projectTask]['groups'][groupID].duration === undefined) {
+                                groups[projectName][projectTask]['groups'][groupID].duration = 0;
+                                groups[projectName][projectTask]['groups'][groupID].amount = 0;
+                                groups[projectName][projectTask]['groups'][groupID].checked = projectTaskChecked;
+                            }
+                            // The timestamp is a testing behaviour now for the grouping ID
+                            if (groups[projectName][projectTask]['groups'][groupID].timestamp === undefined) {
+                                groups[projectName][projectTask]['groups'][groupID].timestamp = entry.timestamp;
                             }
 
                             // Sum up the durations of every project with same task description
-                            groups[projectName][projectTask].duration += entry.timestampDuration;
-                            groups[projectName][projectTask].amount += 1;
-                            groups[projectName][projectTask]['tasks'][data.key] = entry;
+                            groups[projectName][projectTask]['groups'][groupID].duration += entry.timestampDuration;
+                            groups[projectName][projectTask]['groups'][groupID].amount += 1;
+                            groups[projectName][projectTask]['groups'][groupID]['tasks'][data.key] = entry;
                         });
 
                         console.log("groups:");
@@ -384,16 +405,24 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $scope.newEntryProject = this.entry.project;
         };
 
-        // Group checked update
-
+        // Group update checked on several tasks
         $scope.updateGroup = function(groupData) {
             console.log("update group");
             console.log(groupData);
             for (var taskKey in groupData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
-                console.log(Entry);
-                console.log(groupData);
                 Entry.checked = groupData.checked;
+                // Should we add an group id to know this was saved together ?
+                // TODO: somehow we have to make groups of the same task but groups are checked , or not checked yet.
+                // But there can be multiple groups over the day of the same task, once checked.
+                if (Entry.checked) {
+                    Entry.groupID = groupData.timestamp;
+                } else {
+                    Entry.groupID = null;
+                    console.log(Entry);
+                }
+
+                console.log(Entry);
                 // Save nextEntry
                 $scope.entries.$save(Entry).then(function(queryRef) {
                     // data has been saved to our database
