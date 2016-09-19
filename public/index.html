@@ -85,7 +85,8 @@
      ng-show="user"
      class="container"
      layout="row" layout-align="center center">
-        <div flex=90 flex-gt-md=80>
+        <div flex="100"
+             flex-gt-md="80">
             <!-- Add new entry -->
             <md-card class="animate-hide" ng-hide="!addEntryEnabled">
                 <md-card-title>
@@ -144,6 +145,7 @@
                     </form>
                 </md-card-content>
             </md-card>
+
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <h1 class="inline">
@@ -175,84 +177,18 @@
 
             <!-- Show table of entries-->
             <div class="timelog__entries"
-            layout="row"
+            layout="column"
+            layout-align="start center"
+            layout-gt-sm="row"
+            layout-align-gt-sm="space-around start"
             >
-                <div class="cyclone-table cyclone-table--grouped">
-                    <md-card ng-repeat="(project, projectData) in entriesCurrentGroups">
-                        <strong>{{project}}</strong>
-                        <div ng-repeat="(Task, TaskData) in projectData">
-                            {{group}}
-                            <md-card ng-repeat="(groupedTask, groupedTaskData) in TaskData.groups"
-                                 ng-if="groupedTaskData.amount > 1"
-                                 layout="column"
-                                 layout-align="center start"
-                                 class="project-card">
-                                <strong>{{Task}}</strong>
-                                <div layout="row"
-                                     layout-align="center center">
-                                    <div layout="column"
-                                    layout-align="center center">
-                                        <div class="entry__checked">
-                                            <md-checkbox ng-model="groupedTaskData.checked"
-                                                         aria-label="groupChecked"
-                                                         ng-change="updateGroup(groupedTaskData);"
-                                                         class="md-primary">
-                                            </md-checkbox>
-                                        </div>
-                                        <div class="entry__time-information" layout=row layout-align="center center">
-                                            <div class="duration duration--human">
-                                                <span>{{ groupedTaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
-                                            </div>
-                                            <div>&nbsp;|&nbsp;</div>
-                                            <div class="duration duration--decimal">
-                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                <strong>{{ groupedTaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div layout="column"
-                                         layout-align="space-around start">
-                                        <div ng-repeat="entry in groupedTaskData.tasks"
-                                             layout="row"
-                                             class="entry"
-                                             ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
-                                          {true: 'done', false: ''}[entry.checked == true]
-                                          ]"
-                                        >
-                                            <div class="entry__timestamp">
-                                                <div class="entry__timestamp__end">
-                                                    {{ entry.timestamp | date:'HH:mm:ss' }}
-                                                </div>
-                                                <div class="entry__timestamp__start">
-                                                    {{ entry.timestampStart | date:'HH:mm:ss' }}
-                                                </div>
-                                            </div>
-                                            <md-card class="" layout=row layout-align="center center">
-
-                                                <!-- entry actions -->
-                                                <div layout=column layout-align="space-between">
-                                                    <div class="entry__time-information" layout=row layout-align="center center">
-                                                        <div class="duration duration--human">
-                                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
-                                                        </div>
-                                                        <div>&nbsp;|&nbsp;</div>
-                                                        <div class="duration duration--decimal">
-                                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </md-card>
-                                        </div>
-                                    </div>
-                                </div>
-                            </md-card>
-                        </div>
-                    </md-card>
-                </div>
-
 
                 <div class="cyclone-table">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h1>Full timelog</h1>
+                        </div>
+                    </md-toolbar>
                     <div ng-repeat="entry in entries"
                      class="row"
                      ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
@@ -284,10 +220,13 @@
                         <div ng-if=!$last
                              class="entry"
                              layout="row">
-                            <div class="entry__timestamp">
+                            <div class="entry__timestamp" flex="none">
                                 {{ entry.timestamp | date:'HH:mm:ss' }}
                             </div>
-                            <md-card layout=row layout-align="space-around">
+                            <md-card layout="column"
+                                     layout-align="space-around"
+                                     layout-gt-xs="row"
+                                     flex="none">
                                 <div class="entry__checked">
                                     <md-checkbox ng-model="entry.checked"
                                                  aria-label="checked"
@@ -364,6 +303,98 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="cyclone-table cyclone-table--grouped">
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h1>Grouped continue tasks</h1>
+                        </div>
+                    </md-toolbar>
+                    <div ng-repeat="(project, projectData) in entriesCurrentGroups">
+                        <md-subheader class="md-primary">{{project}}</md-subheader>
+                        <div ng-repeat="(Task, TaskData) in projectData">
+                            {{group}}
+                            <md-card ng-repeat="(groupedTask, groupedTaskData) in TaskData.groups"
+                                     ng-if="groupedTaskData.amount > 1"
+                                     layout="column"
+                                     layout-align="center center"
+                                     class="project-card">
+                                <strong>{{Task}}</strong>
+                                <div layout="column"
+                                     layout-align="center stretch"
+                                     layout-gt-sm="row"
+                                     layout-align-gt-sm="space-around center"
+                                >
+                                    <div layout="column"
+                                         layout-align="center stretch">
+                                        <div class="entry__checked"
+                                             layout=row
+                                             layout-align="center center">
+                                            <md-checkbox ng-model="groupedTaskData.checked"
+                                                         aria-label="groupChecked"
+                                                         ng-change="updateGroup(groupedTaskData);"
+                                                         class="md-primary">
+                                            </md-checkbox>
+                                        </div>
+                                        <div class="entry__time-information"
+                                             layout=row
+                                             layout-align="center center">
+                                            <div class="duration duration--human">
+                                                <span>{{ groupedTaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
+                                            </div>
+                                            <div>&nbsp;|&nbsp;</div>
+                                            <div class="duration duration--decimal">
+                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                <strong>{{ groupedTaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div layout="column"
+                                         layout-align="center stretch">
+                                        <div ng-repeat="entry in groupedTaskData.tasks"
+                                             layout="row"
+                                             layout-align="space-around stretch"
+                                             class="entry"
+                                             ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
+                                          {true: 'done', false: ''}[entry.checked == true]
+                                          ]"
+                                        >
+                                            <div class="entry__timestamp" flex="none" flex-xs="100">
+                                                <div class="entry__timestamp__end">
+                                                    {{ entry.timestamp | date:'HH:mm:ss' }}
+                                                </div>
+                                                <div class="entry__timestamp__start">
+                                                    {{ entry.timestampStart | date:'HH:mm:ss' }}
+                                                </div>
+                                            </div>
+                                            <md-card
+                                                    layout=row
+                                                    layout-align="center center"
+                                                    flex="none"
+                                            >
+
+                                                <!-- entry actions -->
+                                                <div layout=column layout-align="space-between">
+                                                    <div class="entry__time-information" layout=row layout-align="center center">
+                                                        <div class="duration duration--human">
+                                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                                        </div>
+                                                        <div>&nbsp;|&nbsp;</div>
+                                                        <div class="duration duration--decimal">
+                                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </md-card>
+                                        </div>
+                                    </div>
+                                </div>
+                            </md-card>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 

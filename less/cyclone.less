@@ -18,8 +18,7 @@
 
 .entry__timestamp {
     position: relative;
-    top: -10px;
-    margin: 0 10px;
+    top: -15px;
 
     .cyclone-table--grouped & {
         top: 0;
@@ -87,6 +86,10 @@
 .cyclone-table {
     padding: 20px 10px;
 
+    > .row:first-of-type {
+        padding-top: 20px;
+    }
+
     .work md-card{
         background-color: lightyellow;
         border-bottom: 1px solid orange;
@@ -102,6 +105,7 @@
 
     .show-on-hover,
     .entry__options {
+        position: relative;
         -webkit-transition: opacity 400ms ease-in-out;
         transition: opacity 400ms ease-in-out;
         opacity: 0;
@@ -122,8 +126,6 @@
     }
 
     &.cyclone-table--grouped {
-        outline: 1px solid red;
-
         .project-card {
             padding: 10px;
         }
@@ -155,6 +157,7 @@
     width: 100%;
     height: auto;
     max-height: none;
+    z-index: 100;
 }
 .stats-title {
     text-align: center;
@@ -197,7 +200,11 @@
 .animate-hide {
     transition: all linear 0.5s;
     opacity: 1;
-    height: 182px;
+    height: 130px;
+
+    md-card-content {
+        padding: 10px;
+    }
 }
 
 .animate-hide.ng-hide {
