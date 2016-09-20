@@ -120,13 +120,13 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // TODO: implement this when there are child__changes / updates.
                     queryGroup.once('value').then(function(snapshot) {
                         $scope.entriesCurrentGroups = [];
+
                         // Iterate over all the data and prepare new object
                         snapshot.forEach(function(data) {
                             entry = data.val();
 
                             var projectName        = entry.project;
                             var projectTask        = entry.text;
-                            var projectTaskChecked = entry.checked;
                             var groupID            = 'noGroup';
 
                             if (entry.groupID !== undefined) {
@@ -142,34 +142,67 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                             // The specific task
                             if (groups[projectName][projectTask] === undefined) {
                                 groups[projectName][projectTask] = {};
-                            }
-                            // The group handling of a specific task
-                            if (groups[projectName][projectTask]['groups'] === undefined) {
-                                groups[projectName][projectTask]['groups'] = {};
-                            }
-                            // The group handling of a specific task
-                            if (groups[projectName][projectTask]['groups'][groupID] === undefined) {
-                                groups[projectName][projectTask]['groups'][groupID] = {};
+                                groups[projectName][projectTask]['tasks'] = {};
+                                groups[projectName][projectTask].amount = 0;
+                                groups[projectName][projectTask].amountChecked = 0;
+                                groups[projectName][projectTask].checkedState = '';
+                                groups[projectName][projectTask].duration = 0;
+                                groups[projectName][projectTask].durationChecked = 0;
                             }
                             // All the tasks will saved within the task id
-                            if (groups[projectName][projectTask]['groups'][groupID]['tasks'] === undefined) {
-                                groups[projectName][projectTask]['groups'][groupID]['tasks'] = {};
-                            }
-                            if (groups[projectName][projectTask]['groups'][groupID].duration === undefined) {
-                                groups[projectName][projectTask]['groups'][groupID].duration = 0;
-                                groups[projectName][projectTask]['groups'][groupID].amount = 0;
-                                groups[projectName][projectTask]['groups'][groupID].checked = projectTaskChecked;
-                            }
+                            // if (groups[projectName][projectTask]['tasks'] === undefined) {
+                            // }
+                            // if (groups[projectName][projectTask].duration === undefined) {
+                            // }
                             // The timestamp is a testing behaviour now for the grouping ID
-                            if (groups[projectName][projectTask]['groups'][groupID].timestamp === undefined) {
-                                groups[projectName][projectTask]['groups'][groupID].timestamp = entry.timestamp;
+                            // if (groups[projectName][projectTask].timestamp === undefined) {
+                            //     groups[projectName][projectTask].timestamp = entry.timestamp;
+                            // }
+
+                            // Sum up the durations and data
+                            groups[projectName][projectTask].amount += 1;
+                            groups[projectName][projectTask]['tasks'][data.key] = entry;
+
+                            // Add specific data with some conditions
+                            if (entry.checked) {
+                                groups[projectName][projectTask].amountChecked += 1;
+                                groups[projectName][projectTask].durationChecked += entry.timestampDuration;
+                            } else {
+                                groups[projectName][projectTask].duration += entry.timestampDuration;
                             }
 
-                            // Sum up the durations of every project with same task description
-                            groups[projectName][projectTask]['groups'][groupID].duration += entry.timestampDuration;
-                            groups[projectName][projectTask]['groups'][groupID].amount += 1;
-                            groups[projectName][projectTask]['groups'][groupID]['tasks'][data.key] = entry;
+                            // checking the "checked" state
+                            // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
+                            if (groups[projectName][projectTask].amountChecked == 0) {
+                                // not checked
+                                groups[projectName][projectTask].checkedState = false;
+                                groups[projectName][projectTask].indeterminate = false;
+                            } else if (groups[projectName][projectTask].amountChecked == groups[projectName][projectTask].amount) {
+                                // all tasks are checked
+                                groups[projectName][projectTask].checkedState = true;
+                                groups[projectName][projectTask].indeterminate = false;
+                            } else {
+                                // amount of tasks checked is not amount of tasks, means mixed
+                                groups[projectName][projectTask].checkedState = false;
+                                groups[projectName][projectTask].indeterminate = true;
+                            }
                         });
+
+                        // make sure only the projects with multiple entries are printed
+                        for (var key in groups) {
+                            if (groups.hasOwnProperty(key)) {
+                                tasks = groups[key];
+                                for (var task in tasks) {
+                                    if (tasks.hasOwnProperty(task)) {
+                                        console.log(task + " -> " + tasks[task]);
+                                        console.log(tasks[task].amount);
+                                        // console.log(Object.keys(tasks).length);
+                                    }
+                                }
+                            }
+                        }
+
+
 
                         console.log("groups:");
                         console.log(groups);
@@ -406,22 +439,22 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         };
 
         // Group update checked on several tasks
-        $scope.updateGroup = function(groupData) {
+        $scope.updateGroup = function(taskData) {
             console.log("update group");
-            console.log(groupData);
-            for (var taskKey in groupData.tasks) {
+            console.log(taskData);
+            console.log(taskData.indeterminate);
+            var checked = false;
+            if (taskData.indeterminate) {
+                checked = true;
+            } else {
+                console.log("checkedstate" + taskData.checkedState);
+                checked = !taskData.checkedState; // the new state is the opposite from the current
+                console.log("inversed checkedstate" + checked);
+            }
+            for (var taskKey in taskData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
-                Entry.checked = groupData.checked;
-                // Should we add an group id to know this was saved together ?
-                // TODO: somehow we have to make groups of the same task but groups are checked , or not checked yet.
-                // But there can be multiple groups over the day of the same task, once checked.
-                if (Entry.checked) {
-                    Entry.groupID = groupData.timestamp;
-                } else {
-                    Entry.groupID = null;
-                    console.log(Entry);
-                }
-
+                Entry.checked = checked;
+                console.log("new checked state is: " + checked);
                 console.log(Entry);
                 // Save nextEntry
                 $scope.entries.$save(Entry).then(function(queryRef) {
