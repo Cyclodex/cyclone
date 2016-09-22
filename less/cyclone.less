@@ -153,14 +153,6 @@
 .cyclone-table .md-errors-spacer {
     display: none;
 }*/
-.footer-stats {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: auto;
-    max-height: none;
-    z-index: 100;
-}
 .stats-title {
     text-align: center;
     font-size: 1.2rem;
@@ -171,19 +163,47 @@
     text-align: center;
 }
 .stats-title > div,
-.stats-total > div,
 .stats-entry > div {
     padding: 5px;
 }
-.stats-total {
+.footer-stats__totals {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 101;
+
     text-align: center;
     font-size: 1.2rem;
-    margin: 5px 0;
+
+    &:hover {
+        ~ .footer-stats__details {
+            transform: translateY(0);
+        }
+    }
 }
-.stats-total > div {
+.footer-stats__details {
+    position: fixed;
+    bottom: 64px;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    z-index: 100;
+    transition: transform 500ms;
+    transform: translateY(100%);
+
+    &.hidden {
+        transform: translateY(100%);
+    }
+    &.show-tasks {
+        transform: translateY(40%);
+    }
+}
+.footer-stats__totals > div {
     display: inline-block;
     border: 1px solid white;
     border-radius: 5px;
+    padding: 5px;
 
     &:first-child {
         border: none;

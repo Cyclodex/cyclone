@@ -48,37 +48,30 @@
         </div>
     </md-toolbar>
 
-    <div ng-cloak class="md-primary">
-        <div ng-controller="ProfileCtrl" class="card-content white-text">
-            <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
-                <md-icon>account_circle</md-icon>
-                <span>{{ user }}</span>
+    <div ng-controller="ProfileCtrl" class="card-content white-text"
+         layout="row">
+        <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
+            <md-icon>account_circle</md-icon>
+            <span>{{ user }}</span>
+        </a>
+        <div ng-show="ProfileOpen || !user" id="ProfileOpen">
+            <div id="account-details" ng-show="userIsAdmin"></div>
+            <a id="loginButton"
+               href="authentication.html"
+               target="_parent"
+               class=""
+               ng-show="!user">
+                <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
             </a>
-            <md-content ng-show="ProfileOpen || !user" id="ProfileOpen">
-                <div>
-                    <div id="account-details" ng-show="userIsAdmin"></div>
-                    <md-grid-list md-cols="5" md-row-height="4:1">
-                        <md-grid-tile>
-                            <a id="loginButton"
-                             href="authentication.html"
-                             target="_parent"
-                             class=""
-                             ng-show="!user">
-                                <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
-                            </a>
-                            <a id="logoutButton"
-                             ng-click="logout()"
-                             class=""
-                             ng-show="user">
-                                <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
-                            </a>
-                        </md-grid-tile>
-                    </md-grid-list>
-                </div>
-            </md-content>
-
-            <!--Data: <pre>{{ profile | json }}</pre>-->
+            <a id="logoutButton"
+               ng-click="logout()"
+               class=""
+               ng-show="user">
+                <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
+            </a>
         </div>
+
+        <!--Data: <pre>{{ profile | json }}</pre>-->
     </div>
 
     <div ng-cloak ng-controller="TimeCtrl"
@@ -87,65 +80,6 @@
      layout="row" layout-align="center center">
         <div flex="100"
              flex-gt-md="80">
-            <!-- Add new entry -->
-            <md-card class="animate-hide" ng-hide="!addEntryEnabled">
-                <md-card-title>
-                    <div class="md-headline">
-                        <div ng-if="!newEntryManualTime.value">
-                            <span>What have you done in the last</span>
-                            <span ng-if="currentDurationHasHours">
-                                <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-                            </span>
-                            <span ng-if="!currentDurationHasHours">
-                                <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-                            </span>
-                        </div>
-                        <div ng-if="newEntryManualTime.value">
-                            <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
-                        </div>
-                    </div>
-                </md-card-title>
-                <md-card-content>
-                    <form ng-submit="addEntry()" layout="row" name="addEntryForm">
-                        <md-input-container flex="33">
-                            <input id="newTaskText"
-                             type="text"
-                             ng-model="newEntryText"
-                             autofocus
-                             focus-on="newTaskText"
-                             aria-label="Description text of new task">
-                            <label for="newTaskText">Description</label>
-                        </md-input-container>
-                        <md-input-container flex="20">
-                            <input id="newTaskProject"
-                             type="text"
-                             ng-model="newEntryProject"
-                             aria-label="Project name of new task">
-                            <label for="newTaskProject">Project</label>
-                        </md-input-container>
-
-                        <md-input-container flex="15">
-                            <input type="time"
-                             id="newTaskManualTime"
-                             name="input"
-                             ng-model="newEntryManualTime.value"
-                             placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
-                            <label for="newTaskManualTime">Manual end time</label>
-                        </md-input-container>
-                        <div class="flex">
-                            <a class=""
-                             ng-click="addEntry()">
-                                <md-button class="md-fab md-primary" aria-label="Add Entry">
-                                    <md-icon>add</md-icon>
-                                </md-button>
-                            </a>
-                        </div>
-
-                        <button type="submit" class="submitbutton hide">Submit</button>
-                    </form>
-                </md-card-content>
-            </md-card>
-
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <h1 class="inline">
@@ -180,15 +114,75 @@
             layout="column"
             layout-align="start center"
             layout-gt-sm="row"
-            layout-align-gt-sm="space-around start"
+            layout-align-gt-sm="start start"
             >
 
-                <div class="cyclone-table">
+                <div class="cyclone-table" flex="none">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
                             <h1>Full timelog</h1>
                         </div>
                     </md-toolbar>
+
+                    <!-- Add new entry -->
+                    <md-card class="animate-hide" ng-hide="!addEntryEnabled">
+                        <md-card-title>
+                            <div class="md-headline">
+                                <div ng-if="!newEntryManualTime.value">
+                                    <span>What have you done in the last</span>
+                                    <span ng-if="currentDurationHasHours">
+                                <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
+                            </span>
+                                    <span ng-if="!currentDurationHasHours">
+                                <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
+                            </span>
+                                </div>
+                                <div ng-if="newEntryManualTime.value">
+                                    <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
+                                </div>
+                            </div>
+                        </md-card-title>
+                        <md-card-content>
+                            <form ng-submit="addEntry()" layout="row" name="addEntryForm">
+                                <md-input-container flex="33">
+                                    <input id="newTaskText"
+                                           type="text"
+                                           ng-model="newEntryText"
+                                           autofocus
+                                           focus-on="newTaskText"
+                                           aria-label="Description text of new task">
+                                    <label for="newTaskText">Description</label>
+                                </md-input-container>
+                                <md-input-container flex="20">
+                                    <input id="newTaskProject"
+                                           type="text"
+                                           ng-model="newEntryProject"
+                                           aria-label="Project name of new task">
+                                    <label for="newTaskProject">Project</label>
+                                </md-input-container>
+
+                                <md-input-container flex="15">
+                                    <input type="time"
+                                           id="newTaskManualTime"
+                                           name="input"
+                                           ng-model="newEntryManualTime.value"
+                                           placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                                    <label for="newTaskManualTime">Manual end time</label>
+                                </md-input-container>
+                                <div class="flex">
+                                    <a class=""
+                                       ng-click="addEntry()">
+                                        <md-button class="md-fab md-primary" aria-label="Add Entry">
+                                            <md-icon>add</md-icon>
+                                        </md-button>
+                                    </a>
+                                </div>
+
+                                <button type="submit" class="submitbutton hide">Submit</button>
+                            </form>
+                        </md-card-content>
+                    </md-card>
+
                     <div ng-repeat="entry in entries"
                      class="row"
                      ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
@@ -304,7 +298,7 @@
                     </div>
                 </div>
 
-                <div class="cyclone-table cyclone-table--grouped">
+                <div class="cyclone-table cyclone-table--grouped" flex="grow">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
                             <h1>Grouped continue tasks</h1>
@@ -312,7 +306,8 @@
                     </md-toolbar>
                     <div ng-repeat="(project, projectData) in entriesCurrentGroups">
                         <md-subheader class="md-primary">{{project}}</md-subheader>
-                        <md-card ng-repeat="(Task, TaskData) in projectData"
+                        <div layout="row">
+                            <md-card ng-repeat="(Task, TaskData) in projectData"
                                  ng-if="TaskData.amount > 1"
                                  layout="column"
                                  layout-align="center stretch"
@@ -407,6 +402,7 @@
                                 </div>
                             </div>
                         </md-card>
+                        </div>
                     </div>
                 </div>
 
@@ -417,12 +413,17 @@
         <pre>{{ profile | json }}</pre> -->
     </div>
 
-    <div ng-cloak ng-controller="StatsCtrl">
-
+    <footer ng-cloak ng-controller="StatsCtrl" class="footer-stats">
+        <md-toolbar class="footer-stats__totals stats-totals md-toolbar-tools"
+                    layout="row" layout-align="center center">
+            <div><strong>Total:</strong></div>
+            <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
+            <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
+        </md-toolbar>
         <md-toolbar
-         ng-show="user"
-         class="container footer-stats md-toolbar-tools"
-         layout="column" layout-align="center center">
+                ng-show="user"
+                class="container footer-stats__details md-toolbar-tools"
+                layout="column" layout-align="center stretch">
 
             <div class="stats-title">
                 <strong>Tasks</strong>
@@ -462,14 +463,9 @@
                     <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | date : "H'h' m'min'" : '+0000'}}</div>
                 </md-button>
             </div>
-            <div class="stats-total">
-                <div><strong>Total:</strong></div>
-                <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
-                <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
-            </div>
 
         </md-toolbar>
-    </div>
+    </footer>
 
 </div>
 
