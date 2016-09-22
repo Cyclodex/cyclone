@@ -18,8 +18,8 @@
 
 .entry__timestamp {
     position: relative;
-    top: -14px;
-    font-size: 0.9rem;
+    top: -19px;
+    font-size: 1.1rem;
 
     .cyclone-table--grouped & {
         top: 0;
@@ -63,7 +63,7 @@
     .entry__checked {
         position: absolute;
         top: 0;
-        left: -50px;
+        left: -38px;
         z-index: 2;
         height: 90%;
         margin: 5px 0;
@@ -83,6 +83,9 @@
             position: absolute;
             top: -5px;
         }
+    }
+    &.start-of-day {
+        width: 100%;
     }
 }
 .cyclone-table {
@@ -112,11 +115,8 @@
         transition: opacity 400ms ease-in-out;
         opacity: 0;
     }
-    .entry:hover {
-        .show-on-hover,
-        .entry__options {
-            opacity: 1;
-        }
+
+    &.timeline {
         .entry__checked:before {
             content: '';
             position: absolute;
@@ -124,9 +124,20 @@
             height: 100%;
             left: 10px;
             border-left: 1px dashed gray;
+            opacity: 0.5;
+        }
+        .entry:hover {
+            .show-on-hover,
+            .entry__options {
+                opacity: 1;
+            }
+            .entry__checked:before {
+                opacity: 1;
+                border-left: 1px solid gray;
+            }
+
         }
     }
-
 }
 
 .stats-title {

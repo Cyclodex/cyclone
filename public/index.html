@@ -35,7 +35,6 @@
     <md-toolbar ng-cloak ng-controller="ConnectionCtrl">
         <div class="header__status md-toolbar-tools">
             <span>Status:&nbsp;</span>
-            <md-progress-circular md-mode="indeterminate" ng-show="isLoading" class="md-accent" md-diameter="20px"></md-progress-circular>
             <span class="status">
                 {{ connection }}
             </span>
@@ -177,10 +176,10 @@
             layout-align-gt-sm="start start"
             >
 
-                <div class="cyclone-table" flex="none">
+                <div class="cyclone-table timeline" flex="none">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
-                            <h1>Full timelog</h1>
+                            <h1>Timeline</h1>
                         </div>
                     </md-toolbar>
 
@@ -200,12 +199,13 @@
                         <div ng-if=$last
                              class="entry start-of-day"
                              layout="row">
-                            <div class="entry__timestamp">
-                                {{ entry.timestamp | date:'HH:mm:ss' }}
+                            <div class="entry__timestamp" flex="none">
+                                {{ entry.timestamp | date:'HH:mm' }}
                             </div>
                             <md-card>
                                 {{entry.text}}
                             </md-card>
+                            <!-- Don't delete the last element, would act nicely.
                             <div>
                                 <md-button ng-click="deleteEntry();"
                                            class="md-fab md-mini"
@@ -215,7 +215,7 @@
                                     </md-tooltip>
                                     <md-icon>delete_forever</md-icon>
                                 </md-button>
-                            </div>
+                            </div> -->
                         </div>
 
 
@@ -223,7 +223,7 @@
                              class="entry"
                              layout="row">
                             <div class="entry__timestamp" flex="none">
-                                {{ entry.timestamp | date:'HH:mm:ss' }}
+                                {{ entry.timestamp | date:'HH:mm' }}
                             </div>
                             <md-card layout="column"
                                      layout-align="space-around"
@@ -270,11 +270,22 @@
                                             <div>
                                                 <a class=""
                                                    ng-click="cloneEntry()">
-                                                    <md-button class="md-fab md-mini" aria-label="Clone Entry">
+                                                    <md-button class="md-fab md-mini" aria-label="Use task">
                                                         <md-tooltip md-direction="top">
-                                                            Clone project & description to current timer
+                                                            Use this project & description for current timer
                                                         </md-tooltip>
                                                         <md-icon>content_copy</md-icon>
+                                                    </md-button>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <a class=""
+                                                   ng-click="continueEntry()">
+                                                    <md-button class="md-fab md-mini" aria-label="Continue Task">
+                                                        <md-tooltip md-direction="top">
+                                                            Track current timer and continue now on this task
+                                                        </md-tooltip>
+                                                        <md-icon>update</md-icon>
                                                     </md-button>
                                                 </a>
                                             </div>
@@ -309,7 +320,7 @@
                 <div class="cyclone-table cyclone-table--grouped" flex="grow">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
-                            <h1>Grouped continue tasks</h1>
+                            <h1>Continued Tasks</h1>
                         </div>
                     </md-toolbar>
 
@@ -388,10 +399,10 @@
                                     >
                                         <div class="entry__timestamp" flex="none">
                                             <div class="entry__timestamp__end">
-                                                {{ entry.timestamp | date:'HH:mm:ss' }}
+                                                {{ entry.timestamp | date:'HH:mm' }}
                                             </div>
                                             <div class="entry__timestamp__start">
-                                                {{ entry.timestampStart | date:'HH:mm:ss' }}
+                                                {{ entry.timestampStart | date:'HH:mm' }}
                                             </div>
                                         </div>
                                         <md-card
