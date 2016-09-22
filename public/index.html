@@ -109,6 +109,66 @@
                 </md-card-content>
             </md-card>
 
+            <!-- Add new entry -->
+            <md-card class="animate-hide" ng-hide="!addEntryEnabled">
+                <md-card-title>
+                    <div class="md-headline">
+                        <div ng-if="!newEntryManualTime.value">
+                            <span>What have you done in the last</span>
+                            <span ng-if="currentDurationHasHours">
+                            <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
+                        </span>
+                            <span ng-if="!currentDurationHasHours">
+                            <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
+                        </span>
+                        </div>
+                        <div ng-if="newEntryManualTime.value">
+                            <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
+                        </div>
+                    </div>
+                </md-card-title>
+                <md-card-content>
+                    <form ng-submit="addEntry()" layout="row" name="addEntryForm">
+                        <md-input-container flex="33">
+                            <input id="newTaskText"
+                                   type="text"
+                                   ng-model="newEntryText"
+                                   autofocus
+                                   focus-on="newTaskText"
+                                   aria-label="Description text of new task">
+                            <label for="newTaskText">Description</label>
+                        </md-input-container>
+                        <md-input-container flex="20">
+                            <input id="newTaskProject"
+                                   type="text"
+                                   ng-model="newEntryProject"
+                                   aria-label="Project name of new task">
+                            <label for="newTaskProject">Project</label>
+                        </md-input-container>
+
+                        <md-input-container flex="15">
+                            <input type="time"
+                                   id="newTaskManualTime"
+                                   name="input"
+                                   ng-model="newEntryManualTime.value"
+                                   placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                            <label for="newTaskManualTime">Manual end time</label>
+                        </md-input-container>
+                        <div class="flex">
+                            <a class=""
+                               ng-click="addEntry()">
+                                <md-button class="md-fab md-primary" aria-label="Add Entry">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                            </a>
+                        </div>
+
+                        <button type="submit" class="submitbutton hide">Submit</button>
+                    </form>
+                </md-card-content>
+            </md-card>
+
+
             <!-- Show table of entries-->
             <div class="timelog__entries"
             layout="column"
@@ -124,66 +184,14 @@
                         </div>
                     </md-toolbar>
 
-                    <!-- Add new entry -->
-                    <md-card class="animate-hide" ng-hide="!addEntryEnabled">
-                        <md-card-title>
-                            <div class="md-headline">
-                                <div ng-if="!newEntryManualTime.value">
-                                    <span>What have you done in the last</span>
-                                    <span ng-if="currentDurationHasHours">
-                                <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-                            </span>
-                                    <span ng-if="!currentDurationHasHours">
-                                <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-                            </span>
-                                </div>
-                                <div ng-if="newEntryManualTime.value">
-                                    <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
-                                </div>
-                            </div>
-                        </md-card-title>
-                        <md-card-content>
-                            <form ng-submit="addEntry()" layout="row" name="addEntryForm">
-                                <md-input-container flex="33">
-                                    <input id="newTaskText"
-                                           type="text"
-                                           ng-model="newEntryText"
-                                           autofocus
-                                           focus-on="newTaskText"
-                                           aria-label="Description text of new task">
-                                    <label for="newTaskText">Description</label>
-                                </md-input-container>
-                                <md-input-container flex="20">
-                                    <input id="newTaskProject"
-                                           type="text"
-                                           ng-model="newEntryProject"
-                                           aria-label="Project name of new task">
-                                    <label for="newTaskProject">Project</label>
-                                </md-input-container>
+                    <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!doneLoading">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
 
-                                <md-input-container flex="15">
-                                    <input type="time"
-                                           id="newTaskManualTime"
-                                           name="input"
-                                           ng-model="newEntryManualTime.value"
-                                           placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
-                                    <label for="newTaskManualTime">Manual end time</label>
-                                </md-input-container>
-                                <div class="flex">
-                                    <a class=""
-                                       ng-click="addEntry()">
-                                        <md-button class="md-fab md-primary" aria-label="Add Entry">
-                                            <md-icon>add</md-icon>
-                                        </md-button>
-                                    </a>
-                                </div>
-
-                                <button type="submit" class="submitbutton hide">Submit</button>
-                            </form>
-                        </md-card-content>
-                    </md-card>
-
+                    <!-- List of timelog entries-->
                     <div ng-repeat="entry in entries"
+                         layout="column"
+                         layout-align="start center"
                      class="row"
                      ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
                       {true: 'done', false: ''}[entry.checked == true]
@@ -304,13 +312,19 @@
                             <h1>Grouped continue tasks</h1>
                         </div>
                     </md-toolbar>
+
+                    <div layout="row" layout-padding layout-sm="column" layout-align="space-around" ng-if="!doneLoading">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+
                     <div ng-repeat="(project, projectData) in entriesCurrentGroups">
                         <md-subheader class="md-primary">{{project}}</md-subheader>
-                        <div layout="row">
+                        <div layout="row" layout-wrap layout-align="start stretch">
                             <md-card ng-repeat="(Task, TaskData) in projectData"
                                  ng-if="TaskData.amount > 1"
                                  layout="column"
-                                 layout-align="center stretch"
+                                 layout-padding
+                                 layout-align="start stretch"
                                  class="project-card">
                             <strong>{{Task}}</strong>
                             <!--<div class="entry__time-information">-->
@@ -365,13 +379,14 @@
                                      layout-align="center stretch">
                                     <div ng-repeat="entry in TaskData.tasks"
                                          layout="row"
-                                         layout-align="space-around stretch"
+                                         layout-align="start stretch"
+                                         layout-align-gt-md="space-around stretch"
                                          class="entry"
                                          ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
                                       {true: 'done', false: ''}[entry.checked == true]
                                       ]"
                                     >
-                                        <div class="entry__timestamp" flex="none" flex-xs="100">
+                                        <div class="entry__timestamp" flex="none">
                                             <div class="entry__timestamp__end">
                                                 {{ entry.timestamp | date:'HH:mm:ss' }}
                                             </div>

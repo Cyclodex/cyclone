@@ -9,6 +9,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $rootScope.viewType = $route.current.params.type;
 
             $scope.error = false;
+            $scope.doneLoading = false;
+            $scope.doneLoadingGroups = false;
 
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
@@ -132,7 +134,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                             if (entry.groupID !== undefined) {
                                 groupID         = entry.groupID;
                             }
-                            console.log("groupID : " + groupID);
 
                             // Make sure the elements are set
                             // The project object
@@ -189,24 +190,26 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                         });
 
                         // make sure only the projects with multiple entries are printed
+                        // So we iterate over the object, remove the task entries which have an amount of 1
+                        // And finally if no task is in the group, we remove the project as well.
                         for (var key in groups) {
                             if (groups.hasOwnProperty(key)) {
                                 tasks = groups[key];
                                 for (var task in tasks) {
                                     if (tasks.hasOwnProperty(task)) {
-                                        console.log(task + " -> " + tasks[task]);
-                                        console.log(tasks[task].amount);
-                                        // console.log(Object.keys(tasks).length);
+                                        if (tasks[task].amount === 1) {
+                                            delete groups[key][task];
+                                        }
                                     }
+                                }
+                                if (Object.keys(tasks).length == 0) {
+                                    delete groups[key];
                                 }
                             }
                         }
 
-
-
-                        console.log("groups:");
-                        console.log(groups);
                         $scope.entriesCurrentGroups = groups;
+                        $scope.doneLoadingGroups = true;
                     });
 
 
@@ -219,6 +222,14 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
                     // Create a synchronized array
                     $scope.entries = $firebaseArray(query);
+                    $scope.entries.$loaded()
+                        .then(function() {
+                            $scope.doneLoading = true;
+                        })
+                        .catch(function(error) {
+                            console.log("Error:", error);
+                        });
+
 
                     /**
                      * Check if there is any entry, if not we add a manual start entry.
@@ -249,10 +260,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                         // Entry added, now do something
                                         console.log("Auto starting the day entry added!");
                                     });
-                                } else {
-                                    // Prepare the grouped current list
-
                                 }
+                                $scope.doneLoading = true;
                             });
                     }
 
@@ -440,22 +449,15 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
         // Group update checked on several tasks
         $scope.updateGroup = function(taskData) {
-            console.log("update group");
-            console.log(taskData);
-            console.log(taskData.indeterminate);
             var checked = false;
             if (taskData.indeterminate) {
                 checked = true;
             } else {
-                console.log("checkedstate" + taskData.checkedState);
                 checked = !taskData.checkedState; // the new state is the opposite from the current
-                console.log("inversed checkedstate" + checked);
             }
             for (var taskKey in taskData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                 Entry.checked = checked;
-                console.log("new checked state is: " + checked);
-                console.log(Entry);
                 // Save nextEntry
                 $scope.entries.$save(Entry).then(function(queryRef) {
                     // data has been saved to our database
