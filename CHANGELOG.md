@@ -7,7 +7,7 @@
 * New Layout which uses less space for the timeline entries
 * Not showing the seconds anymore, more cleaner time output.
 * Moving the statistics into the bottom of the footer - only visible on footer hover at the moment.
-
+* New continue a task feature (tracks current timer and uses the selected task to continue on)
 ## 0.33 - TBD
 * Automatically adding a start day entry to improve user experience.
 
