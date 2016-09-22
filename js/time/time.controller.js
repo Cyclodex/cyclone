@@ -129,11 +129,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
                             var projectName        = entry.project;
                             var projectTask        = entry.text;
-                            var groupID            = 'noGroup';
-
-                            if (entry.groupID !== undefined) {
-                                groupID         = entry.groupID;
-                            }
 
                             // Make sure the elements are set
                             // The project object
@@ -150,15 +145,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                 groups[projectName][projectTask].duration = 0;
                                 groups[projectName][projectTask].durationChecked = 0;
                             }
-                            // All the tasks will saved within the task id
-                            // if (groups[projectName][projectTask]['tasks'] === undefined) {
-                            // }
-                            // if (groups[projectName][projectTask].duration === undefined) {
-                            // }
-                            // The timestamp is a testing behaviour now for the grouping ID
-                            // if (groups[projectName][projectTask].timestamp === undefined) {
-                            //     groups[projectName][projectTask].timestamp = entry.timestamp;
-                            // }
 
                             // Sum up the durations and data
                             groups[projectName][projectTask].amount += 1;
