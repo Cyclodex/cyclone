@@ -8,7 +8,10 @@
 * Not showing the seconds anymore, more cleaner time output.
 * Moving the statistics into the bottom of the footer - only visible on footer hover at the moment.
 * New continue a task feature (tracks current timer and uses the selected task to continue on)
-## 0.33 - TBD
+* Stats open on mouseover on footer
+* Project is now before the task description
+
+## 0.33 - 16.09.2016
 * Automatically adding a start day entry to improve user experience.
 
 ## 0.32 - 13.09.2016
