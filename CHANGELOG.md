@@ -1,5 +1,5 @@
 # CHANGELOG
-## 0.34 - 23.09.2016
+## 0.34 - 26.09.2016
 * New continued tasks feature
 * Allows to group multiple appearances of a task (+same project) and have a summary for it
 * Mark all tasks of a continue-group as done
