@@ -56,7 +56,7 @@
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <h1 class="inline">
-                        <a ng-href="#today">Timelog</a>
+                        <a ng-href="#today">Cyclone</a>
                         <span ng-if="nextDateLink"> - Archive</span>
                     </h1>
                     <span flex></span>
@@ -107,6 +107,8 @@
                             <input id="newTaskProject"
                                    type="text"
                                    ng-model="newEntryProject"
+                                   autofocus
+                                   focus-on="newTaskProject"
                                    aria-label="Project name of new task">
                             <label for="newTaskProject">Project</label>
                         </md-input-container>
@@ -114,8 +116,6 @@
                             <input id="newTaskText"
                                    type="text"
                                    ng-model="newEntryText"
-                                   autofocus
-                                   focus-on="newTaskText"
                                    aria-label="Description text of new task">
                             <label for="newTaskText">Description</label>
                         </md-input-container>
@@ -257,7 +257,7 @@
                                                     </md-button>
                                                 </a>
                                             </div>
-                                            <div>
+                                            <div ng-if="addEntryEnabled">
                                                 <a class=""
                                                    ng-click="continueEntry(entry.project, entry.text)">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
@@ -319,6 +319,7 @@
                                 <div>
                                     <strong>{{Task}}</strong>
                                     <a class="continue-task-now"
+                                       ng-if="addEntryEnabled"
                                        ng-click="continueEntry(project, Task)">
                                         <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                             <md-tooltip md-direction="top">

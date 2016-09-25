@@ -114,6 +114,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // Order the query, from recent to older entries
                     var queryGroup = queryGroupRef.orderByChild("order");
 
+                    // CONTINUE TASK
                     // Update the groups on load and all changes of the child data
                     // queryGroup.once('value').then(function(snapshot) {
                     // queryGroup.on('child_changed', function(snapshot) {
@@ -121,6 +122,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                         updateContinuedTasks(snapshot);
                     });
 
+                    focus('newTaskProject');
 
                     // Timelog entries:
                     var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
@@ -130,29 +132,14 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
                     // Create a synchronized array
                     $scope.entries = $firebaseArray(query);
+
+                    // Add a start entry if we are on today and no entries in yet.
                     $scope.entries.$loaded()
-                        .then(function() {
+                        .then(function () {
                             $scope.doneLoading = true;
-                        })
-                        .catch(function(error) {
-                            console.log("Error:", error);
-                        });
-
-
-                    /**
-                     * Check if there is any entry, if not we add a manual start entry.
-                     * This helps to not loose the time in specific situations.
-                     */
-                    if ($rootScope.viewType == 'today') {
-                        queryRef.once("value")
-                            .then(function(snapshot) {
-                                if (snapshot.numChildren() === 0) {
-                                    // TODO: unclear how, but sometimes its still adding this entry
-                                    console.log(snapshot);
-                                    //
-                                    // ADD an automatic entry as start of the day
-                                    // The user can still delete if he wants.
-                                    //
+                            console.log("Entries loaded: " + $scope.entries.length);
+                            if ($rootScope.viewType == 'today') {
+                                if ($scope.entries.length === 0) {
                                     var timestamp = Date.now();
                                     var duration = 0;
                                     var start = timestamp;
@@ -166,18 +153,19 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                         timestampDuration: duration,
                                         order: -timestamp,
                                         user: $rootScope.user // Now it takes the first part of the email address of the logged in user
-                                    }).then(function(queryRef) {
+                                    }).then(function (queryRef) {
                                         // Entry added, now do something
                                         console.log("Auto starting the day entry added!");
                                     });
                                 }
-                                $scope.doneLoading = true;
-                            });
-                    }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("Error:", error);
+                        });
 
                     // Update current time
                     // Attach an asynchronous callback to read the data at our posts reference
-                    // TODO: Is it okey to reuse the queryRef ?
                     var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
                     lastEntryRef.on("value", function(snapshot) {
                         // object in object (but only 1 because of limit above)
@@ -256,7 +244,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             // newEntryText
             if ($scope.newEntryText !== undefined) {
-                console.log($scope.newEntryText);
+
             } else {
                 $scope.newEntryText = '';
             }
@@ -293,7 +281,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 }
 
                 // Focus First element now again, so we are ready to type an other task
-                focus('newTaskText');
+                focus('newTaskProject');
 
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key;
