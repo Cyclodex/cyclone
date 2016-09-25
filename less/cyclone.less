@@ -1,3 +1,7 @@
+.login {
+    height: ~'calc(100vh - 64px)';
+    text-align: center;
+}
 .header .header__version {
     float: right;
 }
@@ -154,14 +158,19 @@
     padding: 5px;
 }
 .footer-stats__totals {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 101;
-
     text-align: center;
     font-size: 1.2rem;
+    height: auto;
+    max-height: none;
+
+    @media only screen and (min-width: 960px) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 101;
+    }
+
 
     &:hover {
         ~ .footer-stats__details {
@@ -170,14 +179,17 @@
     }
 }
 .footer-stats__details {
-    position: fixed;
-    bottom: 64px;
-    width: 100%;
     height: auto;
     max-height: none;
-    z-index: 100;
-    transition: transform 500ms;
-    transform: translateY(100%);
+
+    @media only screen and (min-width: 960px) {
+        position: fixed;
+        bottom: 64px;
+        width: 100%;
+        z-index: 100;
+        transition: transform 500ms;
+        transform: translateY(100%);
+    }
 
     &.hidden {
         transform: translateY(100%);
@@ -186,7 +198,7 @@
         transform: translateY(40%);
     }
 }
-.footer-stats__totals > div {
+.stats-totals > div {
     display: inline-block;
     border: 1px solid white;
     border-radius: 5px;
@@ -198,7 +210,15 @@
 }
 
 .page {
+  @media only screen and (min-width: 960px) {
     padding-bottom: 300px;
+  }
+}
+.md-headline {
+  font-size: 1rem;
+  @media only screen and (min-width: 960px) {
+    font-size: 24px;
+  }
 }
 /* the private time entries look different */
 .footer-stats__private:last-child {

@@ -32,45 +32,19 @@
 <body translate="no">
 
 <div ng-app="cycloneApp" class="page page--timelog">
-    <md-toolbar ng-cloak ng-controller="ConnectionCtrl">
-        <div class="header__status md-toolbar-tools">
-            <span>Status:&nbsp;</span>
-            <span class="status">
-                {{ connection }}
-            </span>
-            <span flex></span>
-            <div class="header__version right">
-                <a href="https://github.com/Cyclodex/cyclone/blob/master/CHANGELOG.md" title="Go to github page" target="_blank">
-                    Version: {{ version }} <strong>BETA</strong>
-                </a>
-            </div>
-        </div>
-    </md-toolbar>
-
-    <div ng-controller="ProfileCtrl" class="card-content white-text"
-         layout="row">
-        <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
-            <md-icon>account_circle</md-icon>
-            <span>{{ user }}</span>
+    <!-- Login button -->
+    <div ng-if="!user"
+         layout="column"
+         layout-align="center center"
+         class="login">
+        <h1>Cyclone</h1>
+        <a id="loginButton"
+           href="authentication.html"
+           target="_parent"
+           class=""
+           ng-show="!user">
+            <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
         </a>
-        <div ng-show="ProfileOpen || !user" id="ProfileOpen">
-            <div id="account-details" ng-show="userIsAdmin"></div>
-            <a id="loginButton"
-               href="authentication.html"
-               target="_parent"
-               class=""
-               ng-show="!user">
-                <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
-            </a>
-            <a id="logoutButton"
-               ng-click="logout()"
-               class=""
-               ng-show="user">
-                <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
-            </a>
-        </div>
-
-        <!--Data: <pre>{{ profile | json }}</pre>-->
     </div>
 
     <div ng-cloak ng-controller="TimeCtrl"
@@ -109,7 +83,8 @@
             </md-card>
 
             <!-- Add new entry -->
-            <md-card class="animate-hide" ng-hide="!addEntryEnabled">
+            <md-card class="animate-hide" ng-hide="!addEntryEnabled"
+                flex="nogrow">
                 <md-card-title>
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
@@ -128,6 +103,13 @@
                 </md-card-title>
                 <md-card-content>
                     <form ng-submit="addEntry()" layout="row" name="addEntryForm">
+                        <md-input-container flex="20">
+                            <input id="newTaskProject"
+                                   type="text"
+                                   ng-model="newEntryProject"
+                                   aria-label="Project name of new task">
+                            <label for="newTaskProject">Project</label>
+                        </md-input-container>
                         <md-input-container flex="33">
                             <input id="newTaskText"
                                    type="text"
@@ -136,13 +118,6 @@
                                    focus-on="newTaskText"
                                    aria-label="Description text of new task">
                             <label for="newTaskText">Description</label>
-                        </md-input-container>
-                        <md-input-container flex="20">
-                            <input id="newTaskProject"
-                                   type="text"
-                                   ng-model="newEntryProject"
-                                   aria-label="Project name of new task">
-                            <label for="newTaskProject">Project</label>
                         </md-input-container>
 
                         <md-input-container flex="15">
@@ -324,7 +299,7 @@
                 <div class="cyclone-table cyclone-table--grouped" flex="grow">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
-                            <h1>Continued Tasks</h1>
+                            <h1>Continued tasks</h1>
                         </div>
                     </md-toolbar>
 
@@ -452,12 +427,51 @@
         <pre>{{ profile | json }}</pre> -->
     </div>
 
-    <footer ng-cloak ng-controller="StatsCtrl" class="footer-stats">
-        <md-toolbar class="footer-stats__totals stats-totals md-toolbar-tools"
-                    layout="row" layout-align="center center">
-            <div><strong>Total:</strong></div>
-            <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
-            <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
+    <footer class="footer-stats"
+            ng-controller="StatsCtrl"
+            ng-cloak>
+        <md-toolbar class="footer-stats__totals md-toolbar-tools"
+                    ng-controller="ConnectionCtrl"
+                    ng-cloak
+                    layout="column"
+                    layout-gt-sm="row"
+                    layout-align="space-between center"
+        >
+            <div flex="nogrow">
+                <div ng-cloak ng-controller="ProfileCtrl" class="card-content white-text"
+                     layout="row" layout-align="start center">
+                    <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
+                        <md-icon>account_circle</md-icon>
+                        <span>{{ user }}</span>
+                    </a>
+                    <span ng-if="!user" class="status">{{ connection }}</span>
+                    <div ng-show="ProfileOpen || !user" id="ProfileOpen" layout="row">
+                        <a id="logoutButton"
+                           ng-click="logout()"
+                           class=""
+                           ng-show="user">
+                            <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
+                        </a>
+                        <div id="account-details" ng-show="userIsAdmin"></div>
+                    </div>
+
+                    <!--Data: <pre>{{ profile | json }}</pre>-->
+                </div>
+            </div>
+            <div flex class="stats-totals">
+                <div><strong>Total:</strong></div>
+                <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
+                <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
+            </div>
+            <div flex="nogrow">
+                <div class="header__version right"
+                     layout="row"
+                     layout-align="end center">
+                    <a href="https://github.com/Cyclodex/cyclone/blob/master/CHANGELOG.md" title="Go to github page" target="_blank">
+                        Version: {{ version }} <strong>BETA</strong>
+                    </a>
+                </div>
+            </div>
         </md-toolbar>
         <md-toolbar
                 ng-show="user"
