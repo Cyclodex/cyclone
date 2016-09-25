@@ -369,12 +369,9 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         };
 
         // Continue task feature (tracks current timer and continues with the selected one)
-        $scope.continueEntry = function() {
-            console.log("continueEntry()");
-            console.log(this.entry.project);
-            console.log(this.entry.text);
-            $scope.newContinueEntryProject = this.entry.project;
-            $scope.newContinueEntryText    = this.entry.text;
+        $scope.continueEntry = function(project, text) {
+            $scope.newContinueEntryProject = project;
+            $scope.newContinueEntryText    = text;
             $scope.addEntry();
         };
 
@@ -519,7 +516,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             for (var taskKey in taskData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                 Entry.checked = checked;
-                // Save nextEntry
+                // Save Entry
                 $scope.entries.$save(Entry).then(function(queryRef) {
                     // data has been saved to our database
                     console.log("Entry (update Group) entry saved with index" + queryRef.key)

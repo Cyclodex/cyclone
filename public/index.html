@@ -284,7 +284,7 @@
                                             </div>
                                             <div>
                                                 <a class=""
-                                                   ng-click="continueEntry()">
+                                                   ng-click="continueEntry(entry.project, entry.text)">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                         <md-tooltip md-direction="top">
                                                             Track current timer and continue now on this task
@@ -341,9 +341,19 @@
                                  layout-padding
                                  layout-align="start stretch"
                                  class="project-card">
-                            <strong>{{Task}}</strong>
-                            <!--<div class="entry__time-information">-->
-                                <md-subheader class="md-secondary" flex="none">
+                                <div>
+                                    <strong>{{Task}}</strong>
+                                    <a class="continue-task-now"
+                                       ng-click="continueEntry(project, Task)">
+                                        <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
+                                            <md-tooltip md-direction="top">
+                                                Track current timer and continue now on this task
+                                            </md-tooltip>
+                                            <md-icon>play_arrow</md-icon>
+                                        </md-button>
+                                    </a>
+                                </div>
+                                <md-subheader class="md-secondary entry__time-information" flex="none">
                                     <span>Checked time:</span>
                                     <span class="duration duration--human">
                                         <span>{{ TaskData.durationChecked | date : "H'h' m'min'" : '+0000' }}</span>
@@ -354,7 +364,6 @@
                                         <strong>{{ TaskData.durationChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
                                     </span>
                                 </md-subheader>
-                            <!--</div>-->
                             <!--<div class="entry__time-information">-->
                                 <md-subheader class="md-primary">
                                     <span>Un-checked time:</span>
