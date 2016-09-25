@@ -196,30 +196,34 @@
                       {true: 'done', false: ''}[entry.checked == true]
                       ]"
                     >
-                        <div ng-if=$last
+                        <div ng-if="$last && entry.type == 'system'"
                              class="entry start-of-day"
                              layout="row">
                             <div class="entry__timestamp" flex="none">
                                 {{ entry.timestamp | date:'HH:mm' }}
                             </div>
-                            <md-card>
-                                {{entry.text}}
+                            <md-card layout="column"
+                                     layout-align="space-around"
+                                     layout-gt-xs="row"
+                                     flex="none">
+                                <div>
+                                    {{entry.text}}
+                                </div>
+                                <div class="entry__options">
+                                    <md-button ng-click="deleteEntry();"
+                                               class="md-fab md-mini"
+                                               aria-label="Delete entry">
+                                        <md-tooltip md-direction="top">
+                                            Delete
+                                        </md-tooltip>
+                                        <md-icon>delete_forever</md-icon>
+                                    </md-button>
+                                </div>
                             </md-card>
-                            <!-- Don't delete the last element, would act nicely.
-                            <div>
-                                <md-button ng-click="deleteEntry();"
-                                           class="md-fab md-mini"
-                                           aria-label="Delete entry">
-                                    <md-tooltip md-direction="top">
-                                        Delete
-                                    </md-tooltip>
-                                    <md-icon>delete_forever</md-icon>
-                                </md-button>
-                            </div> -->
                         </div>
 
 
-                        <div ng-if=!$last
+                        <div ng-if="!$last || entry.type !== 'system'"
                              class="entry"
                              layout="row">
                             <div class="entry__timestamp" flex="none">
@@ -270,7 +274,7 @@
                                             <div>
                                                 <a class=""
                                                    ng-click="cloneEntry()">
-                                                    <md-button class="md-fab md-mini" aria-label="Use task">
+                                                    <md-button class="md-fab md-primary md-mini" aria-label="Use task">
                                                         <md-tooltip md-direction="top">
                                                             Use this project & description for current timer
                                                         </md-tooltip>
@@ -281,11 +285,11 @@
                                             <div>
                                                 <a class=""
                                                    ng-click="continueEntry()">
-                                                    <md-button class="md-fab md-mini" aria-label="Continue Task">
+                                                    <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                         <md-tooltip md-direction="top">
                                                             Track current timer and continue now on this task
                                                         </md-tooltip>
-                                                        <md-icon>update</md-icon>
+                                                        <md-icon>play_arrow</md-icon>
                                                     </md-button>
                                                 </a>
                                             </div>
