@@ -1,3 +1,7 @@
+.login {
+    height: ~'calc(100vh - 64px)';
+    text-align: center;
+}
 .header .header__version {
     float: right;
 }
@@ -15,65 +19,131 @@
     padding: 10px;
     display: inline-block;
 }
+
+.entry__timestamp {
+    position: relative;
+    top: -15px;
+    font-size: 1.1rem;
+
+    .cyclone-table--grouped & {
+        top: 0;
+        font-size: 0.7rem;
+    }
+
+    .entry__timestamp__start {
+        position: absolute;
+        bottom: 0;
+    }
+}
+
+.entry {
+    position: relative;
+    margin: 2px 0;
+
+    .md-input-has-value {
+        margin: 0;
+        display: block;
+    }
+    .entry__info {
+        margin-right: 1em;
+    }
+    .entry__info__input--text {
+        margin: 5px 0 5px 0;
+        padding: 0;
+
+    }
+    .entry__info__input--project input {
+        font-weight: bold;
+    }
+    .md-errors-spacer {
+        min-height: unset;
+    }
+    md-card {
+        position: relative;
+        padding: 10px;
+        margin: 0 0 0 10px;
+    }
+
+    .entry__checked {
+        position: absolute;
+        top: 5px;
+        left: -38px;
+        z-index: 2;
+        height: 83%;
+        margin: 0;
+
+        md-checkbox {
+            position: relative;
+            top: 33%;
+            margin: 0;
+            padding: 5px 0;
+            background-color: rgb(250,250,250);
+        }
+    }
+    md-switch.md-primary {
+        margin: 0;
+
+        ._md-label {
+            position: absolute;
+            top: -5px;
+        }
+    }
+    &.start-of-day {
+        width: 100%;
+    }
+}
 .cyclone-table {
-    width: 100%;
-    border-collapse: collapse;
-    display: table;
+    padding: 20px 10px;
+
+    > .row:first-of-type {
+        padding-top: 20px;
+    }
+
+    .work md-card{
+        background-color: lightyellow;
+        border-bottom: 1px solid orange;
+    }
+    .work.done md-card{
+        background-color: #c6ffc6;
+        border-bottom: 1px solid darkgreen;
+    }
+    .private md-card{
+        background-color: lightblue;
+        border-bottom: 1px solid blue;
+    }
+
+    .show-on-hover,
+    .entry__options {
+        position: relative;
+        -webkit-transition: opacity 400ms ease-in-out;
+        transition: opacity 400ms ease-in-out;
+        opacity: 0;
+    }
+
+    &.timeline {
+        .entry__checked:before {
+            content: '';
+            position: absolute;
+            display: block;
+            height: 100%;
+            left: 10px;
+            border-left: 1px dashed gray;
+            opacity: 0.5;
+        }
+        .entry:hover {
+            .show-on-hover,
+            .entry__options {
+                opacity: 1;
+            }
+            .entry__checked:before {
+                opacity: 1;
+                border-left: 1px solid gray;
+            }
+
+        }
+    }
 }
-.cyclone-table > div {
-    display: table-row;
-}
-.cyclone-table > div > div {
-    display: table-cell;
-    vertical-align: middle;
-    /** make this on mobile 33% **/
-}
-.cyclone-table .work {
-    background-color: lightyellow;
-    border-bottom: 1px solid orange;
-}
-.cyclone-table .work.done {
-    background-color: #c6ffc6;
-    border-bottom: 1px solid darkgreen;
-}
-.cyclone-table .private {
-    background-color: lightblue;
-    border-bottom: 1px solid blue;
-}
-.cyclone-table .show-on-hover,
-.cyclone-table .options > div {
-    -webkit-transition: opacity 400ms ease-in-out;
-    transition: opacity 400ms ease-in-out;
-    opacity: 0;
-}
-.cyclone-table :hover .show-on-hover,
-.cyclone-table :hover .options > div {
-    opacity: 1;
-}
-.cyclone-table .options md-checkbox,
-.cyclone-table .options md-switch,
-.cyclone-table .options md-fab {
-    margin: 0 !important;
-}
-.cyclone-table .entry__text {
-    width: 68%;
-}
-.cyclone-table .entry__project {
-    width: 28%;
-}
-.cyclone-table .duration {
-    text-align: center;
-}
-.cyclone-table .md-errors-spacer {
-    display: none;
-}
-.footer-stats {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: auto;
-    max-height: none;
-}
+
 .stats-title {
     text-align: center;
     font-size: 1.2rem;
@@ -84,19 +154,59 @@
     text-align: center;
 }
 .stats-title > div,
-.stats-total > div,
 .stats-entry > div {
     padding: 5px;
 }
-.stats-total {
+.footer-stats__totals {
     text-align: center;
     font-size: 1.2rem;
-    margin: 5px 0;
+    height: auto;
+    max-height: none;
+
+    @media only screen and (min-width: 960px) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 101;
+    }
+
+
+    &:hover {
+        ~ .footer-stats__details {
+            transform: translateY(0);
+        }
+    }
 }
-.stats-total > div {
+.footer-stats__details {
+    height: auto;
+    max-height: none;
+
+    @media only screen and (min-width: 960px) {
+        position: fixed;
+        bottom: 64px;
+        width: 100%;
+        z-index: 100;
+        transition: transform 500ms;
+        transform: translateY(100%);
+    }
+
+    &:hover {
+      transform: translateY(0);
+    }
+
+    &.hidden {
+        transform: translateY(100%);
+    }
+    &.show-tasks {
+        transform: translateY(40%);
+    }
+}
+.stats-totals > div {
     display: inline-block;
     border: 1px solid white;
     border-radius: 5px;
+    padding: 5px;
 
     &:first-child {
         border: none;
@@ -104,7 +214,15 @@
 }
 
 .page {
+  @media only screen and (min-width: 960px) {
     padding-bottom: 300px;
+  }
+}
+.md-headline {
+  font-size: 1rem;
+  @media only screen and (min-width: 960px) {
+    font-size: 24px;
+  }
 }
 /* the private time entries look different */
 .footer-stats__private:last-child {
@@ -115,7 +233,11 @@
 .animate-hide {
     transition: all linear 0.5s;
     opacity: 1;
-    height: 182px;
+    height: 130px;
+
+    md-card-content {
+        padding: 10px;
+    }
 }
 
 .animate-hide.ng-hide {
@@ -129,7 +251,7 @@
     margin: 0px 10px 20px;
 
     display: flex;
-    align-items: center;
+    align-items: flex-end;
 
     .dayVisualize-entry {
         display: inline-block;
@@ -190,4 +312,9 @@ button.dayVisualize-entry.md-button.md-button:hover {
 .footer-stats.open .dayVisualize.project-sum {
     height: 100%;
     margin: 20px;
+}
+
+// The continue tasks time summary
+.project-card ._md-subheader-inner {
+    padding: 0;
 }

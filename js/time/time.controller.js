@@ -9,6 +9,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $rootScope.viewType = $route.current.params.type;
 
             $scope.error = false;
+            $scope.doneLoading = false;
+            $scope.doneLoadingGroups = false;
 
             // Note: This is defining the type and values also for the stats.
             if ($rootScope.viewType == 'today') {
@@ -99,11 +101,30 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             // Show the current date
             $scope.today = lastEntryTimestamp;
 
+            $scope.entriesCurrentGroups = {};
+
             // Observe the user and then call the data
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
                     // We save the entries in the current year, week and day, but most important by every user ()
                     var ref = firebase.database().ref();
+
+                    // New grouped current time entries
+                    var queryGroupRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                    // Order the query, from recent to older entries
+                    var queryGroup = queryGroupRef.orderByChild("order");
+
+                    // CONTINUE TASK
+                    // Update the groups on load and all changes of the child data
+                    // queryGroup.once('value').then(function(snapshot) {
+                    // queryGroup.on('child_changed', function(snapshot) {
+                    queryGroup.on('value', function(snapshot) {
+                        updateContinuedTasks(snapshot);
+                    });
+
+                    focus('newTaskProject');
+
+                    // Timelog entries:
                     var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
                     // Order the query, from recent to older entries
                     // However this only works with the orderBy in the template right now.
@@ -112,18 +133,13 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // Create a synchronized array
                     $scope.entries = $firebaseArray(query);
 
-                    /**
-                     * Check if there is any entry, if not we add a manual start entry.
-                     * This helps to not loose the time in specific situations.
-                     */
-                    if ($rootScope.viewType == 'today') {
-                        queryRef.once("value")
-                            .then(function(snapshot) {
-                                if (snapshot.numChildren() == 0) {
-                                    //
-                                    // ADD an automatic entry as start of the day
-                                    // The user can still delete if he wants.
-                                    //
+                    // Add a start entry if we are on today and no entries in yet.
+                    $scope.entries.$loaded()
+                        .then(function () {
+                            $scope.doneLoading = true;
+                            console.log("Entries loaded: " + $scope.entries.length);
+                            if ($rootScope.viewType == 'today') {
+                                if ($scope.entries.length === 0) {
                                     var timestamp = Date.now();
                                     var duration = 0;
                                     var start = timestamp;
@@ -131,23 +147,25 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                                         text: 'Starting the day',
                                         project: 'CYCLONE',
                                         checked: true,
-                                        type: 'private',
+                                        type: 'system',
                                         timestamp: timestamp,
                                         timestampStart: start,
                                         timestampDuration: duration,
                                         order: -timestamp,
                                         user: $rootScope.user // Now it takes the first part of the email address of the logged in user
-                                    }).then(function(queryRef) {
+                                    }).then(function (queryRef) {
                                         // Entry added, now do something
                                         console.log("Auto starting the day entry added!");
                                     });
                                 }
-                            });
-                    }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("Error:", error);
+                        });
 
                     // Update current time
                     // Attach an asynchronous callback to read the data at our posts reference
-                    // TODO: Is it okey to reuse the queryRef ?
                     var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
                     lastEntryRef.on("value", function(snapshot) {
                         // object in object (but only 1 because of limit above)
@@ -182,6 +200,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             // TODO: we probably should display a information that it was not added
             // The input field which is invalid however should be marked red already.
             if ($scope.addEntryForm.$invalid){
+                console.log("entry was not added");
                 return false;
             }
 
@@ -251,8 +270,18 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 $scope.newEntryProject = '';
                 $scope.newEntryManualTime = '';
 
+                // Take over continue task if available
+                if ($scope.newContinueEntryProject !== undefined){
+                    $scope.newEntryProject = $scope.newContinueEntryProject;
+                    $scope.newContinueEntryProject = ''; // Clear it again
+                }
+                if ($scope.newContinueEntryText !== undefined){
+                    $scope.newEntryText = $scope.newContinueEntryText;
+                    $scope.newContinueEntryText = ''; // Clear it again
+                }
+
                 // Focus First element now again, so we are ready to type an other task
-                focus('newTaskText');
+                focus('newTaskProject');
 
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key;
@@ -283,7 +312,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 // Save new entry
                 $scope.entries.$save(newEntry).then(function(queryRef) {
                     // data has been saved to our database
-                    console.log("entry saved with index" + queryRef.key)
+                    console.log("newEntry entry saved with index" + queryRef.key)
                 });
 
                 //
@@ -299,7 +328,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
-                        console.log("entry saved with index" + queryRef.key)
+                        console.log("nextEntry entry saved with index" + queryRef.key)
                     });
                 }
 
@@ -327,6 +356,16 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $scope.newEntryProject = this.entry.project;
         };
 
+        // Continue task feature (tracks current timer and continues with the selected one)
+        $scope.continueEntry = function(project, text) {
+            $scope.newContinueEntryProject = project;
+            $scope.newContinueEntryText    = text;
+            $scope.addEntry();
+        };
+
+
+
+
         // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
         $scope.deleteEntry = function() {
             // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
@@ -353,7 +392,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     // Save nextEntry
                     $scope.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
-                        console.log("entry saved with index" + queryRef.key)
+                        console.log("(removed) nextEntry saved with index" + queryRef.key)
                     });
                 }
             });
@@ -372,5 +411,105 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             $timeout(updateDurations, 1000, true);
         };
 
+        // Continued Task handler
+        function updateContinuedTasks(snapshot) {
+            // We are always starting from scratch, we could also try to iterate over the
+            // $scope.entriesCurrentGroups but this would lead to more problems on text changes etc.
+
+            var groups = {};
+
+            // Iterate over all the data and prepare new object
+            snapshot.forEach(function(data) {
+                entry = data.val();
+
+                var projectName        = entry.project;
+                var projectTask        = entry.text;
+
+                // Make sure the elements are set
+                // The project object
+                if (groups[projectName] === undefined) {
+                    groups[projectName] = {};
+                }
+                // The specific task
+                if (groups[projectName][projectTask] === undefined) {
+                    groups[projectName][projectTask] = {};
+                    groups[projectName][projectTask]['tasks'] = {};
+                    groups[projectName][projectTask].amount = 0;
+                    groups[projectName][projectTask].amountChecked = 0;
+                    groups[projectName][projectTask].checkedState = '';
+                    groups[projectName][projectTask].duration = 0;
+                    groups[projectName][projectTask].durationChecked = 0;
+                }
+
+                // Sum up the durations and data
+                groups[projectName][projectTask].amount += 1;
+                groups[projectName][projectTask]['tasks'][data.key] = entry;
+
+                // Add specific data with some conditions
+                if (entry.checked) {
+                    groups[projectName][projectTask].amountChecked += 1;
+                    groups[projectName][projectTask].durationChecked += entry.timestampDuration;
+                } else {
+                    groups[projectName][projectTask].duration += entry.timestampDuration;
+                }
+
+                // checking the "checked" state
+                // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
+                if (groups[projectName][projectTask].amountChecked == 0) {
+                    // not checked
+                    groups[projectName][projectTask].checkedState = false;
+                    groups[projectName][projectTask].indeterminate = false;
+                } else if (groups[projectName][projectTask].amountChecked == groups[projectName][projectTask].amount) {
+                    // all tasks are checked
+                    groups[projectName][projectTask].checkedState = true;
+                    groups[projectName][projectTask].indeterminate = false;
+                } else {
+                    // amount of tasks checked is not amount of tasks, means mixed
+                    groups[projectName][projectTask].checkedState = false;
+                    groups[projectName][projectTask].indeterminate = true;
+                }
+            });
+
+            // make sure only the projects with multiple entries are printed
+            // So we iterate over the object, remove the task entries which have an amount of 1
+            // And finally if no task is in the group, we remove the project as well.
+            for (var key in groups) {
+                if (groups.hasOwnProperty(key)) {
+                    tasks = groups[key];
+                    for (var task in tasks) {
+                        if (tasks.hasOwnProperty(task)) {
+                            if (tasks[task].amount === 1) {
+                                delete groups[key][task];
+                            }
+                        }
+                    }
+                    if (Object.keys(tasks).length == 0) {
+                        delete groups[key];
+                    }
+                }
+            }
+
+            $scope.entriesCurrentGroups = groups;
+            $scope.doneLoadingGroups = true;
+        }
+
+        // Group update checked on several tasks
+        $scope.updateGroup = function(taskData) {
+            var checked = false;
+            if (taskData.indeterminate) {
+                checked = true;
+            } else {
+                checked = !taskData.checkedState; // the new state is the opposite from the current
+            }
+            for (var taskKey in taskData.tasks) {
+                var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
+                Entry.checked = checked;
+                // Save Entry
+                $scope.entries.$save(Entry).then(function(queryRef) {
+                    // data has been saved to our database
+                    console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                });
+            }
+        };
     }
 ]);

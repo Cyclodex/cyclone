@@ -1,5 +1,17 @@
 # CHANGELOG
-## 0.33 - TBD
+## 0.34 - 23.09.2016
+* New continued tasks feature
+* Allows to group multiple appearances of a task (+same project) and have a summary for it
+* Mark all tasks of a continue-group as done
+* Half marked continue-groups can still be checked, sum of time is shown accordingly.
+* New Layout which uses less space for the timeline entries
+* Not showing the seconds anymore, more cleaner time output.
+* Moving the statistics into the bottom of the footer - only visible on footer hover at the moment.
+* New continue a task feature (tracks current timer and uses the selected task to continue on)
+* Stats open on mouseover on footer
+* Project is now before the task description
+
+## 0.33 - 16.09.2016
 * Automatically adding a start day entry to improve user experience.
 
 ## 0.32 - 13.09.2016
