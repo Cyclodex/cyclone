@@ -432,8 +432,6 @@
             ng-controller="StatsCtrl"
             ng-cloak>
         <md-toolbar class="footer-stats__totals md-toolbar-tools"
-                    ng-controller="ConnectionCtrl"
-                    ng-cloak
                     layout="column"
                     layout-gt-sm="row"
                     layout-align="space-between center"
@@ -459,20 +457,11 @@
                     <!--Data: <pre>{{ profile | json }}</pre>-->
                 </div>
             </div>
-            <div flex class="stats-totals">
-                <div><strong>Total:</strong></div>
-                <div>Work: {{statsTotalWork | date : "H'h' m'min'" : '+0000'}}</div>
-                <div class="footer-stats__private">Private: {{statsTotalPrivate | date : "H'h' m'min'" : '+0000'}}</div>
-            </div>
-            <div flex="nogrow">
-                <div class="header__version right"
-                     layout="row"
-                     layout-align="end center">
-                    <a href="https://github.com/Cyclodex/cyclone/blob/master/CHANGELOG.md" title="Go to github page" target="_blank">
-                        Version: {{ version }} <strong>BETA</strong>
-                    </a>
-                </div>
-            </div>
+            <stats-total
+                work-total="statsTotalWork"
+                private-total="statsTotalPrivate"
+            ></stats-total>
+            <version-display></version-display>
         </md-toolbar>
         <md-toolbar
                 ng-show="user"

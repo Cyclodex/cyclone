@@ -1,11 +1,14 @@
 // Profile controller
-angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "Auth", "$rootScope",
-    function($scope, Auth, $location, Auth, $rootScope) {
+angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "$rootScope",
+    function($scope, Auth, $location, $rootScope) {
         $rootScope.user = '';
+        $scope.connection = 'connecting';
 
         initApp = function() {
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
+                    $scope.connection = 'connected';
+                    
                     // User is signed in.
                     var displayName = user.displayName;
                     var email = user.email;
@@ -36,6 +39,7 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
 
                 } else {
                     // User is signed out.
+                    $scope.connection = 'not connected';
                     console.log("User is not logged in.");
                 }
             }, function(error) {

@@ -1,3 +1,7 @@
+// Require sub components and services
+require('./statsTotal.component.js');
+require('../version/version.component.js'); // version is currently inside stats
+
 //
 // Summary / Stats
 //
