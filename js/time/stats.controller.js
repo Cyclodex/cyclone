@@ -41,7 +41,7 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "Auth", "$fireba
                             var projectName     = data.project;
 
                             // Random project color
-                            if (projectsColor[projectName] === undefined) {
+                            if (projectsColor[projectName] === undefined  || typeof projectsColor[projectName] === 'function') {
                                 projectsColor[projectName] = randomColor({luminosity: 'light'});
                             }
 
@@ -57,7 +57,7 @@ angular.module("cycloneApp").controller("StatsCtrl", ["$scope", "Auth", "$fireba
                             // Stats project totals
                             //
 
-                            if (projects[projectName] === undefined) {
+                            if (projects[projectName] === undefined || typeof projects[projectName] === 'function') {
                                 projects[projectName] = {};
                             }
                             // Sum of all projects

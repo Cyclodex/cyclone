@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.36 -18.10.2016
+* Fixed issue in FF that "watch" was not working as project or description. The property was already a function.
+
 ## 0.35 - 26.09.2016
 * Making login not to call 2 route changes
 
