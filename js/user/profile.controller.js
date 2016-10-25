@@ -22,7 +22,9 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                         if (email == 'gander@jumps.ch') {
                             $scope.userIsAdmin = 1;
 
-                            document.getElementById('account-details').textContent = JSON.stringify({
+                          /** Show more information
+                           *
+                          document.getElementById('account-details').textContent = JSON.stringify({
                                 displayName: displayName,
                                 email: email,
                                 emailVerified: emailVerified,
@@ -31,11 +33,13 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                                 accessToken: accessToken,
                                 providerData: providerData
                             }, null, '  ');
+                           */
                         }
                     });
 
                     // Cyclone variables
-                    $rootScope.user = user.email.substring(0, user.email.indexOf("@"));
+                    // TODO: should be a service or similar I think...
+                    $rootScope.user = $scope.user = user.email.substring(0, user.email.indexOf("@"));
 
                 } else {
                     // User is signed out.
