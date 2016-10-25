@@ -52,7 +52,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                 var projectName     = data.project;
 
                 // Random project color
-                if (projectsColor[projectName] === undefined) {
+                if (projectsColor[projectName] === undefined  || typeof projectsColor[projectName] === 'function') {
                   projectsColor[projectName] = randomColor({luminosity: 'light'});
                 }
 
@@ -68,7 +68,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                 // Stats project totals
                 //
 
-                if (projects[projectName] === undefined) {
+                if (projects[projectName] === undefined || typeof projects[projectName] === 'function') {
                   projects[projectName] = {};
                 }
                 // Sum of all projects
