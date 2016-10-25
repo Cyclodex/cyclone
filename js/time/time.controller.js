@@ -427,11 +427,13 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
                 // Make sure the elements are set
                 // The project object
-                if (groups[projectName] === undefined) {
+                if (groups[projectName] === undefined || typeof groups[projectName] === 'function') {
                     groups[projectName] = {};
                 }
                 // The specific task
-                if (groups[projectName][projectTask] === undefined) {
+                // Why typeof === function? It looks like there are cases like "watch" which is a function. (ff only)
+                // Not sure how to handle this correctly. For now we just override it anyway.
+                if (groups[projectName][projectTask] === undefined || typeof groups[projectName][projectTask] === 'function') {
                     groups[projectName][projectTask] = {};
                     groups[projectName][projectTask]['tasks'] = {};
                     groups[projectName][projectTask].amount = 0;

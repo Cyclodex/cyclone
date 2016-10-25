@@ -1,4 +1,10 @@
 # CHANGELOG
+## 0.36 -18.10.2016
+* Fixed issue in FF that "watch" was not working as project or description. The property was already a function.
+
+## 0.35 - 26.09.2016
+* Making login not to call 2 route changes
+
 ## 0.34 - 26.09.2016
 * New continued tasks feature
 * Allows to group multiple appearances of a task (+same project) and have a summary for it
