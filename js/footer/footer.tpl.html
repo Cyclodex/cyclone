@@ -25,15 +25,15 @@
         </div>
     </div>
     <stats-total
-     work-total="statsTotalWork"
-     private-total="statsTotalPrivate"
+     work-total="$ctrl.statsTotalWork"
+     private-total="$ctrl.statsTotalPrivate"
     ></stats-total>
     <version-display></version-display>
 </md-toolbar>
 
 <!-- TODO: This would be rather its own component, but needs all the stats data in a service or similar -->
 <md-toolbar
- ng-show="refDayVisArray"
+ ng-show="$ctrl.refDayVisArray"
  class="container footer-stats__details md-toolbar-tools"
  layout="column" layout-align="center stretch">
 
@@ -41,7 +41,7 @@
         <strong>Tasks</strong>
     </div>
     <div class="day-visualize">
-        <md-button ng-repeat="entry in refDayVisArray | orderObjectBy:'order':true"
+        <md-button ng-repeat="entry in $ctrl.refDayVisArray | orderObjectBy:'order':true"
          class="dayVisualize-entry project--{{entry.project}}"
          ng-class="[
                 {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
@@ -63,7 +63,7 @@
         <strong>Project total</strong>
     </div>
     <div class="day-visualize project-sum">
-        <md-button ng-repeat="entry in dayVisualizeProjectTotals track by $index"
+        <md-button ng-repeat="entry in $ctrl.dayVisualizeProjectTotals track by $index"
          class="dayVisualize-entry project--{{entry.project}}"
          ng-class="[
                 {true: 'work', false: 'private'}[entry.type == 'work'],

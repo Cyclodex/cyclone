@@ -35,18 +35,18 @@ angular.module('cycloneApp').component('footerDisplay', {
             // If we don't order by "order" , manual time entries will not appear correctly
             var refDayVis = queryRef.orderByChild("order");
 
-            $scope.refDayVisArray = $firebaseArray(refDayVis);
-            $scope.dayVisualizeProjectTotals = [];
+            $ctrl.refDayVisArray = $firebaseArray(refDayVis);
+            $ctrl.dayVisualizeProjectTotals = [];
 
-            $scope.refDayVisArray.$watch(function(event) {
+            $ctrl.refDayVisArray.$watch(function(event) {
               var secondsOfOneHour = 60 * 60;
 
               // Time bar / dayVisualize
-              $scope.statsTotalWork = 0;
-              $scope.statsTotalPrivate = 0;
+              $ctrl.statsTotalWork = 0;
+              $ctrl.statsTotalPrivate = 0;
               var projects = {};
-              $scope.refDayVisArray.forEach(function(data) {
-                $scope.dayVisualizeProjectTotals = [];
+              $ctrl.refDayVisArray.forEach(function(data) {
+                $ctrl.dayVisualizeProjectTotals = [];
 
                 var projectDuration = data.timestampDuration;
                 var projectName     = data.project;
@@ -57,12 +57,12 @@ angular.module('cycloneApp').component('footerDisplay', {
                 }
 
                 // Get index of current data element
-                var index = $scope.refDayVisArray.$indexFor(data.$id);
+                var index = $ctrl.refDayVisArray.$indexFor(data.$id);
                 // Add some none DB values (use _)
                 // The width is defined as a flex-grow unit, which represents the amount of "hour" in decimal
                 var width = data.timestampDuration / 1000 / secondsOfOneHour;
-                $scope.refDayVisArray[index]._color = projectsColor[projectName]; // load the projects color
-                $scope.refDayVisArray[index]._width = width;
+                $ctrl.refDayVisArray[index]._color = projectsColor[projectName]; // load the projects color
+                $ctrl.refDayVisArray[index]._width = width;
 
                 //
                 // Stats project totals
@@ -88,7 +88,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                   projects[projectName].projectDurationSumWork += projectDuration;
 
                   // Sum of all work hours
-                  $scope.statsTotalWork += projectDuration;
+                  $ctrl.statsTotalWork += projectDuration;
                 } else {
                   // Private
                   if (projects[projectName].projectDurationSumPrivate === undefined) {
@@ -98,7 +98,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                   projects[projectName].projectDurationSumPrivate += projectDuration;
 
                   // Sum of all private hours
-                  $scope.statsTotalPrivate += projectDuration;
+                  $ctrl.statsTotalPrivate += projectDuration;
                 }
 
               });
@@ -114,7 +114,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                   projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
                   projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
 
-                  $scope.dayVisualizeProjectTotals.push(projectVisWork);
+                  $ctrl.dayVisualizeProjectTotals.push(projectVisWork);
                 }
                 // if we have private
                 if ( projects[projectName].projectDurationSumPrivate !== undefined ){
@@ -125,7 +125,7 @@ angular.module('cycloneApp').component('footerDisplay', {
                   projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
                   projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
 
-                  $scope.dayVisualizeProjectTotals.push(projectVisPrivate);
+                  $ctrl.dayVisualizeProjectTotals.push(projectVisPrivate);
                 }
               };
 
