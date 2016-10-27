@@ -16,6 +16,7 @@ module.exports = {
     entry: [
       "./less/cyclone.less",
       "./js/cyclone.js",
+      "./node_modules/angular-clipboard/angular-clipboard.js", // TODO-review: Is this correct to load here?
     ],
     output: {
         path: __dirname + '/public/build/',
