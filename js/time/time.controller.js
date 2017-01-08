@@ -4,6 +4,15 @@
 //
 angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
     function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route) {
+        // Angular-clipboard
+        $scope.success = function () {
+            console.log('Copied time!');
+        };
+        $scope.fail = function (err) {
+            console.error('Error!', err);
+            console.info('Not supported browser, press Ctrl+C to copy time');
+        };
+
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
             $rootScope.viewType = $route.current.params.type;
@@ -137,7 +146,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     $scope.entries.$loaded()
                         .then(function () {
                             $scope.doneLoading = true;
-                            console.log("Entries loaded: " + $scope.entries.length);
+                            // console.log("Entries loaded: " + $scope.entries.length);
                             if ($rootScope.viewType == 'today') {
                                 if ($scope.entries.length === 0) {
                                     var timestamp = Date.now();

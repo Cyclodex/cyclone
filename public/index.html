@@ -286,8 +286,17 @@
                                         </div>
                                         <div>&nbsp;|&nbsp;</div>
                                         <div class="duration duration--decimal">
-                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                            <md-button
+                                             clipboard
+                                             text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
+                                             on-copied="success()"
+                                             on-error="fail(err)"
+                                             class="md-raised md-button md-ink-ripple">
+                                                <md-tooltip md-direction="bottom">
+                                                    Copy time
+                                                </md-tooltip>
+                                                {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
+                                            </md-button>
                                         </div>
                                     </div>
                                 </div>
@@ -460,6 +469,9 @@
 
 <!-- Random Colors -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.min.js"></script>
+
+<!-- Clipboard -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-clipboard/1.5.0/angular-clipboard.min.js"></script>
 
 <!-- Cyclone app -->
 <script src="build/cyclone.js"></script>
