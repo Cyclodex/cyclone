@@ -1,0 +1,9 @@
+<div flex="nogrow">
+    <div class="header__version right"
+         layout="row"
+         layout-align="end center">
+        <a ng-href="{{::$ctrl.changelogUrl}}" title="Go to github page" target="_blank">
+            Version: {{ ::$ctrl.version }} <strong ng-if="$ctrl.preRelease">{{ ::$ctrl.preRelease }}</strong>
+        </a>
+    </div>
+</div>
