@@ -1,11 +1,14 @@
 // Profile controller
-angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "Auth", "$rootScope",
-    function($scope, Auth, $location, Auth, $rootScope) {
+angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "$rootScope",
+    function($scope, Auth, $location, $rootScope) {
         $rootScope.user = '';
+        $scope.connection = 'connecting';
 
         initApp = function() {
             Auth.$onAuthStateChanged(function(user) {
                 if (user) {
+                    $scope.connection = 'connected';
+                    
                     // User is signed in.
                     var displayName = user.displayName;
                     var email = user.email;
@@ -19,7 +22,9 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                         if (email == 'gander@jumps.ch') {
                             $scope.userIsAdmin = 1;
 
-                            document.getElementById('account-details').textContent = JSON.stringify({
+                          /** Show more information
+                           *
+                          document.getElementById('account-details').textContent = JSON.stringify({
                                 displayName: displayName,
                                 email: email,
                                 emailVerified: emailVerified,
@@ -28,14 +33,17 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                                 accessToken: accessToken,
                                 providerData: providerData
                             }, null, '  ');
+                           */
                         }
                     });
 
                     // Cyclone variables
-                    $rootScope.user = user.email.substring(0, user.email.indexOf("@"));
+                    // TODO: should be a service or similar I think...
+                    $rootScope.user = $scope.user = user.email.substring(0, user.email.indexOf("@"));
 
                 } else {
                     // User is signed out.
+                    $scope.connection = 'not connected';
                     console.log("User is not logged in.");
                 }
             }, function(error) {

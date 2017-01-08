@@ -26,8 +26,13 @@ module.exports = {
         loaders: [
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
-            }
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+            },
+            {
+                test: /\.tpl\.html$/,
+                loader: 'raw-loader',
+                exclude: /node_modules/
+            },
         ]
     },
     devtool: 'inline-source-map',

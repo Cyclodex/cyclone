@@ -1,5 +1,9 @@
 # CHANGELOG
-## 0.36 -18.10.2016
+## 0.37 - 25.10.2016
+* Removed connection.controller.js and simplified into ProfileCtrl
+* Created a footer component which holds the stats and profile components / controller
+
+## 0.36 - 18.10.2016
 * Fixed issue in FF that "watch" was not working as project or description. The property was already a function.
 
 ## 0.35 - 26.09.2016
