@@ -15,8 +15,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 module.exports = {
     entry: [
       "./less/cyclone.less",
-      "./js/cyclone.js",
-      "./node_modules/angular-clipboard/angular-clipboard.js", // TODO-review: Is this correct to load here?
+      "./js/cyclone.js"
     ],
     output: {
         path: __dirname + '/public/build/',
