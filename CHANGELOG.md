@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.38 - 08.01.2017
+* Adding clipboard feature. The time can be copied with a simple click on it.
+
 ## 0.37 - 25.10.2016
 * Removed connection.controller.js and simplified into ProfileCtrl
 * Created a footer component which holds the stats and profile components / controller

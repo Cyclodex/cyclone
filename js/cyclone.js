@@ -13,5 +13,3 @@ require('./components/order.filter.js');
 require('./footer/footer.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');
-// Clipboard tool
-require('../node_modules/angular-clipboard/angular-clipboard.js');
