@@ -2,6 +2,8 @@
 ## 0.38 - 08.01.2017
 * Adding clipboard feature. The time can be copied with a simple click on it.
 * Styling improvement when the project and description is left empty.
+* Removed the copy button: Functionality moved into the continue button.
+* Further improved the "Continue" button: The copy functionality is now executed if entries are empty (of current tracker)
 
 ## 0.37 - 25.10.2016
 * Removed connection.controller.js and simplified into ProfileCtrl
