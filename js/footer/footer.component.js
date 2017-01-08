@@ -12,7 +12,6 @@ angular.module('cycloneApp').component('footerDisplay', {
   template: require('./footer.tpl.html'),
   controller: ["$scope", "Auth", "$firebaseArray", "$rootScope",
     function($scope, Auth, $firebaseArray, $rootScope) {
-      // TODO: Should I change all $scope to $ctrl here ?
       var $ctrl = this;
 
       // collect the projects colors
