@@ -1,7 +1,10 @@
 # CHANGELOG
+## 0.40 - xx.01.2017
+* Adding Feedback/report issue link in footer. (#33)
+
 ## 0.39 - 09.01.2017
-* Copy time will now also mark the entry as done.
-* Time-copy buttons now also on the "continued tasks". 
+* Copy time will now also mark the entry as done. (#34)
+* Time-copy buttons now also on the "continued tasks". (#35)
 
 ## 0.38 - 08.01.2017
 * Adding clipboard feature. The time can be copied with a simple click on it.
