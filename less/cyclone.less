@@ -71,7 +71,7 @@
     .entry__checked {
         position: absolute;
         top: 5px;
-        left: -38px;
+        left: -42px;
         z-index: 2;
         height: 83%;
         margin: 0;
@@ -134,16 +134,23 @@
             border-left: 1px dashed gray;
             opacity: 0.5;
         }
-        .entry:hover {
-            .show-on-hover,
-            .entry__options {
-                opacity: 1;
-            }
-            .entry__checked:before {
-                opacity: 1;
-                border-left: 1px solid gray;
+        .entry {
+            width: 100%;
+            &:hover {
+                .show-on-hover,
+                .entry__options {
+                    opacity: 1;
+                }
+                .entry__checked:before {
+                    opacity: 1;
+                    border-left: 1px solid gray;
+                }
+
             }
 
+            md-card {
+                flex: 1 0 88%;
+            }
         }
     }
 }
