@@ -16,5 +16,9 @@ angular.module('cycloneApp').factory('versionService', [function() {
         return 'BETA';
     }
 
+    VersionService.prototype.getIssuesUrl = function() {
+        return 'https://github.com/Cyclodex/cyclone/issues';
+    }
+
     return new VersionService();
 }]);
