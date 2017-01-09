@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.39 - 09.01.2017
+* Copy time will now also mark the entry as done.
+* Time-copy buttons now also on the "continued tasks". 
+
 ## 0.38 - 08.01.2017
 * Adding clipboard feature. The time can be copied with a simple click on it.
 * Styling improvement when the project and description is left empty.

@@ -278,7 +278,7 @@
                                             <md-button
                                              clipboard
                                              text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                             on-copied="success()"
+                                             on-copied="success(); entry.checked = true;"
                                              on-error="fail(err)"
                                              class="md-raised md-button md-ink-ripple">
                                                 <md-tooltip md-direction="bottom">
@@ -332,25 +332,40 @@
                                     <span class="duration duration--human">
                                         <span>{{ TaskData.durationChecked | date : "H'h' m'min'" : '+0000' }}</span>
                                     </span>
-                                    <span>&nbsp;|&nbsp;</span>
                                     <span class="duration duration--decimal">
-                                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                        <strong>{{ TaskData.durationChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
+                                        <md-button
+                                         clipboard
+                                         text="TaskData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                         on-copied="success(); updateGroup(TaskData, true);"
+                                         on-error="fail(err)"
+                                         class="md-raised md-button md-ink-ripple">
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time
+                                            </md-tooltip>
+                                            {{ TaskData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
+                                        </md-button>
                                     </span>
                                 </md-subheader>
-                            <!--<div class="entry__time-information">-->
-                                <md-subheader class="md-primary">
+                                <md-subheader class="md-primary entry__time-information">
                                     <span>Un-checked time:</span>
                                     <span class="duration duration--human">
                                         <span>{{ TaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
                                     </span>
-                                    <span>&nbsp;|&nbsp;</span>
                                     <span class="duration duration--decimal">
-                                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                        <strong>{{ TaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        <md-button
+                                         clipboard
+                                         text="TaskData.duration / 1000 / 60 / 60 | number : 2"
+                                         on-copied="success(); updateGroup(TaskData, true);"
+                                         on-error="fail(err)"
+                                         class="md-raised md-button md-ink-ripple">
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time
+                                            </md-tooltip>
+                                            <strong>{{ TaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        </md-button>
                                     </span>
                                 </md-subheader>
-                            <!--</div>-->
                             <div layout="column"
                                  layout-align="center stretch"
                                  layout-gt-sm="row"

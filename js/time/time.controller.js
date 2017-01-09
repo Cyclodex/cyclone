@@ -508,12 +508,17 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         }
 
         // Group update checked on several tasks
-        $scope.updateGroup = function(taskData) {
+        $scope.updateGroup = function(taskData, status) {
             var checked = false;
-            if (taskData.indeterminate) {
-                checked = true;
+            if (status === undefined) {
+                if (taskData.indeterminate) {
+                    checked = true;
+                } else {
+                    checked = !taskData.checkedState; // the new state is the opposite from the current
+                }
             } else {
-                checked = !taskData.checkedState; // the new state is the opposite from the current
+              // If status is given, we force it.
+              checked = status;
             }
             for (var taskKey in taskData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
