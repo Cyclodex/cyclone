@@ -517,8 +517,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     checked = !taskData.checkedState; // the new state is the opposite from the current
                 }
             } else {
-              // If status is given, we force it.
-              checked = status;
+                // If status is given, we force it.
+                checked = status;
             }
             for (var taskKey in taskData.tasks) {
                 var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
@@ -529,6 +529,21 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     console.log("Entry (update Group) entry saved with index" + queryRef.key)
                 });
             }
+        };
+
+        //
+        // Single entry update
+        // Could also be reached with this simple call: "entry.checked = true; entries.$save(entry);" in the html.
+        // This however seems to be more clean for functionality.
+        // NOTE: This does not work with the single entries in the grouped "continue" tasks, because the keys don't exist in there. Rather use updateGroup if needed.
+        $scope.updateSingleEntry = function(entry) {
+            // Mark it checked
+            entry.checked = true;
+            // Save Entry
+            $scope.entries.$save(entry).then(function(queryRef) {
+                // data has been saved to our database
+                console.log("Entry (single Entry) saved with index" + queryRef.key)
+            });
         };
     }
 ]);

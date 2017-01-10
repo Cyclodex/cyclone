@@ -1,5 +1,8 @@
 # CHANGELOG
-## 0.40 - xx.01.2017
+## 0.41 - 10.01.2017
+* Fixed bug that copy time button was changing visually the state of a task as done, but did not save to DB (#36)
+
+## 0.40 - 09.01.2017
 * Adding Feedback/report issue link in footer. (#33)
 
 ## 0.39 - 09.01.2017

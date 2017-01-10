@@ -277,7 +277,7 @@
                                             <md-button
                                              clipboard
                                              text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                             on-copied="copySuccess(); entry.checked = true;"
+                                             on-copied="copySuccess(); updateSingleEntry(entry);"
                                              on-error="copyFail(err)"
                                              class="md-raised md-button md-ink-ripple">
                                                 <md-tooltip md-direction="bottom">
