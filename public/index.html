@@ -277,8 +277,8 @@
                                             <md-button
                                              clipboard
                                              text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                             on-copied="success(); entry.checked = true;"
-                                             on-error="fail(err)"
+                                             on-copied="copySuccess(); entry.checked = true;"
+                                             on-error="copyFail(err)"
                                              class="md-raised md-button md-ink-ripple">
                                                 <md-tooltip md-direction="bottom">
                                                     Copy time
@@ -336,8 +336,8 @@
                                         <md-button
                                          clipboard
                                          text="TaskData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                         on-copied="success(); updateGroup(TaskData, true);"
-                                         on-error="fail(err)"
+                                         on-copied="copySuccess(); updateGroup(TaskData, true);"
+                                         on-error="copyFail(err)"
                                          class="md-raised md-button md-ink-ripple">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
@@ -355,8 +355,8 @@
                                         <md-button
                                          clipboard
                                          text="TaskData.duration / 1000 / 60 / 60 | number : 2"
-                                         on-copied="success(); updateGroup(TaskData, true);"
-                                         on-error="fail(err)"
+                                         on-copied="copySuccess(); updateGroup(TaskData, true);"
+                                         on-error="copyFail(err)"
                                          class="md-raised md-button md-ink-ripple">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time

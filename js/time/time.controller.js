@@ -5,10 +5,10 @@
 angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
     function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route) {
         // Angular-clipboard
-        $scope.success = function () {
+        $scope.copySuccess = function () {
             console.log('Copied time!');
         };
-        $scope.fail = function (err) {
+        $scope.copyFail = function (err) {
             console.error('Error!', err);
             console.info('Not supported browser, press Ctrl+C to copy time');
         };
