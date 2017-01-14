@@ -1,4 +1,4 @@
-angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ngRoute', 'angular-clipboard']);
+angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ngRoute', 'angular-clipboard', 'angularMoment']);
 
 // Routing
 angular.module("cycloneApp").config(function($routeProvider, $locationProvider) {
