@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.42 - 15.01.2017
+* Reverted a change from 0.38 - The copy button is back.
+
 ## 0.41 - 10.01.2017
 * Fixed bug that copy time button was changing visually the state of a task as done, but did not save to DB (#36)
 

@@ -246,12 +246,23 @@
                                                     {{ entry.type }}
                                                 </md-switch>
                                             </div>
+                                            <div>
+                                                <a class=""
+                                                   ng-click="cloneEntry()">
+                                                    <md-button class="md-fab md-primary md-mini" aria-label="Use task">
+                                                        <md-tooltip md-direction="top">
+                                                            Use this project & description for current timer
+                                                        </md-tooltip>
+                                                        <md-icon>content_copy</md-icon>
+                                                    </md-button>
+                                                </a>
+                                            </div>
                                             <div ng-if="addEntryEnabled">
                                                 <a class=""
                                                    ng-click="continueEntry(entry.project, entry.text)">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                         <md-tooltip md-direction="top">
-                                                            Current tracker empty: Use this project. - Current tracker given: Track current timer and continue now on this task
+                                                            Track current timer and continue now on this task
                                                         </md-tooltip>
                                                         <md-icon>play_arrow</md-icon>
                                                     </md-button>
@@ -320,7 +331,7 @@
                                        ng-click="continueEntry(project, Task)">
                                         <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                             <md-tooltip md-direction="top">
-                                                Current tracker empty: Use this project. - Current tracker given: Track current timer and continue now on this task
+                                                Track current timer and continue now on this task
                                             </md-tooltip>
                                             <md-icon>play_arrow</md-icon>
                                         </md-button>
