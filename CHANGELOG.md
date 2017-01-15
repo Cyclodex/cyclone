@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.42 - 15.01.2017
+* Loading the libraries with webpack instead of CDN's.
+* Providing the randomColor through a factory.
+
 ## 0.41 - 10.01.2017
 * Fixed bug that copy time button was changing visually the state of a task as done, but did not save to DB (#36)
 
