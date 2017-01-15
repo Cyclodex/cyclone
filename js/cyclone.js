@@ -14,11 +14,6 @@ require('angular-material');
 require('angular-clipboard');
 require('angular-moment');
 
-// Other libraries
-// Getting this error with randomcolor (a js library only)
-// Error: [$injector:unpr] Unknown provider: randomColorProvider <- randomColor
-//require('randomcolor');
-
 // Firebase
 var firebase = require('firebase/app');
 require('firebase/auth');

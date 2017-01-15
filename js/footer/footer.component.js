@@ -1,5 +1,6 @@
 require('../stats/statsTotal.component.js');
 require('../user/profile.controller.js');
+require('../components/randomColor.factory.js');
 // Footer display component
 // <footer-display></footer-display>
 //
@@ -10,8 +11,8 @@ require('../user/profile.controller.js');
 //
 angular.module('cycloneApp').component('footerDisplay', {
   template: require('./footer.tpl.html'),
-  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope",
-    function($scope, Auth, $firebaseArray, $rootScope) {
+  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor",
+    function($scope, Auth, $firebaseArray, $rootScope, randomColor) {
       var $ctrl = this;
 
       // collect the projects colors
