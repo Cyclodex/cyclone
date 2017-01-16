@@ -1,6 +1,5 @@
 require('../stats/statsTotal.component.js');
 require('../user/profile.controller.js');
-require('../components/randomColor.factory.js');
 // Footer display component
 // <footer-display></footer-display>
 //
@@ -9,7 +8,9 @@ require('../components/randomColor.factory.js');
 //  * for the total stats in the footer
 //  * for the graphs-display
 //
-angular.module('cycloneApp').component('footerDisplay', {
+angular.module("cycloneApp")
+  .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
+  .component('footerDisplay', {
   template: require('./footer.tpl.html'),
   controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor",
     function($scope, Auth, $firebaseArray, $rootScope, randomColor) {
