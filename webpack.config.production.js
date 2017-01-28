@@ -8,6 +8,7 @@
  */
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const webpack = require('webpack');
 
 module.exports = {
     entry: [
@@ -33,6 +34,17 @@ module.exports = {
     },
     devtool: 'cheap-module-source-map',
     plugins: [
-        new ExtractTextPlugin("cyclone.css")
+        new ExtractTextPlugin("cyclone.css"),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                screw_ie8: true
+            },
+            comments: false,
+            sourceMap: false
+        }),
+        //new webpack.optimize.CommonsChunkPlugin('common.js'), // Not using this yet.
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.AggressiveMergingPlugin()
     ]
 };
