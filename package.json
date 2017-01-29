@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "node_modules/webpack/bin/webpack.js --watch",
-    "build": "node_modules/webpack/bin/webpack.js",
+    "dev": "node_modules/webpack/bin/webpack.js",
+    "build": "node_modules/webpack/bin/webpack.js --config webpack.config.production.js --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,19 @@
     "url": "https://github.com/Cyclodex/cyclone/issues"
   },
   "homepage": "https://github.com/Cyclodex/cyclone#readme",
-  "dependencies": {},
+  "dependencies": {
+    "angular": "1.5.8",
+    "angular-animate": "1.5.3",
+    "angular-aria": "1.5.3",
+    "angular-clipboard": "1.5.0",
+    "angular-material": "http://github.com/angular/bower-material/tarball/v1.1.0-rc2",
+    "angular-messages": "1.5.3",
+    "angular-moment": "^1.0.1",
+    "angular-route": "1.5.3",
+    "angularfire": "2.0.2",
+    "firebase": "3.3.2",
+    "randomcolor": "^0.4.4"
+  },
   "devDependencies": {
     "browser-sync": "^2.15.0",
     "browser-sync-webpack-plugin": "^1.1.2",
@@ -28,6 +41,7 @@
     "less-loader": "^2.2.3",
     "style-loader": "^0.13.1",
     "raw-loader": "0.5.1",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "ng-annotate-webpack-plugin": "^0.1.1"
   }
 }

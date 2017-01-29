@@ -5,7 +5,7 @@ angular.module('cycloneApp').factory('versionService', [function() {
     }
 
     VersionService.prototype.getVersion = function() {
-        return '0.42 | 15.01.2017';
+        return '0.42 | 29.01.2017';
     }
 
     VersionService.prototype.getChanglogUrl = function() {

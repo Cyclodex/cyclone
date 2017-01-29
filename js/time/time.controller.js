@@ -2,8 +2,8 @@
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route",
-    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route) {
+angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment",
+    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment) {
         // Angular-clipboard
         $scope.copySuccess = function () {
             console.log('Copied time!');

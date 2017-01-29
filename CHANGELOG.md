@@ -1,5 +1,9 @@
 # CHANGELOG
-## 0.42 - 15.01.2017
+
+## 0.42 - 29.01.2017
+* Loading the libraries with webpack instead of CDN's. (index.html)
+* Providing the randomColor through a factory.
+* Created new build process for production (webpack).
 * Reverted a change from 0.38 - The copy button is back.
 
 ## 0.41 - 10.01.2017

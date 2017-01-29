@@ -8,10 +8,12 @@ require('../user/profile.controller.js');
 //  * for the total stats in the footer
 //  * for the graphs-display
 //
-angular.module('cycloneApp').component('footerDisplay', {
+angular.module("cycloneApp")
+  .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
+  .component('footerDisplay', {
   template: require('./footer.tpl.html'),
-  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope",
-    function($scope, Auth, $firebaseArray, $rootScope) {
+  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor",
+    function($scope, Auth, $firebaseArray, $rootScope, randomColor) {
       var $ctrl = this;
 
       // collect the projects colors
