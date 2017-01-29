@@ -7,8 +7,9 @@
  * Build by running `npm run build`
  */
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -46,6 +47,9 @@ module.exports = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
+        new ngAnnotatePlugin({
+            add: true
+        }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,
@@ -55,7 +59,7 @@ module.exports = {
             minimize: true,
             comments: false,
             sourceMap: false,
-            mangle: false // This one is important, or angular app does not work anymore.
+            mangle: true
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
         new webpack.optimize.DedupePlugin(),
