@@ -359,20 +359,17 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             return timestampDuration;
         }
 
+        // Clone text and project to current timer
+        $scope.cloneEntry = function() {
+            $scope.newEntryText = this.entry.text;
+            $scope.newEntryProject = this.entry.project;
+        };
 
         // Continue task feature (tracks current timer and continues with the selected one)
         $scope.continueEntry = function(project, text) {
-            if ( $scope.newEntryProject !== undefined && $scope.newEntryProject !== ''
-              || $scope.newEntryText !== undefined && $scope.newEntryText !== '' ){
-                // If the current timer has project or text, we commit this and switch selected project
-                $scope.newContinueEntryProject = project;
-                $scope.newContinueEntryText    = text;
-                $scope.addEntry();
-            } else {
-                // Lets only copy the selected task into the current timer (the copy feature from before)
-                $scope.newEntryProject = project;
-                $scope.newEntryText = text;
-            }
+            $scope.newContinueEntryProject = project;
+            $scope.newContinueEntryText    = text;
+            $scope.addEntry();
         };
 
 
