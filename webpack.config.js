@@ -3,20 +3,25 @@
 /* jshint node: true */
 
 /**
- * Cyclone webpack build.
- * Build by running `npm run build`
+ * Cyclone webpack development build.
+ * Build by running `npm run dev`
  * For development use `npm start`
  */
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-
+const webpack = require('webpack');
 
 module.exports = {
-    entry: [
-      "./less/cyclone.less",
-      "./js/cyclone.js"
-    ],
+    entry: {
+        app: [
+            "./less/cyclone.less",
+            "./js/cyclone.js"
+        ],
+        vendors: [
+            'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
+            'firebase/auth', 'firebase/database', 'angularfire'
+        ]
+    },
     output: {
         path: __dirname + '/public/build/',
         filename: "cyclone.js"
@@ -31,18 +36,12 @@ module.exports = {
                 test: /\.tpl\.html$/,
                 loader: 'raw-loader',
                 exclude: /node_modules/
-            },
+            }
         ]
     },
     devtool: 'inline-source-map',
     plugins: [
         new ExtractTextPlugin("cyclone.css"),
-        new BrowserSyncPlugin({
-            host: 'localhost',
-            port: 3000,
-            files: ["public/*.html"],
-            server: { baseDir: ['public'] }
-        })
-
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
     ]
 };
