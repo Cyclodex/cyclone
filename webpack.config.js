@@ -8,8 +8,9 @@
  * For development use `npm start`
  */
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -42,6 +43,12 @@ module.exports = {
     devtool: 'inline-source-map',
     plugins: [
         new ExtractTextPlugin("cyclone.css"),
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+        new BrowserSyncPlugin({
+            host: 'localhost',
+            port: 3000,
+            files: ["public/*.html"],
+            server: { baseDir: ['public'] }
+        })
     ]
 };
