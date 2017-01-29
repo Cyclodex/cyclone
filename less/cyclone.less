@@ -110,13 +110,16 @@
         background-color: lightyellow;
         border-bottom: 1px solid orange;
     }
-    .work.done md-card{
-        background-color: #c6ffc6;
-        border-bottom: 1px solid darkgreen;
+    .internal md-card {
+        background-color: #ffdb6e;
     }
     .private md-card{
         background-color: lightblue;
         border-bottom: 1px solid blue;
+    }
+    // Done entries are faded out
+    .done {
+        opacity: 0.6;
     }
 
     .show-on-hover,
@@ -155,6 +158,13 @@
                 flex: 1 0 88%;
             }
         }
+    }
+}
+
+md-radio-button {
+    opacity: 0.6;
+    &.md-checked {
+        opacity: 1;
     }
 }
 
