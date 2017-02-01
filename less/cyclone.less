@@ -106,14 +106,14 @@
         padding-top: 20px;
     }
 
-    .work md-card{
+    .project-type--work md-card{
         background-color: lightyellow;
         border-bottom: 1px solid orange;
     }
-    .internal md-card {
+    .project-type--internal md-card {
         background-color: #ffdb6e;
     }
-    .private md-card{
+    .project-type--private md-card{
         background-color: lightblue;
         border-bottom: 1px solid blue;
     }
@@ -320,11 +320,15 @@ md-radio-button {
         right: -10px;
     }
 }
-.dayVisualize-entry.work.checked--no {
+.dayVisualize-entry.project-type--internal.checked--no,
+.dayVisualize-entry.project-type--work.checked--no {
     height: 80px;
 }
-.dayVisualize-entry.private {
+.dayVisualize-entry.project-type--private {
     background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+}
+.dayVisualize-entry.project-type--internal {
+    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
 }
 
 button.dayVisualize-entry.md-button.md-button {

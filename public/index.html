@@ -166,7 +166,7 @@
                     <div ng-repeat="entry in entries"
                          layout="column"
                          layout-align="start center"
-                     class="row {{entry.type}}"
+                     class="row project-type--{{entry.type}}"
                      ng-class="[{true: 'done', false: ''}[entry.checked == true]]"
                     >
                         <div ng-if="$last && entry.type == 'system'"

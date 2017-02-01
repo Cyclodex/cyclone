@@ -26,6 +26,7 @@
     </div>
     <stats-total
      work-total="$ctrl.statsTotalWork"
+     internal-total="$ctrl.statsTotalInternal"
      private-total="$ctrl.statsTotalPrivate"
     ></stats-total>
     <version-display></version-display>
@@ -42,7 +43,7 @@
     </div>
     <div class="day-visualize">
         <md-button ng-repeat="entry in $ctrl.refDayVisArray | orderObjectBy:'order':true"
-         class="dayVisualize-entry project--{{entry.project}}"
+         class="dayVisualize-entry project--{{entry.project}} project-type--{{entry.type}}"
          ng-class="[
                 {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
                 {true: 'work', false: 'private'}[entry.type == 'work'],
@@ -64,10 +65,7 @@
     </div>
     <div class="day-visualize project-sum">
         <md-button ng-repeat="entry in $ctrl.dayVisualizeProjectTotals track by $index"
-         class="dayVisualize-entry project--{{entry.project}}"
-         ng-class="[
-                {true: 'work', false: 'private'}[entry.type == 'work'],
-             ]"
+         class="dayVisualize-entry project--{{entry.project}} project-type--{{entry.type}}"
          ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
          aria-label="info">
             </md-tooltip>
