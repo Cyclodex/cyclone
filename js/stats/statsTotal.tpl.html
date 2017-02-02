@@ -1,5 +1,5 @@
 <div flex class="stats-totals">
     <div><strong>Total:</strong></div>
-    <div>Work: {{ $ctrl.workTotal | date : "H'h' m'min'" : '+0000' }} (Internal:{{ $ctrl.internalTotal | date : "H'h' m'min'" : '+0000' }})</div>
+    <div>Work: {{ $ctrl.workTotal | date : "H'h' m'min'" : '+0000' }} <span class="stats-totals__internals">(Internal:{{ $ctrl.internalTotal | date : "H'h' m'min'" : '+0000' }})</span></div>
     <div class="footer-stats__private">Private: {{ $ctrl.privateTotal | date : "H'h' m'min'" : '+0000' }}</div>
 </div>

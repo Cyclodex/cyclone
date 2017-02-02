@@ -120,6 +120,17 @@
                             <label for="newTaskText">Description</label>
                         </md-input-container>
 
+                        <md-input-container>
+                            <label>Type</label>
+                            <md-select id="newTaskType"
+                             ng-model="newEntryType"
+                             aria-label="Type of entry">
+                                <md-option ng-repeat="type in types" ng-value="type">
+                                    {{type}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
                         <md-input-container flex="15">
                             <input type="time"
                                    id="newTaskManualTime"
@@ -206,24 +217,6 @@
                                      layout-align="space-around"
                                      layout-gt-xs="row"
                                      flex="none">
-                                <div class="entry__time-information" layout=column layout-align="center center">
-                                    <div class="duration duration--human">
-                                        <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
-                                    </div>
-                                    <div class="duration duration--decimal">
-                                        <md-button
-                                         clipboard
-                                         text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                         on-copied="copySuccess(); updateSingleEntry(entry);"
-                                         on-error="copyFail(err)"
-                                         class="md-raised md-button md-ink-ripple">
-                                            <md-tooltip md-direction="bottom">
-                                                Copy time
-                                            </md-tooltip>
-                                            {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
-                                        </md-button>
-                                    </div>
-                                </div>
                                 <div class="entry__checked">
                                     <md-checkbox ng-model="entry.checked"
                                                  aria-label="checked"
@@ -231,22 +224,42 @@
                                                  class="md-primary">
                                     </md-checkbox>
                                 </div>
-                                <div class="entry__info">
-                                    <md-input-container class="entry__info__input entry__info__input--project">
-                                        <input ng-model="entry.project"
-                                         ng-change="entries.$save(entry)"
-                                         id="project"
-                                         type="text"
-                                         aria-label="project"/>
-                                    </md-input-container>
-                                    <md-input-container class="entry__info__input entry__info__input--text">
-                                        <input ng-model="entry.text"
-                                         ng-change="entries.$save(entry)"
-                                         id="text"
-                                         type="text"
-                                         class="validate"
-                                         aria-label="Description"/>
-                                    </md-input-container>
+                                <div layout=column layout-align="center">
+                                    <div class="entry__info">
+                                        <md-input-container class="entry__info__input entry__info__input--project">
+                                            <input ng-model="entry.project"
+                                             ng-change="entries.$save(entry)"
+                                             id="project"
+                                             type="text"
+                                             aria-label="project"/>
+                                        </md-input-container>
+                                        <md-input-container class="entry__info__input entry__info__input--text">
+                                            <input ng-model="entry.text"
+                                             ng-change="entries.$save(entry)"
+                                             id="text"
+                                             type="text"
+                                             class="validate"
+                                             aria-label="Description"/>
+                                        </md-input-container>
+                                    </div>
+                                    <div class="entry__time-information" layout=row layout-align="start center">
+                                        <div class="duration duration--decimal">
+                                            <md-button
+                                             clipboard
+                                             text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
+                                             on-copied="copySuccess(); updateSingleEntry(entry);"
+                                             on-error="copyFail(err)"
+                                             class="md-raised md-button md-ink-ripple">
+                                                <md-tooltip md-direction="bottom">
+                                                    Copy time
+                                                </md-tooltip>
+                                                {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
+                                            </md-button>
+                                        </div>
+                                        <div class="duration duration--human">
+                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- Entry type -->
                                 <div>
@@ -261,7 +274,7 @@
                                     </md-radio-group>
                                 </div>
                                 <!-- entry actions -->
-                                <div layout=column layout-align="space-between">
+                                <div layout=column layout-align="center">
                                     <div class="entry__options">
                                         <div layout=row layout-align="space-around center">
 
@@ -278,7 +291,7 @@
                                             </div>
                                             <div ng-if="addEntryEnabled">
                                                 <a class=""
-                                                   ng-click="continueEntry(entry.project, entry.text)">
+                                                   ng-click="continueEntry(entry.project, entry.text, entry.type)">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                         <md-tooltip md-direction="top">
                                                             Track current timer and continue now on this task
@@ -329,7 +342,7 @@
                                     <strong>{{Task}}</strong>
                                     <a class="continue-task-now"
                                        ng-if="addEntryEnabled"
-                                       ng-click="continueEntry(project, Task)">
+                                       ng-click="continueEntry(project, Task, '')">
                                         <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                             <md-tooltip md-direction="top">
                                                 Track current timer and continue now on this task
@@ -405,10 +418,8 @@
                                          layout="row"
                                          layout-align="start stretch"
                                          layout-align-gt-md="space-around stretch"
-                                         class="entry"
-                                         ng-class="[{true: 'work', false: 'private'}[entry.type == 'work'],
-                                      {true: 'done', false: ''}[entry.checked == true]
-                                      ]"
+                                         class="entry project-type--{{entry.type}}"
+                                         ng-class="{true: 'done', false: ''}[entry.checked == true]"
                                     >
                                         <div class="entry__timestamp" flex="none">
                                             <div class="entry__timestamp__end">

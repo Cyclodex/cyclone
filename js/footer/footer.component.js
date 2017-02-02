@@ -94,8 +94,6 @@ angular.module("cycloneApp")
                 // projects[projectName].projectDurationSumWork += projectDuration;
                 projects[projectName].sums[data.type] += projectDuration;
 
-                console.log(projects[projectName].sums);
-
                 // Separate sums for work and private
                 // TODO: Add internal hours ( think about work hours + internal combined?)
                 if (data.type == 'work') {
@@ -119,8 +117,8 @@ angular.module("cycloneApp")
               for (var projectName in projects) {
 
                 for (var timeType in projects[projectName].sums) {
-                  console.log(timeType);
-                  console.log(projects[projectName].sums[timeType]);
+                  // console.log(timeType);
+                  // console.log(projects[projectName].sums[timeType]);
                     var projectVisualisation = {};
                     projectVisualisation["project"]  = projectName;
                     projectVisualisation["type"]     = timeType;

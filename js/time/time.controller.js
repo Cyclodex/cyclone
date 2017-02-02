@@ -13,6 +13,9 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             console.info('Not supported browser, press Ctrl+C to copy time');
         };
 
+        // The different types
+        $scope.types = ['work', 'internal', 'private'];
+
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
             $rootScope.viewType = $route.current.params.type;
@@ -28,6 +31,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 $rootScope.weekDay = moment().weekday();
                 $scope.addEntryEnabled = true;
                 $scope.currentDate = new Date;
+                $scope.newEntryType = 'work';
             } else if ($rootScope.viewType == 'archive') {
                 // TODO: do we need this?
                 $rootScope.weekDay = $route.current.params.weekDay;
@@ -240,21 +244,29 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             }
 
+
             // Check if the entry should be marked as private (break)
-            var newEntryType = 'work';
+            // TODO: Lets change the type field after the user entered a project, not here on add.
+            // Check the project name for auto assignment
             if ($scope.newEntryProject !== undefined) {
                 var breakMatches = $scope.newEntryProject.match(/break/i);
                 if (breakMatches) {
-                    newEntryType = 'private';
+                    $scope.newEntryType = 'private';
                 }
             } else {
                 $scope.newEntryProject = '';
             }
+            if ( $scope.newEntryType === undefined){
+                $scope.newEntryType = 'work';
+            }
 
-            // newEntryText
-            if ($scope.newEntryText !== undefined) {
+            // Project name empty if not yet set
+            if ($scope.newEntryProject === undefined) {
+                $scope.newEntryProject = '';
+            }
 
-            } else {
+            // newEntryText empty if not yet set
+            if ($scope.newEntryText === undefined) {
                 $scope.newEntryText = '';
             }
 
@@ -265,7 +277,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 text: $scope.newEntryText,
                 project: $scope.newEntryProject,
                 checked: false,
-                type: newEntryType,
+                type: $scope.newEntryType,
                 timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
                 timestampStart: start,
                 timestampDuration: duration,
@@ -278,6 +290,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 $scope.newEntryText = '';
                 $scope.newEntryProject = '';
                 $scope.newEntryManualTime = '';
+                $scope.newEntryType = 'work';
 
                 // Take over continue task if available
                 if ($scope.newContinueEntryProject !== undefined){
@@ -287,6 +300,10 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 if ($scope.newContinueEntryText !== undefined){
                     $scope.newEntryText = $scope.newContinueEntryText;
                     $scope.newContinueEntryText = ''; // Clear it again
+                }
+                if ($scope.newContinueEntryType !== undefined){
+                    $scope.newEntryType = $scope.newContinueEntryType;
+                    $scope.newContinueEntryType = ''; // Clear it again
                 }
 
                 // Focus First element now again, so we are ready to type an other task
@@ -363,12 +380,14 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         $scope.cloneEntry = function() {
             $scope.newEntryText = this.entry.text;
             $scope.newEntryProject = this.entry.project;
+            $scope.newEntryType = this.entry.type;
         };
 
         // Continue task feature (tracks current timer and continues with the selected one)
-        $scope.continueEntry = function(project, text) {
+        $scope.continueEntry = function(project, text, type) {
             $scope.newContinueEntryProject = project;
             $scope.newContinueEntryText    = text;
+            $scope.newContinueEntryType    = type;
             $scope.addEntry();
         };
 
