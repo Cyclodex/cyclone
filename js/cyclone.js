@@ -19,6 +19,7 @@ var firebase = require('firebase/app');
 require('firebase/auth');
 require('firebase/database');
 require('angularfire');
+var firebaseui = require('firebaseui');
 
 // Cyclone app files
 require('./config/config.js');
