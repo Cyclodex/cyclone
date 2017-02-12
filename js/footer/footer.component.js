@@ -43,7 +43,9 @@ angular.module("cycloneApp")
               var secondsOfOneHour = 60 * 60;
 
               // Time bar / dayVisualize
+              // TODO: think about making these types more dynamic:
               $ctrl.statsTotalWork = 0;
+              $ctrl.statsTotalInternal = 0;
               $ctrl.statsTotalPrivate = 0;
               var projects = {};
               $ctrl.refDayVisArray.forEach(function(data) {
@@ -79,25 +81,31 @@ angular.module("cycloneApp")
                 projects[projectName].projectDurationSum += projectDuration;
 
 
-                // Separate sums for work and private
-                if (data.type == 'work') {
-                  // Work
-                  if (projects[projectName].projectDurationSumWork === undefined) {
-                    projects[projectName].projectDurationSumWork = 0;
-                  }
-                  // Sum up the durations of every work project
-                  projects[projectName].projectDurationSumWork += projectDuration;
+                // More dynamically collect the data:
+                if (projects[projectName].sums === undefined || typeof projects[projectName].sums === 'function') {
+                    projects[projectName].sums = {};
+                }
+                // Set starting value if not set.
+                if (projects[projectName].sums[data.type] === undefined) {
+                    projects[projectName].sums[data.type] = 0;
+                }
 
+                // Sum up the durations of every work project
+                // projects[projectName].projectDurationSumWork += projectDuration;
+                projects[projectName].sums[data.type] += projectDuration;
+
+                // Separate sums for work and private
+                // TODO: Add internal hours ( think about work hours + internal combined?)
+                if (data.type == 'work') {
                   // Sum of all work hours
                   $ctrl.statsTotalWork += projectDuration;
+                } else if (data.type == 'internal') {
+                    // Sum of all internal work hours
+                    $ctrl.statsTotalInternal += projectDuration;
+                    // But we still want this also count as work hours
+                    // TODO: Think about this as well.
+                    $ctrl.statsTotalWork += projectDuration;
                 } else {
-                  // Private
-                  if (projects[projectName].projectDurationSumPrivate === undefined) {
-                    projects[projectName].projectDurationSumPrivate = 0;
-                  }
-                  // Sum up the durations of every private project
-                  projects[projectName].projectDurationSumPrivate += projectDuration;
-
                   // Sum of all private hours
                   $ctrl.statsTotalPrivate += projectDuration;
                 }
@@ -107,27 +115,41 @@ angular.module("cycloneApp")
 
               // Create an element for every work and/or private separated
               for (var projectName in projects) {
-                if ( projects[projectName].projectDurationSumWork !== undefined ){
-                  var projectVisWork = {};
-                  projectVisWork["project"]  = projectName;
-                  projectVisWork["type"]     = 'work';
-                  projectVisWork["_color"]   = projectsColor[projectName]; // load the projects color
-                  projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
-                  projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
 
-                  $ctrl.dayVisualizeProjectTotals.push(projectVisWork);
-                }
-                // if we have private
-                if ( projects[projectName].projectDurationSumPrivate !== undefined ){
-                  var projectVisPrivate = {};
-                  projectVisPrivate["project"]  = projectName;
-                  projectVisPrivate["type"]     = 'private';
-                  projectVisPrivate["_color"]   = projectsColor[projectName]; // load the projects color
-                  projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
-                  projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
+                for (var timeType in projects[projectName].sums) {
+                  // console.log(timeType);
+                  // console.log(projects[projectName].sums[timeType]);
+                    var projectVisualisation = {};
+                    projectVisualisation["project"]  = projectName;
+                    projectVisualisation["type"]     = timeType;
+                    projectVisualisation["_color"]   = projectsColor[projectName]; // load the projects color
+                    projectVisualisation["duration"] = projects[projectName].sums[timeType];
+                    projectVisualisation["_width"]   = projectVisualisation["duration"] / 1000 / secondsOfOneHour;
 
-                  $ctrl.dayVisualizeProjectTotals.push(projectVisPrivate);
+                    $ctrl.dayVisualizeProjectTotals.push(projectVisualisation);
                 }
+
+                // if ( projects[projectName].projectDurationSumWork !== undefined ){
+                //   var projectVisWork = {};
+                //   projectVisWork["project"]  = projectName;
+                //   projectVisWork["type"]     = 'work';
+                //   projectVisWork["_color"]   = projectsColor[projectName]; // load the projects color
+                //   projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
+                //   projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
+                //
+                //   $ctrl.dayVisualizeProjectTotals.push(projectVisWork);
+                // }
+                // // if we have private
+                // if ( projects[projectName].projectDurationSumPrivate !== undefined ){
+                //   var projectVisPrivate = {};
+                //   projectVisPrivate["project"]  = projectName;
+                //   projectVisPrivate["type"]     = 'private';
+                //   projectVisPrivate["_color"]   = projectsColor[projectName]; // load the projects color
+                //   projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
+                //   projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
+                //
+                //   $ctrl.dayVisualizeProjectTotals.push(projectVisPrivate);
+                // }
               };
 
             });

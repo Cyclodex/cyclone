@@ -1,7 +1,7 @@
 {
   "name": "cyclone",
   "author": "Cyclodex",
-  "version": "0.42.0",
+  "version": "0.43.0",
   "description": "Time tracking",
   "private": true,
   "scripts": {
@@ -30,6 +30,7 @@
     "angular-route": "1.5.3",
     "angularfire": "2.0.2",
     "firebase": "3.3.2",
+    "firebaseui": "^1.0.0",
     "randomcolor": "^0.4.4"
   },
   "devDependencies": {

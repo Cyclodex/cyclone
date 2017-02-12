@@ -1,4 +1,9 @@
 # CHANGELOG
+## 0.43 - 11.02.2017
+* Introducing new "internal" hours. They count as work hours but are useful for seeing the amount of internal hours. (against project/client/external hours)
+* Fixed authentication, works now also without any CDN's.
+* Improved loading screen behaviour, no raw Angular template code is visible anymore.
+* Changing the layout a bit and improving visibility of Project name
 
 ## 0.42 - 29.01.2017
 * Loading the libraries with webpack instead of CDN's. (index.html)

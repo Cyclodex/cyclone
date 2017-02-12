@@ -1,3 +1,9 @@
+// Hide angular during loading process
+// https://docs.angularjs.org/api/ng/directive/ngCloak
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 .login {
     height: ~'calc(100vh - 64px)';
     text-align: center;
@@ -61,6 +67,7 @@
     }
     .entry__info__input--project input {
         font-weight: bold;
+        font-size: 1.3rem;
     }
     .md-errors-spacer {
         min-height: unset;
@@ -106,17 +113,21 @@
         padding-top: 20px;
     }
 
-    .work md-card{
+    .project-type--work md-card{
         background-color: lightyellow;
         border-bottom: 1px solid orange;
     }
-    .work.done md-card{
-        background-color: #c6ffc6;
-        border-bottom: 1px solid darkgreen;
+    .project-type--internal md-card {
+        background-color: #ffdb6e;
+        border-bottom: 1px solid orange;
     }
-    .private md-card{
+    .project-type--private md-card{
         background-color: lightblue;
         border-bottom: 1px solid blue;
+    }
+    // Done entries are faded out
+    .done {
+        opacity: 0.6;
     }
 
     .show-on-hover,
@@ -144,6 +155,10 @@
                 .entry__options {
                     opacity: 1;
                 }
+                // Type of entry selection:
+                md-radio-button {
+                    opacity: 0.6;
+                }
                 .entry__checked:before {
                     opacity: 1;
                     border-left: 1px solid gray;
@@ -155,6 +170,13 @@
                 flex: 1 0 88%;
             }
         }
+    }
+}
+
+md-radio-button {
+    opacity: 0.3;
+    &.md-checked {
+        opacity: 1 !important;
     }
 }
 
@@ -221,10 +243,16 @@
     border: 1px solid white;
     border-radius: 5px;
     padding: 5px;
+    margin: 3px;
 
     &:first-child {
         border: none;
     }
+}
+
+.stats-totals__internals {
+    display: block;
+    font-size: 0.7rem;
 }
 
 .page {
@@ -310,11 +338,15 @@
         right: -10px;
     }
 }
-.dayVisualize-entry.work.checked--no {
+.dayVisualize-entry.project-type--internal.checked--no,
+.dayVisualize-entry.project-type--work.checked--no {
     height: 80px;
 }
-.dayVisualize-entry.private {
+.dayVisualize-entry.project-type--private {
     background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+}
+.dayVisualize-entry.project-type--internal {
+    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
 }
 
 button.dayVisualize-entry.md-button.md-button {
@@ -339,7 +371,6 @@ button.dayVisualize-entry.md-button.md-button:hover {
 }
 
 .entry__time-information {
-    padding: 0 0 0 8px;
     text-align: right;
 
 }
