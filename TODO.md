@@ -10,3 +10,11 @@ Don't show 0h xmin  -> lets move this into a other function (not on template) an
 Update the type of project after the user has set a project name.
  * check current entries
  * later lets make this somehow configurable as a default for a project
+
+## Make html files processing over build for cache file renaming
+* https://webpack.js.org/guides/caching/
+  * https://www.npmjs.com/package/webpack-file-changer
+* hash name of js (vendor + cyclone)
+* hash name of css file
+* Version number replacement
+* Date replacement

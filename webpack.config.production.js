@@ -10,6 +10,7 @@ const path = require("path");
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+const FileChanger = require('webpack-file-changer');
 
 module.exports = {
     entry: {
@@ -24,7 +25,7 @@ module.exports = {
     },
     output: {
         path: __dirname + '/public/build/',
-        filename: "cyclone.js"
+        filename: "cyclone.[chunkhash].js"
     },
     module: {
         loaders: [
@@ -63,6 +64,18 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.AggressiveMergingPlugin()
+        new webpack.optimize.AggressiveMergingPlugin(),
+        new FileChanger({
+            change: [{
+                file: "public/index.html",
+                parameters: {
+                    'cyclone\\.js': 'cyclone.[renderedHash:0].js'
+                    // "\\$VERSION": package.version,
+                    // "\\$BUILD_TIME": new Date()
+                }
+            }
+            ]
+        })
+
     ]
 };
