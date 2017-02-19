@@ -38,6 +38,7 @@ angular.module("cycloneApp")
 
             $ctrl.refDayVisArray = $firebaseArray(refDayVis);
             $ctrl.dayVisualizeProjectTotals = [];
+            $ctrl.dayVisualizeWorkTypeTotals = [];
 
             $ctrl.refDayVisArray.$watch(function(event) {
               var secondsOfOneHour = 60 * 60;
@@ -45,11 +46,13 @@ angular.module("cycloneApp")
               // Time bar / dayVisualize
               // TODO: think about making these types more dynamic:
               $ctrl.statsTotalWork = 0;
-              $ctrl.statsTotalInternal = 0;
               $ctrl.statsTotalPrivate = 0;
+              $ctrl.stats = {};
+
               var projects = {};
               $ctrl.refDayVisArray.forEach(function(data) {
                 $ctrl.dayVisualizeProjectTotals = [];
+                $ctrl.dayVisualizeWorkTypeTotals = [];
 
                 var projectDuration = data.timestampDuration;
                 var projectName     = data.project;
@@ -91,26 +94,37 @@ angular.module("cycloneApp")
                 }
 
                 // Sum up the durations of every work project
-                // projects[projectName].projectDurationSumWork += projectDuration;
                 projects[projectName].sums[data.type] += projectDuration;
 
                 // Separate sums for work and private
-                // TODO: Add internal hours ( think about work hours + internal combined?)
-                if (data.type == 'work') {
-                  // Sum of all work hours
-                  $ctrl.statsTotalWork += projectDuration;
-                } else if (data.type == 'internal') {
-                    // Sum of all internal work hours
-                    $ctrl.statsTotalInternal += projectDuration;
-                    // But we still want this also count as work hours
-                    // TODO: Think about this as well.
-                    $ctrl.statsTotalWork += projectDuration;
+                if (data.type == 'private') {
+                    $ctrl.statsTotalPrivate += projectDuration;
                 } else {
-                  // Sum of all private hours
-                  $ctrl.statsTotalPrivate += projectDuration;
+                  // Sum of all work hours - everything else than private: (internal, external, trust)
+                  $ctrl.statsTotalWork += projectDuration;
+                  // Set starting value if not set.
+                  if ($ctrl.stats[data.type] === undefined) {
+                      $ctrl.stats[data.type] = 0;
+                  }
+                  // Sum up every type
+                  $ctrl.stats[data.type] += projectDuration;
                 }
 
               });
+
+              // Create graph for work types
+              // TODO: try to make the order stable , so it doesn't magically replace elements on the graph when resizing
+              for (var timeType in $ctrl.stats) {
+                  // console.log(timeType);
+                  var timeTypeVisualisation = {};
+                  timeTypeVisualisation["type"]     = timeType;
+                  timeTypeVisualisation["_color"]   = randomColor(); // TODO DEFINE COLORS
+                  timeTypeVisualisation["duration"] = $ctrl.stats[timeType];
+                  timeTypeVisualisation["_width"]   = timeTypeVisualisation["duration"] / 1000 / secondsOfOneHour;
+
+                  $ctrl.dayVisualizeWorkTypeTotals.push(timeTypeVisualisation);
+
+              };
 
 
               // Create an element for every work and/or private separated
@@ -129,27 +143,6 @@ angular.module("cycloneApp")
                     $ctrl.dayVisualizeProjectTotals.push(projectVisualisation);
                 }
 
-                // if ( projects[projectName].projectDurationSumWork !== undefined ){
-                //   var projectVisWork = {};
-                //   projectVisWork["project"]  = projectName;
-                //   projectVisWork["type"]     = 'work';
-                //   projectVisWork["_color"]   = projectsColor[projectName]; // load the projects color
-                //   projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
-                //   projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
-                //
-                //   $ctrl.dayVisualizeProjectTotals.push(projectVisWork);
-                // }
-                // // if we have private
-                // if ( projects[projectName].projectDurationSumPrivate !== undefined ){
-                //   var projectVisPrivate = {};
-                //   projectVisPrivate["project"]  = projectName;
-                //   projectVisPrivate["type"]     = 'private';
-                //   projectVisPrivate["_color"]   = projectsColor[projectName]; // load the projects color
-                //   projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
-                //   projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
-                //
-                //   $ctrl.dayVisualizeProjectTotals.push(projectVisPrivate);
-                // }
               };
 
             });

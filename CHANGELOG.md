@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.44
+* Fixed empty type after using continue button.
+* Adding a "trust" type
+
 ## 0.43 - 11.02.2017
 * Introducing new "internal" hours. They count as work hours but are useful for seeing the amount of internal hours. (against project/client/external hours)
 * Fixed authentication, works now also without any CDN's.

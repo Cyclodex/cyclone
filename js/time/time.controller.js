@@ -14,7 +14,25 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         };
 
         // The different types
-        $scope.types = ['work', 'internal', 'private'];
+        // TODO: Make this a configuration option
+        $scope.types = [
+            {
+                'name'  : 'External work',
+                'value' : 'work'
+            },
+            {
+                'name'  : 'Internal work',
+                'value' : 'internal'
+            },
+            {
+                'name'  : 'Trust time',
+                'value' : 'trust'
+            },
+            {
+                'name'  : 'Private / break',
+                'value' : 'private'
+            }
+        ];
 
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {
@@ -303,12 +321,13 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 }
                 if ($scope.newContinueEntryType !== undefined){
                     $scope.newEntryType = $scope.newContinueEntryType;
-                    $scope.newContinueEntryType = ''; // Clear it again
+                    $scope.newContinueEntryType = 'work'; // Default it again
                 }
 
                 // Focus First element now again, so we are ready to type an other task
                 focus('newTaskProject');
 
+                // TODO: put the following logic into a function to get called also by other change options later
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key;
                 // Get location in the array

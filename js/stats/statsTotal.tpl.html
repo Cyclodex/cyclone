@@ -1,5 +1,16 @@
 <div flex layout="row" layout-align="center center" class="stats-totals">
-    <div><strong>Total:</strong></div>
-    <div>Work: {{ $ctrl.workTotal | date : "H'h' m'min'" : '+0000' }} <span class="stats-totals__internals">(Internal:{{ $ctrl.internalTotal | date : "H'h' m'min'" : '+0000' }})</span></div>
-    <div class="footer-stats__private">Private: {{ $ctrl.privateTotal | date : "H'h' m'min'" : '+0000' }}</div>
+    <div flex="grow">
+        <span>Work: {{ $ctrl.workTotal | date : "H'h'&nbsp;m'min'" : '+0000' }}</span>
+        <div class="day-visualize timeType-sum">
+            <md-button ng-repeat="entry in $ctrl.workTypes track by $index"
+             class="dayVisualize-entry project-type--{{entry.type}}"
+             ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
+             aria-label="info">
+                </md-tooltip>
+                <div class="dayVisualize-entry-content dayVisualize-entry-content--type">{{entry.type}}</div>
+                <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | date : "H'h' m'min'" : '+0000'}}</div>
+            </md-button>
+        </div>
+    </div>
+    <div class="footer-stats__private">Private:<BR>{{ $ctrl.privateTotal | date : "H'h'&nbsp;m'min'" : '+0000' }}</div>
 </div>

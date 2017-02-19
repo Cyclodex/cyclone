@@ -125,8 +125,8 @@
                             <md-select id="newTaskType"
                              ng-model="newEntryType"
                              aria-label="Type of entry">
-                                <md-option ng-repeat="type in types" ng-value="type">
-                                    {{type}}
+                                <md-option ng-repeat="type in types" ng-value="type.value">
+                                    {{type.name}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -268,9 +268,9 @@
                                      ng-change="entries.$save(entry)"
                                      aria-label="Work or private hours"
                                     >
-                                        <md-radio-button value="work" class="md-primary">Work</md-radio-button>
-                                        <md-radio-button value="internal" class="md-primary">Internal</md-radio-button>
-                                        <md-radio-button value="private">Private</md-radio-button>
+                                        <md-radio-button ng-repeat="type in types" class="md-primary" ng-value="type.value">
+                                            {{type.name}}
+                                        </md-radio-button>
                                     </md-radio-group>
                                 </div>
                                 <!-- entry actions -->
@@ -469,6 +469,6 @@
 
 <!-- Cyclone app -->
 <script src="build/vendors.js"></script>
-<script src="build/cyclone.5ac287c59c327ab9033a.js"></script>
+<script src="build/cyclone.js"></script>
 </body>
 </html>

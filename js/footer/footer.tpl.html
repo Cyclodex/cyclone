@@ -26,8 +26,9 @@
     </div>
     <stats-total
      work-total="$ctrl.statsTotalWork"
-     internal-total="$ctrl.statsTotalInternal"
      private-total="$ctrl.statsTotalPrivate"
+     work-types="$ctrl.dayVisualizeWorkTypeTotals"
+     flex="grow"
     ></stats-total>
     <version-display></version-display>
 </md-toolbar>
@@ -73,5 +74,4 @@
             <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | date : "H'h' m'min'" : '+0000'}}</div>
         </md-button>
     </div>
-
 </md-toolbar>
