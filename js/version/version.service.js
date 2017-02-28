@@ -12,10 +12,6 @@ angular.module('cycloneApp').factory('versionService', [function() {
         return 'https://github.com/Cyclodex/cyclone/blob/master/CHANGELOG.md';
     }
 
-    VersionService.prototype.getPreReleaseStatus = function() {
-        return 'BETA';
-    }
-
     VersionService.prototype.getIssuesUrl = function() {
         return 'https://github.com/Cyclodex/cyclone/issues';
     }

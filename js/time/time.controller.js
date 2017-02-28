@@ -2,8 +2,8 @@
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment",
-    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment) {
+angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment", "timeTypesService",
+    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment, timeTypesService) {
         // Angular-clipboard
         $scope.copySuccess = function () {
             console.log('Copied time!');
@@ -14,25 +14,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         };
 
         // The different types
-        // TODO: Make this a configuration option
-        $scope.types = [
-            {
-                'name'  : 'External work',
-                'value' : 'work'
-            },
-            {
-                'name'  : 'Internal work',
-                'value' : 'internal'
-            },
-            {
-                'name'  : 'Trust time',
-                'value' : 'trust'
-            },
-            {
-                'name'  : 'Private / break',
-                'value' : 'private'
-            }
-        ];
+        $scope.types = timeTypesService.getTimeTypes();
+        // TODO: Make this a configuration option or save it in the firebasedb
 
         // check the route when ready
         $rootScope.$on('$routeChangeSuccess', function () {

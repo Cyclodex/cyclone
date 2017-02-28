@@ -27,6 +27,7 @@ require('./cyclone.module.js');
 require('./components/auth.factory.js');
 require('./components/focus.directive.js');
 require('./components/order.filter.js');
+require('./components/timeTypes.service.js');
 require('./footer/footer.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');

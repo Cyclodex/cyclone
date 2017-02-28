@@ -8,7 +8,6 @@ angular.module('cycloneApp').component('versionDisplay', {
       var $ctrl = this;
 
       $ctrl.version = versionService.getVersion();
-      $ctrl.preRelease = versionService.getPreReleaseStatus();
       $ctrl.changelogUrl = versionService.getChanglogUrl();
       $ctrl.issuesUrl = versionService.getIssuesUrl();
   }]
