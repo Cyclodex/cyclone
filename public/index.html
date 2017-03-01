@@ -325,7 +325,7 @@
                     </div>
 
                     <div ng-repeat="(project, projectData) in entriesCurrentGroups">
-                        <md-subheader class="md-primary">{{project}}</md-subheader>
+                        <md-subheader class="md-primary">Project: {{project}}</md-subheader>
                         <div layout="row" layout-wrap layout-align="start stretch">
                             <md-card ng-repeat="(Task, TaskData) in projectData"
                                  ng-if="TaskData.amount > 1"
