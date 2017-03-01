@@ -4,6 +4,7 @@
 * Adding a "trust" type
 * Improved type handling in general
 * New graph which shows the time of the different types for today in the footer instead of numbers only.
+* Created filter to render durations in a simple human format.
 
 ## 0.43 - 11.02.2017
 * Introducing new "internal" hours. They count as work hours but are useful for seeing the amount of internal hours. (against project/client/external hours)

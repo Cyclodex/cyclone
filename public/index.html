@@ -89,12 +89,7 @@
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
                             <span>What have you done in the last</span>
-                            <span ng-if="currentDurationHasHours">
-                            <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-                        </span>
-                            <span ng-if="!currentDurationHasHours">
-                            <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-                        </span>
+                            <em>{{ currentDuration | humanizeDate }}</em>
                         </div>
                         <div ng-if="newEntryManualTime.value">
                             <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
@@ -257,7 +252,7 @@
                                             </md-button>
                                         </div>
                                         <div class="duration duration--human">
-                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                            <span>{{ entry.timestampDuration | humanizeDate  }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -354,7 +349,7 @@
                                 <md-subheader class="md-secondary entry__time-information" flex="none">
                                     <span>Checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.durationChecked | date : "H'h' m'min'" : '+0000' }}</span>
+                                        <span>{{ TaskData.durationChecked | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
@@ -374,7 +369,7 @@
                                 <md-subheader class="md-primary entry__time-information">
                                     <span>Un-checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
+                                        <span>{{ TaskData.duration | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <md-button
@@ -438,7 +433,7 @@
                                             <div layout=column layout-align="space-between">
                                                 <div class="entry__time-information" layout=row layout-align="center center">
                                                     <div class="duration duration--human">
-                                                        <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                                        <span>{{ entry.timestampDuration | humanizeDate  }}</span>
                                                     </div>
                                                     <div>&nbsp;|&nbsp;</div>
                                                     <div class="duration duration--decimal">

@@ -109,7 +109,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             // Duration
             $scope.currentDuration = 0;
-            $scope.currentDurationHasHours = false;
             $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
 
             // Show the current date
@@ -453,12 +452,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         // Realtime duration display
         function updateDurations() {
             $scope.currentDuration = ((Date.now() - $scope.lastEntryTimestamp));
-            // Set the HasHours expression
-            if (((1000 * 60 * 60) - $scope.currentDuration) <= 0) {
-                $scope.currentDurationHasHours = true;
-            } else {
-                $scope.currentDurationHasHours = false;
-            }
             $timeout(updateDurations, 1000, true);
         };
 
