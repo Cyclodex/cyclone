@@ -69,7 +69,16 @@ module.exports = {
             change: [{
                 file: "public/index.html",
                 parameters: {
-                    'cyclone\\.js': 'cyclone.[renderedHash:0].js'
+                    'cyclone\\.js': 'cyclone.[renderedHash:0].js',
+                    'cyclone\\.css': 'cyclone.css?v=[renderedHash:0]' // makes the css reloaded on every release
+                    // "\\$VERSION": package.version,
+                    // "\\$BUILD_TIME": new Date()
+                }
+            },{
+                file: "public/authentication.html",
+                parameters: {
+                    'cyclone\\.js': 'cyclone.[renderedHash:0].js',
+                    'cyclone\\.css': 'cyclone.css?v=[renderedHash:0]'
                     // "\\$VERSION": package.version,
                     // "\\$BUILD_TIME": new Date()
                 }
