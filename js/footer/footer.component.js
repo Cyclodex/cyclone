@@ -122,8 +122,8 @@ angular.module("cycloneApp")
                   // Why push it when we can directly set on the order id:
                   $ctrl.dayVisualizeWorkTypeTotals[$scope.types[timeType].order] = timeTypeVisualisation;
 
-                  // Count up total of work (all none private ones)
-                  if (timeType !== 'private') {
+                  // Count up total of work (ignores private and trust time)
+                  if (timeType === 'work' || timeType === 'internal') {
                       // Sum of all work hours - everything else than private: (internal, external, trust)
                       $ctrl.statsTotalWork += $scope.types[timeType].timeSum;
                   }
