@@ -367,6 +367,11 @@ md-radio-button {
     &.project-type--internal {
         background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
     }
+
+    &.project-type--system {
+        flex-grow: 0 !important;
+        display: none !important; // We don't show the system entries in the graphs for now.
+    }
 }
 
 button.dayVisualize-entry.md-button {
