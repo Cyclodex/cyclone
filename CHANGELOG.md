@@ -2,6 +2,7 @@
 ## 0.45
 * Changed total work hours to client and internal work types (removed trust time from it)
 * Made a visual space to separate the work types from break and trust
+* Removed the start entry (system) from the stats graph.
 
 ## 0.44
 * Fixed empty type after using continue button.
