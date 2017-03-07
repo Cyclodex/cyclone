@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.46
+* Style changes to need less space when a entry is checked.
+
+
 ## 0.45
 * Changed total work hours to client and internal work types (removed trust time from it)
 * Made a visual space to separate the work types from break and trust

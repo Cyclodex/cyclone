@@ -59,9 +59,10 @@
     .entry__info__input {
         display: block;
         margin: 0;
+        padding: 0;
     }
     .entry__info__input--text {
-        margin: 5px 0 5px 0;
+        margin: 0;
         padding: 0;
 
     }
@@ -129,7 +130,13 @@
         background-color: lightblue;
         border-bottom: 2px solid blue;
     }
-    // Done entries are faded out
+
+    .project-type--system {
+        .entry-card {
+            height: 80px;
+        }
+    }
+    // Done entries are green
     .done md-card {
         opacity: 1;
         background-color: #c6ffc6;
@@ -176,7 +183,55 @@
             }
         }
     }
+
+    // Every card in the timetable
+    .entry-card {
+        .fadeOutPrepare();
+        height: 366px;
+        @media only screen and (min-width: 600px) {
+            height: 166px;
+        }
+
+        // Fix the width of the types to not jump around.
+        .entry__type {
+            width: 145px;
+        }
+
+        // When the task is tracked, we only show it minimal.
+        &.done {
+            height: 160px;
+            @media only screen and (min-width: 600px) {
+                height: 80px;
+            }
+
+            // remove all types, but not the checked one
+            .entry__type md-radio-button:not(.md-checked) {
+                display: none;
+            }
+
+        }
+
+        // Time information change when task is done
+        .entry__time-information {
+            padding: 10px 0;
+            .fadeOutPrepare();
+        }
+        &.done  .entry__time-information {
+            .fadeOut();
+        }
+    }
 }
+
+// Set transition and make sure we have opacity and a max-height
+.fadeOutPrepare(){
+    transition: opacity 400ms ease-in-out, height 400ms ease-in-out;
+    opacity: 1;
+}
+
+.fadeOut(){
+    opacity: 0;
+}
+
 
 md-radio-button {
     opacity: 0.3;

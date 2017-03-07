@@ -172,8 +172,8 @@
                     <div ng-repeat="entry in entries"
                          layout="column"
                          layout-align="start center"
-                     class="row project-type--{{entry.type}}"
-                     ng-class="[{true: 'done', false: ''}[entry.checked == true]]"
+                         class="row project-type--{{entry.type}}"
+                         ng-class="[{true: 'done', false: ''}[entry.checked == true]]"
                     >
                         <div ng-if="$last && entry.type == 'system'"
                              class="entry start-of-day"
@@ -184,7 +184,9 @@
                             <md-card layout="column"
                                      layout-align="space-around"
                                      layout-gt-xs="row"
-                                     flex="none">
+                                     flex="none"
+                                     class="entry-card"
+                                     >
                                 <div>
                                     {{entry.text}}
                                 </div>
@@ -211,7 +213,9 @@
                             <md-card layout="column"
                                      layout-align="space-around"
                                      layout-gt-xs="row"
-                                     flex="none">
+                                     flex="none"
+                                     class="entry-card"
+                                     ng-class="[{true: 'done', false: ''}[entry.checked == true]]">
                                 <div class="entry__checked">
                                     <md-checkbox ng-model="entry.checked"
                                                  aria-label="checked"
@@ -219,7 +223,7 @@
                                                  class="md-primary">
                                     </md-checkbox>
                                 </div>
-                                <div layout=column layout-align="center">
+                                <div layout=column layout-align="start">
                                     <div class="entry__info">
                                         <md-input-container class="entry__info__input entry__info__input--project">
                                             <input ng-model="entry.project"
@@ -257,7 +261,7 @@
                                     </div>
                                 </div>
                                 <!-- Entry type -->
-                                <div>
+                                <div class="entry__type">
                                     <md-radio-group
                                      ng-model="entry.type"
                                      ng-change="entries.$save(entry)"
@@ -269,7 +273,7 @@
                                     </md-radio-group>
                                 </div>
                                 <!-- entry actions -->
-                                <div layout=column layout-align="center">
+                                <div layout=column layout-align="start">
                                     <div class="entry__options">
                                         <div layout=row layout-align="space-around center">
 
