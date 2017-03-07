@@ -5,15 +5,11 @@ angular.module('cycloneApp').factory('versionService', [function() {
     }
 
     VersionService.prototype.getVersion = function() {
-        return '0.43 | 11.02.2017';
+        return '0.45 | 06.03.2017';
     }
 
     VersionService.prototype.getChanglogUrl = function() {
         return 'https://github.com/Cyclodex/cyclone/blob/master/CHANGELOG.md';
-    }
-
-    VersionService.prototype.getPreReleaseStatus = function() {
-        return 'BETA';
     }
 
     VersionService.prototype.getIssuesUrl = function() {

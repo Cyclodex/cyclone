@@ -115,19 +115,24 @@
 
     .project-type--work md-card{
         background-color: lightyellow;
-        border-bottom: 1px solid orange;
+        border-bottom: 2px solid orange;
     }
     .project-type--internal md-card {
         background-color: #ffdb6e;
-        border-bottom: 1px solid orange;
+        border-bottom: 2px solid orange;
+    }
+    .project-type--trust md-card{
+        background-color: #e1c2e6;
+        border-bottom: 2px solid #9724e6;
     }
     .project-type--private md-card{
         background-color: lightblue;
-        border-bottom: 1px solid blue;
+        border-bottom: 2px solid blue;
     }
     // Done entries are faded out
-    .done {
-        opacity: 0.6;
+    .done md-card {
+        opacity: 1;
+        background-color: #c6ffc6;
     }
 
     .show-on-hover,
@@ -220,7 +225,7 @@ md-radio-button {
 
     @media only screen and (min-width: 960px) {
         position: fixed;
-        bottom: 64px;
+        bottom: 95px;
         width: 100%;
         z-index: 100;
         transition: transform 500ms;
@@ -238,15 +243,14 @@ md-radio-button {
         transform: translateY(40%);
     }
 }
-.stats-totals > div {
-    display: inline-block;
-    border: 1px solid white;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 3px;
 
-    &:first-child {
-        border: none;
+.stats-totals {
+    text-align: left;
+    width: 90%;
+    margin: 0 auto;
+
+    .day-visualize {
+        width: 100%;
     }
 }
 
@@ -295,7 +299,7 @@ md-radio-button {
 .day-visualize {
     width: 90%;
     text-align: center;
-    margin: 0px 10px 20px;
+    margin: 0px auto 20px;
 
     display: flex;
     align-items: flex-end;
@@ -312,6 +316,14 @@ md-radio-button {
         flex-basis: 0;
         flex-grow: 1;
         transition: all .5s cubic-bezier(.35,0,.25,1);
+    }
+
+
+    // Make a gap between the work times and the trust button, but only in the stats totals
+    .project-type--trust {
+        .stats-totals & {
+            margin-left: 2%;
+        }
     }
 }
 
@@ -338,27 +350,39 @@ md-radio-button {
         right: -10px;
     }
 }
-.dayVisualize-entry.project-type--internal.checked--no,
-.dayVisualize-entry.project-type--work.checked--no {
-    height: 80px;
-}
-.dayVisualize-entry.project-type--private {
-    background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
-}
-.dayVisualize-entry.project-type--internal {
-    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+
+.dayVisualize-entry {
+    // Increase height of elements which are not checked
+    &.project-type--internal.checked--no,
+    &.project-type--work.checked--no {
+        height: 80px;
+    }
+
+    // diagonal lines in the background for trust and private time
+    &.project-type--trust,
+    &.project-type--private {
+        background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+    }
+    // Vertical lines for the internal backgrounds
+    &.project-type--internal {
+        background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
+    }
+
+    &.project-type--system {
+        flex-grow: 0 !important;
+        display: none !important; // We don't show the system entries in the graphs for now.
+    }
 }
 
-button.dayVisualize-entry.md-button.md-button {
+button.dayVisualize-entry.md-button {
     font-size: 0.7rem;
 }
-button.dayVisualize-entry.md-button.md-button:hover {
+button.dayVisualize-entry.md-button:hover {
     min-width: 150px !important;
 }
 
 .day-visualize.project-sum {
     transition: all 1s;
-    margin: 0 10px;
 }
 .footer-stats.open .dayVisualize.project-sum {
     height: 100%;

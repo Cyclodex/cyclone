@@ -1,7 +1,7 @@
 {
   "name": "cyclone",
   "author": "Cyclodex",
-  "version": "0.43.0",
+  "version": "0.45.0",
   "description": "Time tracking",
   "private": true,
   "scripts": {
@@ -43,6 +43,8 @@
     "style-loader": "^0.13.1",
     "raw-loader": "0.5.1",
     "webpack": "^1.13.2",
-    "ng-annotate-webpack-plugin": "^0.1.1"
+    "ng-annotate-webpack-plugin": "^0.1.1",
+    "webpack-file-changer": "2.0.1",
+    "firebase-tools": ""
   }
 }

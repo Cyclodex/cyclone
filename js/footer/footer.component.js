@@ -12,8 +12,8 @@ angular.module("cycloneApp")
   .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
   .component('footerDisplay', {
   template: require('./footer.tpl.html'),
-  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor",
-    function($scope, Auth, $firebaseArray, $rootScope, randomColor) {
+  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService",
+    function($scope, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService) {
       var $ctrl = this;
 
       // collect the projects colors
@@ -42,15 +42,20 @@ angular.module("cycloneApp")
             $ctrl.refDayVisArray.$watch(function(event) {
               var secondsOfOneHour = 60 * 60;
 
-              // Time bar / dayVisualize
-              // TODO: think about making these types more dynamic:
-              $ctrl.statsTotalWork = 0;
-              $ctrl.statsTotalInternal = 0;
-              $ctrl.statsTotalPrivate = 0;
+              // Get the time types
+              $scope.types = timeTypesService.getTimeTypes();
+              // Set default values we need
+              for (var timeType in $scope.types) {
+                $scope.types[timeType].timeSum = 0;
+              }
+
               var projects = {};
               $ctrl.refDayVisArray.forEach(function(data) {
-                $ctrl.dayVisualizeProjectTotals = [];
-
+                // Check if entries type is supported (we also have system which is not part of graphs)
+                if ($scope.types[data.type] === undefined) {
+                  console.warn('Ignoring type "' + data.type + '" for sum visualization.');
+                  return;
+                }
                 var projectDuration = data.timestampDuration;
                 var projectName     = data.project;
 
@@ -91,27 +96,38 @@ angular.module("cycloneApp")
                 }
 
                 // Sum up the durations of every work project
-                // projects[projectName].projectDurationSumWork += projectDuration;
                 projects[projectName].sums[data.type] += projectDuration;
 
-                // Separate sums for work and private
-                // TODO: Add internal hours ( think about work hours + internal combined?)
-                if (data.type == 'work') {
-                  // Sum of all work hours
-                  $ctrl.statsTotalWork += projectDuration;
-                } else if (data.type == 'internal') {
-                    // Sum of all internal work hours
-                    $ctrl.statsTotalInternal += projectDuration;
-                    // But we still want this also count as work hours
-                    // TODO: Think about this as well.
-                    $ctrl.statsTotalWork += projectDuration;
-                } else {
-                  // Sum of all private hours
-                  $ctrl.statsTotalPrivate += projectDuration;
-                }
+                // Sum up every type
+                $scope.types[data.type]['timeSum'] += projectDuration;
 
               });
 
+              // Set arrays
+              $ctrl.dayVisualizeProjectTotals = [];
+              $ctrl.dayVisualizeWorkTypeTotals = [];
+              $ctrl.statsTotalWork = 0;
+
+
+              // Create graph for work types
+              for (var timeType in $scope.types) {
+                  var timeTypeVisualisation = {};
+                  timeTypeVisualisation["type"]     = $scope.types[timeType].value;
+                  timeTypeVisualisation["_name"]    = $scope.types[timeType].name;
+                  timeTypeVisualisation["_color"]   = $scope.types[timeType].color;
+                  timeTypeVisualisation["duration"] = $scope.types[timeType].timeSum;
+                  timeTypeVisualisation["_width"]   = $scope.types[timeType].timeSum / 1000 / secondsOfOneHour;
+                  timeTypeVisualisation["_order"]   = $scope.types[timeType].order;
+
+                  // Why push it when we can directly set on the order id:
+                  $ctrl.dayVisualizeWorkTypeTotals[$scope.types[timeType].order] = timeTypeVisualisation;
+
+                  // Count up total of work (ignores private and trust time)
+                  if (timeType === 'work' || timeType === 'internal') {
+                      // Sum of all work hours - everything else than private: (internal, external, trust)
+                      $ctrl.statsTotalWork += $scope.types[timeType].timeSum;
+                  }
+              };
 
               // Create an element for every work and/or private separated
               for (var projectName in projects) {
@@ -129,27 +145,6 @@ angular.module("cycloneApp")
                     $ctrl.dayVisualizeProjectTotals.push(projectVisualisation);
                 }
 
-                // if ( projects[projectName].projectDurationSumWork !== undefined ){
-                //   var projectVisWork = {};
-                //   projectVisWork["project"]  = projectName;
-                //   projectVisWork["type"]     = 'work';
-                //   projectVisWork["_color"]   = projectsColor[projectName]; // load the projects color
-                //   projectVisWork["duration"] = projects[projectName].projectDurationSumWork;
-                //   projectVisWork["_width"]   = projectVisWork["duration"] / 1000 / secondsOfOneHour;
-                //
-                //   $ctrl.dayVisualizeProjectTotals.push(projectVisWork);
-                // }
-                // // if we have private
-                // if ( projects[projectName].projectDurationSumPrivate !== undefined ){
-                //   var projectVisPrivate = {};
-                //   projectVisPrivate["project"]  = projectName;
-                //   projectVisPrivate["type"]     = 'private';
-                //   projectVisPrivate["_color"]   = projectsColor[projectName]; // load the projects color
-                //   projectVisPrivate["duration"] = projects[projectName].projectDurationSumPrivate;
-                //   projectVisPrivate["_width"]   = projectVisPrivate["duration"] / 1000 / secondsOfOneHour;
-                //
-                //   $ctrl.dayVisualizeProjectTotals.push(projectVisPrivate);
-                // }
               };
 
             });

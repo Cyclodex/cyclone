@@ -1,4 +1,16 @@
 # CHANGELOG
+## 0.45
+* Changed total work hours to client and internal work types (removed trust time from it)
+* Made a visual space to separate the work types from break and trust
+* Removed the start entry (system) from the stats graph.
+
+## 0.44
+* Fixed empty type after using continue button.
+* Adding a "trust" type
+* Improved type handling in general
+* New graph which shows the time of the different types for today in the footer instead of numbers only.
+* Created filter to render durations in a simple human format.
+
 ## 0.43 - 11.02.2017
 * Introducing new "internal" hours. They count as work hours but are useful for seeing the amount of internal hours. (against project/client/external hours)
 * Fixed authentication, works now also without any CDN's.

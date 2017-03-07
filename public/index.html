@@ -89,12 +89,7 @@
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
                             <span>What have you done in the last</span>
-                            <span ng-if="currentDurationHasHours">
-                            <em>{{ currentDuration | date : "H'h' m'min'" : '+0000'}}</em> ?
-                        </span>
-                            <span ng-if="!currentDurationHasHours">
-                            <em>{{ currentDuration | date : "m:ss" :  '+0000'}} Minutes</em> ?
-                        </span>
+                            <em>{{ currentDuration | humanizeDate }}</em>
                         </div>
                         <div ng-if="newEntryManualTime.value">
                             <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
@@ -125,8 +120,8 @@
                             <md-select id="newTaskType"
                              ng-model="newEntryType"
                              aria-label="Type of entry">
-                                <md-option ng-repeat="type in types" ng-value="type">
-                                    {{type}}
+                                <md-option ng-repeat="type in types" ng-value="type.value">
+                                    {{type.name}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -257,7 +252,7 @@
                                             </md-button>
                                         </div>
                                         <div class="duration duration--human">
-                                            <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                            <span>{{ entry.timestampDuration | humanizeDate  }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -268,9 +263,9 @@
                                      ng-change="entries.$save(entry)"
                                      aria-label="Work or private hours"
                                     >
-                                        <md-radio-button value="work" class="md-primary">Work</md-radio-button>
-                                        <md-radio-button value="internal" class="md-primary">Internal</md-radio-button>
-                                        <md-radio-button value="private">Private</md-radio-button>
+                                        <md-radio-button ng-repeat="type in types" class="md-primary" ng-value="type.value">
+                                            {{type.name}}
+                                        </md-radio-button>
                                     </md-radio-group>
                                 </div>
                                 <!-- entry actions -->
@@ -330,7 +325,7 @@
                     </div>
 
                     <div ng-repeat="(project, projectData) in entriesCurrentGroups">
-                        <md-subheader class="md-primary">{{project}}</md-subheader>
+                        <md-subheader class="md-primary">Project: {{project}}</md-subheader>
                         <div layout="row" layout-wrap layout-align="start stretch">
                             <md-card ng-repeat="(Task, TaskData) in projectData"
                                  ng-if="TaskData.amount > 1"
@@ -354,7 +349,7 @@
                                 <md-subheader class="md-secondary entry__time-information" flex="none">
                                     <span>Checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.durationChecked | date : "H'h' m'min'" : '+0000' }}</span>
+                                        <span>{{ TaskData.durationChecked | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
@@ -374,7 +369,7 @@
                                 <md-subheader class="md-primary entry__time-information">
                                     <span>Un-checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.duration | date : "H'h' m'min'" : '+0000' }}</span>
+                                        <span>{{ TaskData.duration | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <md-button
@@ -438,7 +433,7 @@
                                             <div layout=column layout-align="space-between">
                                                 <div class="entry__time-information" layout=row layout-align="center center">
                                                     <div class="duration duration--human">
-                                                        <span>{{ entry.timestampDuration | date : "H'h' m'min'" : '+0000' }}</span>
+                                                        <span>{{ entry.timestampDuration | humanizeDate  }}</span>
                                                     </div>
                                                     <div>&nbsp;|&nbsp;</div>
                                                     <div class="duration duration--decimal">

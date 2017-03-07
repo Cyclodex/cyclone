@@ -5,7 +5,6 @@ angular.module('cycloneApp').component('statsTotal', {
   template: require('./statsTotal.tpl.html'),
   bindings: {
       workTotal: '<',
-      internalTotal: '<',
-      privateTotal: '<'
+      workTypes: '<'
   }
 });

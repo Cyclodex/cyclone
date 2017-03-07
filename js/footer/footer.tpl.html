@@ -26,8 +26,8 @@
     </div>
     <stats-total
      work-total="$ctrl.statsTotalWork"
-     internal-total="$ctrl.statsTotalInternal"
-     private-total="$ctrl.statsTotalPrivate"
+     work-types="$ctrl.dayVisualizeWorkTypeTotals"
+     flex="grow"
     ></stats-total>
     <version-display></version-display>
 </md-toolbar>
@@ -54,7 +54,7 @@
                 {{entry.project}}: {{entry.text}}
             </md-tooltip>
             <div class="dayVisualize-entry-content dayVisualize-entry-content--text">{{entry.text}}</div>
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--duration">{{entry.timestampDuration | date : "H'h' m'min'" : '+0000'}}</div>
+            <div class="dayVisualize-entry-content dayVisualize-entry-content--duration">{{entry.timestampDuration | humanizeDate }}</div>
             <div class="dayVisualize-entry-content dayVisualize-entry-content--time-start">{{entry.timestampStart | date:'H:mm'}}</div>
             <div ng-if=$last class="dayVisualize-entry-content dayVisualize-entry-content--time-end">{{entry.timestamp | date:'H:mm'}}</div>
         </md-button>
@@ -70,8 +70,7 @@
          aria-label="info">
             </md-tooltip>
             <div class="dayVisualize-entry-content dayVisualize-entry-content--project">{{entry.project}}</div>
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | date : "H'h' m'min'" : '+0000'}}</div>
+            <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | humanizeDate }}</div>
         </md-button>
     </div>
-
 </md-toolbar>
