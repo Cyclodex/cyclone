@@ -1,7 +1,8 @@
 # CHANGELOG
 ## 0.46
 * Style changes to need less space when a entry is checked.
-
+* Replacing the checkbox with the time button.
+* Further styling improvements and re-placing elements.
 
 ## 0.45
 * Changed total work hours to client and internal work types (removed trust time from it)

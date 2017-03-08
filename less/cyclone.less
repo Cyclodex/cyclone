@@ -86,13 +86,16 @@
         z-index: 2;
         height: 83%;
         margin: 0;
+        width: 40px;
 
-        md-checkbox {
-            position: relative;
-            top: 33%;
+        .entry__checked__button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             margin: 0;
-            padding: 5px 0;
-            background-color: rgb(250,250,250);
+            right: 0px;
+            width: 60px;
+            min-width: unset;
         }
     }
     md-switch.md-primary {
@@ -213,6 +216,9 @@
 
         // Time information change when task is done
         .entry__time-information {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
             padding: 10px 0;
             .fadeOutPrepare();
         }

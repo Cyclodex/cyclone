@@ -217,11 +217,29 @@
                                      class="entry-card"
                                      ng-class="[{true: 'done', false: ''}[entry.checked == true]]">
                                 <div class="entry__checked">
-                                    <md-checkbox ng-model="entry.checked"
-                                                 aria-label="checked"
-                                                 ng-change="entries.$save(entry)"
-                                                 class="md-primary">
-                                    </md-checkbox>
+                                    <md-button
+                                            clipboard
+                                            class="entry__checked__button md-raised md-primary md-button md-ink-ripple"
+                                            ng-if="!entry.checked"
+                                            text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
+                                            on-copied="copySuccess(); updateSingleEntry(entry);"
+                                            on-error="copyFail(err)"
+                                            aria-label="Check entry and copy time"
+                                            class="md-raised md-button md-ink-ripple">
+                                        <md-tooltip md-direction="bottom">
+                                            Check & copy time
+                                        </md-tooltip>
+                                        {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
+                                    </md-button>
+                                    <md-button
+                                        ng-if="entry.checked"
+                                        class="entry__checked__button"
+                                        ng-click="entry.checked = false; entries.$save(entry);"
+                                        aria-label="remove check from entry">
+                                        <md-icon
+                                            class="material-icons md-primary"
+                                            >check_box</md-icon>
+                                    </md-button>
                                 </div>
                                 <div layout=column layout-align="start">
                                     <div class="entry__info">
@@ -242,19 +260,6 @@
                                         </md-input-container>
                                     </div>
                                     <div class="entry__time-information" layout=row layout-align="start center">
-                                        <div class="duration duration--decimal">
-                                            <md-button
-                                             clipboard
-                                             text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                             on-copied="copySuccess(); updateSingleEntry(entry);"
-                                             on-error="copyFail(err)"
-                                             class="md-raised md-button md-ink-ripple">
-                                                <md-tooltip md-direction="bottom">
-                                                    Copy time
-                                                </md-tooltip>
-                                                {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
-                                            </md-button>
-                                        </div>
                                         <div class="duration duration--human">
                                             <span>{{ entry.timestampDuration | humanizeDate  }}</span>
                                         </div>
