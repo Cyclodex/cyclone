@@ -246,7 +246,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
 
             // Check if the entry should be marked as private (break)
-            // TODO: Lets change the type field after the user entered a project, not here on add.
+            // TODO: Lets change the type field after the user entered a project; not here on add.
             // Check the project name for auto assignment
             if ($scope.newEntryProject !== undefined) {
                 var breakMatches = $scope.newEntryProject.match(/break/i);
@@ -270,12 +270,18 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 $scope.newEntryText = '';
             }
 
+            // newEntryGroup
+            if ($scope.newEntryGroup === undefined) {
+                $scope.newEntryGroup = false;
+            }
+
             //
             // ADD new entry into DB
             //
             $scope.entries.$add({
                 text: $scope.newEntryText,
                 project: $scope.newEntryProject,
+                group: $scope.newEntryGroup,
                 checked: false,
                 type: $scope.newEntryType,
                 timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
@@ -289,10 +295,12 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 // Clear the input fields again
                 $scope.newEntryText = '';
                 $scope.newEntryProject = '';
+                $scope.newEntryGroup = false;
                 $scope.newEntryManualTime = '';
                 $scope.newEntryType = 'work';
 
                 // Take over continue task if available
+                // TODO: Add the group here as well ?!
                 if ($scope.newContinueEntryProject !== undefined){
                     $scope.newEntryProject = $scope.newContinueEntryProject;
                     $scope.newContinueEntryProject = ''; // Clear it again
@@ -300,6 +308,10 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 if ($scope.newContinueEntryText !== undefined){
                     $scope.newEntryText = $scope.newContinueEntryText;
                     $scope.newContinueEntryText = ''; // Clear it again
+                }
+                if ($scope.newContinueEntryGroup !== undefined){
+                    $scope.newEntryGroup = $scope.newContinueEntryGroup;
+                    $scope.newContinueEntryGroup = false; // Clear it again
                 }
                 if ($scope.newContinueEntryType !== undefined){
                     $scope.newEntryType = $scope.newContinueEntryType;
@@ -377,18 +389,34 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             return timestampDuration;
         }
 
+        // Add task to group
+        // TODO: Define how the group name should be
+        $scope.addToGroup = function(entry) {
+            console.log(entry);
+            entry.group = 'groupTest';
+            // Save Entry
+            $scope.entries.$save(entry).then(function(queryRef) {
+                // data has been saved to our database
+                console.log("Entry (single Entry) saved with index" + queryRef.key)
+            });
+        };
+
         // Clone text and project to current timer
         $scope.cloneEntry = function() {
+            console.log(this.entry);
             $scope.newEntryText = this.entry.text;
             $scope.newEntryProject = this.entry.project;
             $scope.newEntryType = this.entry.type;
+            $scope.newEntryGroup = this.entry.group;
         };
 
         // Continue task feature (tracks current timer and continues with the selected one)
-        $scope.continueEntry = function(project, text, type) {
-            $scope.newContinueEntryProject = project;
-            $scope.newContinueEntryText    = text;
-            $scope.newContinueEntryType    = type;
+        $scope.continueEntry = function(entry) {
+            console.log(entry);
+            $scope.newContinueEntryProject = entry.project;
+            $scope.newContinueEntryText    = entry.text;
+            $scope.newContinueEntryType    = entry.type;
+            $scope.newContinueEntryGroup    = entry.group;
             $scope.addEntry();
         };
 
@@ -411,6 +439,13 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             // Continue this task
             $scope.continueEntry(project, text, type);
+        };
+
+        // Add the current timer to this group
+        $scope.addEntryToGroup = function(GroupTaskData) {
+            console.log(GroupTaskData);
+            $scope.newEntryGroup = GroupTaskData.group;
+            $scope.addEntry();
         };
 
 
@@ -461,6 +496,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             // $scope.entriesCurrentGroups but this would lead to more problems on text changes etc.
 
             var groups = {};
+            var groupsNew = {};
 
             // Iterate over all the data and prepare new object
             snapshot.forEach(function(data) {
@@ -468,6 +504,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
                 var projectName        = entry.project;
                 var projectTask        = entry.text;
+                var groupId            = entry.group;
 
                 // Make sure the elements are set
                 // The project object
@@ -485,57 +522,127 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     groups[projectName][projectTask].checkedState = '';
                     groups[projectName][projectTask].duration = 0;
                     groups[projectName][projectTask].durationChecked = 0;
+                    groups[projectName][projectTask].group = groupId;
                 }
 
-                // Sum up the durations and data
-                groups[projectName][projectTask].amount += 1;
-                groups[projectName][projectTask]['tasks'][data.key] = entry;
+                // The task has already a groupId, put the task we just prepared into the new group system:
+                // TODO: Attention, this seems not to work if there are both kind of types (2 old ones, and adding a task over the grouping functions)
+                if (groupId) {
+                    console.log('GroupID is set: ' + groupId);
+                    // If group does not exist yet, create it from the above data
+                    if (groupsNew[groupId] === undefined || typeof groupsNew[groupId] === 'function') {
+                        groupsNew[groupId] = groups[projectName][projectTask];
+                    }
 
-                // Add specific data with some conditions
-                if (entry.checked) {
-                    groups[projectName][projectTask].amountChecked += 1;
-                    groups[projectName][projectTask].durationChecked += entry.timestampDuration;
+                    // Sum up
+                    groupsNew[groupId].amount += 1;
+                    groupsNew[groupId]['tasks'][data.key] = entry;
+
+                    // Add specific data with some conditions
+                    if (entry.checked) {
+                        groupsNew[groupId].amountChecked += 1;
+                        groupsNew[groupId].durationChecked += entry.timestampDuration;
+                    } else {
+                        groupsNew[groupId].duration += entry.timestampDuration;
+                    }
+
+                    // Verifying the "checked" state
+                    // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
+                    if (groupsNew[groupId].amountChecked == 0) {
+                        // not checked
+                        groupsNew[groupId].checkedState = false;
+                        groupsNew[groupId].indeterminate = false;
+                    } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amount) {
+                        // all tasks are checked
+                        groupsNew[groupId].checkedState = true;
+                        groupsNew[groupId].indeterminate = false;
+                    } else {
+                        // amount of tasks checked is not amount of tasks, means mixed
+                        groupsNew[groupId].checkedState = false;
+                        groupsNew[groupId].indeterminate = true;
+                    }
+
                 } else {
-                    groups[projectName][projectTask].duration += entry.timestampDuration;
+                    // Sum up the durations and data
+                    groups[projectName][projectTask].amount += 1;
+                    groups[projectName][projectTask]['tasks'][data.key] = entry;
+
+                    // Add specific data with some conditions
+                    if (entry.checked) {
+                        groups[projectName][projectTask].amountChecked += 1;
+                        groups[projectName][projectTask].durationChecked += entry.timestampDuration;
+                    } else {
+                        groups[projectName][projectTask].duration += entry.timestampDuration;
+                    }
+
+                    // Verifying the "checked" state
+                    // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
+                    if (groups[projectName][projectTask].amountChecked == 0) {
+                        // not checked
+                        groups[projectName][projectTask].checkedState = false;
+                        groups[projectName][projectTask].indeterminate = false;
+                    } else if (groups[projectName][projectTask].amountChecked == groups[projectName][projectTask].amount) {
+                        // all tasks are checked
+                        groups[projectName][projectTask].checkedState = true;
+                        groups[projectName][projectTask].indeterminate = false;
+                    } else {
+                        // amount of tasks checked is not amount of tasks, means mixed
+                        groups[projectName][projectTask].checkedState = false;
+                        groups[projectName][projectTask].indeterminate = true;
+                    }
+
+                    // Automatically migrate the old group system to the new one (if more than 1 task has same name and description)
+                    if (groups[projectName][projectTask].amount > 1) {
+                        var autoCreatedGroupId = projectName + projectTask;
+                        groupsNew[autoCreatedGroupId] = groups[projectName][projectTask];
+                        groupsNew[autoCreatedGroupId].group = autoCreatedGroupId;
+                    }
                 }
 
-                // checking the "checked" state
-                // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
-                if (groups[projectName][projectTask].amountChecked == 0) {
-                    // not checked
-                    groups[projectName][projectTask].checkedState = false;
-                    groups[projectName][projectTask].indeterminate = false;
-                } else if (groups[projectName][projectTask].amountChecked == groups[projectName][projectTask].amount) {
-                    // all tasks are checked
-                    groups[projectName][projectTask].checkedState = true;
-                    groups[projectName][projectTask].indeterminate = false;
-                } else {
-                    // amount of tasks checked is not amount of tasks, means mixed
-                    groups[projectName][projectTask].checkedState = false;
-                    groups[projectName][projectTask].indeterminate = true;
-                }
+
             });
+
+            // Clean up the end result of groups
+            for (var key in groupsNew) {
+                if (groupsNew.hasOwnProperty(key)) {
+                    group = groupsNew[key];
+                    console.log(group);
+                    if (group.amount === 1) {
+                        delete groupsNew[key];
+                    }
+                }
+                if (Object.keys(groupsNew).length == 0) {
+                    delete groupsNew[key];
+                }
+            }
 
             // make sure only the projects with multiple entries are printed
             // So we iterate over the object, remove the task entries which have an amount of 1
             // And finally if no task is in the group, we remove the project as well.
-            for (var key in groups) {
-                if (groups.hasOwnProperty(key)) {
-                    tasks = groups[key];
-                    for (var task in tasks) {
-                        if (tasks.hasOwnProperty(task)) {
-                            if (tasks[task].amount === 1) {
-                                delete groups[key][task];
-                            }
-                        }
-                    }
-                    if (Object.keys(tasks).length == 0) {
-                        delete groups[key];
-                    }
-                }
-            }
+            // for (var key in groups) {
+            //     if (groups.hasOwnProperty(key)) {
+            //         tasks = groups[key];
+            //         console.log(tasks);
+            //         for (var task in tasks) {
+            //             if (tasks.hasOwnProperty(task)) {
+            //                 if (tasks[task].amount === 1) {
+            //                     delete groups[key][task];
+            //                 } else if (tasks[task].amount > 1) {
+            //                     console.log(tasks[task]);
+            //                     groupsNew['testGroupMigrated'] = tasks[task];
+            //                 }
+            //             }
+            //         }
+            //         if (Object.keys(tasks).length == 0) {
+            //             delete groups[key];
+            //         }
+            //     }
+            // }
 
-            $scope.entriesCurrentGroups = groups;
+            console.log('new groups:');
+            console.log(groupsNew);
+
+            $scope.entriesCurrentGroups = groupsNew;
             $scope.doneLoadingGroups = true;
         }
 
@@ -567,7 +674,8 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         // Single entry update
         // Could also be reached with this simple call: "entry.checked = true; entries.$save(entry);" in the html.
         // This however seems to be more clean for functionality.
-        // NOTE: This does not work with the single entries in the grouped "continue" tasks, because the keys don't exist in there. Rather use updateGroup if needed.
+        // NOTE: This does not work with the single entries in the grouped "continue" tasks, because the keys don't exist in there.
+        // Rather use updateGroup if needed.
         $scope.updateSingleEntry = function(entry) {
             // Mark it checked
             entry.checked = true;

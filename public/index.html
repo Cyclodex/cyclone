@@ -116,6 +116,14 @@
                         </md-input-container>
 
                         <md-input-container>
+                            <input id="newTaskGroup"
+                                   type="text"
+                                   ng-model="newEntryGroup"
+                                   aria-label="Group name">
+                            <label for="newTaskProject">Group</label>
+                        </md-input-container>
+
+                        <md-input-container>
                             <label>Type</label>
                             <md-select id="newTaskType"
                              ng-model="newEntryType"
@@ -258,6 +266,15 @@
                                              class="validate"
                                              aria-label="Description"/>
                                         </md-input-container>
+                                        <!-- Showing the group name assigned-->
+                                        <md-input-container class="entry__info__input entry__info__input--text">
+                                            <input ng-model="entry.group"
+                                                   ng-change="entries.$save(entry)"
+                                                   id="group"
+                                                   type="text"
+                                                   class="validate"
+                                                   aria-label="Group"/>
+                                        </md-input-container>
                                     </div>
                                     <div class="entry__time-information" layout=row layout-align="start center">
                                         <div class="duration duration--human">
@@ -284,6 +301,18 @@
 
                                             <div>
                                                 <a class=""
+                                                   ng-click="addToGroup(entry)">
+                                                    <md-button class="md-fab md-primary md-mini" aria-label="Add task to group">
+                                                        <md-tooltip md-direction="top">
+                                                            Add task to group
+                                                        </md-tooltip>
+                                                        <md-icon>note_add</md-icon>
+                                                    </md-button>
+                                                </a>
+                                            </div>
+
+                                            <div>
+                                                <a class=""
                                                    ng-click="cloneEntry()">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Use task">
                                                         <md-tooltip md-direction="top">
@@ -295,7 +324,7 @@
                                             </div>
                                             <div ng-if="addEntryEnabled">
                                                 <a class=""
-                                                   ng-click="continueEntry(entry.project, entry.text, entry.type)">
+                                                   ng-click="continueEntry(entry)">
                                                     <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                         <md-tooltip md-direction="top">
                                                             Track current timer and continue now on this task
@@ -333,131 +362,144 @@
                         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                     </div>
 
-                    <div ng-repeat="(project, projectData) in entriesCurrentGroups">
-                        <md-subheader class="md-primary">Project: {{project}}</md-subheader>
-                        <div layout="row" layout-wrap layout-align="start stretch">
-                            <md-card ng-repeat="(Task, TaskData) in projectData"
-                                 ng-if="TaskData.amount > 1"
+                    <!--<div ng-repeat="(group, groupData) in entriesCurrentGroups">-->
+                        <!--<md-subheader class="md-primary">Group: {{group}}</md-subheader>-->
+                        <!--<div layout="row" layout-wrap layout-align="start stretch">-->
+                            <md-card ng-repeat="(Group, GroupData) in entriesCurrentGroups"
+                                 ng-if="GroupData.group"
                                  layout="column"
                                  layout-padding
                                  layout-align="start stretch"
                                  class="project-card">
                                 <div>
-                                    <strong>{{Task}}</strong>
+                                    <strong>{{Group}}</strong>
                                     <a class="continue-task-now"
                                        ng-if="addEntryEnabled"
-                                       ng-click="continueGroup(TaskData)">
-                                        <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
+                                       ng-click="continueGroup(GroupData)">
+                                        <md-button class="md-fab md-primary md-mini" aria-label="Continue Group">
                                             <md-tooltip md-direction="top">
-                                                Track current timer and continue now on this task
+                                                Track current timer and continue now on this Group
                                             </md-tooltip>
                                             <md-icon>play_arrow</md-icon>
+                                        </md-button>
+                                    </a>
+                                    <a class="continue-task-now"
+                                       ng-if="addEntryEnabled"
+                                       ng-click="addEntryToGroup(GroupData)">
+                                        <md-button class="md-fab md-primary md-mini" aria-label="Add current timer to this Group">
+                                            <md-tooltip md-direction="top">
+                                                Track current timer into this group
+                                            </md-tooltip>
+                                            <md-icon>add</md-icon>
                                         </md-button>
                                     </a>
                                 </div>
                                 <md-subheader class="md-secondary entry__time-information" flex="none">
                                     <span>Checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.durationChecked | humanizeDate  }}</span>
+                                        <span>{{ GroupData.durationChecked | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
                                         <md-button
                                          clipboard
-                                         text="TaskData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                         on-copied="copySuccess(); updateGroup(TaskData, true);"
+                                         text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                         on-copied="copySuccess(); updateGroup(GroupData, true);"
                                          on-error="copyFail(err)"
                                          class="md-raised md-button md-ink-ripple">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
                                             </md-tooltip>
-                                            {{ TaskData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
+                                            {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
                                         </md-button>
                                     </span>
                                 </md-subheader>
                                 <md-subheader class="md-primary entry__time-information">
                                     <span>Un-checked time:</span>
                                     <span class="duration duration--human">
-                                        <span>{{ TaskData.duration | humanizeDate  }}</span>
+                                        <span>{{ GroupData.duration | humanizeDate  }}</span>
                                     </span>
                                     <span class="duration duration--decimal">
                                         <md-button
                                          clipboard
-                                         text="TaskData.duration / 1000 / 60 / 60 | number : 2"
-                                         on-copied="copySuccess(); updateGroup(TaskData, true);"
+                                         text="GroupData.duration / 1000 / 60 / 60 | number : 2"
+                                         on-copied="copySuccess(); updateGroup(GroupData, true);"
                                          on-error="copyFail(err)"
                                          class="md-raised md-button md-ink-ripple">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
                                             </md-tooltip>
-                                            <strong>{{ TaskData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                            <strong>{{ GroupData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
                                         </md-button>
                                     </span>
                                 </md-subheader>
-                            <div layout="column"
-                                 layout-align="center stretch"
-                                 layout-gt-sm="row"
-                                 layout-align-gt-sm="space-around center"
-                            >
                                 <div layout="column"
-                                     layout-align="center stretch">
-                                    <div class="entry__checked"
-                                         layout=row
-                                         layout-align="center center">
-                                        <md-checkbox aria-label="TasksChecked"
-                                                     ng-click="updateGroup(TaskData);"
-                                                     ng-checked="TaskData.checkedState"
-                                                     md-indeterminate="TaskData.indeterminate"
-                                                     class="md-primary">
-                                        </md-checkbox>
-                                        <md-tooltip md-direction="top">
-                                            <span ng-if="!TaskData.checkedState">Check all</span>
-                                            <span ng-if="TaskData.checkedState">Un-check all</span>
-                                        </md-tooltip>
-                                    </div>
-                                </div>
-                                <div layout="column"
-                                     layout-align="center stretch">
-                                    <div ng-repeat="entry in TaskData.tasks"
-                                         layout="row"
-                                         layout-align="start stretch"
-                                         layout-align-gt-md="space-around stretch"
-                                         class="entry project-type--{{entry.type}}"
-                                         ng-class="{true: 'done', false: ''}[entry.checked == true]"
-                                    >
-                                        <div class="entry__timestamp" flex="none">
-                                            <div class="entry__timestamp__end">
-                                                {{ entry.timestamp | date:'HH:mm' }}
-                                            </div>
-                                            <div class="entry__timestamp__start">
-                                                {{ entry.timestampStart | date:'HH:mm' }}
-                                            </div>
+                                     layout-align="center stretch"
+                                     layout-gt-sm="row"
+                                     layout-align-gt-sm="space-around center"
+                                >
+                                    <div layout="column"
+                                         layout-align="center stretch">
+                                        <div class="entry__checked"
+                                             layout=row
+                                             layout-align="center center">
+                                            <md-checkbox aria-label="GroupsChecked"
+                                                         ng-click="updateGroup(GroupData);"
+                                                         ng-checked="GroupData.checkedState"
+                                                         md-indeterminate="GroupData.indeterminate"
+                                                         class="md-primary">
+                                            </md-checkbox>
+                                            <md-tooltip md-direction="top">
+                                                <span ng-if="!GroupData.checkedState">Check all</span>
+                                                <span ng-if="GroupData.checkedState">Un-check all</span>
+                                            </md-tooltip>
                                         </div>
-                                        <md-card
-                                                layout=row
-                                                layout-align="center center"
-                                                flex="none"
+                                    </div>
+                                    <div layout="column"
+                                         layout-align="center stretch">
+                                        <div ng-repeat="entry in GroupData.tasks"
+                                             layout="row"
+                                             layout-align="start stretch"
+                                             layout-align-gt-md="space-around stretch"
+                                             class="entry project-type--{{entry.type}}"
+                                             ng-class="{true: 'done', false: ''}[entry.checked == true]"
                                         >
-                                            <!-- entry actions -->
-                                            <div layout=column layout-align="space-between">
-                                                <div class="entry__time-information" layout=row layout-align="center center">
-                                                    <div class="duration duration--human">
-                                                        <span>{{ entry.timestampDuration | humanizeDate  }}</span>
-                                                    </div>
-                                                    <div>&nbsp;|&nbsp;</div>
-                                                    <div class="duration duration--decimal">
-                                                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                        <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                                    </div>
+                                            <div class="entry__timestamp" flex="none">
+                                                <div class="entry__timestamp__end">
+                                                    {{ entry.timestamp | date:'HH:mm' }}
+                                                </div>
+                                                <div class="entry__timestamp__start">
+                                                    {{ entry.timestampStart | date:'HH:mm' }}
                                                 </div>
                                             </div>
-                                        </md-card>
+                                            <md-card
+                                                    layout=row
+                                                    layout-align="center center"
+                                                    flex="none"
+                                            >
+                                                <!-- entries -->
+                                                <div layout=column layout-align="space-between">
+                                                    <div>
+                                                        <strong>{{ entry.project}}</strong>
+                                                        {{ entry.text}}
+                                                    </div>
+                                                    <div class="entry__time-information">
+                                                        <div class="duration duration--human">
+                                                            <span>{{ entry.timestampDuration | humanizeDate  }}</span>
+                                                            <span>&nbsp;|&nbsp;</span>
+                                                            <span class="duration duration--decimal">
+                                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </md-card>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </md-card>
-                        </div>
-                    </div>
+                            </md-card>
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
 
             </div>
