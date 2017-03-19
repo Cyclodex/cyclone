@@ -357,26 +357,25 @@
                          class="project-card">
                         <md-subheader layout-padding>
                             <strong>{{Group}}</strong>
-                            <a class="continue-task-now"
-                               ng-if="addEntryEnabled"
-                               ng-click="continueGroup(GroupData)">
-                                <md-button class="md-fab md-primary md-mini" aria-label="Continue Group">
-                                    <md-tooltip md-direction="top">
-                                        Track current timer and continue now on this Group
-                                    </md-tooltip>
+                            <span>
+                                <md-button class="md-fab md-primary md-mini"
+                                           aria-label="Continue Group"
+                                           ng-if="addEntryEnabled">
+                                    <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
                                     <md-icon>play_arrow</md-icon>
                                 </md-button>
-                            </a>
-                            <a class="continue-task-now"
-                               ng-if="addEntryEnabled"
-                               ng-click="addEntryToGroup(GroupData)">
-                                <md-button class="md-fab md-primary md-mini" aria-label="Add current timer to this Group">
+                            </span>
+                            <span>
+                                <md-button class="md-fab md-primary md-mini"
+                                           aria-label="Add current timer to this Group"
+                                           ng-if="addEntryEnabled"
+                                           ng-click="addEntryToGroup(GroupData)">
                                     <md-tooltip md-direction="top">
                                         Track current timer into this group
                                     </md-tooltip>
                                     <md-icon>add</md-icon>
                                 </md-button>
-                            </a>
+                            </span>
                             <md-button class="md-icon-button">
                                 <md-checkbox aria-label="GroupsChecked"
                                              ng-click="updateGroup(GroupData);"
@@ -389,7 +388,9 @@
                                     <span ng-if="GroupData.checkedState">Un-check all</span>
                                 </md-tooltip>
                             </md-button>
-                            <md-button class="group__details md-icon-button" ng-click="toggleDetails(GroupData)">
+                            <md-button class="group__details md-icon-button"
+                                       ng-click="toggleDetails(GroupData)"
+                                       aria-label="Toggle display of details">
                                 <div ng-if="!GroupData.showDetails">
                                     <md-tooltip md-direction="top">
                                         Show details
