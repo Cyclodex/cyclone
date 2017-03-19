@@ -272,7 +272,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
 
             // newEntryGroup
             if ($scope.newEntryGroup === undefined) {
-                $scope.newEntryGroup = false;
+                $scope.newEntryGroup = '';
             }
 
             //
@@ -295,7 +295,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 // Clear the input fields again
                 $scope.newEntryText = '';
                 $scope.newEntryProject = '';
-                $scope.newEntryGroup = false;
+                $scope.newEntryGroup = '';
                 $scope.newEntryManualTime = '';
                 $scope.newEntryType = 'work';
 
@@ -311,7 +311,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 }
                 if ($scope.newContinueEntryGroup !== undefined){
                     $scope.newEntryGroup = $scope.newContinueEntryGroup;
-                    $scope.newContinueEntryGroup = false; // Clear it again
+                    $scope.newContinueEntryGroup = ''; // Clear it again
                 }
                 if ($scope.newContinueEntryType !== undefined){
                     $scope.newEntryType = $scope.newContinueEntryType;
@@ -388,18 +388,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
             //console.log('cleaned timestamp' + timestampDuration);
             return timestampDuration;
         }
-
-        // Add task to group
-        // TODO: Define how the group name should be
-        $scope.addToGroup = function(entry) {
-            console.log(entry);
-            entry.group = 'groupTest';
-            // Save Entry
-            $scope.entries.$save(entry).then(function(queryRef) {
-                // data has been saved to our database
-                console.log("Entry (single Entry) saved with index" + queryRef.key)
-            });
-        };
 
         // Clone text and project to current timer
         $scope.cloneEntry = function() {
@@ -506,99 +494,55 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 var projectTask        = entry.text;
                 var groupId            = entry.group;
 
-                // Make sure the elements are set
-                // The project object
-                if (groups[projectName] === undefined || typeof groups[projectName] === 'function') {
-                    groups[projectName] = {};
+
+                if (!groupId) {
+                    console.log('groupID not set, auto creating it.');
+                    groupId = projectName + '-' + projectTask;
                 }
-                // The specific task
+
+                // Make sure the elements are set
+                // The groups
                 // Why typeof === function? It looks like there are cases like "watch" which is a function. (ff only)
                 // Not sure how to handle this correctly. For now we just override it anyway.
-                if (groups[projectName][projectTask] === undefined || typeof groups[projectName][projectTask] === 'function') {
-                    groups[projectName][projectTask] = {};
-                    groups[projectName][projectTask]['tasks'] = {};
-                    groups[projectName][projectTask].amount = 0;
-                    groups[projectName][projectTask].amountChecked = 0;
-                    groups[projectName][projectTask].checkedState = '';
-                    groups[projectName][projectTask].duration = 0;
-                    groups[projectName][projectTask].durationChecked = 0;
-                    groups[projectName][projectTask].group = groupId;
+                if (groupsNew[groupId] === undefined || typeof groupsNew[groupId] === 'function') {
+                    groupsNew[groupId] = {};
+                    groupsNew[groupId]['tasks'] = {};
+                    groupsNew[groupId].amount = 0;
+                    groupsNew[groupId].amountChecked = 0;
+                    groupsNew[groupId].checkedState = '';
+                    groupsNew[groupId].duration = 0;
+                    groupsNew[groupId].durationChecked = 0;
+                    groupsNew[groupId].group = groupId;
+                    console.log('GroupID created:' + groupId);
                 }
 
-                // The task has already a groupId, put the task we just prepared into the new group system:
-                // TODO: Attention, this seems not to work if there are both kind of types (2 old ones, and adding a task over the grouping functions)
-                if (groupId) {
-                    console.log('GroupID is set: ' + groupId);
-                    // If group does not exist yet, create it from the above data
-                    if (groupsNew[groupId] === undefined || typeof groupsNew[groupId] === 'function') {
-                        groupsNew[groupId] = groups[projectName][projectTask];
-                    }
+                // Sum up
+                groupsNew[groupId].amount += 1;
+                groupsNew[groupId]['tasks'][data.key] = entry;
 
-                    // Sum up
-                    groupsNew[groupId].amount += 1;
-                    groupsNew[groupId]['tasks'][data.key] = entry;
-
-                    // Add specific data with some conditions
-                    if (entry.checked) {
-                        groupsNew[groupId].amountChecked += 1;
-                        groupsNew[groupId].durationChecked += entry.timestampDuration;
-                    } else {
-                        groupsNew[groupId].duration += entry.timestampDuration;
-                    }
-
-                    // Verifying the "checked" state
-                    // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
-                    if (groupsNew[groupId].amountChecked == 0) {
-                        // not checked
-                        groupsNew[groupId].checkedState = false;
-                        groupsNew[groupId].indeterminate = false;
-                    } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amount) {
-                        // all tasks are checked
-                        groupsNew[groupId].checkedState = true;
-                        groupsNew[groupId].indeterminate = false;
-                    } else {
-                        // amount of tasks checked is not amount of tasks, means mixed
-                        groupsNew[groupId].checkedState = false;
-                        groupsNew[groupId].indeterminate = true;
-                    }
-
+                // Add specific data with some conditions
+                if (entry.checked) {
+                    groupsNew[groupId].amountChecked += 1;
+                    groupsNew[groupId].durationChecked += entry.timestampDuration;
                 } else {
-                    // Sum up the durations and data
-                    groups[projectName][projectTask].amount += 1;
-                    groups[projectName][projectTask]['tasks'][data.key] = entry;
-
-                    // Add specific data with some conditions
-                    if (entry.checked) {
-                        groups[projectName][projectTask].amountChecked += 1;
-                        groups[projectName][projectTask].durationChecked += entry.timestampDuration;
-                    } else {
-                        groups[projectName][projectTask].duration += entry.timestampDuration;
-                    }
-
-                    // Verifying the "checked" state
-                    // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
-                    if (groups[projectName][projectTask].amountChecked == 0) {
-                        // not checked
-                        groups[projectName][projectTask].checkedState = false;
-                        groups[projectName][projectTask].indeterminate = false;
-                    } else if (groups[projectName][projectTask].amountChecked == groups[projectName][projectTask].amount) {
-                        // all tasks are checked
-                        groups[projectName][projectTask].checkedState = true;
-                        groups[projectName][projectTask].indeterminate = false;
-                    } else {
-                        // amount of tasks checked is not amount of tasks, means mixed
-                        groups[projectName][projectTask].checkedState = false;
-                        groups[projectName][projectTask].indeterminate = true;
-                    }
-
-                    // Automatically migrate the old group system to the new one (if more than 1 task has same name and description)
-                    if (groups[projectName][projectTask].amount > 1) {
-                        var autoCreatedGroupId = projectName + projectTask;
-                        groupsNew[autoCreatedGroupId] = groups[projectName][projectTask];
-                        groupsNew[autoCreatedGroupId].group = autoCreatedGroupId;
-                    }
+                    groupsNew[groupId].duration += entry.timestampDuration;
                 }
 
+                // Verifying the "checked" state
+                // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
+                if (groupsNew[groupId].amountChecked == 0) {
+                    // not checked
+                    groupsNew[groupId].checkedState = false;
+                    groupsNew[groupId].indeterminate = false;
+                } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amount) {
+                    // all tasks are checked
+                    groupsNew[groupId].checkedState = true;
+                    groupsNew[groupId].indeterminate = false;
+                } else {
+                    // amount of tasks checked is not amount of tasks, means mixed
+                    groupsNew[groupId].checkedState = false;
+                    groupsNew[groupId].indeterminate = true;
+                }
 
             });
 
@@ -615,29 +559,6 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                     delete groupsNew[key];
                 }
             }
-
-            // make sure only the projects with multiple entries are printed
-            // So we iterate over the object, remove the task entries which have an amount of 1
-            // And finally if no task is in the group, we remove the project as well.
-            // for (var key in groups) {
-            //     if (groups.hasOwnProperty(key)) {
-            //         tasks = groups[key];
-            //         console.log(tasks);
-            //         for (var task in tasks) {
-            //             if (tasks.hasOwnProperty(task)) {
-            //                 if (tasks[task].amount === 1) {
-            //                     delete groups[key][task];
-            //                 } else if (tasks[task].amount > 1) {
-            //                     console.log(tasks[task]);
-            //                     groupsNew['testGroupMigrated'] = tasks[task];
-            //                 }
-            //             }
-            //         }
-            //         if (Object.keys(tasks).length == 0) {
-            //             delete groups[key];
-            //         }
-            //     }
-            // }
 
             console.log('new groups:');
             console.log(groupsNew);

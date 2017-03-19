@@ -267,13 +267,14 @@
                                              aria-label="Description"/>
                                         </md-input-container>
                                         <!-- Showing the group name assigned-->
-                                        <md-input-container class="entry__info__input entry__info__input--text">
+                                        <md-input-container class="entry__info__input entry__info__input--group">
                                             <input ng-model="entry.group"
                                                    ng-change="entries.$save(entry)"
                                                    id="group"
                                                    type="text"
                                                    class="validate"
                                                    aria-label="Group"/>
+                                            <label for="group">Group:</label>
                                         </md-input-container>
                                     </div>
                                     <div class="entry__time-information" layout=row layout-align="start center">
@@ -298,19 +299,6 @@
                                 <div layout=column layout-align="start">
                                     <div class="entry__options">
                                         <div layout=row layout-align="space-around center">
-
-                                            <div>
-                                                <a class=""
-                                                   ng-click="addToGroup(entry)">
-                                                    <md-button class="md-fab md-primary md-mini" aria-label="Add task to group">
-                                                        <md-tooltip md-direction="top">
-                                                            Add task to group
-                                                        </md-tooltip>
-                                                        <md-icon>note_add</md-icon>
-                                                    </md-button>
-                                                </a>
-                                            </div>
-
                                             <div>
                                                 <a class=""
                                                    ng-click="cloneEntry()">
