@@ -388,7 +388,51 @@
                                     <span ng-if="GroupData.checkedState">Un-check all</span>
                                 </md-tooltip>
                             </md-button>
-                            <md-button class="group__details md-icon-button"
+                        </md-subheader>
+                        <div class="group__time-information">
+                            <div class="group__time-information__row">
+                                <div flex="none"
+                                     ng-if="GroupData.durationChecked > 0">
+                                    <span>Checked time:</span>
+                                    <!--<span class="duration duration&#45;&#45;human">-->
+                                        <!--<span>{{ GroupData.durationChecked | humanizeDate  }}</span>-->
+                                    <!--</span>-->
+                                    <span class="duration duration--decimal">
+                                        <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
+                                        <md-button
+                                         clipboard
+                                         text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                         on-copied="copySuccess();"
+                                         on-error="copyFail(err)"
+                                         class="md-raised md-button done">
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time
+                                            </md-tooltip>
+                                            {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
+                                        </md-button>
+                                    </span>
+                                </div>
+                                <div ng-if="GroupData.duration > 0">
+                                    <span>Un-checked time:</span>
+                                    <!--<span class="duration duration&#45;&#45;human">-->
+                                        <!--<span>{{ GroupData.duration | humanizeDate  }}</span>-->
+                                    <!--</span>-->
+                                    <span class="duration duration--decimal">
+                                        <md-button
+                                         clipboard
+                                         text="GroupData.duration / 1000 / 60 / 60 | number : 2"
+                                         on-copied="copySuccess(); updateGroup(GroupData, true);"
+                                         on-error="copyFail(err)"
+                                         class="md-raised md-button md-primary">
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time & check entries
+                                            </md-tooltip>
+                                            <strong>{{ GroupData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                        </md-button>
+                                    </span>
+                                </div>
+                            </div>
+                            <md-button class="group__time-information__details md-icon-button"
                                        ng-click="toggleDetails(GroupData)"
                                        aria-label="Toggle display of details">
                                 <div ng-if="!GroupData.showDetails">
@@ -404,50 +448,6 @@
                                     <md-icon ng-if="GroupData.showDetails">keyboard_arrow_up</md-icon>
                                 </div>
                             </md-button>
-                        </md-subheader>
-                        <div class="group__time-information">
-                            <div class="md-secondary entry__time-information"
-                                 flex="none"
-                                 ng-if="GroupData.durationChecked > 0">
-                                <span>Checked time:</span>
-                                <!--<span class="duration duration&#45;&#45;human">-->
-                                    <!--<span>{{ GroupData.durationChecked | humanizeDate  }}</span>-->
-                                <!--</span>-->
-                                <span class="duration duration--decimal">
-                                    <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
-                                    <md-button
-                                     clipboard
-                                     text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                     on-copied="copySuccess();"
-                                     on-error="copyFail(err)"
-                                     class="md-raised md-button md-ink-ripple">
-                                        <md-tooltip md-direction="bottom">
-                                            Copy time
-                                        </md-tooltip>
-                                        {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
-                                    </md-button>
-                                </span>
-                            </div>
-                            <div class="md-primary entry__time-information"
-                                 ng-if="GroupData.duration > 0">
-                                <span>Un-checked time:</span>
-                                <!--<span class="duration duration&#45;&#45;human">-->
-                                    <!--<span>{{ GroupData.duration | humanizeDate  }}</span>-->
-                                <!--</span>-->
-                                <span class="duration duration--decimal">
-                                    <md-button
-                                     clipboard
-                                     text="GroupData.duration / 1000 / 60 / 60 | number : 2"
-                                     on-copied="copySuccess(); updateGroup(GroupData, true);"
-                                     on-error="copyFail(err)"
-                                     class="md-raised md-button md-primary">
-                                        <md-tooltip md-direction="bottom">
-                                            Copy time & check entries
-                                        </md-tooltip>
-                                        <strong>{{ GroupData.duration / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                    </md-button>
-                                </span>
-                            </div>
                         </div>
                         <div layout="column"
                              layout-align="center center"
