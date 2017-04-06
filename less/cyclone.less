@@ -59,7 +59,6 @@
     .entry__info__input {
         display: block;
         margin: 0;
-        padding: 0;
     }
     .entry__info__input--text {
         margin: 0;
@@ -68,6 +67,16 @@
     }
     .entry__info__input--group {
         margin-top: 20px;
+        font-size: 0.8rem;
+
+        // Animate the padding for the icon space
+        padding-left: 0;
+        will-change: padding;
+        -webkit-transition: padding 400ms ease-in-out;
+        transition: padding 400ms ease-in-out;
+        &.md-input-has-value {
+            padding-left: 36px;
+        }
     }
     .entry__info__input--project input {
         font-weight: bold;

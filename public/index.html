@@ -83,8 +83,9 @@
             </md-card>
 
             <!-- Add new entry -->
-            <md-card class="animate-hide" ng-hide="!addEntryEnabled"
-                flex="nogrow">
+            <md-card class="animate-hide"
+                     ng-hide="!addEntryEnabled"
+                     flex="nogrow">
                 <md-card-title>
                     <div class="md-headline">
                         <div ng-if="!newEntryManualTime.value">
@@ -116,22 +117,23 @@
                         </md-input-container>
 
                         <md-input-container>
+                            <label>Type</label>
+                            <md-select id="newTaskType"
+                             ng-model="newEntryType"
+                             aria-label="Type of entry"
+                             ng-keydown="$event.which === 13 && addEntry()">
+                                <md-option ng-repeat="type in types" ng-value="type.value">
+                                    {{type.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container>
                             <input id="newTaskGroup"
                                    type="text"
                                    ng-model="newEntryGroup"
                                    aria-label="Group name">
                             <label for="newTaskProject">Group</label>
-                        </md-input-container>
-
-                        <md-input-container>
-                            <label>Type</label>
-                            <md-select id="newTaskType"
-                             ng-model="newEntryType"
-                             aria-label="Type of entry">
-                                <md-option ng-repeat="type in types" ng-value="type.value">
-                                    {{type.name}}
-                                </md-option>
-                            </md-select>
                         </md-input-container>
 
                         <md-input-container flex="15">
@@ -168,7 +170,7 @@
                 <div class="cyclone-table timeline" flex="none">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
-                            <h1>Timeline</h1>
+                            <h1><md-icon>timeline</md-icon> Timeline</h1>
                         </div>
                     </md-toolbar>
 
@@ -251,30 +253,35 @@
                                 </div>
                                 <div layout=column layout-align="start">
                                     <div class="entry__info">
-                                        <md-input-container class="entry__info__input entry__info__input--project">
+                                        <md-input-container md-no-float class="entry__info__input entry__info__input--project">
                                             <input ng-model="entry.project"
                                              ng-change="entries.$save(entry)"
                                              id="project"
                                              type="text"
-                                             aria-label="project"/>
+                                             aria-label="project"
+                                             placeholder="Project"
+                                             autocomplete="Project"/>
                                         </md-input-container>
-                                        <md-input-container class="entry__info__input entry__info__input--text">
+                                        <md-input-container md-no-float class="entry__info__input entry__info__input--text">
                                             <input ng-model="entry.text"
                                              ng-change="entries.$save(entry)"
                                              id="text"
                                              type="text"
                                              class="validate"
-                                             aria-label="Description"/>
+                                             aria-label="Description"
+                                             placeholder="Description"
+                                             autocomplete="Description"/>
                                         </md-input-container>
                                         <!-- Showing the group name assigned-->
-                                        <md-input-container class="entry__info__input entry__info__input--group">
+                                        <md-input-container md-no-float class="entry__info__input entry__info__input--group md-icon-float md-icon-left">
+                                            <md-icon ng-if="entry.group">featured_play_list</md-icon>
                                             <input ng-model="entry.group"
                                                    ng-change="entries.$save(entry)"
                                                    id="group"
                                                    type="text"
                                                    class="validate"
-                                                   aria-label="Group"/>
-                                            <label for="group">Group:</label>
+                                                   aria-label="Group name"
+                                                   placeholder="Group name"/>
                                         </md-input-container>
                                     </div>
                                     <div class="entry__time-information" layout=row layout-align="start center">
@@ -342,7 +349,8 @@
                 <div class="cyclone-table cyclone-table--grouped" flex="grow">
                     <md-toolbar>
                         <div class="md-toolbar-tools">
-                            <h1>Grouped tasks</h1>
+                            <h1>
+                                <md-icon>featured_play_list</md-icon> Grouped tasks</h1>
                         </div>
                     </md-toolbar>
 
@@ -360,7 +368,8 @@
                             <span>
                                 <md-button class="md-fab md-primary md-mini"
                                            aria-label="Continue Group"
-                                           ng-if="addEntryEnabled">
+                                           ng-if="addEntryEnabled"
+                                           ng-click="continueGroup(GroupData)">
                                     <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
                                     <md-icon>play_arrow</md-icon>
                                 </md-button>

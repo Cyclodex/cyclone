@@ -414,17 +414,16 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
          * @param text
          * @param GroupTaskData
          *
-         * Calls $scope.continueEntry() from above.
+         * Calls $scope.continueEntry(task) from above.
          */
         $scope.continueGroup = function(GroupTaskData) {
             // We just try to access any of the tasks (could be the first one because of the object
             var oneOfTheTasks = GroupTaskData.tasks[Object.keys(GroupTaskData.tasks)[0]];
-            var project = oneOfTheTasks.project;
-            var text = oneOfTheTasks.text;
-            var type = oneOfTheTasks.type;
+            console.log("one of the tasks");
+            console.log(oneOfTheTasks);
 
             // Continue this task
-            $scope.continueEntry(project, text, type);
+            $scope.continueEntry(oneOfTheTasks);
         };
 
         // Toggles the display of group details
