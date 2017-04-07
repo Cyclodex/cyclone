@@ -1,5 +1,6 @@
 # CHANGELOG
 ## 0.46 - 08.03.2017
+* Enhancement: Grouping feature improved
 * Style changes to need less space when a entry is checked.
 * Replacing the checkbox with the time button.
 * Further styling improvements and re-placing elements.
