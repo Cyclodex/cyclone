@@ -59,12 +59,24 @@
     .entry__info__input {
         display: block;
         margin: 0;
-        padding: 0;
     }
     .entry__info__input--text {
         margin: 0;
         padding: 0;
+        font-size: 0.8rem;
+    }
+    .entry__info__input--group {
+        margin-top: 20px;
+        font-size: 0.8rem;
 
+        // Animate the padding for the icon space
+        padding-left: 0;
+        will-change: padding;
+        -webkit-transition: padding 400ms ease-in-out;
+        transition: padding 400ms ease-in-out;
+        &.md-input-has-value {
+            padding-left: 36px;
+        }
     }
     .entry__info__input--project input {
         font-weight: bold;
@@ -112,6 +124,10 @@
 }
 .cyclone-table {
     padding: 20px 10px;
+
+    &.cyclone-table--grouped {
+        max-width: 400px;
+    }
 
     > .row:first-of-type {
         padding-top: 20px;
@@ -287,6 +303,7 @@ md-radio-button {
     @media only screen and (min-width: 960px) {
         position: fixed;
         bottom: 95px;
+        left: 0;
         width: 100%;
         z-index: 100;
         transition: transform 500ms;
@@ -454,8 +471,27 @@ button.dayVisualize-entry.md-button:hover {
 .project-card ._md-subheader-inner {
     padding: 0;
 }
-
-.entry__time-information {
-    text-align: right;
-
+// Smaller human times
+.duration.duration--human {
+  font-size: 0.6rem;
 }
+
+// Grouped
+.group__time-information {
+    position: relative;
+
+    .group__time-information__row {
+        padding: 10px;
+    }
+
+    .done {
+        background-color: #c6ffc6;
+    }
+
+    .group__time-information__details {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+}
+

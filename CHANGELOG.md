@@ -1,15 +1,15 @@
 # CHANGELOG
-## 0.46
+## 0.46 - 08.03.2017
 * Style changes to need less space when a entry is checked.
 * Replacing the checkbox with the time button.
 * Further styling improvements and re-placing elements.
 
-## 0.45
+## 0.45 - 06.03.2017
 * Changed total work hours to client and internal work types (removed trust time from it)
 * Made a visual space to separate the work types from break and trust
 * Removed the start entry (system) from the stats graph.
 
-## 0.44
+## 0.44 - ?
 * Fixed empty type after using continue button.
 * Adding a "trust" type
 * Improved type handling in general
