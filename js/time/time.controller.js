@@ -1,9 +1,9 @@
-
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment", "timeTypesService",
-    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment, timeTypesService) {
+// TODO: move service related things out of here.
+angular.module("cycloneApp").controller("TimeCtrl", ["currentAuth", "$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment", "timeTypesService",
+    function(currentAuth, $scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment, timeTypesService) {
         // Angular-clipboard
         $scope.copySuccess = function () {
             console.log('Copied time!');
@@ -17,188 +17,187 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
         $scope.types = timeTypesService.getTimeTypes();
         // TODO: Make this a configuration option or save it in the firebasedb
 
-        // check the route when ready
-        $rootScope.$on('$routeChangeSuccess', function () {
-            $rootScope.viewType = $route.current.params.type;
+        $rootScope.viewType = $route.current.params.type;
 
-            $scope.error = false;
-            $scope.doneLoading = false;
-            $scope.doneLoadingGroups = false;
+        $scope.error = false;
+        $scope.doneLoading = false;
+        $scope.doneLoadingGroups = false;
 
-            // Note: This is defining the type and values also for the stats.
-            if ($rootScope.viewType == 'today') {
-                $rootScope.year = moment().year();
-                $rootScope.weekNumber = moment().week();
-                $rootScope.weekDay = moment().weekday();
-                $scope.addEntryEnabled = true;
-                $scope.currentDate = new Date;
-                $scope.newEntryType = 'work';
-            } else if ($rootScope.viewType == 'archive') {
-                // TODO: do we need this?
-                $rootScope.weekDay = $route.current.params.weekDay;
-                $rootScope.weekNumber = $route.current.params.weekNumber;
-                $rootScope.year = $route.current.params.year;
-                $scope.addEntryEnabled = false;
+        // Note: This is defining the type and values also for the stats.
+        if ($rootScope.viewType == 'today') {
+            $rootScope.year = moment().year();
+            $rootScope.weekNumber = moment().week();
+            $rootScope.weekDay = moment().weekday();
+            $scope.addEntryEnabled = true;
+            $scope.currentDate = new Date;
+            $scope.newEntryType = 'work';
+        } else if ($rootScope.viewType == 'archive') {
+            // TODO: do we need this?
+            $rootScope.weekDay = $route.current.params.weekDay;
+            $rootScope.weekNumber = $route.current.params.weekNumber;
+            $rootScope.year = $route.current.params.year;
+            $scope.addEntryEnabled = false;
 
-                // Read the date out of current week number and day number from current page
-                $scope.currentDate = moment()
-                    .week($rootScope.weekNumber)
-                    .weekday($rootScope.weekDay)
-                    .toDate();
+            // Read the date out of current week number and day number from current page
+            $scope.currentDate = moment()
+                .week($rootScope.weekNumber)
+                .weekday($rootScope.weekDay)
+                .toDate();
 
-            } else if ($rootScope.viewType == 'archive-date') {
-                // This is the archive in use, simple by using real dates
-                // eg. index.html#/archive-date/2016/09/12
-                var requestedDate = $route.current.params.year
-                            + '-' + $route.current.params.month
-                            + '-' + $route.current.params.day;
-                // Parse the date from the URL with different formats
-                requestedDate = moment(requestedDate,
-                    [
-                        'YYYY-MMMM-DD'  // DE long month name
-                        ,'YYYY-MMM-DD'  // DE short month name
-                        ,'YYYY-MM-DD'   // DE date format short
-                        ,'YYYY-M-DD'   // DE date format short
-                        //,'YYYY-DD-MM'    // US - date format
-                    ],
-                    true // strict parsing
-                );
+        } else if ($rootScope.viewType == 'archive-date') {
+            // This is the archive in use, simple by using real dates
+            // eg. index.html#/archive-date/2016/09/12
+            var requestedDate = $route.current.params.year
+                        + '-' + $route.current.params.month
+                        + '-' + $route.current.params.day;
+            // Parse the date from the URL with different formats
+            requestedDate = moment(requestedDate,
+                [
+                    'YYYY-MMMM-DD'  // DE long month name
+                    ,'YYYY-MMM-DD'  // DE short month name
+                    ,'YYYY-MM-DD'   // DE date format short
+                    ,'YYYY-M-DD'   // DE date format short
+                    //,'YYYY-DD-MM'    // US - date format
+                ],
+                true // strict parsing
+            );
 
-                if (!requestedDate.isValid()){
-                    $scope.error = 'Invalid date entered!';
-                }
-
-                // Convert the date to what we need:
-                $rootScope.weekDay = requestedDate.weekday();
-                $rootScope.weekNumber = requestedDate.week();
-                $rootScope.year = requestedDate.year();
-                $scope.addEntryEnabled = false;
-
-                $scope.currentDate = requestedDate.toDate();
+            if (!requestedDate.isValid()){
+                $scope.error = 'Invalid date entered!';
             }
 
-            // ARCHIVE day jumping
-            // TODO: Make the current date recognized
-            // so if the next or prev date is today, go to today.
-            // prev + next day (archive day switching)
-            var currentDate = moment($scope.currentDate);
-            var prevDate = currentDate.clone();
-            var nextDate = currentDate.clone();
-            var today = moment();
+            // Convert the date to what we need:
+            $rootScope.weekDay = requestedDate.weekday();
+            $rootScope.weekNumber = requestedDate.week();
+            $rootScope.year = requestedDate.year();
+            $scope.addEntryEnabled = false;
 
-            // PREV
-            prevDate = prevDate.subtract(1, 'days');
-            $scope.prevDateLink = '#archive-date/' + prevDate.format("YYYY/MM/DD");
+            $scope.currentDate = requestedDate.toDate();
+        }
 
-            // NEXT (not for the future)
-            nextDate = nextDate.add(1, 'days');
-            if (nextDate.isBefore(today, 'day')) {
-                $scope.nextDateLink = '#archive-date/' + nextDate.format("YYYY/MM/DD");
-            } else if (nextDate.isSame(today, 'day')){
-                    $scope.nextDateLink = '#today';
-            } else {
-                $scope.nextDateLink = false;
-            }
+        // ARCHIVE day jumping
+        // TODO: Make the current date recognized
+        // so if the next or prev date is today, go to today.
+        // prev + next day (archive day switching)
+        var currentDate = moment($scope.currentDate);
+        var prevDate = currentDate.clone();
+        var nextDate = currentDate.clone();
+        var today = moment();
 
-            // Define the path for reading and saving the entries
-            var year = $rootScope.year;
-            var weekNumber = $rootScope.weekNumber;
-            var todayNumber = $rootScope.weekDay;
+        // PREV
+        prevDate = prevDate.subtract(1, 'days');
+        $scope.prevDateLink = '#archive-date/' + prevDate.format("YYYY/MM/DD");
 
-            var lastEntryTimestamp = Date.now();
+        // NEXT (not for the future)
+        nextDate = nextDate.add(1, 'days');
+        if (nextDate.isBefore(today, 'day')) {
+            $scope.nextDateLink = '#archive-date/' + nextDate.format("YYYY/MM/DD");
+        } else if (nextDate.isSame(today, 'day')){
+                $scope.nextDateLink = '#today';
+        } else {
+            $scope.nextDateLink = false;
+        }
 
-            // Duration
-            $scope.currentDuration = 0;
-            $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
+        // Define the path for reading and saving the entries
+        var year = $rootScope.year;
+        var weekNumber = $rootScope.weekNumber;
+        var todayNumber = $rootScope.weekDay;
 
-            // Show the current date
-            $scope.today = lastEntryTimestamp;
+        var lastEntryTimestamp = Date.now();
 
-            $scope.entriesCurrentGroups = {};
+        // Duration
+        $scope.currentDuration = 0;
+        $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
 
-            // Observe the user and then call the data
-            Auth.$onAuthStateChanged(function(user) {
-                if (user) {
-                    // We save the entries in the current year, week and day, but most important by every user ()
-                    var ref = firebase.database().ref();
+        // Show the current date
+        $scope.today = lastEntryTimestamp;
 
-                    // New grouped current time entries
-                    var queryGroupRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
-                    // Order the query, from recent to older entries
-                    var queryGroup = queryGroupRef.orderByChild("order");
+        $scope.entriesCurrentGroups = {};
+        // Observe the user and then call the data
+        // TODO: do we really need this ?
+        // Auth.$onAuthStateChanged(function(user) {
+        //     console.log('User pass $onAuthStateChanged');
+        //     console.log(user);
+            if (currentAuth) {
+                // TODO: remove this quick workaround
+                user = currentAuth;
+                // We save the entries in the current year, week and day, but most important by every user ()
+                var ref = firebase.database().ref();
 
-                    // CONTINUE TASK
-                    // Update the groups on load and all changes of the child data
-                    // queryGroup.once('value').then(function(snapshot) {
-                    // queryGroup.on('child_changed', function(snapshot) {
-                    queryGroup.on('value', function(snapshot) {
-                        updateContinuedTasks(snapshot);
-                    });
+                // New grouped current time entries
+                var queryGroupRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                // Order the query, from recent to older entries
+                var queryGroup = queryGroupRef.orderByChild("order");
 
-                    focus('newTaskProject');
+                // CONTINUE TASK
+                // Update the groups on load and all changes of the child data
+                // queryGroup.once('value').then(function(snapshot) {
+                // queryGroup.on('child_changed', function(snapshot) {
+                queryGroup.on('value', function(snapshot) {
+                    updateContinuedTasks(snapshot);
+                });
 
-                    // Timelog entries:
-                    var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
-                    // Order the query, from recent to older entries
-                    // However this only works with the orderBy in the template right now.
-                    var query = queryRef.orderByChild("order");
+                focus('newTaskProject');
 
-                    // Create a synchronized array
-                    $scope.entries = $firebaseArray(query);
+                // Timelog entries:
+                var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                // Order the query, from recent to older entries
+                // However this only works with the orderBy in the template right now.
+                var query = queryRef.orderByChild("order");
 
-                    // Add a start entry if we are on today and no entries in yet.
-                    $scope.entries.$loaded()
-                        .then(function () {
-                            $scope.doneLoading = true;
-                            // console.log("Entries loaded: " + $scope.entries.length);
-                            if ($rootScope.viewType == 'today') {
-                                if ($scope.entries.length === 0) {
-                                    var timestamp = Date.now();
-                                    var duration = 0;
-                                    var start = timestamp;
-                                    $scope.entries.$add({
-                                        text: 'Starting the day',
-                                        project: 'CYCLONE',
-                                        checked: true,
-                                        type: 'system',
-                                        timestamp: timestamp,
-                                        timestampStart: start,
-                                        timestampDuration: duration,
-                                        order: -timestamp,
-                                        user: $rootScope.user // Now it takes the first part of the email address of the logged in user
-                                    }).then(function (queryRef) {
-                                        // Entry added, now do something
-                                        console.log("Auto starting the day entry added!");
-                                    });
-                                }
+                // Create a synchronized array
+                $scope.entries = $firebaseArray(query);
+
+                // Add a start entry if we are on today and no entries in yet.
+                $scope.entries.$loaded()
+                    .then(function () {
+                        $scope.doneLoading = true;
+                        // console.log("Entries loaded: " + $scope.entries.length);
+                        if ($rootScope.viewType == 'today') {
+                            if ($scope.entries.length === 0) {
+                                var timestamp = Date.now();
+                                var duration = 0;
+                                var start = timestamp;
+                                $scope.entries.$add({
+                                    text: 'Starting the day',
+                                    project: 'CYCLONE',
+                                    checked: true,
+                                    type: 'system',
+                                    timestamp: timestamp,
+                                    timestampStart: start,
+                                    timestampDuration: duration,
+                                    order: -timestamp,
+                                    user: $rootScope.user // Now it takes the first part of the email address of the logged in user
+                                }).then(function (queryRef) {
+                                    // Entry added, now do something
+                                    console.log("Auto starting the day entry added!");
+                                });
                             }
-                        })
-                        .catch(function (error) {
-                            console.log("Error:", error);
-                        });
-
-                    // Update current time
-                    // Attach an asynchronous callback to read the data at our posts reference
-                    var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
-                    lastEntryRef.on("value", function(snapshot) {
-                        // object in object (but only 1 because of limit above)
-                        // console.log(snapshot);
-                        snapshot.forEach(function(data) {
-                            $scope.lastEntryTimestamp = data.val().timestamp;
-                        });
-                    }, function(errorObject) {
-                        console.log("The read failed: " + errorObject.code);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log("Error:", error);
                     });
 
-                    updateDurations();
+                // Update current time
+                // Attach an asynchronous callback to read the data at our posts reference
+                var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
+                lastEntryRef.on("value", function(snapshot) {
+                    // object in object (but only 1 because of limit above)
+                    // console.log(snapshot);
+                    snapshot.forEach(function(data) {
+                        $scope.lastEntryTimestamp = data.val().timestamp;
+                    });
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
 
-                } else {
-                    // No user is signed in.
-                }
-            }); // End of firebase.auth()
+                updateDurations();
 
-        }); // END of $routeChangeSuccess
-
+            } else {
+                // No user is signed in.
+            }
+        // }); // End of firebase.auth()
 
         // ADD
         // Add new entry to current week and day

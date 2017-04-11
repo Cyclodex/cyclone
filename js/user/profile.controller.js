@@ -1,4 +1,5 @@
 // Profile controller
+// TODO: separate this on the templates and make a component out of it
 angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "$rootScope",
     function($scope, Auth, $location, $rootScope) {
         $rootScope.user = '';
@@ -44,6 +45,7 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                 } else {
                     // User is signed out.
                     $scope.connection = 'not connected';
+                    $rootScope.user = '';
                     console.log("User is not logged in.");
                 }
             }, function(error) {
