@@ -6,7 +6,7 @@
 
 // Load angular libraries
 require('angular');
-require('angular-route');
+require('angular-ui-router');
 require('angular-animate');
 require('angular-aria');
 require('angular-messages');
@@ -32,3 +32,6 @@ require('./components/timeTypes.service.js');
 require('./footer/footer.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');
+
+// Testing component:
+//require('./hello/hello.component.js');

@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.47 - xx.xx.2017
+* Enhancement: Changed routing to ui-router, several updates according to this
+
 ## 0.46 - 08.03.2017
 * Enhancement: Grouping feature improved
 * Style changes to need less space when a entry is checked.

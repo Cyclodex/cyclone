@@ -33,7 +33,7 @@
 
 <div ng-app="cycloneApp" class="page page--timelog">
     <!-- Login button -->
-    <div ng-if="!user"
+    <div ng-if="!username"
          layout="column"
          layout-align="center center"
          class="login">
@@ -47,8 +47,9 @@
         </a>
     </div>
 
-    <ng-view></ng-view>
-    <footer-display class="footer-stats" ng-cloak></footer-display>
+    <ui-view name="content"></ui-view>
+    <ui-view name="footer"></ui-view>
+
 
 </div>
 

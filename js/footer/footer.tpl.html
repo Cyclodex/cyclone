@@ -9,14 +9,14 @@
          layout="row" layout-align="start center">
             <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
                 <md-icon>account_circle</md-icon>
-                <span>{{ user }}</span>
+                <span>{{ username }}</span>
             </a>
-            <span ng-if="!user" class="status">{{ connection }}</span>
-            <div ng-show="ProfileOpen || !user" id="ProfileOpen" layout="row">
+            <span ng-if="!username" class="status">{{ connection }}</span>
+            <div ng-show="ProfileOpen || !username" id="ProfileOpen" layout="row">
                 <a id="logoutButton"
                  ng-click="logout()"
                  class=""
-                 ng-show="user">
+                 ng-show="username">
                     <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
                 </a>
                 <div id="account-details" ng-show="userIsAdmin"></div>

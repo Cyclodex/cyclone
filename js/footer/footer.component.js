@@ -8,27 +8,29 @@ require('../user/profile.controller.js');
 //  * for the total stats in the footer
 //  * for the graphs-display
 //
+// TODO: I could not make this component load directly from route and so use a resolve for waiting for the user. Try to do this at some point.
 angular.module("cycloneApp")
   .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
   .component('footerDisplay', {
   template: require('./footer.tpl.html'),
-  controller: ["$scope", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService",
-    function($scope, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService) {
+  controller: ["$scope", "userPromise", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService",
+    function($scope, userPromise, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService) {
       var $ctrl = this;
 
       // collect the projects colors
       var projectsColor = [];
 
-      // check the route when ready
-      $rootScope.$on('$routeChangeSuccess', function () {
+      // Continue when auth state changed
+      Auth.$onAuthStateChanged(function(user) {
 
-        // TODO: $rootScope - This is probably not the right way how to deal with, but it works for now.
+        // TODO: $rootScope - This is not the right way how to deal with, but it works for now.
         var year = $rootScope.year;
         var weekNumber = $rootScope.weekNumber;
         var todayNumber = $rootScope.weekDay;
 
-        // Observe the user and then call the data
-        Auth.$onAuthStateChanged(function(user) {
+        // Wait for promise of the user and then call the data
+        userPromise.getPromise().then(function(currentUser){
+          user = currentUser.user;
           if (user) {
             // We save the entries in the current week and day
             var ref = firebase.database().ref();
