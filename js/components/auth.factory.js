@@ -6,8 +6,7 @@ angular.module('cycloneApp').factory("Auth", ["$firebaseAuth",
 ]);
 
 angular.module('cycloneApp').factory("userPromise", ["Auth", "$q", "$rootScope", function(Auth, $q, $rootScope) {
-    //function returnPromise will generate a promise that will get the authenticated user, make a profile if it doesn't exist,
-    //and then return both objects on resolution.
+    //function returnPromise will generate a promise that will get the authenticated user.
     var returnPromise = function(){
         var deferred = $q.defer();
 
@@ -18,6 +17,8 @@ angular.module('cycloneApp').factory("userPromise", ["Auth", "$q", "$rootScope",
                 // getProfile(user);
                 $rootScope.username = user.username;
                 deferred.resolve({user: user});
+            } else {
+                deferred.reject('Not authenticated');
             }
         });
 

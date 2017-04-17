@@ -1,19 +1,24 @@
 angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ui.router', 'angular-clipboard', 'angularMoment']);
 
-// Some authentication helper code, but not really used
-// However part of the document:
-// https://github.com/firebase/angularfire/blob/master/docs/guide/user-auth.md#authenticating-with-routers
-angular.module("cycloneApp").run(["$rootScope", "$state", function($rootScope, $state) {
-    $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
-        // We can catch the error thrown when the $requireSignIn promise is rejected
-        // and redirect the user back to the home page
-        if (error === "AUTH_REQUIRED") {
-            // We don't have a login page yet
-            // TODO: We could redirect there in this case
-            $state.go("/");
+// Make sure user is authenticated, otherwise send to login state
+angular.module("cycloneApp").run(function($transitions) {
+    $transitions.onStart(
+    {
+        // Special function match, so we require authentication everywhere but not on "login" state.
+        to: function(state) {
+            return state.name != null && state.name !== 'login';
         }
+    }, function(trans) {
+        var $state = trans.router.stateService;
+        // Check if we have a firebase user
+        var Auth = trans.injector().get('Auth');
+        Auth.$onAuthStateChanged(function(user) {
+            if (!user){
+                $state.transitionTo('login');
+            }
+        });
     });
-}]);
+});
 
 // Routing
 angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider) {
@@ -22,17 +27,28 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
 
     // Test route
     $stateProvider
-        .state('hello', {
-            url: "/hello",
+        .state('welcome', {
+            url: "/welcome",
             views: {
                 content: {
-                    template: '<hello></hello>'
+                    component: 'welcome'
                 },
                 footer : {
-                    template: 'some custom footer'
+                    template: 'FOOTER!'
                 }
-
-
+            }
+        });
+    // Login
+    $stateProvider
+        .state('login', {
+            url: "/login",
+            views: {
+                content: {
+                    component: 'login'
+                },
+                footer : {
+                    template: ''
+                }
             }
         });
     // Time
@@ -58,7 +74,7 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                             return success;
                         }, function(reason){
                             console.log("userPromise Failed: " + reason);
-                            $state.transitionTo('login');
+                            // $state.transitionTo('login');
                         }, function(notification){
                             console.log("notification: " + notification);
                         });

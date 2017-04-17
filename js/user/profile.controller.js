@@ -6,8 +6,12 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
         $scope.connection = 'connecting';
 
         Auth.$onAuthStateChanged(function(user) {
-            $scope.connection = 'connected';
-            $scope.username = user.username;
+            if (user){
+                $scope.connection = 'connected';
+                $scope.username = user.username;
+            } else {
+                $scope.connection = 'connection failed';
+            }
         });
 
         $scope.logout = function() {

@@ -32,21 +32,7 @@
 <body translate="no">
 
 <div ng-app="cycloneApp" class="page page--timelog">
-    <!-- Login button -->
-    <div ng-if="!username"
-         layout="column"
-         layout-align="center center"
-         class="login">
-        <h1>Cyclone</h1>
-        <a id="loginButton"
-           href="authentication.html"
-           target="_parent"
-           class=""
-           ng-show="!user">
-            <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
-        </a>
-    </div>
-
+    <ui-view></ui-view>
     <ui-view name="content"></ui-view>
     <ui-view name="footer"></ui-view>
 
