@@ -82,6 +82,40 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
             }
         });
 
+    // Task
+    $stateProvider
+        .state('task', {
+            url: "/task/today",
+            params: {
+                type: "today"
+            },
+            views: {
+                content: {
+                    // controller: "TaskCtrl",
+                    // template: require('./task/task.tpl.html'),
+                    component: "task",
+                    bindings: { user: 'currentUser.user' },
+                },
+                footer: {
+                    template: ''
+                }
+            },
+            resolve: {
+                "currentUser":
+                    ["userPromise", "$state", function(userPromise, $state) {
+                        return userPromise.getPromise().then(function(success){
+                            return success;
+                        }, function(reason){
+                            console.log("userPromise Failed: " + reason);
+                            // $state.transitionTo('login');
+                        }, function(notification){
+                            console.log("notification: " + notification);
+                        });
+                    }]
+            }
+        });
+
+
     // Specific day view / Archive
     $stateProvider
         .state('day', {
