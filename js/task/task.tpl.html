@@ -1,7 +1,7 @@
 Task component:
-{{ $ctrl.user | json }}
-<!--<div
-     ng-show="username"
+{{ $ctrl.username | json }}
+<div
+     ng-show="$ctrl.user.username"
      class="container"
      layout="row" layout-align="center center">
     <div flex="100"
@@ -13,49 +13,49 @@ Task component:
                     <span ng-if="nextDateLink"> - Archive</span>
                 </h1>
                 <span flex></span>
-                <a ng-href="{{prevDateLink}}">
+                <a ng-href="{{$ctrl.prevDateLink}}">
                     <md-icon>keyboard_arrow_left</md-icon>
                 </a>
-                <h1 ng-if="!nextDateLink" class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>
-                <h1 ng-if="nextDateLink" class="inline">{{currentDate | date : "EEE d. MMM yyyy"}}</h1>
-                <a ng-if="nextDateLink" ng-href="{{nextDateLink}}">
+                <h1 ng-if="!$ctrl.nextDateLink" class="inline">{{$ctrl.currentDate | date : "d. MMM yyyy"}}</h1>
+                <h1 ng-if="$ctrl.nextDateLink" class="inline">{{$ctrl.currentDate | date : "EEE d. MMM yyyy"}}</h1>
+                <a ng-if="$ctrl.nextDateLink" ng-href="{{$ctrl.nextDateLink}}">
                     <md-icon>keyboard_arrow_right</md-icon>
                 </a>
             </div>
         </md-toolbar>
 
-        <md-card ng-if="error">
+        <md-card ng-if="$ctrl.error">
             <md-card-title>
                 <div class="md-headline">
                     Error
                 </div>
             </md-card-title>
             <md-card-content>
-                {{error}}
+                {{$ctrl.error}}
             </md-card-content>
         </md-card>
 
-        &lt;!&ndash; Add new entry &ndash;&gt;
+        <!-- Add new entry -->
         <md-card class="animate-hide"
-                 ng-hide="!addEntryEnabled"
+                 ng-hide="!$ctrl.addEntryEnabled"
                  flex="nogrow">
             <md-card-title>
                 <div class="md-headline">
-                    <div ng-if="!newEntryManualTime.value">
+                    <div ng-if="!$ctrl.newEntryManualTime.value">
                         <span>What have you done in the last</span>
-                        <em>{{ currentDuration | humanizeDate }}</em>
+                        <em>{{ $ctrl.currentDuration | humanizeDate }}</em>
                     </div>
-                    <div ng-if="newEntryManualTime.value">
-                        <span>What have you done until {{newEntryManualTime.value | date : "H:mm"}}</span>
+                    <div ng-if="$ctrl.newEntryManualTime.value">
+                        <span>What have you done until {{$ctrl.newEntryManualTime.value | date : "H:mm"}}</span>
                     </div>
                 </div>
             </md-card-title>
             <md-card-content>
-                <form ng-submit="addEntry()" layout="row" name="addEntryForm">
+                <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
                     <md-input-container flex="20">
                         <input id="newTaskProject"
                                type="text"
-                               ng-model="newEntryProject"
+                               ng-model="$ctrl.newEntryProject"
                                autofocus
                                focus-on="newTaskProject"
                                aria-label="Project name of new task">
@@ -64,7 +64,7 @@ Task component:
                     <md-input-container flex="33">
                         <input id="newTaskText"
                                type="text"
-                               ng-model="newEntryText"
+                               ng-model="$ctrl.newEntryText"
                                aria-label="Description text of new task">
                         <label for="newTaskText">Description</label>
                     </md-input-container>
@@ -72,10 +72,10 @@ Task component:
                     <md-input-container>
                         <label>Type</label>
                         <md-select id="newTaskType"
-                                   ng-model="newEntryType"
+                                   ng-model="$ctrl.newEntryType"
                                    aria-label="Type of entry"
                                    ng-keydown="$event.which === 13 && addEntry()">
-                            <md-option ng-repeat="type in types" ng-value="type.value">
+                            <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
                                 {{type.name}}
                             </md-option>
                         </md-select>
@@ -84,7 +84,7 @@ Task component:
                     <md-input-container flex="15">
                         <input id="newTaskGroup"
                                type="text"
-                               ng-model="newEntryGroup"
+                               ng-model="$ctrl.newEntryGroup"
                                aria-label="Group name">
                         <label for="newTaskProject">Group</label>
                     </md-input-container>
@@ -93,13 +93,13 @@ Task component:
                         <input type="time"
                                id="newTaskManualTime"
                                name="input"
-                               ng-model="newEntryManualTime.value"
+                               ng-model="$ctrl.newEntryManualTime.value"
                                placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
                         <label for="newTaskManualTime">Manual end time</label>
                     </md-input-container>
                     <div class="flex">
                         <a class=""
-                           ng-click="addEntry()">
+                           ng-click="$ctrl.addEntry()">
                             <md-button class="md-fab md-primary" aria-label="Add Entry">
                                 <md-icon>add</md-icon>
                             </md-button>
@@ -112,8 +112,8 @@ Task component:
         </md-card>
 
 
-        &lt;!&ndash; Show table of entries&ndash;&gt;
-        <div class="timelog__entries"
+        <!-- Show table of entries -->
+        <!--<div class="timelog__entries"
              layout="column"
              layout-align="start center"
              layout-gt-sm="row"
@@ -127,7 +127,7 @@ Task component:
                     </div>
                 </md-toolbar>
 
-                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!doneLoading">
+                <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
 
@@ -185,8 +185,8 @@ Task component:
                                         class="entry__checked__button md-raised md-primary md-button md-ink-ripple"
                                         ng-if="!entry.checked"
                                         text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                        on-copied="copySuccess(); updateSingleEntry(entry);"
-                                        on-error="copyFail(err)"
+                                        on-copied="$ctrl.copySuccess(); updateSingleEntry(entry);"
+                                        on-error="$ctrl.copyFail(err)"
                                         aria-label="Check entry and copy time"
                                         class="md-raised md-button md-ink-ripple">
                                     <md-tooltip md-direction="left">
@@ -253,7 +253,7 @@ Task component:
                                         ng-change="entries.$save(entry)"
                                         aria-label="Work or private hours"
                                 >
-                                    <md-radio-button ng-repeat="type in types" class="md-primary" ng-value="type.value">
+                                    <md-radio-button ng-repeat="type in $ctrl.timeTypesService" class="md-primary" ng-value="type.value">
                                         {{type.name}}
                                     </md-radio-button>
                                 </md-radio-group>
@@ -310,7 +310,7 @@ Task component:
                     </div>
                 </md-toolbar>
 
-                <div layout="row" layout-padding layout-sm="column" layout-align="space-around" ng-if="!doneLoading">
+                <div layout="row" layout-padding layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
 
@@ -367,8 +367,8 @@ Task component:
                                         <md-button
                                                 clipboard
                                                 text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                                on-copied="copySuccess();"
-                                                on-error="copyFail(err)"
+                                                on-copied="$ctrl.copySuccess();"
+                                                on-error="$ctrl.copyFail(err)"
                                                 class="md-raised md-button done">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
@@ -386,8 +386,8 @@ Task component:
                                         <md-button
                                                 clipboard
                                                 text="GroupData.duration / 1000 / 60 / 60 | number : 2"
-                                                on-copied="copySuccess(); updateGroup(GroupData, true);"
-                                                on-error="copyFail(err)"
+                                                on-copied="$ctrl.copySuccess(); updateGroup(GroupData, true);"
+                                                on-error="$ctrl.copyFail(err)"
                                                 class="md-raised md-button md-primary">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time & check entries
@@ -466,9 +466,10 @@ Task component:
                 </md-card>
             </div>
 
-        </div>
+        </div>-->
     </div>
-
-    &lt;!&ndash; <pre>{{ data | json }}</pre>
-    <pre>{{ profile | json }}</pre> &ndash;&gt;
-</div>-->
+    <!--
+    <pre>{{ data | json }}</pre>
+    <pre>{{ profile | json }}</pre>
+    -->
+</div>

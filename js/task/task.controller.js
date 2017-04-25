@@ -1,130 +1,96 @@
 //
 // TASK (as component migrated from TimeCtrl)
 //
-angular.module('cycloneApp').component('task', {
+angular.module('cycloneApp')
+    .component('task', {
     template: require('./task.tpl.html'),
-    bindings: { user: '<' }, // Notice the binding on the router! (its currentUser.user)
+    bindings: {
+        user: '<',
+        timeTypesService: '<',
+        moment: '<',
+        $firebaseArray: '<',
+        $timeout: '<',
+        addEntryForm: '<' // This binds the form, but would need further changes still
+    }, // Notice the binding on the router! (its currentUser.user)
     controller: function() {
-        // DONE: currentUser
-        // $scope, Auth, $firebaseArray, focus, $timeout, $rootScope, moment, timeTypesService, $stateParams, $state
-        console.log('user');
-        console.log(this.user);
-        console.log(this);
-
-
+        // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state
+        // Not working properly: $timeout
+        // UNSURE: focus
+        console.log('task component');
+        console.log(this.addEntryForm);
 
          // TODO: move "copy" out from here, into service something like that.
          // Angular-clipboard
-         $scope.copySuccess = function () {
+         this.copySuccess = function () {
             console.log('Copied time!');
-        };
-         $scope.copyFail = function (err) {
+         };
+         this.copyFail = function (err) {
             console.error('Error!', err);
             console.info('Not supported browser, press Ctrl+C to copy time');
-        };
+         };
 
          // The different types
-         $scope.types = timeTypesService.getTimeTypes();
+         // this.types = this.timeTypesService;
          // TODO: Make this a configuration option or save it in the firebasedb
 
-         $rootScope.viewType = $stateParams.type;
+         this.error = false;
+         this.doneLoading = false;
+         this.doneLoadingGroups = false;
 
-         $scope.error = false;
-         $scope.doneLoading = false;
-         $scope.doneLoadingGroups = false;
-
-         var today = moment();
+         var today = this.moment();
 
          // Note: This is defining the type and values also for the stats.
-         if ($rootScope.viewType == 'today') {
-            $rootScope.year = moment().year();
-            $rootScope.weekNumber = moment().week();
-            $rootScope.weekDay = moment().weekday();
-            $scope.addEntryEnabled = true;
-            $scope.currentDate = new Date;
-            $scope.newEntryType = 'work';
-        } else if ($rootScope.viewType == 'archive-date') {
-            // This is the archive in use, simple by using real dates
-            // eg. index.html#/time/2016/09/12
-            var requestedDate = $stateParams.year
-                + '-' + $stateParams.month
-                + '-' + $stateParams.day;
-            // Parse the date from the URL with different formats
-            requestedDate = moment(requestedDate,
-                [
-                    'YYYY-MMMM-DD'  // DE long month name
-                    ,'YYYY-MMM-DD'  // DE short month name
-                    ,'YYYY-MM-DD'   // DE date format short
-                    ,'YYYY-M-DD'   // DE date format short
-                    //,'YYYY-DD-MM'    // US - date format
-                ],
-                true // strict parsing
-            );
-
-            if (!requestedDate.isValid()){
-                $scope.error = 'Invalid date entered!';
-            }
-
-            // If the current date is entered, lets move to today as it will handle little bit differently (add time block)
-            if (requestedDate.isSame(today, 'day')){
-                // TODO: This is still the legacy way, this should be done differently on the routing
-                // https://ui-router.github.io/guide/ng1/migrate-to-1_0#state-change-events
-                $state.go('time');
-            }
-
-            // Convert the date to what we need:
-            $rootScope.weekDay = requestedDate.weekday();
-            $rootScope.weekNumber = requestedDate.week();
-            $rootScope.year = requestedDate.year();
-            $scope.addEntryEnabled = false;
-
-            $scope.currentDate = requestedDate.toDate();
-        }
+         this.year = this.moment().year();
+         this.weekNumber = this.moment().week();
+         this.weekDay = this.moment().weekday();
+         this.addEntryEnabled = true;
+         this.currentDate = new Date;
+         this.newEntryType = 'work';
 
          // Day jumping to go to archived / past days
          // prev + next day (archive day switching)
-         var currentDate = moment($scope.currentDate);
+         var currentDate = this.moment(this.currentDate);
          var prevDate = currentDate.clone();
          var nextDate = currentDate.clone();
 
 
          // PREV
          prevDate = prevDate.subtract(1, 'days');
-         $scope.prevDateLink = '#time/' + prevDate.format("YYYY/MM/DD");
+         this.prevDateLink = '#time/' + prevDate.format("YYYY/MM/DD");
 
          // NEXT (not for the future)
          nextDate = nextDate.add(1, 'days');
          if (nextDate.isBefore(today, 'day')) {
-            $scope.nextDateLink = '#time/' + nextDate.format("YYYY/MM/DD");
+            this.nextDateLink = '#time/' + nextDate.format("YYYY/MM/DD");
         } else if (nextDate.isSame(today, 'day')){
-            $scope.nextDateLink = '#today';
+            this.nextDateLink = '#today';
         } else {
-            $scope.nextDateLink = false;
+            this.nextDateLink = false;
         }
 
          // Define the path for reading and saving the entries
-         var year = $rootScope.year;
-         var weekNumber = $rootScope.weekNumber;
-         var todayNumber = $rootScope.weekDay;
+         var year = this.year;
+         var weekNumber = this.weekNumber;
+         var todayNumber = this.weekDay;
 
          var lastEntryTimestamp = Date.now();
 
          // Duration
-         $scope.currentDuration = 0;
-         $scope.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
+         this.currentDuration = 0;
+         this.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
 
          // Show the current date
-         $scope.today = lastEntryTimestamp;
+         this.today = lastEntryTimestamp;
 
-         $scope.entriesCurrentGroups = {};
+         this.entriesCurrentGroups = {};
          // Call the data etc.
          // We don't need to observe anymore, because the routing makes sure we have the user
-         if (user) {
+         if (this.user) {
             // We save the entries in the current year, week and day, but most important by every user ()
             var ref = firebase.database().ref();
 
             // New grouped current time entries
-            var queryGroupRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+            var queryGroupRef = ref.child("time/" + this.user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
             // Order the query, from recent to older entries
             var queryGroup = queryGroupRef.orderByChild("order");
 
@@ -139,25 +105,26 @@ angular.module('cycloneApp').component('task', {
             focus('newTaskProject');
 
             // Timelog entries:
-            var queryRef = ref.child("time/" + user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+            var queryRef = ref.child("time/" + this.user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
             // Order the query, from recent to older entries
             // However this only works with the orderBy in the template right now.
             var query = queryRef.orderByChild("order");
 
             // Create a synchronized array
-            $scope.entries = $firebaseArray(query);
+            this.entries = this.$firebaseArray(query);
 
             // Add a start entry if we are on today and no entries in yet.
-            $scope.entries.$loaded()
+             // TODO: Do we need this for tasks?
+            /*this.entries.$loaded()
                 .then(function () {
-                    $scope.doneLoading = true;
-                    if ($rootScope.viewType == 'today') {
-                        if ($scope.entries.length === 0) {
+                    this.doneLoading = true;
+                    if (this.viewType == 'today') {
+                        if (this.entries.length === 0) {
                             var timestamp = Date.now();
                             var duration = 0;
                             var start = timestamp;
                             // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
-                            $scope.entries.$add({
+                            this.entries.$add({
                                 text: 'Starting the day',
                                 project: 'CYCLONE',
                                 checked: true,
@@ -166,7 +133,7 @@ angular.module('cycloneApp').component('task', {
                                 timestampStart: start,
                                 timestampDuration: duration,
                                 order: -timestamp,
-                                user: $rootScope.username // Now it takes the first part of the email address of the logged in user
+                                user: this.username // Now it takes the first part of the email address of the logged in user
                             }).then(function (queryRef) {
                                 // Entry added, now do something
                                 console.log("Auto starting the day entry added!");
@@ -176,7 +143,7 @@ angular.module('cycloneApp').component('task', {
                 })
                 .catch(function (error) {
                     console.log("Error:", error);
-                });
+                });*/
 
             // Update current time
             // Attach an asynchronous callback to read the data at our posts reference
@@ -185,13 +152,14 @@ angular.module('cycloneApp').component('task', {
                 // object in object (but only 1 because of limit above)
                 // console.log(snapshot);
                 snapshot.forEach(function(data) {
-                    $scope.lastEntryTimestamp = data.val().timestamp;
+                    this.lastEntryTimestamp = data.val().timestamp;
                 });
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
 
-            updateDurations();
+            // TODO: Is disabled because it did not work
+            // this.updateDurations();
 
         } else {
             // No user is signed in.
@@ -199,25 +167,25 @@ angular.module('cycloneApp').component('task', {
 
         // ADD
         // Add new entry to current week and day
-        $scope.addEntry = function() {
+        this.addEntry = function() {
 
             // Default time is now
             var timestamp = Date.now();
-            var duration = cleanupDuration(timestamp - $scope.lastEntryTimestamp);
-            var start = $scope.lastEntryTimestamp;
+            var duration = cleanupDuration(timestamp - this.lastEntryTimestamp);
+            var start = this.lastEntryTimestamp;
 
             // If the form is not valid, don't add content.
             // TODO: we probably should display a information that it was not added
             // The input field which is invalid however should be marked red already.
-            if ($scope.addEntryForm.$invalid){
+            if (this.addEntryForm.$invalid){
                 console.log("entry was not added");
                 return false;
             }
 
             // Check if we need to add some manual end time.
-            if ($scope.newEntryManualTime !== undefined &&
-                $scope.newEntryManualTime.value !== undefined &&
-                $scope.newEntryManualTime.value !== null
+            if (this.newEntryManualTime !== undefined &&
+                this.newEntryManualTime.value !== undefined &&
+                this.newEntryManualTime.value !== null
             ) {
                 // If we have a manual end time, we don't know the prev time entry
                 // We need a date of today
@@ -225,8 +193,8 @@ angular.module('cycloneApp').component('task', {
                 manualTime.setTime(Date.now());
 
                 // And manually set the hours + minutes
-                var hours = $scope.newEntryManualTime.value.getHours();
-                var minutes = $scope.newEntryManualTime.value.getMinutes();
+                var hours = this.newEntryManualTime.value.getHours();
+                var minutes = this.newEntryManualTime.value.getMinutes();
                 manualTime.setHours(hours);
                 manualTime.setMinutes(minutes);
                 manualTime.setSeconds(0);
@@ -245,74 +213,74 @@ angular.module('cycloneApp').component('task', {
             // Check if the entry should be marked as private (break)
             // TODO: Lets change the type field after the user entered a project; not here on add.
             // Check the project name for auto assignment
-            if ($scope.newEntryProject !== undefined) {
-                var breakMatches = $scope.newEntryProject.match(/break/i);
+            if (this.newEntryProject !== undefined) {
+                var breakMatches = this.newEntryProject.match(/break/i);
                 if (breakMatches) {
-                    $scope.newEntryType = 'private';
+                    this.newEntryType = 'private';
                 }
             } else {
-                $scope.newEntryProject = '';
+                this.newEntryProject = '';
             }
-            if ( $scope.newEntryType === undefined){
-                $scope.newEntryType = 'work';
+            if ( this.newEntryType === undefined){
+                this.newEntryType = 'work';
             }
 
             // Project name empty if not yet set
-            if ($scope.newEntryProject === undefined) {
-                $scope.newEntryProject = '';
+            if (this.newEntryProject === undefined) {
+                this.newEntryProject = '';
             }
 
             // newEntryText empty if not yet set
-            if ($scope.newEntryText === undefined) {
-                $scope.newEntryText = '';
+            if (this.newEntryText === undefined) {
+                this.newEntryText = '';
             }
 
             // newEntryGroup
-            if ($scope.newEntryGroup === undefined) {
-                $scope.newEntryGroup = '';
+            if (this.newEntryGroup === undefined) {
+                this.newEntryGroup = '';
             }
 
             //
             // ADD new entry into DB
             //
-            $scope.entries.$add({
-                text: $scope.newEntryText,
-                project: $scope.newEntryProject,
-                group: $scope.newEntryGroup,
+            this.entries.$add({
+                text: this.newEntryText,
+                project: this.newEntryProject,
+                group: this.newEntryGroup,
                 checked: false,
-                type: $scope.newEntryType,
+                type: this.newEntryType,
                 timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
                 timestampStart: start,
                 timestampDuration: duration,
                 order: -timestamp,
-                user: $rootScope.username, // Now it takes the first part of the email address of the logged in user
+                user: this.username, // Now it takes the first part of the email address of the logged in user
             }).then(function(queryRef) {
                 // Entry added, now do something
 
                 // Clear the input fields again
-                $scope.newEntryText = '';
-                $scope.newEntryProject = '';
-                $scope.newEntryGroup = '';
-                $scope.newEntryManualTime = '';
-                $scope.newEntryType = 'work';
+                this.newEntryText = '';
+                this.newEntryProject = '';
+                this.newEntryGroup = '';
+                this.newEntryManualTime = '';
+                this.newEntryType = 'work';
 
                 // Take over continue task if available
                 // TODO: Add the group here as well ?!
-                if ($scope.newContinueEntryProject !== undefined){
-                    $scope.newEntryProject = $scope.newContinueEntryProject;
-                    $scope.newContinueEntryProject = ''; // Clear it again
+                if (this.newContinueEntryProject !== undefined){
+                    this.newEntryProject = this.newContinueEntryProject;
+                    this.newContinueEntryProject = ''; // Clear it again
                 }
-                if ($scope.newContinueEntryText !== undefined){
-                    $scope.newEntryText = $scope.newContinueEntryText;
-                    $scope.newContinueEntryText = ''; // Clear it again
+                if (this.newContinueEntryText !== undefined){
+                    this.newEntryText = this.newContinueEntryText;
+                    this.newContinueEntryText = ''; // Clear it again
                 }
-                if ($scope.newContinueEntryGroup !== undefined){
-                    $scope.newEntryGroup = $scope.newContinueEntryGroup;
-                    $scope.newContinueEntryGroup = ''; // Clear it again
+                if (this.newContinueEntryGroup !== undefined){
+                    this.newEntryGroup = this.newContinueEntryGroup;
+                    this.newContinueEntryGroup = ''; // Clear it again
                 }
-                if ($scope.newContinueEntryType !== undefined){
-                    $scope.newEntryType = $scope.newContinueEntryType;
-                    $scope.newContinueEntryType = 'work'; // Default it again
+                if (this.newContinueEntryType !== undefined){
+                    this.newEntryType = this.newContinueEntryType;
+                    this.newContinueEntryType = 'work'; // Default it again
                 }
 
                 // Focus First element now again, so we are ready to type an other task
@@ -322,18 +290,18 @@ angular.module('cycloneApp').component('task', {
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key;
                 // Get location in the array
-                var newEntryIndex = $scope.entries.$indexFor(newEntryKey); // returns location in the array
+                var newEntryIndex = this.entries.$indexFor(newEntryKey); // returns location in the array
 
                 //
                 // check the previous entry to know when the new entry started, update timestampStart and duration of the new entry
                 //
                 // The new entry
-                var newEntry = $scope.entries.$getRecord(newEntryKey); // record with $id === prevEntryKey or null
+                var newEntry = this.entries.$getRecord(newEntryKey); // record with $id === prevEntryKey or null
 
                 // Get prevEntry and load its timestamp which we need as timestampStart
                 // Also we need to update the timestamp
-                var prevEntryKey = $scope.entries.$keyAt(newEntryIndex + 1); // previous entry (if existing)
-                var prevEntry = $scope.entries.$getRecord(prevEntryKey); // record with $id === prevEntryKey or null
+                var prevEntryKey = this.entries.$keyAt(newEntryIndex + 1); // previous entry (if existing)
+                var prevEntry = this.entries.$getRecord(prevEntryKey); // record with $id === prevEntryKey or null
 
 
                 // If we have a prev entry we can check when it finished
@@ -346,7 +314,7 @@ angular.module('cycloneApp').component('task', {
                 }
 
                 // Save new entry
-                $scope.entries.$save(newEntry).then(function(queryRef) {
+                this.entries.$save(newEntry).then(function(queryRef) {
                     // data has been saved to our database
                     console.log("newEntry entry saved with index" + queryRef.key)
                 });
@@ -356,13 +324,13 @@ angular.module('cycloneApp').component('task', {
                 //
                 // There can also be an item after the new added one, so we need to give over the new timestampStart and update duration of it
                 // Get prev timestamp which is the start of the new entry and calculate the duration
-                var nextEntryKey = $scope.entries.$keyAt(newEntryIndex - 1); // next entry (if existing)
-                var nextEntry = $scope.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
+                var nextEntryKey = this.entries.$keyAt(newEntryIndex - 1); // next entry (if existing)
+                var nextEntry = this.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
                 if (nextEntry !== null) {
                     nextEntry.timestampStart = newEntry.timestamp;
                     nextEntry.timestampDuration = calculateDuration(nextEntry);
                     // Save nextEntry
-                    $scope.entries.$save(nextEntry).then(function(queryRef) {
+                    this.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
                         console.log("nextEntry entry saved with index" + queryRef.key)
                     });
@@ -387,22 +355,22 @@ angular.module('cycloneApp').component('task', {
         }
 
         // Clone text and project to current timer
-        $scope.cloneEntry = function() {
+        this.cloneEntry = function() {
             console.log(this.entry);
-            $scope.newEntryText = this.entry.text;
-            $scope.newEntryProject = this.entry.project;
-            $scope.newEntryType = this.entry.type;
-            $scope.newEntryGroup = this.entry.group;
+            this.newEntryText = this.entry.text;
+            this.newEntryProject = this.entry.project;
+            this.newEntryType = this.entry.type;
+            this.newEntryGroup = this.entry.group;
         };
 
         // Continue task feature (tracks current timer and continues with the selected one)
-        $scope.continueEntry = function(entry) {
+        this.continueEntry = function(entry) {
             console.log(entry);
-            $scope.newContinueEntryProject = entry.project;
-            $scope.newContinueEntryText    = entry.text;
-            $scope.newContinueEntryType    = entry.type;
-            $scope.newContinueEntryGroup    = entry.group;
-            $scope.addEntry();
+            this.newContinueEntryProject = entry.project;
+            this.newContinueEntryText    = entry.text;
+            this.newContinueEntryType    = entry.type;
+            this.newContinueEntryGroup    = entry.group;
+            this.addEntry();
         };
 
         // /**
@@ -411,21 +379,21 @@ angular.module('cycloneApp').component('task', {
         //  * @param text
         //  * @param GroupTaskData
         //  *
-        //  * Calls $scope.continueEntry(task) from above.
+        //  * Calls this.continueEntry(task) from above.
         //
 
-        $scope.continueGroup = function(GroupTaskData) {
+        this.continueGroup = function(GroupTaskData) {
             // We just try to access any of the tasks (could be the first one because of the object
             var oneOfTheTasks = GroupTaskData.tasks[Object.keys(GroupTaskData.tasks)[0]];
             console.log("one of the tasks");
             console.log(oneOfTheTasks);
 
             // Continue this task
-            $scope.continueEntry(oneOfTheTasks);
+            this.continueEntry(oneOfTheTasks);
         };
 
         // Toggles the display of group details
-        $scope.toggleDetails = function(GroupTaskData) {
+        this.toggleDetails = function(GroupTaskData) {
             if (GroupTaskData.showDetails === undefined || typeof GroupTaskData.showDetails === 'function') {
                 GroupTaskData.showDetails = true;
             } else {
@@ -434,30 +402,30 @@ angular.module('cycloneApp').component('task', {
         };
 
         // Add the current timer to this group
-        $scope.addEntryToGroup = function(GroupTaskData) {
+        this.addEntryToGroup = function(GroupTaskData) {
             console.log(GroupTaskData);
-            $scope.newEntryGroup = GroupTaskData.group;
-            $scope.addEntry();
+            this.newEntryGroup = GroupTaskData.group;
+            this.addEntry();
         };
 
 
 
 
         // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
-        $scope.deleteEntry = function() {
+        this.deleteEntry = function() {
             // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
             var deleteEntryTimestampStart = this.entry.timestampStart;
             var deleteEntryKey = this.entry.$id;
-            var deleteEntryIndex = $scope.entries.$indexFor(deleteEntryKey); // returns location in the array
+            var deleteEntryIndex = this.entries.$indexFor(deleteEntryKey); // returns location in the array
 
             //
             // prepare update next entry
             //
-            var nextEntryKey = $scope.entries.$keyAt(deleteEntryIndex - 1); // next entry (if existing)
-            var nextEntry = $scope.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
+            var nextEntryKey = this.entries.$keyAt(deleteEntryIndex - 1); // next entry (if existing)
+            var nextEntry = this.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
 
             // Delete entry, and update the next one
-            $scope.entries.$remove(this.entry).then(function(ref) {
+            this.entries.$remove(this.entry).then(function(ref) {
                 // Which id and location did we remove? We need to check the next entry to update the duration of it!
                 var deletedEntryKey = ref.key;
 
@@ -467,7 +435,7 @@ angular.module('cycloneApp').component('task', {
                     // Update the duration entry
                     nextEntry.timestampDuration = calculateDuration(nextEntry);
                     // Save nextEntry
-                    $scope.entries.$save(nextEntry).then(function(queryRef) {
+                    this.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
                         console.log("(removed) nextEntry saved with index" + queryRef.key)
                     });
@@ -477,15 +445,18 @@ angular.module('cycloneApp').component('task', {
 
 
         // Realtime duration display
-        function updateDurations() {
-            $scope.currentDuration = ((Date.now() - $scope.lastEntryTimestamp));
-            $timeout(updateDurations, 1000, true);
-        };
+        // TODO: Did not work with timeout etc.
+        // this.updateDurations = function() {
+        // function updateDurations() {
+        //     this.currentDuration = ((Date.now() - this.lastEntryTimestamp));
+        //     console.log(this);
+        //     this.$timeout(updateDurations, 1000, true);
+        // };
 
         // Continued Task handler
         function updateContinuedTasks(snapshot) {
             // We are always starting from scratch, we could also try to iterate over the
-            // $scope.entriesCurrentGroups but this would lead to more problems on text changes etc.
+            // this.entriesCurrentGroups but this would lead to more problems on text changes etc.
 
             var groups = {};
             var groupsNew = {};
@@ -567,12 +538,12 @@ angular.module('cycloneApp').component('task', {
             console.log('new groups:');
             console.log(groupsNew);
 
-            $scope.entriesCurrentGroups = groupsNew;
-            $scope.doneLoadingGroups = true;
+            this.entriesCurrentGroups = groupsNew;
+            this.doneLoadingGroups = true;
         }
 
         // Group update checked on several tasks
-        $scope.updateGroup = function(taskData, status) {
+        this.updateGroup = function(taskData, status) {
             var checked = false;
             if (status === undefined) {
                 if (taskData.indeterminate) {
@@ -585,10 +556,10 @@ angular.module('cycloneApp').component('task', {
                 checked = status;
             }
             for (var taskKey in taskData.tasks) {
-                var Entry = $scope.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
+                var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                 Entry.checked = checked;
                 // Save Entry
-                $scope.entries.$save(Entry).then(function(queryRef) {
+                this.entries.$save(Entry).then(function(queryRef) {
                     // data has been saved to our database
                     console.log("Entry (update Group) entry saved with index" + queryRef.key)
                 });
@@ -601,11 +572,11 @@ angular.module('cycloneApp').component('task', {
         // This however seems to be more clean for functionality.
         // NOTE: This does not work with the single entries in the grouped "continue" tasks, because the keys don't exist in there.
         // Rather use updateGroup if needed.
-        $scope.updateSingleEntry = function(entry) {
+        this.updateSingleEntry = function(entry) {
             // Mark it checked
             entry.checked = true;
             // Save Entry
-            $scope.entries.$save(entry).then(function(queryRef) {
+            this.entries.$save(entry).then(function(queryRef) {
                 // data has been saved to our database
                 console.log("Entry (single Entry) saved with index" + queryRef.key)
             });

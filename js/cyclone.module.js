@@ -97,11 +97,11 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                     bindings: { user: 'currentUser.user' },
                 },
                 footer: {
-                    template: ''
+                    template: '<footer-display class="footer-stats" ng-cloak></footer-display>'
                 }
             },
             resolve: {
-                "currentUser":
+                currentUser:
                     ["userPromise", "$state", function(userPromise, $state) {
                         return userPromise.getPromise().then(function(success){
                             return success;
@@ -112,6 +112,20 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                             console.log("notification: " + notification);
                         });
                     }]
+                ,
+                timeTypesService: function(timeTypesService) {
+                    return timeTypesService.getTimeTypes();
+                }
+                ,
+                moment: function(moment) {
+                    return moment;
+                },
+                $firebaseArray: function($firebaseArray) {
+                    return $firebaseArray;
+                },
+                $timeout: function($timeout) {
+                    return $timeout;
+                }
             }
         });
 
