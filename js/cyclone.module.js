@@ -125,6 +125,9 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                 },
                 $timeout: function($timeout) {
                     return $timeout;
+                },
+                firebaseRef: function(firebaseRef) {
+                    return firebaseRef;
                 }
             }
         });

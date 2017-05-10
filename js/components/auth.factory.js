@@ -5,6 +5,29 @@ angular.module('cycloneApp').factory("Auth", ["$firebaseAuth",
     }
 ]);
 
+// Initialize firebase ref
+angular.module('cycloneApp')
+    // .config(function ($firebaseRefProvider) {
+    //
+    //     // TODO: How can we load the config from config/config.js file
+    //     var config = {
+    //         apiKey: "AIzaSyDsWGJoeAa_1puNxV5gt0WMrtN12JIEKTk",
+    //         authDomain: "cyclone-806dd.firebaseapp.com",
+    //         databaseURL: "https://cyclone-806dd.firebaseio.com"
+    //     };
+    //
+    //     $firebaseRefProvider
+    //         .registerUrl({
+    //             default: config.databaseURL
+    //             // Possibility to add further locations:
+    //             // -> https://firebase.googleblog.com/2016/03/whats-new-in-angularfire-12_90.html
+    //             // -> https://github.com/toddmotto/angular-1-5-components-app/blob/f8bc47f11f9cc900dcee7896f1dd51b08dd3eba5/src/app/components/auth/auth.module.js
+    //             // contacts: config.databaseURL + '/contacts'
+    //         });
+    //
+    //     firebase.initializeApp(config);
+    // });
+
 angular.module('cycloneApp').factory("userPromise", ["Auth", "$q", "$rootScope", function(Auth, $q, $rootScope) {
     //function returnPromise will generate a promise that will get the authenticated user.
     var returnPromise = function(){

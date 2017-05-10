@@ -15,15 +15,13 @@ angular.module('cycloneApp')
             newEntryText: '<',
             newEntryGroup: '<',
             newEntryManualTime: '<',
-            entries: '<',
-            doneLoading: '<'
+            firebaseRef: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
             // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state
             // Not working properly: $timeout
             // UNSURE: focus
             var ctrl = this;
-            console.log('task component');
 
             // TODO: move "copy" out from here, into service something like that.
             // Angular-clipboard
@@ -35,6 +33,7 @@ angular.module('cycloneApp')
                 console.info('Not supported browser, press Ctrl+C to copy time');
             };
 
+            // TODO: remove if not needed
             // The different types
             // this.types = this.timeTypesService;
             // TODO: Make this a configuration option or save it in the firebasedb
@@ -46,9 +45,6 @@ angular.module('cycloneApp')
             var today = this.moment();
 
             // Note: This is defining the type and values also for the stats.
-            this.year = this.moment().year();
-            this.weekNumber = this.moment().week();
-            this.weekDay = this.moment().weekday();
             this.addEntryEnabled = true;
             this.currentDate = new Date;
             this.newEntryType = 'work';
@@ -62,41 +58,40 @@ angular.module('cycloneApp')
 
             // PREV
             prevDate = prevDate.subtract(1, 'days');
-            this.prevDateLink = '#time/' + prevDate.format("YYYY/MM/DD");
+            this.prevDateLink = '#task/' + prevDate.format("YYYY/MM/DD");
 
             // NEXT (not for the future)
             nextDate = nextDate.add(1, 'days');
             if (nextDate.isBefore(today, 'day')) {
-                this.nextDateLink = '#time/' + nextDate.format("YYYY/MM/DD");
+                this.nextDateLink = '#task/' + nextDate.format("YYYY/MM/DD");
             } else if (nextDate.isSame(today, 'day')) {
                 this.nextDateLink = '#today';
             } else {
                 this.nextDateLink = false;
             }
 
-            // Define the path for reading and saving the entries
-            var year = this.year;
-            var weekNumber = this.weekNumber;
-            var todayNumber = this.weekDay;
-
+            // Initially set lastEntry to now.
             var lastEntryTimestamp = Date.now();
 
             // Duration
-            this.currentDuration = 0;
+            ctrl.currentDuration = 0;
             this.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
 
-            // Show the current date
-            this.today = lastEntryTimestamp;
+            // Focus input
+            focus('newTaskProject');
 
+            // build custom entries
             this.entriesCurrentGroups = {};
+
+
             // Call the data etc.
             // We don't need to observe anymore, because the routing makes sure we have the user
             if (this.user) {
-                // We save the entries in the current year, week and day, but most important by every user ()
-                var ref = firebase.database().ref();
-
                 // New grouped current time entries
-                var queryGroupRef = ref.child("time/" + this.user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                // TODO: Of course it would be even better to not have to reference the user
+                // But we have it alredy, seems to be strange to promise again the userPromise...
+                // Because we have the user here alredy.
+                var queryGroupRef = this.firebaseRef.getReference(this.user);
                 // Order the query, from recent to older entries
                 var queryGroup = queryGroupRef.orderByChild("order");
 
@@ -108,10 +103,9 @@ angular.module('cycloneApp')
                     updateContinuedTasks(snapshot);
                 });
 
-                focus('newTaskProject');
-
+                // TODO: I don't need too calls anymore, we just will do it once, and then create the output of it
                 // Timelog entries:
-                var queryRef = ref.child("time/" + this.user.uid + "/" + year + "/" + weekNumber + "/" + todayNumber);
+                var queryRef = this.firebaseRef.getReference(this.user);
                 // Order the query, from recent to older entries
                 // However this only works with the orderBy in the template right now.
                 var query = queryRef.orderByChild("order");
@@ -154,16 +148,15 @@ angular.module('cycloneApp')
                 var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
                 lastEntryRef.on("value", function (snapshot) {
                     // object in object (but only 1 because of limit above)
-                    // console.log(snapshot);
                     snapshot.forEach(function (data) {
-                        this.lastEntryTimestamp = data.val().timestamp;
+                        ctrl.lastEntryTimestamp = data.val().timestamp;
                     });
                 }, function (errorObject) {
                     console.log("The read failed: " + errorObject.code);
                 });
 
                 // TODO: Is disabled because it did not work
-                // this.updateDurations();
+                updateDurations();
 
             } else {
                 // No user is signed in.
@@ -454,13 +447,10 @@ angular.module('cycloneApp')
 
 
             // Realtime duration display
-            // TODO: Did not work with timeout etc.
-            // this.updateDurations = function() {
-            // function updateDurations() {
-            //     this.currentDuration = ((Date.now() - this.lastEntryTimestamp));
-            //     console.log(this);
-            //     this.$timeout(updateDurations, 1000, true);
-            // };
+            function updateDurations() {
+                ctrl.currentDuration = ((Date.now() - ctrl.lastEntryTimestamp));
+                ctrl.$timeout(updateDurations, 1000, true);
+            };
 
             // Continued Task handler
             function updateContinuedTasks(snapshot) {
