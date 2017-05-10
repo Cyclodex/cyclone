@@ -112,6 +112,19 @@ Task component:
         </md-card>
 
 
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <div ng-repeat="entry in $ctrl.entries"
+             layout="column"
+             layout-align="start center"
+             class="row project-type--{{entry.type}}"
+             ng-class="[{true: 'done', false: ''}[entry.checked == true]]"
+        >
+            {{ entry }}
+        </div>
+
         <!-- Show table of entries -->
         <!--<div class="timelog__entries"
              layout="column"

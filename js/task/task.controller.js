@@ -10,14 +10,20 @@ angular.module('cycloneApp')
         moment: '<',
         $firebaseArray: '<',
         $timeout: '<',
-        addEntryForm: '<' // This binds the form, but would need further changes still
+        addEntryForm: '=', // This binds the form, but would need further changes still
+        newEntryProject: '<',
+        newEntryText: '<',
+        newEntryGroup: '<',
+        newEntryManualTime: '<',
+        entries: '<',
+        doneLoading: '<'
     }, // Notice the binding on the router! (its currentUser.user)
     controller: function() {
         // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state
         // Not working properly: $timeout
         // UNSURE: focus
+        var ctrl = this;
         console.log('task component');
-        console.log(this.addEntryForm);
 
          // TODO: move "copy" out from here, into service something like that.
          // Angular-clipboard
@@ -114,36 +120,34 @@ angular.module('cycloneApp')
             this.entries = this.$firebaseArray(query);
 
             // Add a start entry if we are on today and no entries in yet.
-             // TODO: Do we need this for tasks?
-            /*this.entries.$loaded()
+             // TODO: Do we need this for tasks? Probably also better outside in a service
+            this.entries.$loaded()
                 .then(function () {
-                    this.doneLoading = true;
-                    if (this.viewType == 'today') {
-                        if (this.entries.length === 0) {
-                            var timestamp = Date.now();
-                            var duration = 0;
-                            var start = timestamp;
-                            // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
-                            this.entries.$add({
-                                text: 'Starting the day',
-                                project: 'CYCLONE',
-                                checked: true,
-                                type: 'system',
-                                timestamp: timestamp,
-                                timestampStart: start,
-                                timestampDuration: duration,
-                                order: -timestamp,
-                                user: this.username // Now it takes the first part of the email address of the logged in user
-                            }).then(function (queryRef) {
-                                // Entry added, now do something
-                                console.log("Auto starting the day entry added!");
-                            });
-                        }
+                    ctrl.doneLoading = true;
+                    if (this.entries.length === 0) {
+                        var timestamp = Date.now();
+                        var duration = 0;
+                        var start = timestamp;
+                        // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
+                        this.entries.$add({
+                            text: 'Starting the day',
+                            project: 'CYCLONE',
+                            checked: true,
+                            type: 'system',
+                            timestamp: timestamp,
+                            timestampStart: start,
+                            timestampDuration: duration,
+                            order: -timestamp,
+                            user: this.username // Now it takes the first part of the email address of the logged in user
+                        }).then(function (queryRef) {
+                            // Entry added, now do something
+                            console.log("Auto starting the day entry added!");
+                        });
                     }
                 })
                 .catch(function (error) {
                     console.log("Error:", error);
-                });*/
+                });
 
             // Update current time
             // Attach an asynchronous callback to read the data at our posts reference
@@ -175,12 +179,11 @@ angular.module('cycloneApp')
             var start = this.lastEntryTimestamp;
 
             // If the form is not valid, don't add content.
-            // TODO: we probably should display a information that it was not added
-            // The input field which is invalid however should be marked red already.
-            if (this.addEntryForm.$invalid){
-                console.log("entry was not added");
-                return false;
-            }
+            // TODO: This is not working anymore
+            // if (this.addEntryForm.$invalid){
+            //     console.log("entry was not added");
+            //     return false;
+            // }
 
             // Check if we need to add some manual end time.
             if (this.newEntryManualTime !== undefined &&
@@ -243,6 +246,11 @@ angular.module('cycloneApp')
             //
             // ADD new entry into DB
             //
+
+            console.log("I AM HERE");
+            console.log(this.newEntryText);
+
+            var entries = this.entries;
             this.entries.$add({
                 text: this.newEntryText,
                 project: this.newEntryProject,
@@ -253,34 +261,33 @@ angular.module('cycloneApp')
                 timestampStart: start,
                 timestampDuration: duration,
                 order: -timestamp,
-                user: this.username, // Now it takes the first part of the email address of the logged in user
+                user: this.user.username, // Now it takes the first part of the email address of the logged in user
             }).then(function(queryRef) {
                 // Entry added, now do something
-
                 // Clear the input fields again
-                this.newEntryText = '';
-                this.newEntryProject = '';
-                this.newEntryGroup = '';
-                this.newEntryManualTime = '';
-                this.newEntryType = 'work';
+                ctrl.newEntryText = '';
+                ctrl.newEntryProject = '';
+                ctrl.newEntryGroup = '';
+                ctrl.newEntryManualTime = '';
+                ctrl.newEntryType = 'work';
 
                 // Take over continue task if available
                 // TODO: Add the group here as well ?!
-                if (this.newContinueEntryProject !== undefined){
-                    this.newEntryProject = this.newContinueEntryProject;
-                    this.newContinueEntryProject = ''; // Clear it again
+                if (ctrl.newContinueEntryProject !== undefined){
+                    ctrl.newEntryProject = ctrl.newContinueEntryProject;
+                    ctrl.newContinueEntryProject = ''; // Clear it again
                 }
-                if (this.newContinueEntryText !== undefined){
-                    this.newEntryText = this.newContinueEntryText;
-                    this.newContinueEntryText = ''; // Clear it again
+                if (ctrl.newContinueEntryText !== undefined){
+                    ctrl.newEntryText = ctrl.newContinueEntryText;
+                    ctrl.newContinueEntryText = ''; // Clear it again
                 }
-                if (this.newContinueEntryGroup !== undefined){
-                    this.newEntryGroup = this.newContinueEntryGroup;
-                    this.newContinueEntryGroup = ''; // Clear it again
+                if (ctrl.newContinueEntryGroup !== undefined){
+                    ctrl.newEntryGroup = ctrl.newContinueEntryGroup;
+                    ctrl.newContinueEntryGroup = ''; // Clear it again
                 }
-                if (this.newContinueEntryType !== undefined){
-                    this.newEntryType = this.newContinueEntryType;
-                    this.newContinueEntryType = 'work'; // Default it again
+                if (ctrl.newContinueEntryType !== undefined){
+                    ctrl.newEntryType = ctrl.newContinueEntryType;
+                    ctrl.newContinueEntryType = 'work'; // Default it again
                 }
 
                 // Focus First element now again, so we are ready to type an other task
@@ -290,18 +297,18 @@ angular.module('cycloneApp')
                 // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                 var newEntryKey = queryRef.key;
                 // Get location in the array
-                var newEntryIndex = this.entries.$indexFor(newEntryKey); // returns location in the array
+                var newEntryIndex = ctrl.entries.$indexFor(newEntryKey); // returns location in the array
 
                 //
                 // check the previous entry to know when the new entry started, update timestampStart and duration of the new entry
                 //
                 // The new entry
-                var newEntry = this.entries.$getRecord(newEntryKey); // record with $id === prevEntryKey or null
+                var newEntry = ctrl.entries.$getRecord(newEntryKey); // record with $id === prevEntryKey or null
 
                 // Get prevEntry and load its timestamp which we need as timestampStart
                 // Also we need to update the timestamp
-                var prevEntryKey = this.entries.$keyAt(newEntryIndex + 1); // previous entry (if existing)
-                var prevEntry = this.entries.$getRecord(prevEntryKey); // record with $id === prevEntryKey or null
+                var prevEntryKey = ctrl.entries.$keyAt(newEntryIndex + 1); // previous entry (if existing)
+                var prevEntry = ctrl.entries.$getRecord(prevEntryKey); // record with $id === prevEntryKey or null
 
 
                 // If we have a prev entry we can check when it finished
@@ -314,7 +321,7 @@ angular.module('cycloneApp')
                 }
 
                 // Save new entry
-                this.entries.$save(newEntry).then(function(queryRef) {
+                ctrl.entries.$save(newEntry).then(function(queryRef) {
                     // data has been saved to our database
                     console.log("newEntry entry saved with index" + queryRef.key)
                 });
@@ -324,18 +331,21 @@ angular.module('cycloneApp')
                 //
                 // There can also be an item after the new added one, so we need to give over the new timestampStart and update duration of it
                 // Get prev timestamp which is the start of the new entry and calculate the duration
-                var nextEntryKey = this.entries.$keyAt(newEntryIndex - 1); // next entry (if existing)
-                var nextEntry = this.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
+                var nextEntryKey = ctrl.entries.$keyAt(newEntryIndex - 1); // next entry (if existing)
+                var nextEntry = ctrl.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
                 if (nextEntry !== null) {
                     nextEntry.timestampStart = newEntry.timestamp;
                     nextEntry.timestampDuration = calculateDuration(nextEntry);
                     // Save nextEntry
-                    this.entries.$save(nextEntry).then(function(queryRef) {
+                    ctrl.entries.$save(nextEntry).then(function(queryRef) {
                         // data has been saved to our database
                         console.log("nextEntry entry saved with index" + queryRef.key)
                     });
                 }
 
+            })
+            .catch(function (error) {
+                console.log("Error:", error);
             });
 
         };// End of ADD
