@@ -124,12 +124,12 @@ angular.module('cycloneApp')
             this.entries.$loaded()
                 .then(function () {
                     ctrl.doneLoading = true;
-                    if (this.entries.length === 0) {
+                    if (ctrl.entries.length === 0) {
                         var timestamp = Date.now();
                         var duration = 0;
                         var start = timestamp;
                         // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
-                        this.entries.$add({
+                        ctrl.entries.$add({
                             text: 'Starting the day',
                             project: 'CYCLONE',
                             checked: true,
@@ -138,7 +138,7 @@ angular.module('cycloneApp')
                             timestampStart: start,
                             timestampDuration: duration,
                             order: -timestamp,
-                            user: this.username // Now it takes the first part of the email address of the logged in user
+                            user: ctrl.user.username // Now it takes the first part of the email address of the logged in user
                         }).then(function (queryRef) {
                             // Entry added, now do something
                             console.log("Auto starting the day entry added!");
