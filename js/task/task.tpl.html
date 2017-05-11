@@ -1,5 +1,3 @@
-Task component:
-{{ $ctrl.username | json }}
 <div
      ng-show="$ctrl.user.username"
      class="container"
@@ -9,7 +7,7 @@ Task component:
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h1 class="inline">
-                    <a ng-href="#today">Cyclone</a>
+                    <a ng-href="#today">Cyclone - Tasks</a>
                     <span ng-if="nextDateLink"> - Archive</span>
                 </h1>
                 <span flex></span>
@@ -124,6 +122,10 @@ Task component:
         >
             {{ entry }}
         </div>
+
+        <hr>
+
+        {{ $ctrl.entriesCurrentGroups | json }}
 
         <!-- Show table of entries -->
         <!--<div class="timelog__entries"

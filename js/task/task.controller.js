@@ -81,7 +81,7 @@ angular.module('cycloneApp')
             focus('newTaskProject');
 
             // build custom entries
-            this.entriesCurrentGroups = {};
+            ctrl.entriesCurrentGroups = {};
 
 
             // Call the data etc.
@@ -537,8 +537,8 @@ angular.module('cycloneApp')
                 console.log('new groups:');
                 console.log(groupsNew);
 
-                this.entriesCurrentGroups = groupsNew;
-                this.doneLoadingGroups = true;
+                ctrl.entriesCurrentGroups = groupsNew;
+                ctrl.doneLoadingGroups = true;
             }
 
             // Group update checked on several tasks
