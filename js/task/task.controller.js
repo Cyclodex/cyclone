@@ -33,9 +33,8 @@ angular.module('cycloneApp')
                 console.info('Not supported browser, press Ctrl+C to copy time');
             };
 
-            // TODO: remove if not needed
-            // The different types
-            // this.types = this.timeTypesService;
+            // Load the different time types
+            this.types = this.timeTypesService;
             // TODO: Make this a configuration option or save it in the firebasedb
 
             this.error = false;
@@ -45,7 +44,6 @@ angular.module('cycloneApp')
             var today = this.moment();
 
             // Note: This is defining the type and values also for the stats.
-            this.addEntryEnabled = true;
             this.currentDate = new Date;
             this.newEntryType = 'work';
 

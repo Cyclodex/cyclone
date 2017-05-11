@@ -2,15 +2,17 @@
 angular.module('cycloneApp').factory("firebaseRef", ['Auth', 'moment',
     function(Auth, moment) {
 
-        // Note: This is defining the type and values also for the stats.
-        this.year = moment().year();
-        this.weekNumber = moment().week();
-        this.weekDay = moment().weekday();
-        this.todayNumber = this.weekDay;
-        this.currentDate = new Date;
 
         function getReference(user){
+            this.year = moment().year();
+            this.weekNumber = moment().week();
+            this.weekDay = moment().weekday();
+            this.todayNumber = this.weekDay;
+            this.currentDate = new Date;
+
             var ref = firebase.database().ref();
+            console.log('firebase ref:');
+            console.log("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
             var reference = ref.child("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
             return reference;
         }
