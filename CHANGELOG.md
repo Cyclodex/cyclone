@@ -1,4 +1,10 @@
 # CHANGELOG
+## 0.48 - 14.05.2017
+* Fixed issue with FF on the "check all" checkbox in "grouped task"
+
+## 0.47 - 07.04.2017
+* Improved Grouping feature
+
 ## 0.46 - 08.03.2017
 * Enhancement: Grouping feature improved
 * Style changes to need less space when a entry is checked.

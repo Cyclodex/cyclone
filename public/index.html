@@ -388,18 +388,16 @@
                                     <md-icon>add</md-icon>
                                 </md-button>
                             </span>
-                            <md-button class="md-icon-button">
-                                <md-checkbox aria-label="GroupsChecked"
-                                             ng-click="updateGroup(GroupData);"
-                                             ng-checked="GroupData.checkedState"
-                                             md-indeterminate="GroupData.indeterminate"
-                                             class="md-primary">
-                                </md-checkbox>
-                                <md-tooltip md-direction="top">
-                                    <span ng-if="!GroupData.checkedState">Check all</span>
-                                    <span ng-if="GroupData.checkedState">Un-check all</span>
-                                </md-tooltip>
-                            </md-button>
+                            <md-checkbox aria-label="GroupsChecked"
+                                         ng-click="updateGroup(GroupData);"
+                                         ng-checked="GroupData.checkedState"
+                                         md-indeterminate="GroupData.indeterminate"
+                                         class="md-primary">
+                            </md-checkbox>
+                            <md-tooltip md-direction="top">
+                                <span ng-if="!GroupData.checkedState">Check all</span>
+                                <span ng-if="GroupData.checkedState">Un-check all</span>
+                            </md-tooltip>
                         </md-subheader>
                         <div class="group__time-information">
                             <div class="group__time-information__row">
