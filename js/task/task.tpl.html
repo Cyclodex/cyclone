@@ -151,7 +151,7 @@
                             <md-button
                                     ng-if="entry.checked"
                                     class="entry__checked__button"
-                                    ng-click="entry.checked = false; entries.$save(entry);"
+                                    ng-click="entry.checked = false; $ctrl.entries.$save(entry);"
                                     aria-label="remove check from entry">
                                 <md-tooltip md-direction="left">
                                     Uncheck
@@ -165,7 +165,7 @@
                         <!-- Project -->
                         <md-input-container md-no-float class="entry__info__input entry__info__input--project">
                             <input ng-model="entry.project"
-                                   ng-change="entries.$save(entry)"
+                                   ng-change="$ctrl.entries.$save(entry)"
                                    id="project"
                                    type="text"
                                    aria-label="project"
@@ -174,9 +174,9 @@
                         </md-input-container>
 
                         <!-- Showing the task name assigned (group)-->
-                        <md-input-container md-no-float class="entry__info__input entry__info__input--group md-icon-float md-icon-left">
+                        <md-input-container md-no-float class="entry__info__input entry__info__input--task md-icon-float md-icon-left">
                             <input ng-model="entry.group"
-                                   ng-change="entries.$save(entry)"
+                                   ng-change="$ctrl.entries.$save(entry)"
                                    id="group"
                                    type="text"
                                    class="validate"
@@ -185,28 +185,30 @@
                         </md-input-container>
 
                         <!-- Description-->
-                        <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                        <!-- TODO: Description is not listed for every group, but groups list all descriptions of all entries-->
+                        <!--<md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;text">
                             <input ng-model="entry.text"
-                                   ng-change="entries.$save(entry)"
+                                   ng-change="$ctrl.entries.$save(entry)"
                                    id="text"
                                    type="text"
                                    class="validate"
                                    aria-label="Description"
                                    placeholder="Description"
                                    autocomplete="Description"/>
-                        </md-input-container>
+                        </md-input-container>-->
 
                         <!-- Entry type -->
                         <div class="entry__type">
-                            <md-radio-group
-                                    ng-model="entry.type"
-                                    ng-change="entries.$save(entry)"
-                                    aria-label="Work or private hours"
-                            >
-                                <md-radio-button ng-repeat="type in $ctrl.types" class="md-primary" ng-value="type.value">
-                                    {{type.name}}
-                                </md-radio-button>
-                            </md-radio-group>
+                            <md-input-container>
+                                <!--<label>Type</label>-->
+                                <md-select ng-model="entry.type"
+                                           aria-label="Type of entry"
+                                           ng-keydown="$event.which === 13 && addEntry()">
+                                    <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
+                                        {{type.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
                         </div>
 
                         <!-- Time information -->
@@ -353,7 +355,7 @@
                                 <md-button
                                         ng-if="entry.checked"
                                         class="entry__checked__button"
-                                        ng-click="entry.checked = false; entries.$save(entry);"
+                                        ng-click="entry.checked = false; $ctrl.entries.$save(entry);"
                                         aria-label="remove check from entry">
                                     <md-tooltip md-direction="left">
                                         Uncheck
@@ -367,7 +369,7 @@
                                 <div class="entry__info">
                                     <md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;project">
                                         <input ng-model="entry.project"
-                                               ng-change="entries.$save(entry)"
+                                               ng-change="$ctrl.entries.$save(entry)"
                                                id="project"
                                                type="text"
                                                aria-label="project"
@@ -376,7 +378,7 @@
                                     </md-input-container>
                                     <md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;text">
                                         <input ng-model="entry.text"
-                                               ng-change="entries.$save(entry)"
+                                               ng-change="$ctrl.entries.$save(entry)"
                                                id="text"
                                                type="text"
                                                class="validate"
@@ -388,7 +390,7 @@
                                     <md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;group md-icon-float md-icon-left">
                                         <md-icon ng-if="entry.group">featured_play_list</md-icon>
                                         <input ng-model="entry.group"
-                                               ng-change="entries.$save(entry)"
+                                               ng-change="$ctrl.entries.$save(entry)"
                                                id="group"
                                                type="text"
                                                class="validate"
@@ -406,7 +408,7 @@
                             <div class="entry__type">
                                 <md-radio-group
                                         ng-model="entry.type"
-                                        ng-change="entries.$save(entry)"
+                                        ng-change="$ctrl.entries.$save(entry)"
                                         aria-label="Work or private hours"
                                 >
                                     <md-radio-button ng-repeat="type in $ctrl.timeTypesService" class="md-primary" ng-value="type.value">
