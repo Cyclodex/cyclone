@@ -33,7 +33,7 @@ require('./components/timeTypes.service.js');
 require('./footer/footer.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');
-require('./components/login.components.js');
+require('./components/login.component.js');
 require('./task/task.controller.js');
 
 // Testing component:

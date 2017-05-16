@@ -11,8 +11,8 @@ angular.module('cycloneApp').factory("firebaseRef", ['Auth', 'moment',
             this.currentDate = new Date;
 
             var ref = firebase.database().ref();
-            console.log('firebase ref:');
-            console.log("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
+            // console.log('firebase ref:');
+            // console.log("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
             var reference = ref.child("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
             return reference;
         }

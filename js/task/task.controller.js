@@ -18,8 +18,7 @@ angular.module('cycloneApp')
             firebaseRef: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
-            // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state
-            // Not working properly: $timeout
+            // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state, $timeout
             // UNSURE: focus
             var ctrl = this;
 
@@ -85,7 +84,7 @@ angular.module('cycloneApp')
             // Call the data etc.
             // New grouped current time entries
             // TODO: Of course it would be even better to not have to reference the user
-            // But we have it alredy, seems to be strange to promise again the userPromise...
+            // But we have it already, seems to be strange to promise again the userPromise...
             // Because we have the user here alredy.
             var queryGroupRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
@@ -150,10 +149,7 @@ angular.module('cycloneApp')
                 console.log("The read failed: " + errorObject.code);
             });
 
-            // TODO: Is disabled because it did not work
             updateDurations();
-
-
 
 
             // ADD
@@ -454,13 +450,14 @@ angular.module('cycloneApp')
                     entry = data.val();
 
                     var projectName = entry.project;
-                    var projectTask = entry.text;
                     var groupId = entry.group;
 
 
+                    // No auto creating of group / task anymore
                     if (!groupId) {
-                        console.log('groupID not set, auto creating it.');
-                        groupId = projectName + '-' + projectTask;
+                        /*console.log('groupID not set, auto creating it.');
+                        groupId = projectName + '-' + projectTask;*/
+                        groupId = '-';
                     }
 
                     // Make sure the elements are set
@@ -470,17 +467,20 @@ angular.module('cycloneApp')
                     if (groupsNew[groupId] === undefined || typeof groupsNew[groupId] === 'function') {
                         groupsNew[groupId] = {};
                         groupsNew[groupId]['tasks'] = {};
-                        groupsNew[groupId].amount = 0;
+                        groupsNew[groupId].amountAll = 0;
+                        groupsNew[groupId].amountNotChecked = 0;
                         groupsNew[groupId].amountChecked = 0;
                         groupsNew[groupId].checkedState = '';
-                        groupsNew[groupId].duration = 0;
+                        groupsNew[groupId].durationNotChecked = 0;
                         groupsNew[groupId].durationChecked = 0;
                         groupsNew[groupId].group = groupId;
+                        groupsNew[groupId].project = projectName;
+                        groupsNew[groupId].showDetails = true; // Show details per default
                         console.log('GroupID created:' + groupId);
                     }
 
                     // Sum up
-                    groupsNew[groupId].amount += 1;
+                    groupsNew[groupId].amountAll += 1;
                     groupsNew[groupId]['tasks'][data.key] = entry;
 
                     // Add specific data with some conditions
@@ -488,7 +488,8 @@ angular.module('cycloneApp')
                         groupsNew[groupId].amountChecked += 1;
                         groupsNew[groupId].durationChecked += entry.timestampDuration;
                     } else {
-                        groupsNew[groupId].duration += entry.timestampDuration;
+                        groupsNew[groupId].amountNotChecked += 1;
+                        groupsNew[groupId].durationNotChecked += entry.timestampDuration;
                     }
 
                     // Verifying the "checked" state
@@ -497,7 +498,7 @@ angular.module('cycloneApp')
                         // not checked
                         groupsNew[groupId].checkedState = false;
                         groupsNew[groupId].indeterminate = false;
-                    } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amount) {
+                    } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
                         // all tasks are checked
                         groupsNew[groupId].checkedState = true;
                         groupsNew[groupId].indeterminate = false;
@@ -513,10 +514,10 @@ angular.module('cycloneApp')
                 for (var key in groupsNew) {
                     if (groupsNew.hasOwnProperty(key)) {
                         group = groupsNew[key];
-                        // console.log(group);
-                        if (group.amount === 1) {
+                        // TODO: I think we can remove this, everything is now a group
+                        /*if (group.amount === 1) {
                             delete groupsNew[key];
-                        }
+                        }*/
                     }
                     if (Object.keys(groupsNew).length == 0) {
                         delete groupsNew[key];
@@ -530,8 +531,9 @@ angular.module('cycloneApp')
                 ctrl.doneLoadingGroups = true;
             }
 
-            // Group update checked on several tasks
-            this.updateGroup = function (taskData, status) {
+            // Group update status checked on several tasks
+            this.updateGroupStatus = function (taskData, status) {
+                console.log(taskData);
                 var checked = false;
                 if (status === undefined) {
                     if (taskData.indeterminate) {
@@ -546,6 +548,20 @@ angular.module('cycloneApp')
                 for (var taskKey in taskData.tasks) {
                     var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                     Entry.checked = checked;
+                    // Save Entry
+                    this.entries.$save(Entry).then(function (queryRef) {
+                        // data has been saved to our database
+                        console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                    });
+                }
+            };
+
+            // Group update data on all sub entries belonging to this task
+            this.updateGroupData = function (taskData) {
+                for (var taskKey in taskData.tasks) {
+                    var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
+                    Entry.project = taskData.project;
+                    Entry.group = taskData.group;
                     // Save Entry
                     this.entries.$save(Entry).then(function (queryRef) {
                         // data has been saved to our database
