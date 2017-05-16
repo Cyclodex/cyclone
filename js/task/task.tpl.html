@@ -225,7 +225,7 @@
                                     <!-- Copy button -->
                                     <div>
                                         <a class=""
-                                           ng-click="cloneEntry()">
+                                           ng-click="$ctrl.cloneEntry(entry)">
                                             <md-button class="md-fab md-primary md-mini" aria-label="Use task">
                                                 <md-tooltip md-direction="top">
                                                     Use this project & description for current timer
@@ -238,7 +238,7 @@
                                     <!-- Continue button -->
                                     <div>
                                         <a class=""
-                                           ng-click="continueEntry(entry)">
+                                           ng-click="$ctrl.continueEntry(entry)">
                                             <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
                                                 <md-tooltip md-direction="top">
                                                     Track current timer and continue now on this task
@@ -248,7 +248,7 @@
                                         </a>
                                     </div>
                                     <div>
-                                        <md-button ng-click="deleteEntry();"
+                                        <md-button ng-click="$ctrl.deleteEntry(entry);"
                                                    class="md-fab md-mini"
                                                    aria-label="Delete entry">
                                             <md-tooltip md-direction="top">

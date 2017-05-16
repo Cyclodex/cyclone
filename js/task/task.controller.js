@@ -83,82 +83,78 @@ angular.module('cycloneApp')
 
 
             // Call the data etc.
-            // We don't need to observe anymore, because the routing makes sure we have the user
-            if (this.user) {
-                // New grouped current time entries
-                // TODO: Of course it would be even better to not have to reference the user
-                // But we have it alredy, seems to be strange to promise again the userPromise...
-                // Because we have the user here alredy.
-                var queryGroupRef = this.firebaseRef.getReference(this.user);
-                // Order the query, from recent to older entries
-                var queryGroup = queryGroupRef.orderByChild("order");
+            // New grouped current time entries
+            // TODO: Of course it would be even better to not have to reference the user
+            // But we have it alredy, seems to be strange to promise again the userPromise...
+            // Because we have the user here alredy.
+            var queryGroupRef = this.firebaseRef.getReference(this.user);
+            // Order the query, from recent to older entries
+            var queryGroup = queryGroupRef.orderByChild("order");
 
-                // CONTINUE TASK
-                // Update the groups on load and all changes of the child data
-                // queryGroup.once('value').then(function(snapshot) {
-                // queryGroup.on('child_changed', function(snapshot) {
-                queryGroup.on('value', function (snapshot) {
-                    updateContinuedTasks(snapshot);
-                });
+            // CONTINUE TASK
+            // Update the groups on load and all changes of the child data
+            // queryGroup.once('value').then(function(snapshot) {
+            // queryGroup.on('child_changed', function(snapshot) {
+            queryGroup.on('value', function (snapshot) {
+                updateContinuedTasks(snapshot);
+            });
 
-                // TODO: I don't need too calls anymore, we just will do it once, and then create the output of it
-                // Timelog entries:
-                var queryRef = this.firebaseRef.getReference(this.user);
-                // Order the query, from recent to older entries
-                // However this only works with the orderBy in the template right now.
-                var query = queryRef.orderByChild("order");
+            // TODO: I don't need too calls anymore, we just will do it once, and then create the output of it
+            // Timelog entries:
+            var queryRef = this.firebaseRef.getReference(this.user);
+            // Order the query, from recent to older entries
+            // However this only works with the orderBy in the template right now.
+            var query = queryRef.orderByChild("order");
 
-                // Create a synchronized array
-                this.entries = this.$firebaseArray(query);
+            // Create a synchronized array
+            this.entries = this.$firebaseArray(query);
 
-                // Add a start entry if we are on today and no entries in yet.
-                // TODO: Do we need this for tasks? Probably also better outside in a service
-                this.entries.$loaded()
-                    .then(function () {
-                        ctrl.doneLoading = true;
-                        if (ctrl.entries.length === 0) {
-                            var timestamp = Date.now();
-                            var duration = 0;
-                            var start = timestamp;
-                            // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
-                            ctrl.entries.$add({
-                                text: 'Starting the day',
-                                project: 'CYCLONE',
-                                checked: true,
-                                type: 'system',
-                                timestamp: timestamp,
-                                timestampStart: start,
-                                timestampDuration: duration,
-                                order: -timestamp,
-                                user: ctrl.user.username // Now it takes the first part of the email address of the logged in user
-                            }).then(function (queryRef) {
-                                // Entry added, now do something
-                                console.log("Auto starting the day entry added!");
-                            });
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log("Error:", error);
+            // Add a start entry if we are on today and no entries in yet.
+            // TODO: Do we need this for tasks? Probably also better outside in a service
+            this.entries.$loaded().then(function () {
+                ctrl.doneLoading = true;
+                if (ctrl.entries.length === 0) {
+                    var timestamp = Date.now();
+                    var duration = 0;
+                    var start = timestamp;
+                    // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
+                    ctrl.entries.$add({
+                        text: 'Starting the day',
+                        project: 'CYCLONE',
+                        checked: true,
+                        type: 'system',
+                        timestamp: timestamp,
+                        timestampStart: start,
+                        timestampDuration: duration,
+                        order: -timestamp,
+                        user: ctrl.user.username // Now it takes the first part of the email address of the logged in user
+                    }).then(function (queryRef) {
+                        // Entry added, now do something
+                        console.log("Auto starting the day entry added!");
                     });
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:", error);
+            });
 
-                // Update current time
-                // Attach an asynchronous callback to read the data at our posts reference
-                var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
-                lastEntryRef.on("value", function (snapshot) {
-                    // object in object (but only 1 because of limit above)
-                    snapshot.forEach(function (data) {
-                        ctrl.lastEntryTimestamp = data.val().timestamp;
-                    });
-                }, function (errorObject) {
-                    console.log("The read failed: " + errorObject.code);
+            // Update current time
+            // Attach an asynchronous callback to read the data at our posts reference
+            var lastEntryRef = queryRef.orderByChild("order").limitToFirst(1);
+            lastEntryRef.on("value", function (snapshot) {
+                // object in object (but only 1 because of limit above)
+                snapshot.forEach(function (data) {
+                    ctrl.lastEntryTimestamp = data.val().timestamp;
                 });
+            }, function (errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
 
-                // TODO: Is disabled because it did not work
-                updateDurations();
+            // TODO: Is disabled because it did not work
+            updateDurations();
 
-            } else {
-                // No user is signed in.
-            }
+
+
 
             // ADD
             // Add new entry to current week and day
@@ -203,7 +199,6 @@ angular.module('cycloneApp')
 
                 }
 
-
                 // Check if the entry should be marked as private (break)
                 // TODO: Lets change the type field after the user entered a project; not here on add.
                 // Check the project name for auto assignment
@@ -238,10 +233,6 @@ angular.module('cycloneApp')
                 // ADD new entry into DB
                 //
 
-                console.log("I AM HERE");
-                console.log(this.newEntryText);
-
-                var entries = this.entries;
                 this.entries.$add({
                     text: this.newEntryText,
                     project: this.newEntryProject,
@@ -357,22 +348,22 @@ angular.module('cycloneApp')
             }
 
             // Clone text and project to current timer
-            this.cloneEntry = function () {
-                console.log(this.entry);
-                this.newEntryText = this.entry.text;
-                this.newEntryProject = this.entry.project;
-                this.newEntryType = this.entry.type;
-                this.newEntryGroup = this.entry.group;
+            this.cloneEntry = function (entry) {
+                console.log(entry);
+                ctrl.newEntryText = entry.text;
+                ctrl.newEntryProject = entry.project;
+                ctrl.newEntryType = entry.type;
+                ctrl.newEntryGroup = entry.group;
             };
 
             // Continue task feature (tracks current timer and continues with the selected one)
             this.continueEntry = function (entry) {
                 console.log(entry);
-                this.newContinueEntryProject = entry.project;
-                this.newContinueEntryText = entry.text;
-                this.newContinueEntryType = entry.type;
-                this.newContinueEntryGroup = entry.group;
-                this.addEntry();
+                ctrl.newContinueEntryProject = entry.project;
+                ctrl.newContinueEntryText = entry.text;
+                ctrl.newContinueEntryType = entry.type;
+                ctrl.newContinueEntryGroup = entry.group;
+                ctrl.addEntry();
             };
 
             // /**
@@ -412,20 +403,20 @@ angular.module('cycloneApp')
 
 
             // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
-            this.deleteEntry = function () {
+            this.deleteEntry = function (entry) {
                 // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
-                var deleteEntryTimestampStart = this.entry.timestampStart;
-                var deleteEntryKey = this.entry.$id;
-                var deleteEntryIndex = this.entries.$indexFor(deleteEntryKey); // returns location in the array
+                var deleteEntryTimestampStart = entry.timestampStart;
+                var deleteEntryKey = entry.$id;
+                var deleteEntryIndex = ctrl.entries.$indexFor(deleteEntryKey); // returns location in the array
 
                 //
                 // prepare update next entry
                 //
-                var nextEntryKey = this.entries.$keyAt(deleteEntryIndex - 1); // next entry (if existing)
-                var nextEntry = this.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
+                var nextEntryKey = ctrl.entries.$keyAt(deleteEntryIndex - 1); // next entry (if existing)
+                var nextEntry = ctrl.entries.$getRecord(nextEntryKey); // record with $id === nextEntryKey or null
 
                 // Delete entry, and update the next one
-                this.entries.$remove(this.entry).then(function (ref) {
+                ctrl.entries.$remove(entry).then(function (ref) {
                     // Which id and location did we remove? We need to check the next entry to update the duration of it!
                     var deletedEntryKey = ref.key;
 
@@ -435,7 +426,7 @@ angular.module('cycloneApp')
                         // Update the duration entry
                         nextEntry.timestampDuration = calculateDuration(nextEntry);
                         // Save nextEntry
-                        this.entries.$save(nextEntry).then(function (queryRef) {
+                        ctrl.entries.$save(nextEntry).then(function (queryRef) {
                             // data has been saved to our database
                             console.log("(removed) nextEntry saved with index" + queryRef.key)
                         });
