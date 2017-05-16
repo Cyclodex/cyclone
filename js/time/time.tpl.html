@@ -320,26 +320,26 @@
                     <md-subheader layout-padding>
                         <strong>{{Group}}</strong>
                         <span>
-                                <md-button class="md-fab md-primary md-mini"
+                            <md-button class="md-fab md-primary md-mini"
                                            aria-label="Continue Group"
                                            ng-if="addEntryEnabled"
                                            ng-click="continueGroup(GroupData)">
                                     <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
                                     <md-icon>play_arrow</md-icon>
                                 </md-button>
-                            </span>
+                        </span>
                         <span>
-                                <md-button class="md-fab md-primary md-mini"
-                                           aria-label="Add current timer to this Group"
-                                           ng-if="addEntryEnabled"
-                                           ng-click="addEntryToGroup(GroupData)">
-                                    <md-tooltip md-direction="top">
-                                        Track current timer into this group
-                                    </md-tooltip>
-                                    <md-icon>add</md-icon>
-                                </md-button>
-                            </span>
-                        <md-button class="md-icon-button">
+                            <md-button class="md-fab md-primary md-mini"
+                                       aria-label="Add current timer to this Group"
+                                       ng-if="addEntryEnabled"
+                                       ng-click="addEntryToGroup(GroupData)">
+                                <md-tooltip md-direction="top">
+                                    Track current timer into this group
+                                </md-tooltip>
+                                <md-icon>add</md-icon>
+                            </md-button>
+                        </span>
+                        <span>
                             <md-checkbox aria-label="GroupsChecked"
                                          ng-click="updateGroup(GroupData);"
                                          ng-checked="GroupData.checkedState"
@@ -350,7 +350,7 @@
                                 <span ng-if="!GroupData.checkedState">Check all</span>
                                 <span ng-if="GroupData.checkedState">Un-check all</span>
                             </md-tooltip>
-                        </md-button>
+                        </span>
                     </md-subheader>
                     <div class="group__time-information">
                         <div class="group__time-information__row">
