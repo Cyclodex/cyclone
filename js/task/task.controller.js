@@ -448,17 +448,10 @@ angular.module('cycloneApp')
                 // Iterate over all the data and prepare new object
                 snapshot.forEach(function (data) {
                     entry = data.val();
-
                     var projectName = entry.project;
-                    var groupId = entry.group;
+                    var groupId   = entry.group || '-';
+                    var groupType = entry.type || '';
 
-
-                    // No auto creating of group / task anymore
-                    if (!groupId) {
-                        /*console.log('groupID not set, auto creating it.');
-                        groupId = projectName + '-' + projectTask;*/
-                        groupId = '-';
-                    }
 
                     // Make sure the elements are set
                     // The groups
@@ -475,6 +468,7 @@ angular.module('cycloneApp')
                         groupsNew[groupId].durationChecked = 0;
                         groupsNew[groupId].group = groupId;
                         groupsNew[groupId].project = projectName;
+                        groupsNew[groupId].type = groupType;
                         groupsNew[groupId].showDetails = true; // Show details per default
                         console.log('GroupID created:' + groupId);
                     }
@@ -562,6 +556,7 @@ angular.module('cycloneApp')
                     var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                     Entry.project = taskData.project;
                     Entry.group = taskData.group;
+                    Entry.type = taskData.type;
                     // Save Entry
                     this.entries.$save(Entry).then(function (queryRef) {
                         // data has been saved to our database

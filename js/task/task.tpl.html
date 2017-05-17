@@ -275,7 +275,7 @@
                      ng-if="GroupData.group"
                      layout="column"
                      layout-align="start stretch"
-                     class="task">
+                     class="task project-type--{{GroupData.type}}" >
                 <md-card layout="row">
 
                     <!-- Checkbox -->
@@ -340,6 +340,17 @@
                                        autocomplete="Task"
                                        ng-model-options="{updateOn: 'blur'}"
                                 />
+                            </md-input-container>
+
+                            <!-- Type -->
+                            <md-input-container>
+                                <md-select ng-model="GroupData.type"
+                                           aria-label="Type of the entry"
+                                           ng-change="$ctrl.updateGroupData(GroupData)" >
+                                    <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
+                                        {{type.name}}
+                                    </md-option>
+                                </md-select>
                             </md-input-container>
 
                             <!-- Time information -->
