@@ -280,14 +280,13 @@
 
                     <!-- Checkbox -->
                     <!-- TODO: The checkbox does not copy the correct time, because its updated already so it seems. -->
-                    <div>
+                    <div class="task__checkbox">
                         <md-checkbox aria-label="GroupsChecked"
-                                     ng-click="$ctrl.updateGroupStatus(GroupData)"
                                      ng-checked="GroupData.checkedState"
                                      md-indeterminate="GroupData.indeterminate"
                                      clipboard
                                      text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                                     on-copied="$ctrl.copySuccess()"
+                                     on-copied="$ctrl.copySuccess(); $ctrl.updateGroupStatus(GroupData)"
                                      on-error="$ctrl.copyFail(err)"
                                      class="md-primary">
                         </md-checkbox>
@@ -297,7 +296,7 @@
                         </md-tooltip>
                     </div>
 
-                    <div class="entry" layout="column">
+                    <div class="entry entry--group" layout="column">
                         <div class="entry__info" layout="row">
 
                             <!-- Detail toggler -->
@@ -415,15 +414,16 @@
 
 
                         </div> <!-- END of entry__info -->
-                        <div class="entry__tasks"
+                        <div class="entry__details"
                              layout="row"
                              layout-align="start start"
                              ng-if="GroupData.showDetails">
-                            <div ng-repeat="entry in GroupData.tasks"
+                            <!-- entries -->
+                            <div ng-repeat="(entryKey, entry) in GroupData.tasks"
                                  layout="row"
                                  layout-align="start stretch"
                                  layout-align-gt-md="space-around stretch"
-                                 class="entry project-type--{{entry.type}}"
+                                 class="entry task__group__entry project-type--{{entry.type}}"
                                  ng-class="{true: 'done', false: ''}[entry.checked == true]"
                             >
                                 <md-card
@@ -431,11 +431,16 @@
                                         layout-align="center center"
                                         flex="none"
                                 >
-                                    <!-- entries -->
                                     <div layout=column layout-align="space-between">
-                                        <div>
-                                            {{ entry.text}}
-                                        </div>
+                                        <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                                            <input ng-model="entry.text"
+                                                   ng-change="$ctrl.updateEntry(entryKey, entry)"
+                                                   type="text"
+                                                   class="validate"
+                                                   aria-label="Task description"
+                                                   placeholder="Task description"
+                                                   autocomplete="task description"/>
+                                        </md-input-container>
                                         <div class="entry__time-information">
                                             <div class="duration duration--human">
                                                 <span>{{ entry.timestampDuration | humanizeDate  }}</span>
@@ -446,6 +451,16 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Delete task entry -->
+                                    <md-button ng-click="$ctrl.deleteEntryHelper(entryKey)"
+                                               class="task__group__entry__delete"
+                                               aria-label="Delete entry">
+                                        <md-tooltip md-direction="top">
+                                            Delete task
+                                        </md-tooltip>
+                                        <md-icon>close</md-icon>
+                                    </md-button>
                                 </md-card>
                             </div>
                         </div>

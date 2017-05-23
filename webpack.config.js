@@ -48,6 +48,7 @@ module.exports = {
             host: 'localhost',
             port: 3000,
             files: ["public/*.html"],
+            ghostMode: false, // Don't sync events over different browsers
             server: { baseDir: ['public'] }
         })
     ]

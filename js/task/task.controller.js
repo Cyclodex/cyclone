@@ -392,19 +392,36 @@ angular.module('cycloneApp')
 
             // Add the current timer to this group
             this.addEntryToGroup = function (GroupTaskData) {
-                console.log(GroupTaskData);
                 this.newEntryGroup = GroupTaskData.group;
+                // TODO: Should we warn user, if he adds different project name than in group?
+                // Take over project
+                if (angular.isUndefined(this.newEntryProject) || !this.newEntryProject ) {
+                    this.newEntryProject = GroupTaskData.project;
+                }
+                // TODO: Should we warn user, if he adds different type than in group?
+                // Take over type
+                if (angular.isUndefined(this.newEntryType)) {
+                    this.newEntryType = GroupTaskData.type;
+                }
+                // TODO: Should we warn user, if he adds different group/task than current group?
                 this.addEntry();
             };
 
+            // Helper to make sure the $id is set for none-firebase entries
+            this.deleteEntryHelper = function(entryKey) {
+                var entry = ctrl.entries.$getRecord(entryKey);
+                // Now we should have all for deleting the entry with the global function
+                this.deleteEntry(entry);
+            };
 
-            // Delete an entry has some special tasks: Update the next (next in timeline, so after the deleting entry) start timesamp.
+            // TODO: Move this deleteEntry to a service or similar if possible (check ctrl.entries)
+            // TODO: But its the same as on time.controller... (general logic)
+            // Delete an entry has some special tasks: Update the next entry's start timestamp (next in timeline, so after the deleting entry).
             this.deleteEntry = function (entry) {
                 // Get the start timestamp of this entry, we will give this over to the next entry, so it fills the deleted gap again.
                 var deleteEntryTimestampStart = entry.timestampStart;
                 var deleteEntryKey = entry.$id;
                 var deleteEntryIndex = ctrl.entries.$indexFor(deleteEntryKey); // returns location in the array
-
                 //
                 // prepare update next entry
                 //
@@ -449,6 +466,7 @@ angular.module('cycloneApp')
                 snapshot.forEach(function (data) {
                     entry = data.val();
                     var projectName = entry.project;
+                    // TODO: Make groupID out of projectname + task (to prevent mixed projects with same task name)
                     var groupId   = entry.group || '-';
                     var groupType = entry.type || '';
 
@@ -563,6 +581,22 @@ angular.module('cycloneApp')
                         console.log("Entry (update Group) entry saved with index" + queryRef.key)
                     });
                 }
+            };
+
+
+            // Entry update. Needs the key and some data to merge with current Entry
+            this.updateEntry = function (entryKey, entryData) {
+                var Entry = this.entries.$getRecord(entryKey); // record with $id === nextEntryKey or null
+                Entry.project = entryData.project;
+                Entry.group = entryData.group;
+                Entry.type = entryData.type;
+                // Merge the entryData into the Entry object
+                Object.assign(Entry, entryData);
+                // Save Entry
+                this.entries.$save(Entry).then(function (queryRef) {
+                    // data has been saved to our database
+                    console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                });
             };
 
             //

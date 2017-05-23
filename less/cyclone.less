@@ -133,19 +133,19 @@
         padding-top: 20px;
     }
 
-    .project-type--work md-card{
+    .project-type--work > md-card{
         background-color: lightyellow;
         border-bottom: 2px solid orange;
     }
-    .project-type--internal md-card {
+    .project-type--internal > md-card {
         background-color: #ffdb6e;
         border-bottom: 2px solid orange;
     }
-    .project-type--trust md-card{
+    .project-type--trust > md-card{
         background-color: #e1c2e6;
         border-bottom: 2px solid #9724e6;
     }
-    .project-type--private md-card{
+    .project-type--private > md-card{
         background-color: lightblue;
         border-bottom: 2px solid blue;
     }
@@ -495,3 +495,22 @@ button.dayVisualize-entry.md-button:hover {
     }
 }
 
+.task__group__entry__delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    min-width: unset;
+}
+
+.task__group__entry {
+    margin: 5px;
+}
+
+.task__group__entry md-card {
+    padding: 5px 40px 5px 5px;
+}
+
+.entry__details {
+    flex-wrap: wrap;
+}
