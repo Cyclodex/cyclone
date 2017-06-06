@@ -13,7 +13,7 @@ angular.module('cycloneApp')
             addEntryForm: '=', // This binds the form, but would need further changes still
             newEntryProject: '<',
             newEntryText: '<',
-            newEntryGroup: '<',
+            newEntryTask: '<',
             newEntryManualTime: '<',
             firebaseRef: '<'
         }, // Notice the binding on the router! (its currentUser.user)
@@ -220,9 +220,9 @@ angular.module('cycloneApp')
                     this.newEntryText = '';
                 }
 
-                // newEntryGroup
-                if (this.newEntryGroup === undefined) {
-                    this.newEntryGroup = '';
+                // newEntryTask
+                if (this.newEntryTask === undefined) {
+                    this.newEntryTask = '';
                 }
 
                 //
@@ -232,7 +232,8 @@ angular.module('cycloneApp')
                 this.entries.$add({
                     text: this.newEntryText,
                     project: this.newEntryProject,
-                    group: this.newEntryGroup,
+                    group: '', // TODO: don't fill the group because its dynamic? Or define it before saving?
+                    task: this.newEntryTask,
                     checked: false,
                     type: this.newEntryType,
                     timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
@@ -245,7 +246,7 @@ angular.module('cycloneApp')
                     // Clear the input fields again
                     ctrl.newEntryText = '';
                     ctrl.newEntryProject = '';
-                    ctrl.newEntryGroup = '';
+                    ctrl.newEntryTask = '';
                     ctrl.newEntryManualTime = '';
                     ctrl.newEntryType = 'work';
 
@@ -259,9 +260,9 @@ angular.module('cycloneApp')
                         ctrl.newEntryText = ctrl.newContinueEntryText;
                         ctrl.newContinueEntryText = ''; // Clear it again
                     }
-                    if (ctrl.newContinueEntryGroup !== undefined) {
-                        ctrl.newEntryGroup = ctrl.newContinueEntryGroup;
-                        ctrl.newContinueEntryGroup = ''; // Clear it again
+                    if (ctrl.newContinueEntryTask !== undefined) {
+                        ctrl.newEntryTask = ctrl.newContinueEntryTask;
+                        ctrl.newContinueEntryTask = ''; // Clear it again
                     }
                     if (ctrl.newContinueEntryType !== undefined) {
                         ctrl.newEntryType = ctrl.newContinueEntryType;
@@ -344,13 +345,12 @@ angular.module('cycloneApp')
             }
 
             // Clone text and project to current timer
-            this.cloneEntry = function (entry) {
-                console.log(entry);
+            /*this.cloneEntry = function (entry) {
                 ctrl.newEntryText = entry.text;
                 ctrl.newEntryProject = entry.project;
                 ctrl.newEntryType = entry.type;
-                ctrl.newEntryGroup = entry.group;
-            };
+                ctrl.newEntryTask = entry.task;
+            };*/
 
             // Continue task feature (tracks current timer and continues with the selected one)
             this.continueEntry = function (entry) {
@@ -358,7 +358,7 @@ angular.module('cycloneApp')
                 ctrl.newContinueEntryProject = entry.project;
                 ctrl.newContinueEntryText = entry.text;
                 ctrl.newContinueEntryType = entry.type;
-                ctrl.newContinueEntryGroup = entry.group;
+                ctrl.newContinueEntryTask = entry.task;
                 ctrl.addEntry();
             };
 
@@ -371,7 +371,8 @@ angular.module('cycloneApp')
             //  * Calls this.continueEntry(task) from above.
             //
 
-            this.continueGroup = function (GroupTaskData) {
+            // Continue is disabled
+/*            this.continueGroup = function (GroupTaskData) {
                 // We just try to access any of the tasks (could be the first one because of the object
                 var oneOfTheTasks = GroupTaskData.tasks[Object.keys(GroupTaskData.tasks)[0]];
                 console.log("one of the tasks");
@@ -379,7 +380,7 @@ angular.module('cycloneApp')
 
                 // Continue this task
                 this.continueEntry(oneOfTheTasks);
-            };
+            };*/
 
             // Toggles the display of group details
             this.toggleDetails = function (GroupTaskData) {
@@ -392,18 +393,24 @@ angular.module('cycloneApp')
 
             // Add the current timer to this group
             this.addEntryToGroup = function (GroupTaskData) {
-                this.newEntryGroup = GroupTaskData.group;
-                // TODO: Should we warn user, if he adds different project name than in group?
+                // TODO: do we need the group?
+                // this.newEntryGroup = GroupTaskData.group;
+
+                // Take over text
+                if (angular.isUndefined(this.newEntryText) || !this.newEntryText ) {
+                    this.newEntryText = GroupTaskData.text;
+                }
+
+                // TODO: Should we warn user, if he adds different projectname/type/task than current group?
                 // Take over project
-                if (angular.isUndefined(this.newEntryProject) || !this.newEntryProject ) {
-                    this.newEntryProject = GroupTaskData.project;
-                }
-                // TODO: Should we warn user, if he adds different type than in group?
+                this.newEntryProject = GroupTaskData.project;
+
+                // Take over task
+                this.newEntryTask = GroupTaskData.task;
+
                 // Take over type
-                if (angular.isUndefined(this.newEntryType)) {
-                    this.newEntryType = GroupTaskData.type;
-                }
-                // TODO: Should we warn user, if he adds different group/task than current group?
+                this.newEntryType = GroupTaskData.type;
+
                 this.addEntry();
             };
 
@@ -465,10 +472,10 @@ angular.module('cycloneApp')
                 // Iterate over all the data and prepare new object
                 snapshot.forEach(function (data) {
                     entry = data.val();
-                    var projectName = entry.project;
-                    // TODO: Make groupID out of projectname + task (to prevent mixed projects with same task name)
-                    var groupId   = entry.group || '-';
+                    var projectName = entry.project || '';
+                    var taskName = entry.task || '';
                     var groupType = entry.type || '';
+                    var groupId   = projectName + '_' + groupType  + '_' + taskName || '-';
 
 
                     // Make sure the elements are set
@@ -485,6 +492,7 @@ angular.module('cycloneApp')
                         groupsNew[groupId].durationNotChecked = 0;
                         groupsNew[groupId].durationChecked = 0;
                         groupsNew[groupId].group = groupId;
+                        groupsNew[groupId].task = taskName;
                         groupsNew[groupId].project = projectName;
                         groupsNew[groupId].type = groupType;
                         groupsNew[groupId].showDetails = true; // Show details per default
@@ -514,10 +522,12 @@ angular.module('cycloneApp')
                         // all tasks are checked
                         groupsNew[groupId].checkedState = true;
                         groupsNew[groupId].indeterminate = false;
+                        groupsNew[groupId].showDetails = false;
                     } else {
                         // amount of tasks checked is not amount of tasks, means mixed
                         groupsNew[groupId].checkedState = false;
                         groupsNew[groupId].indeterminate = true;
+                        groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
                     }
 
                 });
@@ -573,7 +583,9 @@ angular.module('cycloneApp')
                 for (var taskKey in taskData.tasks) {
                     var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                     Entry.project = taskData.project;
+                    // TODO: do we need group?
                     Entry.group = taskData.group;
+                    Entry.task = taskData.task;
                     Entry.type = taskData.type;
                     // Save Entry
                     this.entries.$save(Entry).then(function (queryRef) {
@@ -589,6 +601,7 @@ angular.module('cycloneApp')
                 var Entry = this.entries.$getRecord(entryKey); // record with $id === nextEntryKey or null
                 Entry.project = entryData.project;
                 Entry.group = entryData.group;
+                Entry.task = entryData.task;
                 Entry.type = entryData.type;
                 // Merge the entryData into the Entry object
                 Object.assign(Entry, entryData);
