@@ -79,6 +79,7 @@ angular.module('cycloneApp')
 
             // build custom entries
             ctrl.entriesCurrentGroups = {};
+            ctrl.groupsChecked = {};
 
 
             // Call the data etc.
@@ -464,13 +465,15 @@ angular.module('cycloneApp')
             // Continued Task handler
             function updateContinuedTasks(snapshot) {
                 // We are always starting from scratch, we could also try to iterate over the
-                // this.entriesCurrentGroups but this would lead to more problems on text changes etc.
+                // ctrl.entriesCurrentGroups
 
                 var groups = {};
                 var groupsNew = {};
 
                 // Iterate over all the data and prepare new object
                 snapshot.forEach(function (data) {
+                    console.log("snaphsot data");
+                    console.log(data);
                     entry = data.val();
                     var projectName = entry.project || '';
                     var taskName = entry.task || '';
@@ -536,10 +539,11 @@ angular.module('cycloneApp')
                 for (var key in groupsNew) {
                     if (groupsNew.hasOwnProperty(key)) {
                         group = groupsNew[key];
-                        // TODO: I think we can remove this, everything is now a group
-                        /*if (group.amount === 1) {
+                        if (group.checkedState) {
+                            // Put done/checked tasks into new object
+                            ctrl.groupsChecked[key] = group;
                             delete groupsNew[key];
-                        }*/
+                        }
                     }
                     if (Object.keys(groupsNew).length == 0) {
                         delete groupsNew[key];
@@ -549,6 +553,7 @@ angular.module('cycloneApp')
                 console.log('new groups:');
                 console.log(groupsNew);
 
+                // // TODO: Should we make separate Groups for Open / Done tasks ?
                 ctrl.entriesCurrentGroups = groupsNew;
                 ctrl.doneLoadingGroups = true;
             }

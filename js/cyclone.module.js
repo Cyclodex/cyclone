@@ -1,4 +1,4 @@
-angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ui.router', 'angular-clipboard', 'angularMoment']);
+angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ui.router', 'angular-clipboard', 'angularMoment', 'ngAnimate']);
 
 // Make sure user is authenticated, otherwise send to login state
 angular.module("cycloneApp").run(function($transitions) {
