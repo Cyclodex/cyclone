@@ -467,13 +467,9 @@ angular.module('cycloneApp')
                 // We are always starting from scratch, we could also try to iterate over the
                 // ctrl.entriesCurrentGroups
 
-                var groups = {};
                 var groupsNew = {};
-
                 // Iterate over all the data and prepare new object
                 snapshot.forEach(function (data) {
-                    console.log("snaphsot data");
-                    console.log(data);
                     entry = data.val();
                     var projectName = entry.project || '';
                     var taskName = entry.task || '';
@@ -515,38 +511,38 @@ angular.module('cycloneApp')
                         groupsNew[groupId].durationNotChecked += entry.timestampDuration;
                     }
 
-                    // Verifying the "checked" state
-                    // TODO: This will happen on every task, it would be better to do it in the end, on the last iteration.
-                    if (groupsNew[groupId].amountChecked == 0) {
-                        // not checked
-                        groupsNew[groupId].checkedState = false;
-                        groupsNew[groupId].indeterminate = false;
-                    } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
-                        // all tasks are checked
-                        groupsNew[groupId].checkedState = true;
-                        groupsNew[groupId].indeterminate = false;
-                        groupsNew[groupId].showDetails = false;
-                    } else {
-                        // amount of tasks checked is not amount of tasks, means mixed
-                        groupsNew[groupId].checkedState = false;
-                        groupsNew[groupId].indeterminate = true;
-                        groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
-                    }
-
                 });
 
                 // Clean up the end result of groups
-                for (var key in groupsNew) {
-                    if (groupsNew.hasOwnProperty(key)) {
-                        group = groupsNew[key];
-                        if (group.checkedState) {
-                            // Put done/checked tasks into new object
-                            ctrl.groupsChecked[key] = group;
-                            delete groupsNew[key];
+                for (var groupId in groupsNew) {
+                    if (groupsNew.hasOwnProperty(groupId)) {
+                        // Verifying the "checked" state
+                        if (groupsNew[groupId].amountChecked == 0) {
+                            // not checked
+                            groupsNew[groupId].checkedState = false;
+                            groupsNew[groupId].indeterminate = false;
+
+                            delete ctrl.groupsChecked[groupId];
+                        } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
+                            // all tasks are checked
+                            groupsNew[groupId].checkedState = true;
+                            groupsNew[groupId].indeterminate = false;
+                            groupsNew[groupId].showDetails = false;
+
+                            // Place entry and remove from other
+                            ctrl.groupsChecked[groupId] = groupsNew[groupId];
+                            delete groupsNew[groupId];
+                        } else {
+                            // amount of tasks checked is not amount of tasks, means mixed
+                            groupsNew[groupId].checkedState = false;
+                            groupsNew[groupId].indeterminate = true;
+                            groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
+
+                            delete ctrl.groupsChecked[groupId];
                         }
                     }
                     if (Object.keys(groupsNew).length == 0) {
-                        delete groupsNew[key];
+                        delete groupsNew[groupId];
                     }
                 }
 

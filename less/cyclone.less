@@ -577,3 +577,29 @@ button.dayVisualize-entry.md-button:hover {
         min-width: 140px;
     }
 }
+
+// Trying out crazy animation stuff
+// https://codepen.io/jonespen/pen/avBZpO
+// https://docs.angularjs.org/api/ngAnimate
+.card {
+    &.ng-anchor {
+        /* this animation will last for 1 second since there are
+               two phases to the animation (an `in` and an `out` phase) */
+        transition:0.5s linear all;
+    }
+    &.ng-leave {
+        opacity: 1.0 ;
+        transition: 1000ms linear all;
+    }
+
+    &.ng-leave-active {
+        opacity: 0.0 ;
+    }
+    &.ng-enter {
+        transition: 1000ms linear all;
+        height: 0;
+    }
+    &.ng-enter-active {
+        height: 73px;
+    }
+}

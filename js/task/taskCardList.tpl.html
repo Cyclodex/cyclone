@@ -6,7 +6,9 @@
 <md-card layout="row" ng-repeat="(Group, GroupData) in $ctrl.data"
          ng-if="GroupData.group"
          layout-align="start stretch"
-         class="card task project-type--{{GroupData.type}}" >
+         class="card task project-type--{{GroupData.type}}"
+         >
+         <!--ng-animate-ref="{{ Group }}"-->
 
     <!-- Checkbox -->
     <div class="task__checkbox">
