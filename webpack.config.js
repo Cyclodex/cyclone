@@ -23,6 +23,11 @@ module.exports = {
             'firebase/auth', 'firebase/database', 'angularfire'
         ]
     },
+    resolve: {
+        alias: {
+            config: path.join(__dirname, '/js/config/config.js'),
+        },
+    },
     output: {
         path: __dirname + '/public/build/',
         filename: "cyclone.js"
@@ -50,6 +55,11 @@ module.exports = {
             files: ["public/*.html"],
             ghostMode: false, // Don't sync events over different browsers
             server: { baseDir: ['public'] }
+        }),
+        new webpack.DefinePlugin({
+            'NODE_ENV': JSON.stringify('development'),
+            'PRODUCTION': JSON.stringify(false),
+            'FIREBASE_PRODUCTION': JSON.stringify(false)
         })
     ]
 };

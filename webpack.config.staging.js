@@ -45,9 +45,9 @@ module.exports = {
         new ExtractTextPlugin("cyclone.css"),
         new webpack.DefinePlugin({
             'process.env': {
-                'NODE_ENV': JSON.stringify('production'),
-                'PRODUCTION': JSON.stringify(true),
-                'FIREBASE_PRODUCTION': JSON.stringify(true)
+                'NODE_ENV': JSON.stringify('staging'),
+                'PRODUCTION': JSON.stringify(false),
+                'FIREBASE_PRODUCTION': JSON.stringify(false)
             }
         }),
         new ngAnnotatePlugin({
@@ -58,8 +58,8 @@ module.exports = {
                 warnings: false,
                 drop_console: false,
                 global_defs: {
-                    PRODUCTION: true,
-                    FIREBASE_PRODUCTION: true
+                    PRODUCTION: false,
+                    FIREBASE_PRODUCTION: false
                 }
             },
             debug: true,

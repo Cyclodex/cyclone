@@ -21,8 +21,15 @@ require('firebase/database');
 require('angularfire');
 var firebaseui = require('firebaseui');
 
+// Webpack loads the environment specific config file
+if (FIREBASE_PRODUCTION) {
+    require('./config/config.production.js');
+}
+if (!FIREBASE_PRODUCTION) {
+    require('./config/config.staging.js');
+}
+
 // Cyclone app files
-require('./config/config.js');
 require('./cyclone.module.js');
 require('./components/auth.factory.js');
 require('./components/firebase.factory.js');
