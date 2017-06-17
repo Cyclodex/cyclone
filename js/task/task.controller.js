@@ -18,8 +18,6 @@ angular.module('cycloneApp')
             firebaseRef: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
-            // DONE: currentUser, $scope, Auth, moment, timeTypesService, $firebaseArray, $rootScope, $stateParams, $state, $timeout
-            // UNSURE: focus
             var ctrl = this;
 
             // TODO: move "copy" out from here, into service something like that.
@@ -270,9 +268,6 @@ angular.module('cycloneApp')
                         ctrl.newContinueEntryType = 'work'; // Default it again
                     }
 
-                    // Focus First element now again, so we are ready to type an other task
-                    focus('newTaskProject');
-
                     // TODO: put the following logic into a function to get called also by other change options later
                     // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
                     var newEntryKey = queryRef.key;
@@ -305,6 +300,16 @@ angular.module('cycloneApp')
                         // data has been saved to our database
                         console.log("newEntry entry saved with index" + queryRef.key)
                     });
+
+                    // Focus First element now again, so we are ready to type an other task
+                    // NOTE: Doesn't work anymore
+                    // focus('newTaskProject');
+                    // TODO: How can I make this work in here, the factory is not yet available here
+                    // Functionality provided over focus.directive.js
+
+                    // Temporary solution, for setting focus again
+                    ctrl.focusNewEntryProject = true;
+
 
                     //
                     // update next entry

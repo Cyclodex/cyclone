@@ -51,15 +51,11 @@
             </md-card-title>
             <md-card-content>
                 <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
-                    <md-input-container flex="20">
-                        <input id="newTaskProject"
-                               type="text"
-                               ng-model="$ctrl.newEntryProject"
-                               autofocus
-                               focus-on="newTaskProject"
-                               aria-label="Project name of new task">
-                        <label for="newTaskProject">Project</label>
-                    </md-input-container>
+                    <autocomplete-project
+                            flex="20"
+                            project="$ctrl.newEntryProject"
+                            set-focus="$ctrl.focusNewEntryProject">
+                    </autocomplete-project>
 
                     <md-input-container flex="15">
                         <input id="newTaskName"

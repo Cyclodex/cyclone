@@ -43,6 +43,7 @@ require('./version/version.component.js');
 require('./components/login.component.js');
 require('./task/task.controller.js');
 require('./task/taskCardList.component.js');
+require('./components/autocomplete/autocompleteProject.component.js');
 
 // Testing component:
 require('./test/welcome.component.js');
