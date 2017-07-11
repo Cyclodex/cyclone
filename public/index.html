@@ -9,7 +9,7 @@
     <!-- Styling files -->
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
     <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- Our styling files -->
@@ -32,10 +32,14 @@
 <body translate="no">
 
 <div ng-app="cycloneApp" class="page page--timelog">
-    <ui-view></ui-view>
-    <ui-view name="content"></ui-view>
-    <ui-view name="footer"></ui-view>
-
+    <div layout="row" layout-xs="column">
+        <ui-view name="nav" flex class="navigation-left-side" md-colors="{background:'primary'}"></ui-view>
+        <div flex class="content">
+            <ui-view name="content" flex></ui-view>
+            <ui-view name="footer"></ui-view>
+            <ui-view></ui-view>
+        </div>
+    </div>
 
 </div>
 

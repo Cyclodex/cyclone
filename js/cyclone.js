@@ -32,6 +32,7 @@ if (!FIREBASE_PRODUCTION) {
 // Cyclone app files
 require('./cyclone.module.js');
 require('./components/auth.factory.js');
+require('./components/nav.component.js');
 require('./components/firebase.factory.js');
 require('./components/focus.directive.js');
 require('./components/order.filter.js');

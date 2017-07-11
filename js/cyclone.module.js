@@ -59,6 +59,9 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                 type: "today"
             },
             views: {
+                nav: {
+                    component: "nav",
+                },
                 content: {
                     controller: "TimeCtrl",
                     template: require('./time/time.tpl.html'),
@@ -90,6 +93,9 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                 type: "today"
             },
             views: {
+                nav: {
+                    component: "nav",
+                },
                 content: {
                     // controller: "TaskCtrl",
                     // template: require('./task/task.tpl.html'),

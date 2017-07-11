@@ -1,0 +1,16 @@
+<div class="nav" layout-padding>
+    <a ui-sref="time" class="nav__element">
+        <img class="cyclone-logo" src="/img/cycloneWhite.svg">
+    </a>
+    <a ui-sref="time" class="nav__element">
+        <md-icon>account_circle</md-icon>
+        Time
+    </a>
+    <a ui-sref="task" class="nav__element">
+        <md-icon>account_circle</md-icon>
+        Task
+    </a>
+    <div class="nav__element" ng-if="nextDateLink">
+        <span>Archive</span>
+    </div>
+</div>
