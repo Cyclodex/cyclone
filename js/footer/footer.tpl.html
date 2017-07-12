@@ -1,37 +1,3 @@
-<md-toolbar class="footer-stats__totals md-toolbar-tools"
- layout="column"
- layout-gt-sm="row"
- layout-align="space-between center"
->
-    <div flex="nogrow">
-        <!-- TODO: This is still the ProfileCtrl which should be its own component -->
-        <div ng-controller="ProfileCtrl" class="card-content white-text"
-         layout="row" layout-align="start center">
-            <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
-                <md-icon>account_circle</md-icon>
-                <span>{{ username }}</span>
-            </a>
-            <span ng-if="!username" class="status">{{ connection }}</span>
-            <div ng-show="ProfileOpen || !username" id="ProfileOpen" layout="row">
-                <a id="logoutButton"
-                 ng-click="logout()"
-                 class=""
-                 ng-show="username">
-                    <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
-                </a>
-                <div id="account-details" ng-show="userIsAdmin"></div>
-            </div>
-
-        </div>
-    </div>
-    <stats-total
-     work-total="$ctrl.statsTotalWork"
-     work-types="$ctrl.dayVisualizeWorkTypeTotals"
-     flex="grow"
-    ></stats-total>
-    <version-display></version-display>
-</md-toolbar>
-
 <!-- TODO: This would be rather its own component, but needs all the stats data in a service or similar -->
 <md-toolbar
  ng-show="$ctrl.refDayVisArray"

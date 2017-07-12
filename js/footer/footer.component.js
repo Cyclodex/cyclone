@@ -2,6 +2,7 @@ require('../stats/statsTotal.component.js');
 require('../user/profile.controller.js');
 // Footer display component
 // <footer-display></footer-display>
+// <footer-display class="footer-stats" ng-cloak></footer-display>
 //
 // Summary / Stats
 // TODO: We should use a service for the calculations and only have components

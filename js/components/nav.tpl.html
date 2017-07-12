@@ -1,16 +1,40 @@
-<div class="nav" layout-padding>
-    <a ui-sref="time" class="nav__element">
+<div class="nav" layout-padding layout="column" layout-align="center center">
+    <a ui-sref="task" class="nav__element">
         <img class="cyclone-logo" src="/img/cycloneWhite.svg">
     </a>
-    <a ui-sref="time" class="nav__element">
-        <md-icon>account_circle</md-icon>
-        Time
-    </a>
-    <a ui-sref="task" class="nav__element">
-        <md-icon>account_circle</md-icon>
-        Task
-    </a>
+    <!-- TODO: do we need timeline still? think about it -->
+    <md-button ng-disabled="true" ui-sref="time" class="nav__element">
+        <md-icon>timeline</md-icon>
+        <div>time</div>
+    </md-button>
+    <md-button ui-sref="task" class="nav__element">
+        <md-icon>playlist_add_check</md-icon>
+        <div>task</div>
+    </md-button>
+    <!-- STATS page ? -->
     <div class="nav__element" ng-if="nextDateLink">
-        <span>Archive</span>
+        <span>archive</span>
     </div>
+    <div flex="grow"></div>
+    <div flex="nogrow">
+        <!-- TODO: This is still the ProfileCtrl which should be its own component -->
+        <div ng-controller="ProfileCtrl" class="card-content white-text">
+            <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
+                <md-icon>account_circle</md-icon>
+                <span>{{ username }}</span>
+            </a>
+            <span ng-if="!username" class="status">{{ connection }}</span>
+            <div ng-show="ProfileOpen || !username" id="ProfileOpen">
+                <a id="logoutButton"
+                   ng-click="logout()"
+                   class=""
+                   ng-show="username">
+                    <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
+                </a>
+                <div id="account-details" ng-show="userIsAdmin"></div>
+            </div>
+
+        </div>
+    </div>
+    <version-display></version-display>
 </div>

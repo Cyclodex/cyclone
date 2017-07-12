@@ -23,7 +23,7 @@ angular.module("cycloneApp").run(function($transitions) {
 // Routing
 angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise("/time/today");
+    $urlRouterProvider.otherwise("/task/today");
 
     // Test route
     $stateProvider
@@ -32,9 +32,6 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
             views: {
                 content: {
                     component: 'welcome'
-                },
-                footer : {
-                    template: 'FOOTER!'
                 }
             }
         });
@@ -45,9 +42,6 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
             views: {
                 content: {
                     component: 'login'
-                },
-                footer : {
-                    template: ''
                 }
             }
         });
@@ -64,10 +58,7 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                 },
                 content: {
                     controller: "TimeCtrl",
-                    template: require('./time/time.tpl.html'),
-                },
-                footer: {
-                    template: '<footer-display class="footer-stats" ng-cloak></footer-display>'
+                    template: require('./time/time.tpl.html')
                 }
             },
             resolve: {
@@ -101,9 +92,6 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                     // template: require('./task/task.tpl.html'),
                     component: "task",
                     bindings: { user: 'currentUser.user' },
-                },
-                footer: {
-                    template: '<footer-display class="footer-stats" ng-cloak></footer-display>'
                 }
             },
             resolve: {
@@ -153,9 +141,6 @@ angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider)
                 content: {
                     controller: "TimeCtrl",
                     template: require('./time/time.tpl.html'),
-                },
-                footer: {
-                    template: '<footer-display class="footer-stats" ng-cloak></footer-display>'
                 }
             },
             resolve: {

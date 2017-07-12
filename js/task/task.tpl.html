@@ -4,19 +4,20 @@
      layout="row" layout-align="center center">
     <div flex="100"
          flex-gt-md="80">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <span flex></span>
-                <a ng-href="{{prevDateLink}}">
-                    <md-icon>keyboard_arrow_left</md-icon>
-                </a>
-                <h1 ng-if="!nextDateLink" class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>
-                <h1 ng-if="nextDateLink" class="inline">{{currentDate | date : "EEE d. MMM yyyy"}}</h1>
-                <a ng-if="nextDateLink" ng-href="{{nextDateLink}}">
-                    <md-icon>keyboard_arrow_right</md-icon>
-                </a>
-            </div>
-        </md-toolbar>
+        <!-- TODO: implement day switcher again -->
+        <!--<md-toolbar>-->
+            <!--<div class="md-toolbar-tools">-->
+                <!--<span flex></span>-->
+                <!--<a ng-href="{{prevDateLink}}">-->
+                    <!--<md-icon>keyboard_arrow_left</md-icon>-->
+                <!--</a>-->
+                <!--<h1 ng-if="!nextDateLink" class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>-->
+                <!--<h1 ng-if="nextDateLink" class="inline">{{currentDate | date : "EEE d. MMM yyyy"}}</h1>-->
+                <!--<a ng-if="nextDateLink" ng-href="{{nextDateLink}}">-->
+                    <!--<md-icon>keyboard_arrow_right</md-icon>-->
+                <!--</a>-->
+            <!--</div>-->
+        <!--</md-toolbar>-->
 
         <md-card ng-if="$ctrl.error">
             <md-card-title>
@@ -30,6 +31,7 @@
         </md-card>
 
         <!-- Add new entry -->
+        <!-- TODO: Make its own component for the ADD functionality and separate from the view -->
         <md-card flex="nogrow">
             <md-card-title>
                 <div class="md-headline">
@@ -99,156 +101,6 @@
                 </form>
             </md-card-content>
         </md-card>
-
-        <!--<div class="task__entries">
-            <div ng-repeat="entry in $ctrl.entries"
-                 layout="column"
-                 layout-align="stretch center"
-                 class="row project-type&#45;&#45;{{entry.type}}"
-                 ng-class="[{true: 'done', false: ''}[entry.checked == true]]"
-            >
-                &lt;!&ndash;<div ng-if="!$last || entry.type !== 'system'"&ndash;&gt;
-                <div class="entry"
-                     layout="row">
-                    <md-card layout="column"
-                             layout-align="space-around"
-                             layout-gt-xs="row"
-                             flex="none"
-                             class="entry-card"
-                             ng-class="[{true: 'done', false: ''}[entry.checked == true]]">
-                        <div class="entry__checked">
-                            &lt;!&ndash; Checkbox in front of the line &ndash;&gt;
-                            <md-button
-                                    clipboard
-                                    class="entry__checked__button md-raised md-primary md-button md-ink-ripple"
-                                    ng-if="!entry.checked"
-                                    text="entry.timestampDuration / 1000 / 60 / 60 | number : 2"
-                                    on-copied="copySuccess(); updateSingleEntry(entry);"
-                                    on-error="copyFail(err)"
-                                    aria-label="Check entry and copy time"
-                                    class="md-raised md-button md-ink-ripple">
-                                <md-tooltip md-direction="left">
-                                    Check & copy time
-                                </md-tooltip>
-                                {{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }} h
-                            </md-button>
-                            <md-button
-                                    ng-if="entry.checked"
-                                    class="entry__checked__button"
-                                    ng-click="entry.checked = false; $ctrl.entries.$save(entry);"
-                                    aria-label="remove check from entry">
-                                <md-tooltip md-direction="left">
-                                    Uncheck
-                                </md-tooltip>
-                                <md-icon
-                                        class="material-icons md-primary"
-                                >check_box</md-icon>
-                            </md-button>
-                        </div>
-
-                        &lt;!&ndash; Project &ndash;&gt;
-                        <md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;project">
-                            <input ng-model="entry.project"
-                                   ng-change="$ctrl.entries.$save(entry)"
-                                   id="project"
-                                   type="text"
-                                   aria-label="project"
-                                   placeholder="Project"
-                                   autocomplete="Project"/>
-                        </md-input-container>
-
-                        &lt;!&ndash; Showing the task name assigned (group)&ndash;&gt;
-                        <md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;task md-icon-float md-icon-left">
-                            <input ng-model="entry.group"
-                                   ng-change="$ctrl.entries.$save(entry)"
-                                   id="group"
-                                   type="text"
-                                   class="validate"
-                                   aria-label="Task"
-                                   placeholder="Task"/>
-                        </md-input-container>
-
-                        &lt;!&ndash; Description&ndash;&gt;
-                        &lt;!&ndash; TODO: Description is not listed for every group, but groups list all descriptions of all entries&ndash;&gt;
-                        &lt;!&ndash;<md-input-container md-no-float class="entry__info__input entry__info__input&#45;&#45;text">
-                            <input ng-model="entry.text"
-                                   ng-change="$ctrl.entries.$save(entry)"
-                                   id="text"
-                                   type="text"
-                                   class="validate"
-                                   aria-label="Description"
-                                   placeholder="Description"
-                                   autocomplete="Description"/>
-                        </md-input-container>&ndash;&gt;
-
-                        &lt;!&ndash; Entry type &ndash;&gt;
-                        <div class="entry__type">
-                            <md-input-container>
-                                &lt;!&ndash;<label>Type</label>&ndash;&gt;
-                                <md-select ng-model="entry.type"
-                                           aria-label="Type of entry"
-                                           ng-keydown="$event.which === 13 && addEntry()">
-                                    <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
-                                        {{type.name}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-                        </div>
-
-                        &lt;!&ndash; Time information &ndash;&gt;
-                        <div class="entry__time-information" layout=row layout-align="start center">
-                            <div class="duration duration&#45;&#45;human">
-                                <span>{{ entry.timestampDuration | humanizeDate  }}</span>
-                            </div>
-                        </div>
-
-                        &lt;!&ndash; Actions &ndash;&gt;
-                        <div layout=column layout-align="start">
-                            <div class="entry__options">
-                                <div layout=row layout-align="space-around center">
-                                    &lt;!&ndash; Copy button &ndash;&gt;
-                                    <div>
-                                        <a class=""
-                                           ng-click="$ctrl.cloneEntry(entry)">
-                                            <md-button class="md-fab md-primary md-mini" aria-label="Use task">
-                                                <md-tooltip md-direction="top">
-                                                    Use this project & description for current timer
-                                                </md-tooltip>
-                                                <md-icon>add</md-icon>
-                                            </md-button>
-                                        </a>
-                                    </div>
-
-                                    &lt;!&ndash; Continue button &ndash;&gt;
-                                    <div>
-                                        <a class=""
-                                           ng-click="$ctrl.continueEntry(entry)">
-                                            <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
-                                                <md-tooltip md-direction="top">
-                                                    Track current timer and continue now on this task
-                                                </md-tooltip>
-                                                <md-icon>play_arrow</md-icon>
-                                            </md-button>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <md-button ng-click="$ctrl.deleteEntry(entry);"
-                                                   class="md-fab md-mini"
-                                                   aria-label="Delete entry">
-                                            <md-tooltip md-direction="top">
-                                                Delete
-                                            </md-tooltip>
-                                            <md-icon>delete_forever</md-icon>
-                                        </md-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </md-card>
-                </div>
-            </div>
-
-        </div>-->
 
         <div class="cyclone-table cyclone-table--tasks" flex="grow">
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">

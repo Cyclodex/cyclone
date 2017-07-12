@@ -5,7 +5,7 @@ angular.module('cycloneApp').factory('versionService', [function() {
     }
 
     VersionService.prototype.getVersion = function() {
-        var version = '0.48 | 14.05.2017';
+        var version = '0.50 | 13.07.2017';
         if (!PRODUCTION) {
             if (FIREBASE_PRODUCTION) {
                 return version + ' (PRODUCTION DB)';

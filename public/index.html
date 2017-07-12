@@ -31,12 +31,15 @@
 
 <body translate="no">
 
-<div ng-app="cycloneApp" class="page page--timelog">
-    <div layout="row" layout-xs="column">
-        <ui-view name="nav" flex class="navigation-left-side" md-colors="{background:'primary'}"></ui-view>
-        <div flex class="content">
-            <ui-view name="content" flex></ui-view>
-            <ui-view name="footer"></ui-view>
+<div ng-app="cycloneApp" class="page page--time-line">
+    <div>
+        <ui-view
+                name="nav"
+                class="navigation-left-side"
+                md-colors="{background:'primary'}"
+        ></ui-view>
+        <div class="page-content">
+            <ui-view name="content"></ui-view>
             <ui-view></ui-view>
         </div>
     </div>
