@@ -1,7 +1,8 @@
 angular.module('cycloneApp').component('autocompleteProject', {
     template: require('./autocompleteProject.tpl.html'),
     require: {
-        task: '^^'
+        task: '?^^',
+        timeline: '?^^'
     },
     bindings: {
         project: '<',
@@ -18,6 +19,13 @@ angular.module('cycloneApp').component('autocompleteProject', {
         // Initial values
         this.$onInit = function() {
             self.setFocus = false;
+
+            // This is for sure the wrong way, but I am learning so its fine for now.
+            // This makes this component work also in the timeline.
+            // TODO: I need to learn how such components need to be done correctly.
+            if (this.task === null ){
+                this.task = this.timeline;
+            }
         };
 
         // Act on changes from outside
