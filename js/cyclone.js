@@ -42,7 +42,7 @@ require('./footer/footer.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');
 require('./components/login.component.js');
-require('./task/task.controller.js');
+require('./task/task.component.js');
 require('./task/taskCardList.component.js');
 require('./components/autocomplete/autocompleteProject.component.js');
 
