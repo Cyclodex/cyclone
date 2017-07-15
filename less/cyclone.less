@@ -134,28 +134,28 @@
     }
 
     .project-type--work {
-        &.card,
+        .task__identifier,
         .entry-card {
             background-color: lightyellow;
             border-bottom: 2px solid orange;
         }
     }
     .project-type--internal {
-        &.card,
+        .task__identifier,
         .entry-card {
             background-color: #ffdb6e;
             border-bottom: 2px solid orange;
         }
     }
     .project-type--trust {
-        &.card,
+        .task__identifier,
         .entry-card {
             background-color: #e1c2e6;
             border-bottom: 2px solid #9724e6;
         }
     }
     .project-type--private {
-        &.card,
+        .task__identifier,
         .entry-card {
             background-color: lightblue;
             border-bottom: 2px solid blue;
@@ -541,9 +541,16 @@ button.dayVisualize-entry.md-button:hover {
     }
 
     .task__checkbox {
-        position: absolute;
-        left: -40px;
-        transform: translateY(50%);
+        position: relative;
+        width: 30px;
+
+        md-checkbox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+        }
     }
 
     ._md-select-value {
