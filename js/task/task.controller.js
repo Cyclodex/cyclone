@@ -84,25 +84,25 @@ angular.module('cycloneApp')
             // New grouped current time entries
             // TODO: Of course it would be even better to not have to reference the user
             // But we have it already, seems to be strange to promise again the userPromise...
-            // Because we have the user here alredy.
-            var queryGroupRef = this.firebaseRef.getReference(this.user);
+            // Because we have the user here already.
+            var queryRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
-            var queryGroup = queryGroupRef.orderByChild("order");
+            var query = queryRef.orderByChild("order");
 
             // CONTINUE TASK
             // Update the groups on load and all changes of the child data
-            // queryGroup.once('value').then(function(snapshot) {
-            // queryGroup.on('child_changed', function(snapshot) {
-            queryGroup.on('value', function (snapshot) {
+            // query.once('value').then(function(snapshot) {
+            // query.on('child_changed', function(snapshot) {
+            query.on('value', function (snapshot) {
                 updateContinuedTasks(snapshot);
             });
 
-            // TODO: I don't need too calls anymore, we just will do it once, and then create the output of it
+            // TODO: I don't need 2 calls anymore, we just will do it once, and then create the output of it
             // Timelog entries:
-            var queryRef = this.firebaseRef.getReference(this.user);
+            // var queryRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
             // However this only works with the orderBy in the template right now.
-            var query = queryRef.orderByChild("order");
+            // var query = queryRef.orderByChild("order");
 
             // Create a synchronized array
             this.entries = this.$firebaseArray(query);
@@ -159,13 +159,6 @@ angular.module('cycloneApp')
                 var timestamp = Date.now();
                 var duration = cleanupDuration(timestamp - this.lastEntryTimestamp);
                 var start = this.lastEntryTimestamp;
-
-                // If the form is not valid, don't add content.
-                // TODO: This is not working anymore
-                // if (this.addEntryForm.$invalid){
-                //     console.log("entry was not added");
-                //     return false;
-                // }
 
                 // Check if we need to add some manual end time.
                 if (this.newEntryManualTime !== undefined &&
