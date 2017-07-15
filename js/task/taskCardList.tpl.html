@@ -1,6 +1,6 @@
 <div class="md-toolbar-tools">
     <h1>
-        <md-icon>featured_play_list</md-icon> {{ $ctrl.title }}
+        <md-icon>featured_play_list</md-icon> {{ $ctrl.listTitle }}
     </h1>
 </div>
 <md-card layout="row" ng-repeat="(Group, GroupData) in $ctrl.data"
@@ -11,24 +11,29 @@
          <!--ng-animate-ref="{{ Group }}"-->
 
     <!-- Checkbox -->
-    <div class="task__checkbox task__identifier">
-        <md-checkbox aria-label="GroupsChecked"
-                     ng-checked="GroupData.checkedState"
-                     md-indeterminate="GroupData.indeterminate"
-                     clipboard
-                     text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                     on-copied="$ctrl.task.copySuccess(); $ctrl.task.updateGroupStatus(GroupData)"
-                     on-error="$ctrl.task.copyFail(err)"
-                     class="md-primary">
-        </md-checkbox>
-        <md-tooltip md-direction="top">
-            <span ng-if="!GroupData.checkedState">Check all</span>
-            <span ng-if="GroupData.checkedState">Un-check all</span>
-        </md-tooltip>
+    <div class="task__identifier">
+        <div class="task__checkbox">
+            <md-checkbox aria-label="GroupsChecked"
+                         ng-checked="GroupData.checkedState"
+                         md-indeterminate="GroupData.indeterminate"
+                         clipboard
+                         text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                         on-copied="$ctrl.task.copySuccess(); $ctrl.task.updateGroupStatus(GroupData)"
+                         on-error="$ctrl.task.copyFail(err)"
+                         class="md-primary">
+            </md-checkbox>
+            <md-tooltip md-direction="top">
+                <span ng-if="!GroupData.checkedState">Check all</span>
+                <span ng-if="GroupData.checkedState">Un-check all</span>
+            </md-tooltip>
+        </div>
     </div>
 
     <div class="entry entry--group" layout="column">
-        <div class="entry__info" layout="row" layout-align="start center">
+        <div class="entry__info"
+             layout-wrap
+             layout="row"
+             layout-align="start center">
 
             <!-- Detail toggler -->
             <md-button class="group__time-information__details md-icon-button"
@@ -84,7 +89,7 @@
             </md-input-container>
 
             <!-- Time information -->
-            <div flex="grow" layout="row" layout-align="start center" class="entry__info__time-information">
+            <div flex="nogrow" layout="row" layout-align="start center" class="entry__info__time-information">
                 <div ng-if="GroupData.indeterminate">
                     <md-icon>warning</md-icon>
                 </div>
@@ -99,6 +104,9 @@
                                                     on-error="$ctrl.task.copyFail(err)"
                                                     class="">
                                                 <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
+                                                <md-tooltip md-direction="bottom">
+                                                    Copy time
+                                                </md-tooltip>
                                                 <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
                                             </span>
                                         </span>
@@ -139,7 +147,10 @@
             <!-- Add button -->
             <!-- TODO: On tasks we also have to push the PROJECT name, otherwise it will be strange mixed -->
             <div class="entry__actions"
-                 flex="nogrow">
+                 flex="auto"
+                 layout="row"
+                 layout-align="end none"
+            >
                 <md-button class="md-fab md-primary md-mini"
                            aria-label="Add current timer to this Group"
                            ng-click="$ctrl.task.addEntryToGroup(GroupData)">
