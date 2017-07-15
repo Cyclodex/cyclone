@@ -20,9 +20,15 @@ angular.module("cycloneApp").run(function($transitions) {
     });
 });
 
-// Routing
-angular.module("cycloneApp").config(function($stateProvider, $urlRouterProvider) {
+// Config / Routing
+angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
+    // Define the theme / pallete colors we use (these are the md defaults)
+    $mdThemingProvider.theme('default')
+        .primaryPalette('indigo')
+        .accentPalette('pink')
+        .warnPalette('red');
 
+    // Routing
     $urlRouterProvider.otherwise("/task/today");
 
     // Test route
