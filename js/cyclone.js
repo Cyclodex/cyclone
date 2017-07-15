@@ -45,6 +45,8 @@ require('./components/login.component.js');
 require('./task/task.component.js');
 require('./task/taskCardList.component.js');
 require('./components/autocomplete/autocompleteProject.component.js');
+require('./timeline/timeline.component.js');
+require('./timeline/timelineCardList.component.js');
 
 // Testing component:
 require('./test/welcome.component.js');

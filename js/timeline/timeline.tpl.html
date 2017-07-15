@@ -1,0 +1,109 @@
+<div class="cyclone-toolbar">
+    <md-card>
+        <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
+            <autocomplete-project
+                    flex="20"
+                    project="$ctrl.newEntryProject"
+                    set-focus="$ctrl.focusNewEntryProject">
+            </autocomplete-project>
+
+            <md-input-container flex="15">
+                <input id="newTaskName"
+                       type="text"
+                       ng-model="$ctrl.newEntryTask"
+                       aria-label="Task">
+                <label for="newTaskName">Task</label>
+            </md-input-container>
+
+            <md-input-container flex="33">
+                <input id="newTaskText"
+                       type="text"
+                       ng-model="$ctrl.newEntryText"
+                       aria-label="Description text of new task">
+                <label for="newTaskText">Description</label>
+            </md-input-container>
+
+            <md-input-container>
+                <label>Type</label>
+                <md-select id="newTaskType"
+                           ng-model="$ctrl.newEntryType"
+                           aria-label="Type of entry"
+                           ng-keydown="$event.which === 13 && addEntry()">
+                    <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
+                        {{type.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+            <md-input-container flex="15">
+                <input type="time"
+                       id="newTaskManualTime"
+                       name="input"
+                       ng-model="$ctrl.newEntryManualTime.value"
+                       placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                <label for="newTaskManualTime">Manual end time</label>
+            </md-input-container>
+            <div class="flex">
+                <a class="add-button"
+                   ng-click="$ctrl.addEntry()">
+                    <md-button class="md-fab md-accent" aria-label="Add Entry">
+                        <md-icon>add</md-icon>
+                    </md-button>
+                </a>
+            </div>
+
+            <button type="submit" class="submitbutton hide">Submit</button>
+        </form>
+
+    </md-card>
+</div>
+<div
+     ng-show="$ctrl.user.username"
+     class="cyclone-content"
+     layout="row" layout-align="center center">
+    <div flex="100"
+         flex-gt-md="80">
+        <!-- TODO: implement day switcher again -->
+        <!--<span flex></span>
+        <a ng-href="{{prevDateLink}}">
+            <md-icon>keyboard_arrow_left</md-icon>
+        </a>
+        <h1 ng-if="!nextDateLink" class="inline">{{currentDate | date : "d. MMM yyyy"}}</h1>
+        <h1 ng-if="nextDateLink" class="inline">{{currentDate | date : "EEE d. MMM yyyy"}}</h1>
+        <a ng-if="nextDateLink" ng-href="{{nextDateLink}}">
+            <md-icon>keyboard_arrow_right</md-icon>
+        </a>-->
+
+
+        <md-card ng-if="$ctrl.error">
+            <md-card-title>
+                <div class="md-headline">
+                    Error
+                </div>
+            </md-card-title>
+            <md-card-content>
+                {{$ctrl.error}}
+            </md-card-content>
+        </md-card>
+
+
+        <div class="cyclone-table cyclone-table--tasks" flex="grow">
+            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+
+            <timeline-card-list list-title="Timeline" data="$ctrl.entries"></timeline-card-list>
+        </div>
+        <!-- END: cyclone-table-->
+
+        <!--<pre>
+            {{ $ctrl.entriesCurrentGroups | json }}
+        </pre>-->
+    </div>
+
+
+    <!--
+    <pre>{{ data | json }}</pre>
+    <pre>{{ profile | json }}</pre>
+    -->
+</div>

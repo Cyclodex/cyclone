@@ -51,7 +51,7 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 }
             }
         });
-    // Time
+    // Time-line
     $stateProvider
         .state('time', {
             url: "/time/today",
@@ -63,12 +63,14 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                     component: "nav",
                 },
                 content: {
-                    controller: "TimeCtrl",
-                    template: require('./time/time.tpl.html')
+                    // controller: "TimeCtrl",
+                    // template: require('./time/time.tpl.html')
+                    component: "timeline",
+                    bindings: { user: 'currentUser.user' },
                 }
             },
             resolve: {
-                "currentUser":
+                currentUser:
                     ["userPromise", "$state", function(userPromise, $state) {
                         return userPromise.getPromise().then(function(success){
                             return success;
@@ -79,6 +81,23 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                             console.log("notification: " + notification);
                         });
                     }]
+                ,
+                timeTypesService: function(timeTypesService) {
+                    return timeTypesService.getTimeTypes();
+                }
+                ,
+                moment: function(moment) {
+                    return moment;
+                },
+                $firebaseArray: function($firebaseArray) {
+                    return $firebaseArray;
+                },
+                $timeout: function($timeout) {
+                    return $timeout;
+                },
+                firebaseRef: function(firebaseRef) {
+                    return firebaseRef;
+                }
             }
         });
 
