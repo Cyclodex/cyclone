@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## 0.49 - 16.07.2017
+* Adding GA
+
 ## 0.48 - 14.05.2017
 * Fixed issue with FF on the "check all" checkbox in "grouped task"
 
