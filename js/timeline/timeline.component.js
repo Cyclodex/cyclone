@@ -75,11 +75,6 @@ angular.module('cycloneApp')
             // Focus input
             focus('newTaskProject');
 
-            // build custom entries
-            ctrl.entriesCurrentGroups = {};
-            ctrl.groupsChecked = {};
-
-
             // Call the data etc.
             // New grouped current time entries
             // TODO: Of course it would be even better to not have to reference the user
@@ -88,21 +83,6 @@ angular.module('cycloneApp')
             var queryRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
             var query = queryRef.orderByChild("order");
-
-            // CONTINUE TASK
-            // Update the groups on load and all changes of the child data
-            // query.once('value').then(function(snapshot) {
-            // query.on('child_changed', function(snapshot) {
-            query.on('value', function (snapshot) {
-                updateContinuedTasks(snapshot);
-            });
-
-            // TODO: I don't need 2 calls anymore, we just will do it once, and then create the output of it
-            // Timelog entries:
-            // var queryRef = this.firebaseRef.getReference(this.user);
-            // Order the query, from recent to older entries
-            // However this only works with the orderBy in the template right now.
-            // var query = queryRef.orderByChild("order");
 
             // Create a synchronized array
             this.entries = this.$firebaseArray(query);
@@ -344,12 +324,12 @@ angular.module('cycloneApp')
             }
 
             // Clone text and project to current timer
-            /*this.cloneEntry = function (entry) {
+            this.cloneEntry = function (entry) {
                 ctrl.newEntryText = entry.text;
                 ctrl.newEntryProject = entry.project;
                 ctrl.newEntryType = entry.type;
                 ctrl.newEntryTask = entry.task;
-            };*/
+            };
 
             // Continue task feature (tracks current timer and continues with the selected one)
             this.continueEntry = function (entry) {
@@ -360,15 +340,6 @@ angular.module('cycloneApp')
                 ctrl.newContinueEntryTask = entry.task;
                 ctrl.addEntry();
             };
-
-            // /**
-            //  * Helper function to wrap up the correct type when continuing a group.
-            //  * @param project
-            //  * @param text
-            //  * @param GroupTaskData
-            //  *
-            //  * Calls this.continueEntry(task) from above.
-            //
 
             // Continue is disabled
 /*            this.continueGroup = function (GroupTaskData) {
@@ -460,144 +431,13 @@ angular.module('cycloneApp')
                 ctrl.$timeout(updateDurations, 1000, true);
             };
 
-            // Continued Task handler
-            function updateContinuedTasks(snapshot) {
-                // We are always starting from scratch, we could also try to iterate over the
-                // ctrl.entriesCurrentGroups
-
-                var groupsNew = {};
-                // Iterate over all the data and prepare new object
-                snapshot.forEach(function (data) {
-                    entry = data.val();
-                    var projectName = entry.project || '';
-                    var taskName = entry.task || '';
-                    var groupType = entry.type || '';
-                    var groupId   = projectName + '_' + groupType  + '_' + taskName || '-';
-
-
-                    // Make sure the elements are set
-                    // The groups
-                    // Why typeof === function? It looks like there are cases like "watch" which is a function. (ff only)
-                    // Not sure how to handle this correctly. For now we just override it anyway.
-                    if (groupsNew[groupId] === undefined || typeof groupsNew[groupId] === 'function') {
-                        groupsNew[groupId] = {};
-                        groupsNew[groupId]['tasks'] = {};
-                        groupsNew[groupId].amountAll = 0;
-                        groupsNew[groupId].amountNotChecked = 0;
-                        groupsNew[groupId].amountChecked = 0;
-                        groupsNew[groupId].checkedState = '';
-                        groupsNew[groupId].durationNotChecked = 0;
-                        groupsNew[groupId].durationChecked = 0;
-                        groupsNew[groupId].group = groupId;
-                        groupsNew[groupId].task = taskName;
-                        groupsNew[groupId].project = projectName;
-                        groupsNew[groupId].type = groupType;
-                        groupsNew[groupId].showDetails = true; // Show details per default
-                        console.log('GroupID created:' + groupId);
-                    }
-
-                    // Sum up
-                    groupsNew[groupId].amountAll += 1;
-                    groupsNew[groupId]['tasks'][data.key] = entry;
-
-                    // Add specific data with some conditions
-                    if (entry.checked) {
-                        groupsNew[groupId].amountChecked += 1;
-                        groupsNew[groupId].durationChecked += entry.timestampDuration;
-                    } else {
-                        groupsNew[groupId].amountNotChecked += 1;
-                        groupsNew[groupId].durationNotChecked += entry.timestampDuration;
-                    }
-
-                });
-
-                // Clean up the end result of groups
-                for (var groupId in groupsNew) {
-                    if (groupsNew.hasOwnProperty(groupId)) {
-                        // Verifying the "checked" state
-                        if (groupsNew[groupId].amountChecked == 0) {
-                            // not checked
-                            groupsNew[groupId].checkedState = false;
-                            groupsNew[groupId].indeterminate = false;
-
-                            delete ctrl.groupsChecked[groupId];
-                        } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
-                            // all tasks are checked
-                            groupsNew[groupId].checkedState = true;
-                            groupsNew[groupId].indeterminate = false;
-                            groupsNew[groupId].showDetails = false;
-
-                            // Place entry and remove from other
-                            ctrl.groupsChecked[groupId] = groupsNew[groupId];
-                            delete groupsNew[groupId];
-                        } else {
-                            // amount of tasks checked is not amount of tasks, means mixed
-                            groupsNew[groupId].checkedState = false;
-                            groupsNew[groupId].indeterminate = true;
-                            groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
-
-                            delete ctrl.groupsChecked[groupId];
-                        }
-                    }
-                    if (Object.keys(groupsNew).length == 0) {
-                        delete groupsNew[groupId];
-                    }
-                }
-
-                console.log('new groups:');
-                console.log(groupsNew);
-
-                // // TODO: Should we make separate Groups for Open / Done tasks ?
-                ctrl.entriesCurrentGroups = groupsNew;
-                ctrl.doneLoadingGroups = true;
-            }
-
-            // Group update status checked on several tasks
-            this.updateGroupStatus = function (taskData, status) {
-                console.log(taskData);
-                var checked = false;
-                if (status === undefined) {
-                    if (taskData.indeterminate) {
-                        checked = true;
-                    } else {
-                        checked = !taskData.checkedState; // the new state is the opposite from the current
-                    }
-                } else {
-                    // If status is given, we force it.
-                    checked = status;
-                }
-                for (var taskKey in taskData.tasks) {
-                    var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
-                    Entry.checked = checked;
-                    // Save Entry
-                    this.entries.$save(Entry).then(function (queryRef) {
-                        // data has been saved to our database
-                        console.log("Entry (update Group) entry saved with index" + queryRef.key)
-                    });
-                }
-            };
-
-            // Group update data on all sub entries belonging to this task
-            this.updateGroupData = function (taskData) {
-                for (var taskKey in taskData.tasks) {
-                    var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
-                    Entry.project = taskData.project;
-                    // TODO: do we need group?
-                    Entry.group = taskData.group;
-                    Entry.task = taskData.task;
-                    Entry.type = taskData.type;
-                    // Save Entry
-                    this.entries.$save(Entry).then(function (queryRef) {
-                        // data has been saved to our database
-                        console.log("Entry (update Group) entry saved with index" + queryRef.key)
-                    });
-                }
-            };
-
-
             // Entry update. Needs the key and some data to merge with current Entry
             this.updateEntry = function (entryKey, entryData) {
+                console.log(entryKey);
+                console.log(this.entries);
                 var Entry = this.entries.$getRecord(entryKey); // record with $id === nextEntryKey or null
+                console.log(entryData);
+                console.log(Entry);
                 Entry.project = entryData.project;
                 Entry.group = entryData.group;
                 Entry.task = entryData.task;

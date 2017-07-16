@@ -611,6 +611,29 @@ button.dayVisualize-entry.md-button:hover {
     transform: translateY(50%);
 }
 
+.timeline-visual {
+    position: absolute;
+    left: -50px;
+    height: 100%;
+    top: -10px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        display: block;
+        left: 20px;
+        border-left: 1px dashed gray;
+        opacity: 0.5;
+        top: 20px;
+        bottom: 0;
+    }
+    &:hover {
+        &:before {
+            opacity: 1;
+            border-left: 1px solid gray;
+        }
+    }
+}
 // Trying out crazy animation stuff
 // https://codepen.io/jonespen/pen/avBZpO
 // https://docs.angularjs.org/api/ngAnimate
