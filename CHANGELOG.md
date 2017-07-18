@@ -2,6 +2,9 @@
 ## 0.xx - xx.xx.2017 - Task view feature
 * Enhancement: Changed routing to ui-router, several updates according to this
 
+## 0.49 - 16.07.2017
+* Adding GA
+
 ## 0.48 - 14.05.2017
 * Fixed issue with FF on the "check all" checkbox in "grouped task"
 
