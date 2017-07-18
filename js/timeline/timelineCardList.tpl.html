@@ -175,6 +175,7 @@
          ng-if="GroupData"
          layout-align="start stretch"
          class="card task project-type--{{GroupData.type}}"
+         ng-class="{true: 'done', false: ''}[GroupData.checked == true]"
          >
          <!--ng-animate-ref="{{ Group }}"-->
 
