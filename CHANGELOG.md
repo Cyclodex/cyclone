@@ -2,6 +2,7 @@
 
 ## 0.50 - 18.07.2017
 * Adding GA events
+* Replaced the label for checking entries
 
 ## 0.49 - 16.07.2017
 * Adding GA
