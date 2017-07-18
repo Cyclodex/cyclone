@@ -35,7 +35,10 @@
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
         ga('create', 'UA-102586826-1', 'auto');
-        ga('send', 'pageview');
+        // Don't send hits on localhost
+        if (location.hostname == 'localhost') {
+            ga('set', 'sendHitTask', null);
+        }
     </script>
 </head>
 
@@ -53,7 +56,11 @@
            target="_parent"
            class=""
            ng-show="!user">
-            <md-button class="md-raised md-primary" aria-label="Login">Login</md-button>
+            <md-button class="md-raised md-primary"
+                       aria-label="Login"
+                       analytics-on="click"
+                       analytics-event="Login"
+                       analytics-category="User">Login</md-button>
         </a>
     </div>
 
@@ -157,7 +164,12 @@
                         <div class="flex">
                             <a class=""
                                ng-click="addEntry()">
-                                <md-button class="md-fab md-primary" aria-label="Add Entry">
+                                <md-button class="md-fab md-primary"
+                                           aria-label="Add Entry"
+                                           analytics-on="click"
+                                           analytics-event="Add entry"
+                                           analytics-category="Add entry form"
+                                >
                                     <md-icon>add</md-icon>
                                 </md-button>
                             </a>
@@ -213,7 +225,10 @@
                                 <div class="entry__options">
                                     <md-button ng-click="deleteEntry();"
                                                class="md-fab md-mini"
-                                               aria-label="Delete entry">
+                                               aria-label="Delete entry"
+                                               analytics-on="click"
+                                               analytics-event="Delete entry"
+                                               analytics-category="Entry">
                                         <md-tooltip md-direction="top">
                                             Delete
                                         </md-tooltip>
@@ -245,6 +260,9 @@
                                             on-copied="copySuccess(); updateSingleEntry(entry);"
                                             on-error="copyFail(err)"
                                             aria-label="Check entry and copy time"
+                                            analytics-on="click"
+                                            analytics-event="Check entry"
+                                            analytics-category="Entry"
                                             class="md-raised md-button md-ink-ripple">
                                         <md-tooltip md-direction="left">
                                             Check & copy time
@@ -255,7 +273,10 @@
                                         ng-if="entry.checked"
                                         class="entry__checked__button"
                                         ng-click="entry.checked = false; entries.$save(entry);"
-                                        aria-label="remove check from entry">
+                                        aria-label="remove check from entry"
+                                        analytics-on="click"
+                                        analytics-event="Remove check from entry"
+                                        analytics-category="Entry">
                                         <md-tooltip md-direction="left">
                                             Uncheck
                                         </md-tooltip>
@@ -322,7 +343,11 @@
                                             <div>
                                                 <a class=""
                                                    ng-click="cloneEntry()">
-                                                    <md-button class="md-fab md-primary md-mini" aria-label="Use task">
+                                                    <md-button class="md-fab md-primary md-mini"
+                                                               aria-label="Use task"
+                                                               analytics-on="click"
+                                                               analytics-event="Use entry (cloneEntry)"
+                                                               analytics-category="Entry">
                                                         <md-tooltip md-direction="top">
                                                             Use this project & description for current timer
                                                         </md-tooltip>
@@ -333,7 +358,11 @@
                                             <div ng-if="addEntryEnabled">
                                                 <a class=""
                                                    ng-click="continueEntry(entry)">
-                                                    <md-button class="md-fab md-primary md-mini" aria-label="Continue Task">
+                                                    <md-button class="md-fab md-primary md-mini"
+                                                               aria-label="Continue Task"
+                                                               analytics-on="click"
+                                                               analytics-event="Continue entry (continueEntry)"
+                                                               analytics-category="Entry">
                                                         <md-tooltip md-direction="top">
                                                             Track current timer and continue now on this task
                                                         </md-tooltip>
@@ -344,7 +373,10 @@
                                             <div>
                                                 <md-button ng-click="deleteEntry();"
                                                            class="md-fab md-mini"
-                                                           aria-label="Delete entry">
+                                                           aria-label="Delete entry"
+                                                           analytics-on="click"
+                                                           analytics-event="Delete entry"
+                                                           analytics-category="Entry">
                                                     <md-tooltip md-direction="top">
                                                         Delete
                                                     </md-tooltip>
@@ -382,7 +414,10 @@
                                 <md-button class="md-fab md-primary md-mini"
                                            aria-label="Continue Group"
                                            ng-if="addEntryEnabled"
-                                           ng-click="continueGroup(GroupData)">
+                                           ng-click="continueGroup(GroupData)"
+                                           analytics-on="click"
+                                           analytics-event="Continue Group (continueGroup)"
+                                           analytics-category="Group">
                                     <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
                                     <md-icon>play_arrow</md-icon>
                                 </md-button>
@@ -391,7 +426,10 @@
                                 <md-button class="md-fab md-primary md-mini"
                                            aria-label="Add current timer to this Group"
                                            ng-if="addEntryEnabled"
-                                           ng-click="addEntryToGroup(GroupData)">
+                                           ng-click="addEntryToGroup(GroupData)"
+                                           analytics-on="click"
+                                           analytics-event="Add current timer to this Group (addEntryToGroup)"
+                                           analytics-category="Group">
                                     <md-tooltip md-direction="top">
                                         Track current timer into this group
                                     </md-tooltip>
@@ -402,7 +440,11 @@
                                          ng-click="updateGroup(GroupData);"
                                          ng-checked="GroupData.checkedState"
                                          md-indeterminate="GroupData.indeterminate"
-                                         class="md-primary">
+                                         class="md-primary"
+                                         analytics-on="click"
+                                         analytics-event="Check group"
+                                         analytics-category="Group"
+                                         analytics-label="{{GroupData.checkedState}}">
                             </md-checkbox>
                             <md-tooltip md-direction="top">
                                 <span ng-if="!GroupData.checkedState">Check all</span>
@@ -424,7 +466,10 @@
                                          text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
                                          on-copied="copySuccess();"
                                          on-error="copyFail(err)"
-                                         class="md-raised md-button done">
+                                         class="md-raised md-button done"
+                                         analytics-on="click"
+                                         analytics-event="Copy checked group time"
+                                         analytics-category="Group">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
                                             </md-tooltip>
@@ -443,7 +488,10 @@
                                          text="GroupData.duration / 1000 / 60 / 60 | number : 2"
                                          on-copied="copySuccess(); updateGroup(GroupData, true);"
                                          on-error="copyFail(err)"
-                                         class="md-raised md-button md-primary">
+                                         class="md-raised md-button md-primary"
+                                         analytics-on="click"
+                                         analytics-event="Copy un-checked group time"
+                                         analytics-category="Group">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time & check entries
                                             </md-tooltip>
@@ -454,7 +502,11 @@
                             </div>
                             <md-button class="group__time-information__details md-icon-button"
                                        ng-click="toggleDetails(GroupData)"
-                                       aria-label="Toggle display of details">
+                                       aria-label="Toggle display of details"
+                                       analytics-on="click"
+                                       analytics-event="Show group details"
+                                       analytics-category="Group"
+                                       analytics-label="{{GroupData.showDetails}}">
                                 <div ng-if="!GroupData.showDetails">
                                     <md-tooltip md-direction="top">
                                         Show details

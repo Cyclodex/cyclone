@@ -14,6 +14,10 @@ require('angular-material');
 require('angular-clipboard');
 require('angular-moment');
 
+// Analytics
+require('angulartics');
+require('angulartics-google-analytics');
+
 // Firebase
 var firebase = require('firebase/app');
 require('firebase/auth');

@@ -2,8 +2,8 @@
 //
 // TIME
 //
-angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment", "timeTypesService",
-    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment, timeTypesService) {
+angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebaseArray", "focus", "$timeout", "$rootScope", "$route", "moment", "timeTypesService", "$analytics",
+    function($scope, Auth, $firebaseArray, focus, $timeout, $rootScope, $route, moment, timeTypesService, $analytics) {
         // Angular-clipboard
         $scope.copySuccess = function () {
             console.log('Copied time!');
@@ -242,6 +242,10 @@ angular.module("cycloneApp").controller("TimeCtrl", ["$scope", "Auth", "$firebas
                 // But this allows us to have first manual end time entries which have 0 duration.
                 start = timestamp;
 
+                // Track that we have a manual end time
+                $analytics.eventTrack('Manual end time', {
+                    category: 'Add entry form', label: hours + ':' + minutes
+                });
             }
 
 

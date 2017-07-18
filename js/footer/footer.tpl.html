@@ -17,7 +17,11 @@
                  ng-click="logout()"
                  class=""
                  ng-show="user">
-                    <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
+                    <md-button class="md-raised md-primary"
+                               aria-label="Login"
+                               analytics-on="click"
+                               analytics-event="Logout"
+                               analytics-category="User">Logout</md-button>
                 </a>
                 <div id="account-details" ng-show="userIsAdmin"></div>
             </div>

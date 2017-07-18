@@ -31,7 +31,8 @@
     "angularfire": "2.0.2",
     "firebase": "3.3.2",
     "firebaseui": "^1.0.0",
-    "randomcolor": "^0.4.4"
+    "randomcolor": "^0.4.4",
+    "angulartics-google-analytics": "0.4.0"
   },
   "devDependencies": {
     "browser-sync": "^2.15.0",

@@ -20,6 +20,7 @@ module.exports = {
         ],
         vendors: [
             'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
+            'angulartics',
             'firebase/auth', 'firebase/database', 'angularfire'
         ]
     },

@@ -1,6 +1,6 @@
 // Profile controller
-angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "$rootScope",
-    function($scope, Auth, $location, $rootScope) {
+angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$location", "$rootScope", "$analytics",
+    function($scope, Auth, $location, $rootScope, $analytics) {
         $rootScope.user = '';
         $scope.connection = 'connecting';
 
@@ -40,6 +40,9 @@ angular.module('cycloneApp').controller("ProfileCtrl", ["$scope", "Auth", "$loca
                     // Cyclone variables
                     // TODO: should be a service or similar I think...
                     $rootScope.user = $scope.user = user.email.substring(0, user.email.indexOf("@"));
+
+                    // Tell analytics which user it is.
+                    $analytics.setUsername(uid);
 
                 } else {
                     // User is signed out.
