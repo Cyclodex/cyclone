@@ -44,16 +44,8 @@ angular.module('cycloneApp').component('autocompleteProject', {
          * TODO: Implement firebase lookup.
          */
         function querySearch (query) {
-            var results = query ? self.projects.filter( createFilterFor(query) ) : self.projects,
-                deferred;
-            // if (self.simulateQuery) {
-            //     deferred = $q.defer();
-            //     // deferred.resolve( results );
-            //     $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
-            //     return deferred.promise;
-            // } else {
-                return results;
-            // }
+            var results = query ? self.projects.filter( createFilterFor(query) ) : self.projects;
+            return results;
         }
 
         function searchTextChange(text) {
@@ -75,14 +67,25 @@ angular.module('cycloneApp').component('autocompleteProject', {
          * TODO: Hook this up with users added projects
          */
         function loadAll() {
-            var allProjects = 'Kime, Kobler-Partner, SIKA, Viseca';
-
-            return allProjects.split(/, +/g).map( function (project) {
-                return {
-                    value: project.toLowerCase(),
-                    display: project
-                };
-            });
+            return allProjects = [
+                {
+                    "display": "Kime",
+                    "value": "kime",
+                    "color": "blue"
+                },{
+                    "display": "SIKA",
+                    "value": "sika",
+                    "color": "red"
+                },{
+                    "display": "Viseca",
+                    "value": "viseca",
+                    "color": "yellow"
+                },{
+                    "display": "Kobler-Partner",
+                    "value": "kobler-partner",
+                    "color": "blue"
+                }
+            ];
         }
 
         /**

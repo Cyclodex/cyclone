@@ -1,6 +1,7 @@
 # CHANGELOG
 ## 0.xx - xx.xx.2017 - Task view feature
 * Enhancement: Changed routing to ui-router, several updates according to this
+* Adding project color idea to autocomplete component
 
 ## 0.49 - 16.07.2017
 * Adding GA

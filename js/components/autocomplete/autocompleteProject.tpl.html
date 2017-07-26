@@ -15,8 +15,10 @@
         md-input-id="newTaskProject"
         md-floating-label="Project"
         md-autoselect="true"
-        aria-label="Project name of new task">
+        aria-label="Project name of new task"
+        class="autocomplete autocomplete--project">
     <md-item-template>
+        <div class="autocomplete__color" style="background-color:{{item.color}}"></div>
         <span md-highlight-text="$ctrl.project" md-highlight-flags="^i">{{item.display}}</span>
     </md-item-template>
 </md-autocomplete>
