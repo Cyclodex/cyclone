@@ -23,14 +23,14 @@
                 <label for="newTaskText">Description</label>
             </md-input-container>
 
-            <md-input-container>
+            <md-input-container class="entry__info__select entry__info__select--type">
                 <label>Type</label>
                 <md-select id="newTaskType"
                            ng-model="$ctrl.newEntryType"
                            aria-label="Type of entry"
                            ng-keydown="$event.which === 13 && addEntry()">
                     <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
-                        {{type.name}}
+                        <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                     </md-option>
                 </md-select>
             </md-input-container>

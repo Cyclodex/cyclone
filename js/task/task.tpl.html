@@ -30,7 +30,7 @@
                            aria-label="Type of entry"
                            ng-keydown="$event.which === 13 && addEntry()">
                     <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
-                        {{type.name}}
+                        <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                     </md-option>
                 </md-select>
             </md-input-container>

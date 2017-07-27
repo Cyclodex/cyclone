@@ -237,7 +237,7 @@
                            aria-label="Type of the entry"
                            ng-change="$ctrl.data.$save(GroupData)" >
                     <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
-                        {{type.name}}
+                        <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                     </md-option>
                 </md-select>
             </md-input-container>
