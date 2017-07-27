@@ -1,6 +1,7 @@
 angular.module('cycloneApp').component('taskCardList', {
     bindings: {
         listTitle: '@',
+        listIcon: '@',
         data: '<'
     },
     require: {

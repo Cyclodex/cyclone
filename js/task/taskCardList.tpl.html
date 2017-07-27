@@ -1,6 +1,6 @@
 <div class="md-toolbar-tools">
     <h1>
-        <md-icon>featured_play_list</md-icon> {{ $ctrl.listTitle }}
+        <md-icon>{{ $ctrl.listIcon }}</md-icon> {{ $ctrl.listTitle }}
     </h1>
 </div>
 <md-card layout="row" ng-repeat="(Group, GroupData) in $ctrl.data"
@@ -33,7 +33,7 @@
         <div class="entry__info"
              layout-wrap
              layout="row"
-             layout-align="start center">
+             layout-align="start start">
 
             <!-- Detail toggler -->
             <md-button class="group__time-information__details md-icon-button"
@@ -87,6 +87,70 @@
                     </md-option>
                 </md-select>
             </md-input-container>
+
+            <!-- List of slots / elements -->
+            <div class="entry__details"
+                 layout="column"
+                 layout-align="start start"
+                 ng-if="GroupData.showDetails">
+                <!-- entries -->
+                <div ng-repeat="(entryKey, entry) in GroupData.tasks"
+                     layout="row"
+                     layout-align="start stretch"
+                     layout-align-gt-md="space-around stretch"
+                     class="entry task__group__entry project-type--{{entry.type}}"
+                     ng-class="{true: 'task__group__entry--done', false: ''}[entry.checked == true]"
+                >
+                    <md-card
+                            layout=row
+                            layout-align="center center"
+                            flex="none"
+                    >
+                        <div layout=column layout-align="space-between">
+                            <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                                <input ng-model="entry.text"
+                                       ng-change="$ctrl.task.updateEntry(entryKey, entry)"
+                                       type="text"
+                                       class="validate"
+                                       aria-label="Task description"
+                                       placeholder="Task description"
+                                       autocomplete="task description"
+                                       ng-model-options="{updateOn: 'blur'}"
+                                />
+                            </md-input-container>
+                            <md-tooltip md-direction="top">
+                                <div class="duration duration--human">
+                                    <span>{{ entry.timestampDuration | humanizeDate  }}</span>
+                                    <span>&nbsp;|&nbsp;</span>
+                                    <span class="duration duration--decimal">
+                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
+                                </div>
+                            </md-tooltip>
+                            <!--<div class="entry__time-information">-->
+                                <!--<div class="duration duration&#45;&#45;human">-->
+                                    <!--<span>{{ entry.timestampDuration | humanizeDate  }}</span>-->
+                                    <!--<span>&nbsp;|&nbsp;</span>-->
+                                    <!--<span class="duration duration&#45;&#45;decimal">-->
+                                                <!--&lt;!&ndash; timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) &ndash;&gt;-->
+                                                <!--<strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+
+                        <!-- Delete task entry -->
+                        <!-- Delete option is disabled - because its unclear where this time will go for the user -->
+                        <!--<md-button ng-click="$ctrl.task.deleteEntryHelper(entryKey)"
+                                   class="task__group__entry__delete"
+                                   aria-label="Delete entry">
+                            <md-tooltip md-direction="top">
+                                Delete task
+                            </md-tooltip>
+                            <md-icon>close</md-icon>
+                        </md-button>-->
+                    </md-card>
+                </div>
+            </div>
 
             <!-- Time information -->
             <div flex="nogrow" layout="row" layout-align="start center" class="entry__info__time-information">
@@ -163,58 +227,5 @@
 
 
         </div> <!-- END of entry__info -->
-        <div class="entry__details"
-             layout="row"
-             layout-align="start start"
-             ng-if="GroupData.showDetails">
-            <!-- entries -->
-            <div ng-repeat="(entryKey, entry) in GroupData.tasks"
-                 layout="row"
-                 layout-align="start stretch"
-                 layout-align-gt-md="space-around stretch"
-                 class="entry task__group__entry project-type--{{entry.type}}"
-                 ng-class="{true: 'task__group__entry--done', false: ''}[entry.checked == true]"
-            >
-                <md-card
-                        layout=row
-                        layout-align="center center"
-                        flex="none"
-                >
-                    <div layout=column layout-align="space-between">
-                        <md-input-container md-no-float class="entry__info__input entry__info__input--text">
-                            <input ng-model="entry.text"
-                                   ng-change="$ctrl.task.updateEntry(entryKey, entry)"
-                                   type="text"
-                                   class="validate"
-                                   aria-label="Task description"
-                                   placeholder="Task description"
-                                   autocomplete="task description"
-                                   ng-model-options="{updateOn: 'blur'}"
-                            />
-                        </md-input-container>
-                        <div class="entry__time-information">
-                            <div class="duration duration--human">
-                                <span>{{ entry.timestampDuration | humanizeDate  }}</span>
-                                <span>&nbsp;|&nbsp;</span>
-                                <span class="duration duration--decimal">
-                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Delete task entry -->
-                    <!-- Delete option is disabled - because its unclear where this time will go for the user -->
-                    <!--<md-button ng-click="$ctrl.task.deleteEntryHelper(entryKey)"
-                               class="task__group__entry__delete"
-                               aria-label="Delete entry">
-                        <md-tooltip md-direction="top">
-                            Delete task
-                        </md-tooltip>
-                        <md-icon>close</md-icon>
-                    </md-button>-->
-                </md-card>
-            </div>
-        </div>
     </div>
 </md-card>
