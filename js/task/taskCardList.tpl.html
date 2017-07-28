@@ -101,12 +101,13 @@
                      class="entry task__group__entry project-type--{{entry.type}}"
                      ng-class="{true: 'task__group__entry--done', false: ''}[entry.checked == true]"
                 >
-                    <md-card
+                    <div
                             layout=row
                             layout-align="center center"
                             flex="none"
                     >
-                        <div layout=column layout-align="space-between">
+                        <div layout=row layout-align="space-between">
+                            <md-icon>reorder</md-icon>
                             <md-input-container md-no-float class="entry__info__input entry__info__input--text">
                                 <input ng-model="entry.text"
                                        ng-change="$ctrl.task.updateEntry(entryKey, entry)"
@@ -148,7 +149,7 @@
                             </md-tooltip>
                             <md-icon>close</md-icon>
                         </md-button>-->
-                    </md-card>
+                    </div>
                 </div>
             </div>
 
@@ -208,13 +209,22 @@
                         <md-icon>play_arrow</md-icon>
                     </md-button>
             </span>-->
-            <!-- Add button -->
-            <!-- TODO: On tasks we also have to push the PROJECT name, otherwise it will be strange mixed -->
+            <!-- Actions -->
             <div class="entry__actions"
                  flex="auto"
                  layout="row"
                  layout-align="end none"
             >
+                <!-- Clone/copy entry button-->
+                <md-button class="md-fab md-primary md-mini"
+                           aria-label="Use task"
+                           ng-click="$ctrl.task.cloneEntry(GroupData)">
+                    <md-tooltip md-direction="top">
+                        Use this project & description for current timer
+                    </md-tooltip>
+                    <md-icon>arrow_upward</md-icon>
+                </md-button>
+                <!-- Add to this group button -->
                 <md-button class="md-fab md-primary md-mini"
                            aria-label="Add current timer to this Group"
                            ng-click="$ctrl.task.addEntryToGroup(GroupData)">

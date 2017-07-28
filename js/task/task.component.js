@@ -344,12 +344,12 @@ angular.module('cycloneApp')
             }
 
             // Clone text and project to current timer
-            /*this.cloneEntry = function (entry) {
+            this.cloneEntry = function (entry) {
                 ctrl.newEntryText = entry.text;
                 ctrl.newEntryProject = entry.project;
                 ctrl.newEntryType = entry.type;
                 ctrl.newEntryTask = entry.task;
-            };*/
+            };
 
             // Continue task feature (tracks current timer and continues with the selected one)
             this.continueEntry = function (entry) {
