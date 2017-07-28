@@ -1,5 +1,14 @@
 <div class="cyclone-toolbar">
     <md-card>
+        <div class="md-headline">
+            <div ng-if="!$ctrl.newEntryManualTime.value">
+                <span>What have you done in the last</span>
+                <em>{{ $ctrl.currentDuration | humanizeDate }}</em>
+            </div>
+            <div ng-if="$ctrl.newEntryManualTime.value">
+                <span>What have you done until {{$ctrl.newEntryManualTime.value | date : "H:mm"}}</span>
+            </div>
+        </div>
         <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
             <autocomplete-project
                     flex="20"
@@ -54,7 +63,6 @@
 
             <button type="submit" class="submitbutton hide">Submit</button>
         </form>
-
     </md-card>
 </div>
 <div
