@@ -18,7 +18,7 @@ angular.module('cycloneApp').factory('timeTypesService', [function() {
                 'value': 'internal',
                 'order': 1,
                 'color': '#ffdb6e',
-                'icon': 'android'
+                'icon': 'money_off'
             },
             "trust": {
                 'name': 'Trust time',
