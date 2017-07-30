@@ -1,12 +1,3 @@
 <div class="stats-totals">
     <span class="timeType-title">Total work: {{ $ctrl.workTotal | humanizeDate }}</span>
-    <div class="day-visualize timeType-sum">
-        <md-button ng-repeat="entry in $ctrl.workTypes track by $index"
-         class="dayVisualize-entry project-type--{{entry.type}}"
-         ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
-         aria-label="info">
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--type">{{entry._name}}</div>
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | humanizeDate }}</div>
-        </md-button>
-    </div>
 </div>

@@ -38,7 +38,7 @@ require('./components/focus.directive.js');
 require('./components/order.filter.js');
 require('./components/humanizeDate.filter.js');
 require('./components/timeTypes.service.js');
-require('./footer/footer.component.js');
+require('./stats/stats.component.js');
 require('./time/time.controller.js');
 require('./version/version.component.js');
 require('./components/login.component.js');

@@ -383,7 +383,7 @@ md-radio-button {
 .day-visualize {
     width: 90%;
     text-align: center;
-    margin: 0px auto 20px;
+    margin: 0 auto 20px;
 
     display: flex;
     align-items: flex-end;
@@ -391,7 +391,8 @@ md-radio-button {
     .dayVisualize-entry {
         display: inline-block;
         margin: 1px;
-        height: 50px;
+        height: 20px;
+        min-height: 20px;
         min-width: 10px;
         color: black;
         overflow: visible;
@@ -423,7 +424,7 @@ md-radio-button {
     }
     &.dayVisualize-entry-content--time-start {
         position: absolute;
-        color: white;
+        //color: white;
         bottom: -20px;
         left: -10px;
     }
@@ -439,7 +440,7 @@ md-radio-button {
     // Increase height of elements which are not checked
     &.project-type--internal.checked--no,
     &.project-type--work.checked--no {
-        height: 80px;
+        height: 30px;
     }
 
     // diagonal lines in the background for trust and private time
@@ -580,7 +581,7 @@ button.dayVisualize-entry.md-button:hover {
 // Overriding the toolbar color, we don't want the primary or accent colors here.
 .cyclone-toolbar {
     position: relative;
-    height: 100px;
+    height: 130px;
 
     md-card {
         background-color: white !important;

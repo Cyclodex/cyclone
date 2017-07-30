@@ -1,8 +1,8 @@
-require('../stats/statsTotal.component.js');
+require('./statsTotal.component.js');
+require('./statsTypes.component.js');
 require('../user/profile.controller.js');
-// Footer display component
-// <footer-display></footer-display>
-// <footer-display class="footer-stats" ng-cloak></footer-display>
+// Stats display component
+// <stats></stats>
 //
 // Summary / Stats
 // TODO: We should use a service for the calculations and only have components
@@ -12,10 +12,10 @@ require('../user/profile.controller.js');
 // TODO: I could not make this component load directly from route and so use a resolve for waiting for the user. Try to do this at some point.
 angular.module("cycloneApp")
   .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
-  .component('footerDisplay', {
-  template: require('./footer.tpl.html'),
-  controller: ["$scope", "userPromise", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService",
-    function($scope, userPromise, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService) {
+  .component('stats', {
+  template: require('./stats.tpl.html'),
+  controller: ["$scope", "userPromise", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService", "firebaseRef",
+    function($scope, userPromise, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService, firebaseRef) {
       var $ctrl = this;
 
       // collect the projects colors
@@ -24,18 +24,13 @@ angular.module("cycloneApp")
       // Continue when auth state changed
       Auth.$onAuthStateChanged(function(user) {
 
-        // TODO: $rootScope - This is not the right way how to deal with, but it works for now.
-        var year = $rootScope.year;
-        var weekNumber = $rootScope.weekNumber;
-        var todayNumber = $rootScope.weekDay;
-
         // Wait for promise of the user and then call the data
         userPromise.getPromise().then(function(currentUser){
           user = currentUser.user;
           if (user) {
             // We save the entries in the current week and day
-            var ref = firebase.database().ref();
-            var queryRef = ref.child("time/" + user.uid + "/" + year  + "/" + weekNumber + "/" + todayNumber);
+            var queryRef = firebaseRef.getReference(user);
+
             // If we don't order by "order" , manual time entries will not appear correctly
             var refDayVis = queryRef.orderByChild("order");
 
