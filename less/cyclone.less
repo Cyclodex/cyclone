@@ -122,6 +122,42 @@
         width: 100%;
     }
 }
+
+// Colors
+@colorWork: lightyellow;
+@colorInternal: #ffdb6e;
+@colorTrust: #e1c2e6;
+@colorPrivate: lightblue;
+
+.project-type--work {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorWork !important;
+    }
+}
+.project-type--internal {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorInternal !important;
+    }
+}
+.project-type--trust {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorTrust !important;
+    }
+}
+.project-type--private {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorPrivate !important;
+    }
+}
+
 .cyclone-table {
     padding: 20px 10px;
 
@@ -133,7 +169,7 @@
         padding-top: 20px;
     }
 
-    .project-type--work {
+    /*.project-type--work {
         .task__identifier,
         .entry-card {
             background-color: lightyellow;
@@ -156,7 +192,7 @@
         .entry-card {
             background-color: lightblue;
         }
-    }
+    }*/
 
     .project-type--system {
         .entry-card {
@@ -424,7 +460,6 @@ md-radio-button {
     }
     &.dayVisualize-entry-content--time-start {
         position: absolute;
-        //color: white;
         bottom: -20px;
         left: -10px;
     }
@@ -444,14 +479,14 @@ md-radio-button {
     }
 
     // diagonal lines in the background for trust and private time
-    &.project-type--trust,
+    /*&.project-type--trust,
     &.project-type--private {
         background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
     }
     // Vertical lines for the internal backgrounds
     &.project-type--internal {
         background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
-    }
+    }*/
 
     &.project-type--system {
         flex-grow: 0 !important;

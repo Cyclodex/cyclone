@@ -18,7 +18,7 @@
                 {true: 'checked--yes', false: 'checked--no'}[entry.checked == true],
                 {true: 'work', false: 'private'}[entry.type == 'work'],
              ]"
-         ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
+         ng-style="{'flex-grow':'' + entry._width + ''}"
          aria-label="info">
             <md-tooltip md-direction="top">
                 {{entry.project}}: {{entry.text}}
