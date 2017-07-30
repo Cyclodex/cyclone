@@ -183,8 +183,10 @@
         {{ GroupData.timestamp | date:'HH:mm' }}
     </div>
 
-    <!-- Checkbox -->
-    <div class="task__identifier">
+    <div class="task__identifier"
+         layout="column"
+         layout-align="space-around stretch">
+        <!-- Checkbox -->
         <div class="task__checkbox">
             <md-checkbox aria-label="GroupsChecked"
                          ng-checked="GroupData.checked"
@@ -199,6 +201,16 @@
                 <span ng-if="GroupData.checked">Un-check all</span>
             </md-tooltip>
         </div>
+        <!-- Type -->
+        <md-input-container md-no-float class="entry__info__select entry__info__select--type">
+            <md-select ng-model="GroupData.type"
+                       aria-label="Type of the entry"
+                       ng-change="$ctrl.data.$save(GroupData)" >
+                <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
+                    <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                </md-option>
+            </md-select>
+        </md-input-container>
     </div>
 
     <div class="entry entry--group" layout="column">
@@ -225,21 +237,10 @@
                        ng-change="$ctrl.data.$save(GroupData)"
                        type="text"
                        aria-label="Task"
-                       placeholder="Task"
+                       placeholder="Task / Issue"
                        autocomplete="Task"
                        ng-model-options="{updateOn: 'blur'}"
                 />
-            </md-input-container>
-
-            <!-- Type -->
-            <md-input-container md-no-float class="entry__info__select entry__info__select--type">
-                <md-select ng-model="GroupData.type"
-                           aria-label="Type of the entry"
-                           ng-change="$ctrl.data.$save(GroupData)" >
-                    <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
-                        <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
-                    </md-option>
-                </md-select>
             </md-input-container>
 
             <!-- Time information -->

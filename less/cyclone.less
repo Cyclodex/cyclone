@@ -137,28 +137,24 @@
         .task__identifier,
         .entry-card {
             background-color: lightyellow;
-            //border-bottom: 2px solid orange;
         }
     }
     .project-type--internal {
         .task__identifier,
         .entry-card {
             background-color: #ffdb6e;
-            //border-bottom: 2px solid orange;
         }
     }
     .project-type--trust {
         .task__identifier,
         .entry-card {
             background-color: #e1c2e6;
-            //border-bottom: 2px solid #9724e6;
         }
     }
     .project-type--private {
         .task__identifier,
         .entry-card {
             background-color: lightblue;
-            //border-bottom: 2px solid blue;
         }
     }
 
@@ -542,13 +538,11 @@ button.dayVisualize-entry.md-button:hover {
 
     .task__identifier {
         position: relative;
-        width: 30px;
+        min-width: 40px;
+        padding: 10px 5px;
     }
     .task__checkbox {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        margin: 0 auto;
 
         md-checkbox {
             width: 20px;
@@ -556,8 +550,8 @@ button.dayVisualize-entry.md-button:hover {
         }
     }
 
-    ._md-select-value {
-        border: 0;
+    .md-select-value {
+        min-width: unset;
     }
 
     .task__group__entry {
@@ -674,11 +668,15 @@ button.dayVisualize-entry.md-button:hover {
     border-radius: 50%;
     background-color: grey;
     position: relative;
-    top: 0px;
+    top: 0;
 }
 
 .entry__info__select.entry__info__select--type {
     min-width: unset;
+
+    .task__identifier &{
+        margin: 0 auto;
+    }
 
     .option__name {
         display: none;
@@ -686,6 +684,10 @@ button.dayVisualize-entry.md-button:hover {
         .md-select-menu-container & {
             display: block;
         }
+    }
+
+    .md-select-icon {
+        display: none;
     }
 }
 
