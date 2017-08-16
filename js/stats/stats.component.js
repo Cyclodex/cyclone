@@ -5,7 +5,7 @@ require('../user/profile.controller.js');
 // <stats></stats>
 //
 // Summary / Stats
-// TODO: We should use a service for the calculations and only have components
+// TODO: We should use a service for the calculations and only have components for the different displays
 //  * for the total stats in the footer
 //  * for the graphs-display
 //
