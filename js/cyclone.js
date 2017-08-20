@@ -47,6 +47,8 @@ require('./task/taskCardList.component.js');
 require('./components/autocomplete/autocompleteProject.component.js');
 require('./timeline/timeline.component.js');
 require('./timeline/timelineCardList.component.js');
+require('./components/dateSwitcher/dateSwitcher.component');
+require('./components/state.service');
 
 // Testing component:
 require('./test/welcome.component.js');

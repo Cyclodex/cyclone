@@ -29,6 +29,8 @@ angular.module("cycloneApp")
           user = currentUser.user;
           if (user) {
             // We save the entries in the current week and day
+            // TODO: we need the correct date set on the reference globally or use service
+            // some how set the currentDate here: (or it will be today)
             var queryRef = firebaseRef.getReference(user);
 
             // If we don't order by "order" , manual time entries will not appear correctly

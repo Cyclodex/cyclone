@@ -38,32 +38,8 @@ angular.module('cycloneApp')
             this.doneLoading = false;
             this.doneLoadingGroups = false;
 
-            var today = this.moment();
-
-            // Note: This is defining the type and values also for the stats.
-            this.currentDate = new Date;
+            // Note: This is defining the  and values also for the stats.
             this.newEntryType = 'work';
-
-            // Day jumping to go to archived / past days
-            // prev + next day (archive day switching)
-            var currentDate = this.moment(this.currentDate);
-            var prevDate = currentDate.clone();
-            var nextDate = currentDate.clone();
-
-
-            // PREV
-            prevDate = prevDate.subtract(1, 'days');
-            this.prevDateLink = '#task/' + prevDate.format("YYYY/MM/DD");
-
-            // NEXT (not for the future)
-            nextDate = nextDate.add(1, 'days');
-            if (nextDate.isBefore(today, 'day')) {
-                this.nextDateLink = '#task/' + nextDate.format("YYYY/MM/DD");
-            } else if (nextDate.isSame(today, 'day')) {
-                this.nextDateLink = '#today';
-            } else {
-                this.nextDateLink = false;
-            }
 
             // Initially set lastEntry to now.
             var lastEntryTimestamp = Date.now();

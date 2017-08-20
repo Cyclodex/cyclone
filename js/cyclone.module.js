@@ -15,6 +15,15 @@ angular.module("cycloneApp").run(function($transitions) {
         Auth.$onAuthStateChanged(function(user) {
             if (!user){
                 $state.transitionTo('login');
+                return;
+            }
+
+            // Go to the current date, if today was requested
+            if (trans.$to().name === 'today'){
+                // Redirect to the current date
+                var today = new Date();
+                today.setTime(Date.now());
+                $state.transitionTo("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
             }
         });
     });
@@ -29,7 +38,8 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
         .warnPalette('red');
 
     // Routing
-    $urlRouterProvider.otherwise("/task/today");
+    // TODO: redirect today to the real date
+    $urlRouterProvider.otherwise("/today");
 
     // Test route
     $stateProvider
@@ -40,6 +50,11 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                     component: 'welcome'
                 }
             }
+        });
+    // Test route
+    $stateProvider
+        .state('today', {
+            url: "/today"
         });
     // Login
     $stateProvider
@@ -54,10 +69,7 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
     // Time-line
     $stateProvider
         .state('time', {
-            url: "/time/today",
-            params: {
-                type: "today"
-            },
+            url: "/time/{year:int}/{month:int}/{day:int}",
             views: {
                 nav: {
                     component: "nav",
@@ -97,6 +109,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 firebaseRef: function(firebaseRef) {
                     return firebaseRef;
+                },
+                $stateParams: function($stateParams){
+                    return $stateParams;
                 }
             }
         });
@@ -104,10 +119,7 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
     // Task
     $stateProvider
         .state('task', {
-            url: "/task/today",
-            params: {
-                type: "today"
-            },
+            url: "/task/{year:int}/{month:int}/{day:int}",
             views: {
                 nav: {
                     component: "nav",
@@ -147,6 +159,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 firebaseRef: function(firebaseRef) {
                     return firebaseRef;
+                },
+                $stateParams: function($stateParams){
+                    return $stateParams;
                 }
             }
         });
@@ -155,7 +170,7 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
     // Specific day view / Archive
     $stateProvider
         .state('day', {
-            url: "/time/:year/:month/:day",
+            url: "/archive/:year/:month/:day",
             params: {
                 year: "",
                 month: "",

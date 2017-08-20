@@ -25,7 +25,7 @@
             <md-checkbox aria-label="GroupsChecked"
                          ng-checked="GroupData.checked"
                          clipboard
-                         text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                         text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
                          on-copied="$ctrl.timeline.copySuccess(); GroupData.checked = !GroupData.checked; $ctrl.data.$save(GroupData)"
                          on-error="$ctrl.timeline.copyFail(err)"
                          class="md-primary">
@@ -140,7 +140,11 @@
                     <div class="duration duration--human">
                         <span>{{ GroupData.timestampDuration | humanizeDate  }}</span>
                         <span>&nbsp;|&nbsp;</span>
-                        <span class="duration duration--decimal">
+                        <span class="duration duration--decimal"
+                              clipboard
+                              text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                              on-copied="$ctrl.timeline.copySuccess();"
+                              on-error="$ctrl.timeline.copyFail(err)">
                                                     <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
                                                     <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
                     </div>

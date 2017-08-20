@@ -1,0 +1,8 @@
+<a data-ui-state="$ctrl.pageType" data-ui-state-params="{'year': $ctrl.prevDateLink.year, 'month': $ctrl.prevDateLink.month, 'day': $ctrl.prevDateLink.day}">
+    <md-icon>keyboard_arrow_left</md-icon>
+</a>
+<h1 class="inline">{{ $ctrl.currentDate | date : "EEE d. MMM yyyy" }}</h1>
+
+<a ng-if="$ctrl.nextDateLink" data-ui-state="$ctrl.pageType" data-ui-state-params="{'year': $ctrl.nextDateLink.year, 'month': $ctrl.nextDateLink.month, 'day': $ctrl.nextDateLink.day}">
+    <md-icon>keyboard_arrow_right</md-icon>
+</a>

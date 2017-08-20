@@ -35,29 +35,6 @@ angular.module('cycloneApp').factory('timeTypesService', [function() {
                 'icon': 'free_breakfast'
             }
         };
-
-        return [
-            {
-                'name'  : 'Client work',
-                'value' : 'work',
-                'order' : 0
-            },
-            {
-                'name'  : 'Internal work',
-                'value' : 'internal',
-                'order' : 1
-            },
-            {
-                'name'  : 'Trust time',
-                'value' : 'trust',
-                'order' : 2
-            },
-            {
-                'name'  : 'Private / break',
-                'value' : 'private',
-                'order' : 3
-            }
-        ];
     };
 
     return new timeTypesService();

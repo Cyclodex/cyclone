@@ -3,11 +3,17 @@
         <img class="cyclone-logo" src="/img/cycloneWhite.svg">
     </a>
     <!-- TODO: do we need timeline still? think about it -->
-    <md-button ui-sref="time" class="nav__element">
+    <md-button
+            class="nav__element"
+            ui-sref="time({year: $ctrl.currentDate.year, month: $ctrl.currentDate.month, day: $ctrl.currentDate.day})"
+            ui-sref-active="md-active">
         <md-icon>timeline</md-icon>
         <div>time</div>
     </md-button>
-    <md-button ui-sref="task" class="nav__element">
+    <md-button
+            class="nav__element"
+            ui-sref="task({year: $ctrl.currentDate.year, month: $ctrl.currentDate.month, day: $ctrl.currentDate.day})"
+            ui-sref-active="md-active">
         <md-icon>playlist_add_check</md-icon>
         <div>task</div>
     </md-button>
