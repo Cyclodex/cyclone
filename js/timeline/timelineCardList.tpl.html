@@ -7,7 +7,7 @@
      ng-repeat="(Group, GroupData) in $ctrl.data"
      ng-if="GroupData"
      layout-align="start stretch"
-     class="task project-type--{{GroupData.type}}"
+     class="task project-type--{{GroupData.type}} activate--show-on-hover"
      ng-class="{true: 'done', false: ''}[GroupData.checked == true]"
      >
      <!--ng-animate-ref="{{ Group }}"-->
@@ -28,18 +28,19 @@
                          text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
                          on-copied="$ctrl.timeline.copySuccess(); GroupData.checked = !GroupData.checked; $ctrl.data.$save(GroupData)"
                          on-error="$ctrl.timeline.copyFail(err)"
-                         class="md-primary">
+                         class="md-primary show-on-hover hide-6">
             </md-checkbox>
             <md-tooltip md-direction="top">
-                <span ng-if="!GroupData.checked">Check all</span>
-                <span ng-if="GroupData.checked">Un-check all</span>
+                <span ng-if="!GroupData.checked">Check & copy time</span>
+                <span ng-if="GroupData.checked">Un-check</span>
             </md-tooltip>
         </div>
         <!-- Type -->
         <md-input-container md-no-float class="entry__info__select entry__info__select--type">
             <md-select ng-model="GroupData.type"
                        aria-label="Type of the entry"
-                       ng-change="$ctrl.data.$save(GroupData)" >
+                       ng-change="$ctrl.data.$save(GroupData)"
+                       class="show-on-hover hide-6">
                 <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
                     <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                 </md-option>
@@ -48,12 +49,14 @@
     </div>
 
         <div class="entry entry--group"
-             layout="column">
+             layout="row">
 
-                <div class="entry__info"
-                     layout-wrap
-                     layout="row"
-                     layout-align="start center">
+            <div class="entry__info"
+                 layout-wrap
+                 layout="row"
+                 layout-align="start center"
+                 flex="auto"
+            >
 
                 <!-- Project -->
                 <md-input-container md-no-float class="entry__info__input entry__info__input--project">
@@ -79,51 +82,6 @@
                     />
                 </md-input-container>
 
-                <!-- Time information -->
-                <div flex="nogrow" layout="row" layout-align="start center" class="entry__info__time-information">
-                    <div ng-if="GroupData.indeterminate">
-                        <md-icon>warning</md-icon>
-                    </div>
-                    <div>
-                        <div ng-if="GroupData.durationNotChecked > 0">
-                            <span ng-if="GroupData.indeterminate">Un-checked time:</span>
-                            <span class="duration duration--decimal">
-                                                <span
-                                                        clipboard
-                                                        text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                                                        on-copied="$ctrl.timeline.copySuccess();"
-                                                        on-error="$ctrl.timeline.copyFail(err)"
-                                                        class="">
-                                                    <!-- on-copied+= $ctrl.timeline.updateGroupStatus(GroupData, true); -->
-                                                    <md-tooltip md-direction="bottom">
-                                                        Copy time
-                                                    </md-tooltip>
-                                                    <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                                </span>
-                                            </span>
-                            <span>in {{ GroupData.amountNotChecked }} slots</span>
-                        </div>
-                        <div ng-if="GroupData.durationChecked > 0">
-                                            <span class="duration duration--decimal">
-                                                <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
-                                                <span ng-if="GroupData.indeterminate">Checked time:</span>
-                                                <span
-                                                        clipboard
-                                                        text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                                        on-copied="$ctrl.timeline.copySuccess();"
-                                                        on-error="$ctrl.timeline.copyFail(err)"
-                                                        class="done">
-                                                    <md-tooltip md-direction="bottom">
-                                                        Copy time
-                                                    </md-tooltip>
-                                                    {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
-                                                </span>
-                                            </span>
-                            <span>in {{ GroupData.amountChecked }} slots</span>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Description -->
                 <md-input-container md-no-float class="entry__info__input entry__info__input--text">
                     <input ng-model="GroupData.text"
@@ -136,65 +94,113 @@
                            ng-model-options="{updateOn: 'blur'}"
                     />
                 </md-input-container>
-                <div class="entry__time-information">
-                    <div class="duration duration--human">
-                        <span>{{ GroupData.timestampDuration | humanizeDate  }}</span>
-                        <span>&nbsp;|&nbsp;</span>
-                        <span class="duration duration--decimal"
-                              clipboard
-                              text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
-                              on-copied="$ctrl.timeline.copySuccess();"
-                              on-error="$ctrl.timeline.copyFail(err)">
-                                                    <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                    <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
+            </div>
+
+            <!-- Time information -->
+            <!-- I think this is not needed here: -->
+            <!--<div flex="nogrow" layout="row" layout-align="start center" class="entry__info__time-information">
+                <div ng-if="GroupData.indeterminate">
+                    <md-icon>warning</md-icon>
+                </div>
+                <div>
+                    <div ng-if="GroupData.durationNotChecked > 0">
+                        <span ng-if="GroupData.indeterminate">Un-checked time:</span>
+                        <span class="duration duration&#45;&#45;decimal">
+                                            <span
+                                                    clipboard
+                                                    text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                                                    on-copied="$ctrl.timeline.copySuccess();"
+                                                    on-error="$ctrl.timeline.copyFail(err)"
+                                                    class="">
+                                                &lt;!&ndash; on-copied+= $ctrl.timeline.updateGroupStatus(GroupData, true); &ndash;&gt;
+                                                <md-tooltip md-direction="bottom">
+                                                    Copy time
+                                                </md-tooltip>
+                                                <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
+                                            </span>
+                                        </span>
+                        <span>in {{ GroupData.amountNotChecked }} slots</span>
+                    </div>
+                    <div ng-if="GroupData.durationChecked > 0">
+                                        <span class="duration duration&#45;&#45;decimal">
+                                            &lt;!&ndash; TODO: Verify if we really should force an update, even when the group is "indeterminate". &ndash;&gt;
+                                            <span ng-if="GroupData.indeterminate">Checked time:</span>
+                                            <span
+                                                    clipboard
+                                                    text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                                    on-copied="$ctrl.timeline.copySuccess();"
+                                                    on-error="$ctrl.timeline.copyFail(err)"
+                                                    class="done">
+                                                <md-tooltip md-direction="bottom">
+                                                    Copy time
+                                                </md-tooltip>
+                                                {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
+                                            </span>
+                                        </span>
+                        <span>in {{ GroupData.amountChecked }} slots</span>
                     </div>
                 </div>
+            </div>-->
 
-                <!-- Continue button -->
-                <!-- LETS SIMPLIFY THE GUI and disable the continue button -->
-                <!--<span>
-                    <md-button class="md-fab md-primary md-mini"
-                               aria-label="Continue Group"
-                               ng-click="$ctrl.timeline.continueGroup(GroupData)">
-                            <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
-                            <md-icon>play_arrow</md-icon>
-                        </md-button>
-                </span>-->
-                <!-- Add button -->
-                <div class="entry__actions"
-                     flex="auto"
-                     layout="row"
-                     layout-align="end none"
-                >
-                    <md-button class="md-fab md-primary md-mini"
-                               aria-label="Use task"
-                               ng-click="$ctrl.timeline.cloneEntry(GroupData)">
-                        <md-tooltip md-direction="top">
-                            Use this project & description for current timer
-                        </md-tooltip>
-                        <md-icon>arrow_upward</md-icon>
-                    </md-button>
-                    <md-button class="md-fab md-primary md-mini"
-                               aria-label="Add current timer to this Group"
-                               ng-click="$ctrl.timeline.addEntryToGroup(GroupData)">
-                        <md-tooltip md-direction="top">
-                            Track current timer into this group
-                        </md-tooltip>
-                        <md-icon>playlist_add</md-icon>
-                    </md-button>
-                    <!-- DELETE BUTTON -->
-                    <md-button ng-click="$ctrl.timeline.deleteEntry(GroupData);"
-                               class="md-fab md-mini"
-                               aria-label="Delete entry">
-                        <md-tooltip md-direction="top">
-                            Delete
-                        </md-tooltip>
-                        <md-icon>delete_forever</md-icon>
-                    </md-button>
+
+            <!-- Time output-->
+            <div class="entry__time-information" layout="row" layout-align="center center">
+                <div class="duration duration--human">
+                    <span>{{ GroupData.timestampDuration | humanizeDate  }}</span>
+                    <span>&nbsp;|&nbsp;</span>
+                    <span class="duration duration--decimal"
+                          clipboard
+                          text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                          on-copied="$ctrl.timeline.copySuccess();"
+                          on-error="$ctrl.timeline.copyFail(err)">
+                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                                <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
                 </div>
+            </div>
 
+            <!-- Continue button -->
+            <!-- LETS SIMPLIFY THE GUI and disable the continue button -->
+            <!--<span>
+                <md-button class="md-fab md-primary md-mini"
+                           aria-label="Continue Group"
+                           ng-click="$ctrl.timeline.continueGroup(GroupData)">
+                        <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
+                        <md-icon>play_arrow</md-icon>
+                    </md-button>
+            </span>-->
+            <!-- Add button -->
+            <div class="entry__actions"
+                 flex="nogrow"
+                 layout="row"
+                 layout-align="end none"
+            >
+                <md-button class="md-fab md-primary md-mini show-on-hover"
+                           aria-label="Use task"
+                           ng-click="$ctrl.timeline.cloneEntry(GroupData)">
+                    <md-tooltip md-direction="top">
+                        Use this project & description for current timer
+                    </md-tooltip>
+                    <md-icon>arrow_upward</md-icon>
+                </md-button>
+                <md-button class="md-fab md-primary md-mini show-on-hover"
+                           aria-label="Add current timer to this Group"
+                           ng-click="$ctrl.timeline.addEntryToGroup(GroupData)">
+                    <md-tooltip md-direction="top">
+                        Track current timer into this group
+                    </md-tooltip>
+                    <md-icon>playlist_add</md-icon>
+                </md-button>
+                <!-- DELETE BUTTON -->
+                <md-button ng-click="$ctrl.timeline.deleteEntry(GroupData);"
+                           class="md-fab md-mini show-on-hover"
+                           aria-label="Delete entry">
+                    <md-tooltip md-direction="top">
+                        Delete
+                    </md-tooltip>
+                    <md-icon>delete_forever</md-icon>
+                </md-button>
+            </div>
 
-            </div> <!-- END of entry entry--group -->
-        </div>
+        </div> <!-- END of entry entry--group -->
     </md-card>
 </div>

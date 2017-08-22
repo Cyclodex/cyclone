@@ -170,31 +170,6 @@
         padding-top: 20px;
     }
 
-    /*.project-type--work {
-        .task__identifier,
-        .entry-card {
-            background-color: lightyellow;
-        }
-    }
-    .project-type--internal {
-        .task__identifier,
-        .entry-card {
-            background-color: #ffdb6e;
-        }
-    }
-    .project-type--trust {
-        .task__identifier,
-        .entry-card {
-            background-color: #e1c2e6;
-        }
-    }
-    .project-type--private {
-        .task__identifier,
-        .entry-card {
-            background-color: lightblue;
-        }
-    }*/
-
     .project-type--system {
         .entry-card {
             height: 80px;
@@ -210,7 +185,7 @@
         position: relative;
         -webkit-transition: opacity 400ms ease-in-out;
         transition: opacity 400ms ease-in-out;
-        opacity: 0;
+        opacity: 0.1;
     }
 
     &.timeline {
@@ -547,7 +522,7 @@ button.dayVisualize-entry.md-button:hover {
 }
 
 .task__group__entry {
-    margin: 5px;
+    margin: 0 0 5px;
 }
 
 .task__group__entry md-card {
@@ -559,8 +534,10 @@ button.dayVisualize-entry.md-button:hover {
 }
 
 .cyclone-table--tasks {
+    padding: 20px 0;
     .entry__info__input {
         max-width: 150px;
+        padding: 0;
 
         input {
             border: 0;
@@ -572,6 +549,7 @@ button.dayVisualize-entry.md-button:hover {
     }
 
     .card {
+        transition: all 1s;
         position: relative;
         margin: 0;
     }
@@ -605,11 +583,13 @@ button.dayVisualize-entry.md-button:hover {
         }
     }
     .entry__info__time-information {
-        padding: 0 20px;
+        padding: 5px 20px;
+        color: darkgrey;
     }
 
     .entry--group {
         width: 100%;
+        padding: 10px;
     }
 
     .entry__info__select {
@@ -646,13 +626,13 @@ button.dayVisualize-entry.md-button:hover {
 }
 
 .timeline-visual {
-    padding: 5px;
+    padding: 0 5px;
     &:before {
         content: '';
         position: absolute;
         display: block;
         left: 25px;
-        border-left: 4px dotted @colorPrimary;
+        border-left: 1px dotted @colorPrimary;
         opacity: 0.5;
         top: 30px;
         bottom: 10px;
@@ -728,4 +708,21 @@ button.dayVisualize-entry.md-button:hover {
 // Not so much space around inputs
 md-input-container {
     margin-bottom: 0;
+}
+
+
+// Special show on hover feature.
+// Just put these classes accordingly: .activate--show-on-hover > .show-on-hover
+.show-on-hover {
+    position: relative;
+    -webkit-transition: opacity 400ms ease-in-out;
+    transition: opacity 400ms ease-in-out;
+    opacity: 0.1;
+
+    &.hide-6 {opacity: 0.6}
+
+    &:focus,
+    .activate--show-on-hover:hover &{
+        opacity: 1;
+    }
 }

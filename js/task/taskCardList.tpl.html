@@ -6,13 +6,13 @@
 <md-card layout="row" ng-repeat="(Group, GroupData) in $ctrl.data"
          ng-if="GroupData.group"
          layout-align="start stretch"
-         class="card task project-type--{{GroupData.type}}"
+         class="card task project-type--{{GroupData.type}} activate--show-on-hover"
          >
          <!--ng-animate-ref="{{ Group }}"-->
 
     <div class="task__identifier"
          layout="column"
-         layout-align="space-around stretch">
+         layout-align="space-between stretch">
         <!-- Checkbox -->
         <div class="task__checkbox">
             <md-checkbox aria-label="GroupsChecked"
@@ -22,7 +22,7 @@
                          text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
                          on-copied="$ctrl.task.copySuccess(); $ctrl.task.updateGroupStatus(GroupData)"
                          on-error="$ctrl.task.copyFail(err)"
-                         class="md-primary">
+                         class="md-primary show-on-hover hide-6">
             </md-checkbox>
             <md-tooltip md-direction="top">
                 <span ng-if="!GroupData.checkedState">Check all</span>
@@ -34,7 +34,9 @@
         <md-input-container md-no-float class="entry__info__select entry__info__select--type">
             <md-select ng-model="GroupData.type"
                        aria-label="Type of the entry"
-                       ng-change="$ctrl.task.updateGroupData(GroupData)" >
+                       ng-change="$ctrl.task.updateGroupData(GroupData)"
+                       class="show-on-hover hide-6"
+                       >
                 <md-option ng-repeat="type in $ctrl.task.timeTypesService" ng-value="type.value">
                     <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                 </md-option>
@@ -42,29 +44,13 @@
         </md-input-container>
     </div>
 
-    <div class="entry entry--group" layout="column">
+    <div class="entry entry--group" layout="row">
         <div class="entry__info"
              layout-wrap
              layout="row"
-             layout-align="start start">
-
-            <!-- Detail toggler -->
-            <md-button class="group__time-information__details md-icon-button"
-                       ng-click="$ctrl.task.toggleDetails(GroupData)"
-                       aria-label="Toggle display of details">
-                <div ng-if="!GroupData.showDetails">
-                    <md-tooltip md-direction="top">
-                        Show details
-                    </md-tooltip>
-                    <md-icon ng-if="!GroupData.showDetails">keyboard_arrow_down</md-icon>
-                </div>
-                <div ng-if="GroupData.showDetails">
-                    <md-tooltip md-direction="top">
-                        Hide details
-                    </md-tooltip>
-                    <md-icon ng-if="GroupData.showDetails">keyboard_arrow_up</md-icon>
-                </div>
-            </md-button>
+             layout-align="start start"
+             flex="auto"
+        >
 
             <!-- Project -->
             <md-input-container md-no-float class="entry__info__input entry__info__input--project">
@@ -79,7 +65,7 @@
             </md-input-container>
 
             <!-- Task name -->
-            <md-input-container md-no-float class="entry__info__input entry__info__input--task">
+            <md-input-container flex="auto" md-no-float class="entry__info__input entry__info__input--task">
                 <input ng-model="GroupData.task"
                        ng-change="$ctrl.task.updateGroupData(GroupData)"
                        type="text"
@@ -89,155 +75,177 @@
                        ng-model-options="{updateOn: 'blur'}"
                 />
             </md-input-container>
+        </div><!-- END of entry__info -->
 
-            <!-- List of slots / elements -->
-            <div class="entry__details"
-                 layout="column"
-                 layout-align="start start"
-                 ng-if="GroupData.showDetails">
-                <!-- entries -->
-                <div ng-repeat="(entryKey, entry) in GroupData.tasks"
-                     layout="row"
-                     layout-align="start stretch"
-                     layout-align-gt-md="space-around stretch"
-                     class="entry task__group__entry project-type--{{entry.type}}"
-                     ng-class="{true: 'task__group__entry--done', false: ''}[entry.checked == true]"
-                >
-                    <div
-                            layout=row
-                            layout-align="center center"
-                            flex="none"
-                    >
-                        <div layout=row layout-align="space-between">
-                            <md-icon>description</md-icon>
-                            <md-input-container md-no-float class="entry__info__input entry__info__input--text">
-                                <input ng-model="entry.text"
-                                       ng-change="$ctrl.task.updateEntry(entryKey, entry)"
-                                       type="text"
-                                       class="validate"
-                                       aria-label="Task description"
-                                       placeholder="Task description"
-                                       autocomplete="task description"
-                                       ng-model-options="{updateOn: 'blur'}"
-                                />
-                            </md-input-container>
-                            <md-tooltip md-direction="top">
-                                <div class="duration duration--human">
-                                    <span>{{ entry.timestampDuration | humanizeDate  }}</span>
-                                    <span>&nbsp;|&nbsp;</span>
-                                    <span class="duration duration--decimal">
-                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
-                                </div>
-                            </md-tooltip>
-                            <!--<div class="entry__time-information">-->
-                                <!--<div class="duration duration&#45;&#45;human">-->
-                                    <!--<span>{{ entry.timestampDuration | humanizeDate  }}</span>-->
-                                    <!--<span>&nbsp;|&nbsp;</span>-->
-                                    <!--<span class="duration duration&#45;&#45;decimal">-->
-                                                <!--&lt;!&ndash; timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) &ndash;&gt;-->
-                                                <!--<strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        </div>
-
-                        <!-- Delete task entry -->
-                        <!-- Delete option is disabled - because its unclear where this time will go for the user -->
-                        <!--<md-button ng-click="$ctrl.task.deleteEntryHelper(entryKey)"
-                                   class="task__group__entry__delete"
-                                   aria-label="Delete entry">
-                            <md-tooltip md-direction="top">
-                                Delete task
-                            </md-tooltip>
-                            <md-icon>close</md-icon>
-                        </md-button>-->
-                    </div>
+        <!-- List of slots / elements -->
+        <div class="entry__details"
+             layout="column"
+             layout-align="start end"
+             flex="nogrow"
+             >
+            <!-- Detail toggler / Disabled for now -->
+            <!--<md-button class="group__time-information__details md-icon-button"
+                       ng-click="$ctrl.task.toggleDetails(GroupData)"
+                       aria-label="Toggle display of details">
+                <div ng-if="!GroupData.showDetails">
+                    <md-tooltip md-direction="top">
+                        Show details
+                    </md-tooltip>
+                    <md-icon ng-if="!GroupData.showDetails">keyboard_arrow_down</md-icon>
                 </div>
-            </div>
-
-            <!-- Time information -->
-            <div flex="nogrow" layout="row" layout-align="start center" class="entry__info__time-information">
-                <div ng-if="GroupData.indeterminate">
-                    <md-icon>warning</md-icon>
+                <div ng-if="GroupData.showDetails">
+                    <md-tooltip md-direction="top">
+                        Hide details
+                    </md-tooltip>
+                    <md-icon ng-if="GroupData.showDetails">keyboard_arrow_up</md-icon>
                 </div>
-                <div>
-                    <div ng-if="GroupData.durationNotChecked > 0">
-                        <span ng-if="GroupData.indeterminate">Un-checked time:</span>
-                        <span class="duration duration--decimal">
-                                            <span
-                                                    clipboard
-                                                    text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                                                    on-copied="$ctrl.task.copySuccess();"
-                                                    on-error="$ctrl.task.copyFail(err)"
-                                                    class="">
-                                                <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
-                                                <md-tooltip md-direction="bottom">
-                                                    Copy time
-                                                </md-tooltip>
-                                                <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong> h
-                                            </span>
-                                        </span>
-                        <span>in {{ GroupData.amountNotChecked }} slots</span>
-                    </div>
-                    <div ng-if="GroupData.durationChecked > 0">
-                                        <span class="duration duration--decimal">
-                                            <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
-                                            <span ng-if="GroupData.indeterminate">Checked time:</span>
-                                            <span
-                                                    clipboard
-                                                    text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                                    on-copied="$ctrl.task.copySuccess();"
-                                                    on-error="$ctrl.task.copyFail(err)"
-                                                    class="done">
-                                                <md-tooltip md-direction="bottom">
-                                                    Copy time
-                                                </md-tooltip>
-                                                {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }} h
-                                            </span>
-                                        </span>
-                        <span>in {{ GroupData.amountChecked }} slots</span>
-                    </div>
-                </div>
-            </div>
+            </md-button>-->
 
-
-            <!-- Continue button -->
-            <!-- LETS SIMPLIFY THE GUI and disable the continue button -->
-            <!--<span>
-                <md-button class="md-fab md-primary md-mini"
-                           aria-label="Continue Group"
-                           ng-click="$ctrl.task.continueGroup(GroupData)">
-                        <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
-                        <md-icon>play_arrow</md-icon>
-                    </md-button>
-            </span>-->
-            <!-- Actions -->
-            <div class="entry__actions"
-                 flex="auto"
+            <!-- entries -->
+            <!--disabled detail switching for now: ng-if="GroupData.showDetails"-->
+            <div
+                 ng-repeat="(entryKey, entry) in GroupData.tasks"
                  layout="row"
-                 layout-align="end none"
+                 layout-align="start stretch"
+                 layout-align-gt-md="space-around stretch"
+                 class="entry task__group__entry project-type--{{entry.type}}"
+                 ng-class="{true: 'task__group__entry--done', false: ''}[entry.checked == true]"
             >
-                <!-- Clone/copy entry button-->
-                <md-button class="md-fab md-primary md-mini"
-                           aria-label="Use task"
-                           ng-click="$ctrl.task.cloneEntry(GroupData)">
-                    <md-tooltip md-direction="top">
-                        Use this project & description for current timer
-                    </md-tooltip>
-                    <md-icon>arrow_upward</md-icon>
-                </md-button>
-                <!-- Add to this group button -->
-                <md-button class="md-fab md-primary md-mini"
-                           aria-label="Add current timer to this Group"
-                           ng-click="$ctrl.task.addEntryToGroup(GroupData)">
-                    <md-tooltip md-direction="top">
-                        Track current timer into this group
-                    </md-tooltip>
-                    <md-icon>playlist_add</md-icon>
-                </md-button>
+                <div
+                        layout=row
+                        layout-align="center center"
+                        flex="none"
+                >
+                    <div layout=row layout-align="space-between">
+                        <md-icon>description</md-icon>
+                        <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                            <input ng-model="entry.text"
+                                   ng-change="$ctrl.task.updateEntry(entryKey, entry)"
+                                   type="text"
+                                   class="validate"
+                                   aria-label="Task description"
+                                   placeholder="Task description"
+                                   autocomplete="task description"
+                                   ng-model-options="{updateOn: 'blur'}"
+                            />
+                        </md-input-container>
+                        <md-tooltip md-direction="top">
+                            <div class="duration duration--human">
+                                <span>{{ entry.timestampDuration | humanizeDate  }}</span>
+                                <span>&nbsp;|&nbsp;</span>
+                                <span class="duration duration--decimal">
+                                            <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                                            <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong>h</span>
+                            </div>
+                        </md-tooltip>
+                        <!--<div class="entry__time-information">-->
+                            <!--<div class="duration duration&#45;&#45;human">-->
+                                <!--<span>{{ entry.timestampDuration | humanizeDate  }}</span>-->
+                                <!--<span>&nbsp;|&nbsp;</span>-->
+                                <!--<span class="duration duration&#45;&#45;decimal">-->
+                                            <!--&lt;!&ndash; timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) &ndash;&gt;-->
+                                            <!--<strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong>h</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+
+                    <!-- Delete task entry -->
+                    <!-- Delete option is disabled - because its unclear where this time will go for the user -->
+                    <!--<md-button ng-click="$ctrl.task.deleteEntryHelper(entryKey)"
+                               class="task__group__entry__delete"
+                               aria-label="Delete entry">
+                        <md-tooltip md-direction="top">
+                            Delete task
+                        </md-tooltip>
+                        <md-icon>close</md-icon>
+                    </md-button>-->
+                </div>
             </div>
+        </div>
+
+        <!-- Time information -->
+        <div flex="nogrow"
+             layout="row"
+             layout-align="center start"
+             class="entry__info__time-information">
+            <div ng-if="GroupData.indeterminate">
+                <md-icon>warning</md-icon>
+            </div>
+            <div>
+                <div ng-if="GroupData.durationNotChecked > 0">
+                    <span ng-if="GroupData.indeterminate">Un-checked time:</span>
+                    <span class="duration duration--decimal">
+                                        <span
+                                                clipboard
+                                                text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                                                on-copied="$ctrl.task.copySuccess();"
+                                                on-error="$ctrl.task.copyFail(err)"
+                                                class="">
+                                            <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time
+                                            </md-tooltip>
+                                            <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong>h
+                                        </span>
+                                    </span>
+                    <span>in {{ GroupData.amountNotChecked }} slots</span>
+                </div>
+                <div ng-if="GroupData.durationChecked > 0">
+                                    <span class="duration duration--decimal">
+                                        <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
+                                        <span ng-if="GroupData.indeterminate">Checked time:</span>
+                                        <span
+                                                clipboard
+                                                text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                                on-copied="$ctrl.task.copySuccess();"
+                                                on-error="$ctrl.task.copyFail(err)"
+                                                class="done">
+                                            <md-tooltip md-direction="bottom">
+                                                Copy time
+                                            </md-tooltip>
+                                            {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }}h
+                                        </span>
+                                    </span>
+                    <span>in {{ GroupData.amountChecked }} slots</span>
+                </div>
+            </div>
+        </div>
 
 
-        </div> <!-- END of entry__info -->
+        <!-- Continue button -->
+        <!-- LETS SIMPLIFY THE GUI and disable the continue button -->
+        <!--<span>
+            <md-button class="md-fab md-primary md-mini"
+                       aria-label="Continue Group"
+                       ng-click="$ctrl.task.continueGroup(GroupData)">
+                    <md-tooltip md-direction="top"><span>Track current timer and continue now on this Group</span></md-tooltip>
+                    <md-icon>play_arrow</md-icon>
+                </md-button>
+        </span>-->
+        <!-- Actions -->
+        <div class="entry__actions show-on-hover"
+             flex="nogrow"
+             layout="row"
+             layout-align="end none"
+        >
+            <!-- Clone/copy entry button-->
+            <md-button class="md-fab md-primary md-mini"
+                       aria-label="Use task"
+                       ng-click="$ctrl.task.cloneEntry(GroupData)">
+                <md-tooltip md-direction="top">
+                    Use this project & description for current timer
+                </md-tooltip>
+                <md-icon>arrow_upward</md-icon>
+            </md-button>
+            <!-- Add to this group button -->
+            <md-button class="md-fab md-primary md-mini"
+                       aria-label="Add current timer to this Group"
+                       ng-click="$ctrl.task.addEntryToGroup(GroupData)">
+                <md-tooltip md-direction="top">
+                    Track current timer into this group
+                </md-tooltip>
+                <md-icon>playlist_add</md-icon>
+            </md-button>
+        </div>
     </div>
 </md-card>
