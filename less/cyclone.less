@@ -549,7 +549,6 @@ button.dayVisualize-entry.md-button:hover {
     }
 
     .card {
-        transition: all 1s;
         position: relative;
         margin: 0;
     }
@@ -645,30 +644,41 @@ button.dayVisualize-entry.md-button:hover {
 // Trying out crazy animation stuff
 // https://codepen.io/jonespen/pen/avBZpO
 // https://docs.angularjs.org/api/ngAnimate
-/*
+// Works on task but not yet timeline ?
+.task,
 .card {
     &.ng-anchor {
-        !* this animation will last for 1 second since there are
-               two phases to the animation (an `in` and an `out` phase) *!
+        /* this animation will last for 1 second since there are
+           two phases to the animation (an `in` and an `out` phase) */
         transition:0.5s linear all;
     }
     &.ng-leave {
         opacity: 1.0 ;
-        transition: 1000ms linear all;
+        transition: 1000ms cubic-bezier(0.165, 0.84, 0.44, 1) all;
+        //transform: translateX(0);
+        transform: scale(1);
+        height: 76px;
+
+        &.ng-leave-active {
+            opacity: 0.0 ;
+            //transform: translateX(-150%);
+            transform: scale(0);
+            height: 0;
+        }
     }
 
-    &.ng-leave-active {
-        opacity: 0.0 ;
-    }
     &.ng-enter {
-        transition: 1000ms linear all;
+        transition: 1000ms cubic-bezier(0.165, 0.84, 0.44, 1) all;
+        //transform: translateX(-150%);
+        transform: scale(0);
         height: 0;
     }
     &.ng-enter-active {
-        height: 73px;
+        //transform: translateX(0);
+        transform: scale(1);
+        height: 76px;
     }
 }
-*/
 
 
 .autocomplete {
