@@ -37,9 +37,10 @@
                 <md-select id="newTaskType"
                            ng-model="$ctrl.newEntryType"
                            aria-label="Type of entry"
-                           ng-keydown="$event.which === 13 && addEntry()">
+                           ng-keydown="$event.which === 13 && addEntry()"
+                           >
                     <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
-                        <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                        <span style="display: none">{{type.name}}</span><md-icon>{{type.icon}}</md-icon><span class="option__name">{{type.name}}</span>
                     </md-option>
                 </md-select>
             </md-input-container>
@@ -72,9 +73,6 @@
     <div flex="100"
          flex-gt-md="80">
 
-        <date-switcher></date-switcher>
-
-
         <md-card ng-if="$ctrl.error">
             <md-card-title>
                 <div class="md-headline">
@@ -86,9 +84,10 @@
             </md-card-content>
         </md-card>
 
-        <stats></stats>
 
         <div class="cyclone-table cyclone-table--tasks" flex="grow">
+            <date-switcher></date-switcher>
+            <stats></stats>
             <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>

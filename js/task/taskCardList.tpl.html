@@ -175,19 +175,19 @@
                 <div ng-if="GroupData.durationNotChecked > 0">
                     <span ng-if="GroupData.indeterminate">Un-checked time:</span>
                     <span class="duration duration--decimal">
-                                        <span
-                                                clipboard
-                                                text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                                                on-copied="$ctrl.task.copySuccess();"
-                                                on-error="$ctrl.task.copyFail(err)"
-                                                class="">
-                                            <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
-                                            <md-tooltip md-direction="bottom">
-                                                Copy time
-                                            </md-tooltip>
-                                            <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong>h
-                                        </span>
-                                    </span>
+                        <span
+                                clipboard
+                                text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                                on-copied="$ctrl.task.copySuccess();"
+                                on-error="$ctrl.task.copyFail(err)"
+                                class="">
+                            <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
+                            <md-tooltip md-direction="bottom">
+                                Copy time
+                            </md-tooltip>
+                            <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong>h
+                        </span>
+                    </span>
                     <span>in {{ GroupData.amountNotChecked }} slots</span>
                 </div>
                 <div ng-if="GroupData.durationChecked > 0">

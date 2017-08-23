@@ -129,6 +129,7 @@
 @colorInternal: #ffdb6e;
 @colorTrust: #e1c2e6;
 @colorPrivate: lightblue;
+@colorSecondary: #ff4081;
 
 .project-type--work {
     &.dayVisualize-entry,
@@ -160,7 +161,9 @@
 }
 
 .cyclone-table {
+    position: relative;
     padding: 20px 10px;
+    margin: 10px 0;
 
     &.cyclone-table--grouped {
         max-width: 400px;
@@ -346,9 +349,10 @@ md-radio-button {
 }
 
 .stats-totals {
-    text-align: left;
-    width: 90%;
-    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: grey;
 
     .day-visualize {
         width: 100%;
@@ -530,7 +534,6 @@ button.dayVisualize-entry.md-button:hover {
 }
 
 .cyclone-table--tasks {
-    padding: 20px 0;
     .entry__info__input {
         max-width: 150px;
         padding: 0;

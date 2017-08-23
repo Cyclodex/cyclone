@@ -19,7 +19,12 @@
   min-height: 35px;
   color: white;
   text-decoration: none;
+
+  &.md-active {
+    background-color: @colorSecondary;
+  }
 }
+
 
 .cyclone-logo {
   height: 30px;
@@ -31,4 +36,12 @@
   color: white;
   font-size: 0.6em;
   text-decoration: none;
+}
+
+.date-switcher {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  color: grey;
 }
