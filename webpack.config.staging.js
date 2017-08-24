@@ -15,7 +15,7 @@ const FileChanger = require('webpack-file-changer');
 module.exports = {
     entry: {
         app: [
-            "./less/cyclone.less",
+            "./less/master.less",
             "./js/cyclone.js"
             ],
         vendors: [
