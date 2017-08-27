@@ -509,7 +509,7 @@ angular.module("cycloneApp").controller("TimeCtrl", ["currentUser", "$scope", "A
                     groupsNew[groupId].duration = 0;
                     groupsNew[groupId].durationChecked = 0;
                     groupsNew[groupId].group = groupId;
-                    console.log('GroupID created:' + groupId);
+                    //console.log('GroupID created:' + groupId);
                 }
 
                 // Sum up

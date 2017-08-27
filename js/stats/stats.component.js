@@ -53,7 +53,7 @@ angular.module("cycloneApp")
               $ctrl.refDayVisArray.forEach(function(data) {
                 // Check if entries type is supported (we also have system which is not part of graphs)
                 if ($scope.types[data.type] === undefined) {
-                  console.warn('Ignoring type "' + data.type + '" for sum visualization.');
+                  //console.warn('Ignoring type "' + data.type + '" for sum visualization.');
                   return;
                 }
                 var projectDuration = data.timestampDuration;

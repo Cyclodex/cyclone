@@ -471,7 +471,7 @@ angular.module('cycloneApp')
                         groupsNew[groupId].project = projectName;
                         groupsNew[groupId].type = groupType;
                         groupsNew[groupId].showDetails = true; // Show details per default
-                        console.log('GroupID created:' + groupId);
+                        //console.log('GroupID created:' + groupId);
                     }
 
                     // Sum up
@@ -522,8 +522,8 @@ angular.module('cycloneApp')
                     }
                 }
 
-                console.log('new groups:');
-                console.log(groupsNew);
+                //console.log('new groups:');
+                //console.log(groupsNew);
 
                 // // TODO: Should we make separate Groups for Open / Done tasks ?
                 ctrl.entriesCurrentGroups = groupsNew;
@@ -532,7 +532,7 @@ angular.module('cycloneApp')
 
             // Group update status checked on several tasks
             this.updateGroupStatus = function (taskData, status) {
-                console.log(taskData);
+                //console.log(taskData);
                 var checked = false;
                 if (status === undefined) {
                     if (taskData.indeterminate) {
@@ -550,7 +550,7 @@ angular.module('cycloneApp')
                     // Save Entry
                     this.entries.$save(Entry).then(function (queryRef) {
                         // data has been saved to our database
-                        console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                        //console.log("Entry (update Group) entry saved with index" + queryRef.key)
                     });
                 }
             };
@@ -567,7 +567,7 @@ angular.module('cycloneApp')
                     // Save Entry
                     this.entries.$save(Entry).then(function (queryRef) {
                         // data has been saved to our database
-                        console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                        //console.log("Entry (update Group) entry saved with index" + queryRef.key)
                     });
                 }
             };
@@ -585,7 +585,7 @@ angular.module('cycloneApp')
                 // Save Entry
                 this.entries.$save(Entry).then(function (queryRef) {
                     // data has been saved to our database
-                    console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                    //console.log("Entry (update Group) entry saved with index" + queryRef.key)
                 });
             };
 
@@ -601,7 +601,7 @@ angular.module('cycloneApp')
                 // Save Entry
                 this.entries.$save(entry).then(function (queryRef) {
                     // data has been saved to our database
-                    console.log("Entry (single Entry) saved with index" + queryRef.key)
+                    //console.log("Entry (single Entry) saved with index" + queryRef.key)
                 });
             };
         }

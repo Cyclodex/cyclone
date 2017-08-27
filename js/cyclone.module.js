@@ -20,9 +20,12 @@ angular.module("cycloneApp").run(function($transitions) {
 
             // Go to the current date, if today was requested
             if (trans.$to().name === 'today'){
+                console.log('######################');
+                console.log("trans $to === today");
                 // Redirect to the current date
                 var today = new Date();
                 today.setTime(Date.now());
+                // TODO: Sometimes it goes back to the time view, must be related to this somehow:
                 $state.transitionTo("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
             }
         });
@@ -38,20 +41,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
         .warnPalette('red');
 
     // Routing
-    // TODO: redirect today to the real date
     $urlRouterProvider.otherwise("/today");
 
-    // Test route
-    $stateProvider
-        .state('welcome', {
-            url: "/welcome",
-            views: {
-                content: {
-                    component: 'welcome'
-                }
-            }
-        });
-    // Test route
+    // Today route - will forward to the current date
     $stateProvider
         .state('today', {
             url: "/today"
@@ -163,38 +155,6 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 $stateParams: function($stateParams){
                     return $stateParams;
                 }
-            }
-        });
-
-
-    // Specific day view / Archive
-    $stateProvider
-        .state('day', {
-            url: "/archive/:year/:month/:day",
-            params: {
-                year: "",
-                month: "",
-                day: "",
-                type: "archive-date"
-            },
-            views: {
-                content: {
-                    controller: "TimeCtrl",
-                    template: require('./time/time.tpl.html'),
-                }
-            },
-            resolve: {
-                "currentUser":
-                    ["userPromise", "$state", function(userPromise, $state) {
-                        return userPromise.getPromise().then(function(success){
-                            return success;
-                        }, function(reason){
-                            console.log("userPromise Failed: " + reason);
-                            $state.transitionTo('login');
-                        }, function(notification){
-                            console.log("notification: " + notification);
-                        });
-                    }]
             }
         });
 });
