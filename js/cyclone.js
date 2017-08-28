@@ -49,6 +49,7 @@ require('./timeline/timeline.component.js');
 require('./timeline/timelineCardList.component.js');
 require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
+require('./filters/type.js');
 
 // Testing component:
 require('./test/welcome.component.js');

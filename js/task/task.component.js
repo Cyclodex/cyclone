@@ -54,8 +54,10 @@ angular.module('cycloneApp')
             focus('newTaskProject');
 
             // build custom entries
-            ctrl.entriesCurrentGroups = {};
-            ctrl.groupsChecked = {};
+            // ctrl.entriesCurrentGroups = {};
+            ctrl.groupsCurrent = {};        // the "open" tasks (internal or work)
+            ctrl.groupsChecked = {};        // the "done" tasks (internal or work)
+            ctrl.groupsUncheckable = {};    // Will hold the private/breaks and trust entries
 
 
             // Call the data etc.
@@ -65,7 +67,8 @@ angular.module('cycloneApp')
             // Because we have the user here already.
             var queryRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
-            var query = queryRef.orderByChild("order");
+            // var query = queryRef.orderByChild("order"); // performance and makes no sense anyway for tasks
+            var query = queryRef;
 
             // CONTINUE TASK
             // Update the groups on load and all changes of the child data
@@ -73,14 +76,8 @@ angular.module('cycloneApp')
             // query.on('child_changed', function(snapshot) {
             query.on('value', function (snapshot) {
                 updateContinuedTasks(snapshot);
+                // Apply the changes
             });
-
-            // TODO: I don't need 2 calls anymore, we just will do it once, and then create the output of it
-            // Timelog entries:
-            // var queryRef = this.firebaseRef.getReference(this.user);
-            // Order the query, from recent to older entries
-            // However this only works with the orderBy in the template right now.
-            // var query = queryRef.orderByChild("order");
 
             // Create a synchronized array
             this.entries = this.$firebaseArray(query);
@@ -440,8 +437,6 @@ angular.module('cycloneApp')
 
             // Continued Task handler
             function updateContinuedTasks(snapshot) {
-                // We are always starting from scratch, we could also try to iterate over the
-                // ctrl.entriesCurrentGroups
 
                 var groupsNew = {};
                 // Iterate over all the data and prepare new object
@@ -450,7 +445,12 @@ angular.module('cycloneApp')
                     var projectName = entry.project || '';
                     var taskName = entry.task || '';
                     var groupType = entry.type || '';
-                    var groupId   = projectName + '_' + groupType  + '_' + taskName || '-';
+
+                    // TODO: Make some real groupID if not set, and set it into the data.
+                    // This could solve the issues of updating lines because of new project or task name
+                    // var groupId   = projectName + '_' + groupType  + '_' + taskName || '-';
+                    // Solves the issues when moving around, but does not support same entries with different type
+                    var groupId   = projectName + '_' + taskName || '-';
 
 
                     // Make sure the elements are set
@@ -489,45 +489,82 @@ angular.module('cycloneApp')
 
                 });
 
+                // TODO: only the OPEN tasks are updated correctly.
+                // If entry moves from private or done to OPEN it stays in the old array somehow.
+                // Also if switched from trust to private
                 // Clean up the end result of groups
                 for (var groupId in groupsNew) {
                     if (groupsNew.hasOwnProperty(groupId)) {
-                        // Verifying the "checked" state
-                        if (groupsNew[groupId].amountChecked == 0) {
-                            // not checked
-                            groupsNew[groupId].checkedState = false;
-                            groupsNew[groupId].indeterminate = false;
-
+                        // Verify the type, and ignore "break" and "trust"
+                        if ((groupsNew[groupId].type === 'trust') || (groupsNew[groupId].type === 'private')) {
+                            ctrl.groupsUncheckable[groupId] = groupsNew[groupId];
+                            // TODO: delete needed ?
+                            delete ctrl.groupsCurrent[groupId];
                             delete ctrl.groupsChecked[groupId];
-                        } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
-                            // all tasks are checked
-                            groupsNew[groupId].checkedState = true;
-                            groupsNew[groupId].indeterminate = false;
-                            groupsNew[groupId].showDetails = false;
-
-                            // Place entry and remove from other
-                            ctrl.groupsChecked[groupId] = groupsNew[groupId];
-                            delete groupsNew[groupId];
+                        } else if (groupsNew[groupId].type === 'system') {
+                            // We ignore system entries
+                            continue;
                         } else {
-                            // amount of tasks checked is not amount of tasks, means mixed
-                            groupsNew[groupId].checkedState = false;
-                            groupsNew[groupId].indeterminate = true;
-                            groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
+                            // Internal or work is checkable:
 
-                            delete ctrl.groupsChecked[groupId];
+                            // Verifying the "checked" state
+                            if (groupsNew[groupId].amountChecked == 0) {
+                                // not checked
+                                groupsNew[groupId].checkedState = false;
+                                groupsNew[groupId].indeterminate = false;
+
+                                ctrl.groupsCurrent[groupId] = groupsNew[groupId];
+                                delete ctrl.groupsChecked[groupId];
+                                delete ctrl.groupsUncheckable[groupId];
+                            } else if (groupsNew[groupId].amountChecked == groupsNew[groupId].amountAll) {
+                                // all tasks are checked
+                                groupsNew[groupId].checkedState = true;
+                                groupsNew[groupId].indeterminate = false;
+                                groupsNew[groupId].showDetails = false;
+
+                                // Place entry and remove from other
+                                ctrl.groupsChecked[groupId] = groupsNew[groupId];
+                                delete ctrl.groupsCurrent[groupId];
+                                delete ctrl.groupsUncheckable[groupId];
+                            } else {
+                                // amount of tasks checked is not amount of tasks, means mixed
+                                groupsNew[groupId].checkedState = false;
+                                groupsNew[groupId].indeterminate = true;
+                                groupsNew[groupId].showDetails = true; // TODO: or even kind of warning?
+
+                                ctrl.groupsCurrent[groupId] = groupsNew[groupId];
+                                delete ctrl.groupsChecked[groupId];
+                                delete ctrl.groupsUncheckable[groupId];
+                            }
                         }
                     }
+                    // Delete the group in new if there is no entry anymore
                     if (Object.keys(groupsNew).length == 0) {
+                        console.log('deleting for what ????????????????:');
+                        console.log(groupId);
                         delete groupsNew[groupId];
                     }
                 }
 
+                console.log("current");
+                console.log(ctrl.groupsCurrent['test_work_trust']);
+                console.log("checked");
+                console.log(ctrl.groupsChecked['test_work_trust']);
+                console.log("unchecked");
+                console.log(ctrl.groupsUncheckable['test_trust_trust']);
                 //console.log('new groups:');
                 //console.log(groupsNew);
 
                 // // TODO: Should we make separate Groups for Open / Done tasks ?
-                ctrl.entriesCurrentGroups = groupsNew;
+                // ctrl.entriesCurrentGroups = groupsNew;
                 ctrl.doneLoadingGroups = true;
+
+                // TODO: return arrays for ng repeat and filters
+                // ctrl.entriesArray = [];
+                // angular.forEach(ctrl.entriesAll, function(element) {
+                //     ctrl.entriesArray.push(element);
+                // });
+                // console.log(ctrl.entriesArray);
             }
 
             // Group update status checked on several tasks

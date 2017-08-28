@@ -2,7 +2,9 @@ angular.module('cycloneApp').component('taskCardList', {
     bindings: {
         listTitle: '@',
         listIcon: '@',
-        data: '<'
+        data: '<',
+        filter: '@',
+        filterCheckAble: '@'
     },
     require: {
         task: '^^'
