@@ -22,6 +22,8 @@ angular.module("cycloneApp").run(function($transitions) {
             if (trans.$to().name === 'today'){
                 console.log('######################');
                 console.log("trans $to === today");
+                console.log(trans);
+                console.log($state);
                 // Redirect to the current date
                 var today = new Date();
                 today.setTime(Date.now());
