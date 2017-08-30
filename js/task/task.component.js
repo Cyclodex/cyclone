@@ -15,7 +15,8 @@ angular.module('cycloneApp')
             newEntryText: '<',
             newEntryTask: '<',
             newEntryManualTime: '<',
-            firebaseRef: '<'
+            firebaseRef: '<',
+            helperService: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
             var ctrl = this;
@@ -196,10 +197,9 @@ angular.module('cycloneApp')
                     this.newEntryTask = '';
                 }
 
-
                 // Check if there is a group id we need to apply
                 var groups = this.entries;
-                groupId = getGroupId(groups, this.newEntryProject, this.newEntryTask, this.newEntryType, timestamp);
+                groupId = ctrl.helperService.getGroupId(groups, this.newEntryProject, this.newEntryTask, this.newEntryType, timestamp);
 
                 //
                 // ADD new entry into DB
@@ -468,7 +468,7 @@ angular.module('cycloneApp')
 
                     // This is probably only a fallback scenario. We need to do the group update on add / update.
                     if (!groupIdentifaction){
-                        groupId = getGroupId(groupsNew, projectName, taskName, groupType, groupTimestamp);
+                        groupId = ctrl.helperService.getGroupId(groupsNew, projectName, taskName, groupType, groupTimestamp);
                     } else {
                         groupId = groupIdentifaction;
                     }
@@ -582,31 +582,6 @@ angular.module('cycloneApp')
                 // });
                 // console.log(ctrl.entriesArray);
             }
-            function getGroupId(existingGroups, projectName, taskName, groupType, groupTimestamp){
-                for (var gId in existingGroups) {
-                    if (existingGroups.hasOwnProperty(gId)) {
-                        if (
-                            existingGroups[gId].project === projectName
-                            && existingGroups[gId].task === taskName
-                            && existingGroups[gId].type === groupType
-                        ){
-                            // console.log("getGroupID debug");
-                            // console.log(existingGroups[gId]);
-                            // Use this group if available
-                            if (existingGroups[gId].group){
-                                return existingGroups[gId].group;
-                            }
-                        }
-                    }
-                }
-                // console.log("no project match found");
-                // Defining new group name
-                // When we use the timestamp it will be ordered and grouped correctly (timestamp of the latest entry)
-                var groupIdDefinition = groupTimestamp;
-                // Grouping with name or task or type, did not work as the ng-repeat re-ordered the elements
-                // var groupIdDefinition = groupTimestamp + '_' + projectName + '_' + groupType  + '_' + taskName || '-';
-                return groupIdDefinition;
-            }
 
             // Group update status checked on several tasks
             this.updateGroupStatus = function (taskData, status) {
@@ -637,7 +612,7 @@ angular.module('cycloneApp')
             this.updateGroupData = function (taskData) {
                 // // Check if there is a group id we need to apply
                 var groups = this.entries;
-                var groupId = getGroupId(groups, taskData.project, taskData.task, taskData.type, taskData.timestamp);
+                var groupId = ctrl.helperService.getGroupId(groups, taskData.project, taskData.task, taskData.type, taskData.timestamp);
 
                 for (var taskKey in taskData.tasks) {
                     var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null

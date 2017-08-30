@@ -15,7 +15,8 @@ angular.module('cycloneApp')
             newEntryText: '<',
             newEntryTask: '<',
             newEntryManualTime: '<',
-            firebaseRef: '<'
+            firebaseRef: '<',
+            helperService: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
             var ctrl = this;
@@ -177,10 +178,14 @@ angular.module('cycloneApp')
                 // ADD new entry into DB
                 //
 
+                // Check if there is a group id we need to apply
+                var groups = this.entries;
+                groupId = ctrl.helperService.getGroupId(groups, this.newEntryProject, this.newEntryTask, this.newEntryType, timestamp);
+
                 this.entries.$add({
                     text: this.newEntryText,
                     project: this.newEntryProject,
-                    group: '', // TODO: don't fill the group because its dynamic? Or define it before saving?
+                    group: groupId,
                     task: this.newEntryTask,
                     checked: false,
                     type: this.newEntryType,
@@ -409,13 +414,12 @@ angular.module('cycloneApp')
 
             // Entry update. Needs the key and some data to merge with current Entry
             this.updateEntry = function (entryKey, entryData) {
-                console.log(entryKey);
-                console.log(this.entries);
                 var Entry = this.entries.$getRecord(entryKey); // record with $id === nextEntryKey or null
-                console.log(entryData);
-                console.log(Entry);
                 Entry.project = entryData.project;
-                Entry.group = entryData.group;
+                // Check if there is a group id we need to apply
+                var groups = this.entries;
+                groupId = ctrl.helperService.getGroupId(groups, entryData.project, entryData.task, entryData.type, entryData.timestamp, entryData.$id);
+                Entry.group = groupId;
                 Entry.task = entryData.task;
                 Entry.type = entryData.type;
                 // Merge the entryData into the Entry object

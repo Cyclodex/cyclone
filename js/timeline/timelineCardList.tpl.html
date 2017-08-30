@@ -39,7 +39,7 @@
         <md-input-container md-no-float class="entry__info__select entry__info__select--type">
             <md-select ng-model="GroupData.type"
                        aria-label="Type of the entry"
-                       ng-change="$ctrl.data.$save(GroupData)"
+                       ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                        class="show-on-hover hide-6">
                 <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
                     <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
@@ -61,7 +61,7 @@
                 <!-- Project -->
                 <md-input-container md-no-float class="entry__info__input entry__info__input--project">
                     <input ng-model="GroupData.project"
-                           ng-change="$ctrl.data.$save(GroupData)"
+                           ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                            type="text"
                            aria-label="project"
                            placeholder="Project"
@@ -73,7 +73,7 @@
                 <!-- Task name -->
                 <md-input-container md-no-float class="entry__info__input entry__info__input--task">
                     <input ng-model="GroupData.task"
-                           ng-change="$ctrl.data.$save(GroupData)"
+                           ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                            type="text"
                            aria-label="Task"
                            placeholder="Task / Issue"

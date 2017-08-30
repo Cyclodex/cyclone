@@ -90,8 +90,7 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 ,
                 timeTypesService: function(timeTypesService) {
                     return timeTypesService.getTimeTypes();
-                }
-                ,
+                },
                 moment: function(moment) {
                     return moment;
                 },
@@ -106,6 +105,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 $stateParams: function($stateParams){
                     return $stateParams;
+                },
+                helperService: function(helperService) {
+                    return helperService;
                 }
             }
         });
@@ -156,6 +158,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 $stateParams: function($stateParams){
                     return $stateParams;
+                },
+                helperService: function(helperService) {
+                    return helperService;
                 }
             }
         });

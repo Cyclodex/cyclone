@@ -50,6 +50,7 @@ require('./timeline/timelineCardList.component.js');
 require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
 require('./filters/type.js');
+require('./components/helper.service.js');
 
 // Testing component:
 require('./test/welcome.component.js');

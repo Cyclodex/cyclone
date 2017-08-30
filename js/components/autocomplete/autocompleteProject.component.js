@@ -49,7 +49,7 @@ angular.module('cycloneApp').component('autocompleteProject', {
         }
 
         function searchTextChange(text) {
-            $log.info('Text changed to ' + text);
+            //$log.info('Text changed to ' + text);
             self.task.newEntryProject = text;
             // TODO: This should go out with a function call to the parent (on-change) not directly
         }
