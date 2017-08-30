@@ -67,16 +67,20 @@ angular.module('cycloneApp')
             // Because we have the user here already.
             var queryRef = this.firebaseRef.getReference(this.user);
             // Order the query, from recent to older entries
-            // var query = queryRef.orderByChild("order"); // performance and makes no sense anyway for tasks
-            var query = queryRef;
+            var query = queryRef.orderByChild("order");
+            // TODO: We could get rid of the ordering, if we save every entry into the "order" timestamp instead the firebase one.
 
             // CONTINUE TASK
             // Update the groups on load and all changes of the child data
             // query.once('value').then(function(snapshot) {
             // query.on('child_changed', function(snapshot) {
             query.on('value', function (snapshot) {
-                updateContinuedTasks(snapshot);
+                // Resetting output
+                ctrl.groupsCurrent = {};        // the "open" tasks (internal or work)
+                ctrl.groupsChecked = {};        // the "done" tasks (internal or work)
+                ctrl.groupsUncheckable = {};    // Will hold the private/breaks and trust entries
                 // Apply the changes
+                updateContinuedTasks(snapshot);
             });
 
             // Create a synchronized array
@@ -192,6 +196,11 @@ angular.module('cycloneApp')
                     this.newEntryTask = '';
                 }
 
+
+                // Check if there is a group id we need to apply
+                var groups = this.entries;
+                groupId = getGroupId(groups, this.newEntryProject, this.newEntryTask, this.newEntryType, timestamp);
+
                 //
                 // ADD new entry into DB
                 //
@@ -199,7 +208,7 @@ angular.module('cycloneApp')
                 this.entries.$add({
                     text: this.newEntryText,
                     project: this.newEntryProject,
-                    group: '', // TODO: don't fill the group because its dynamic? Or define it before saving?
+                    group: groupId,
                     task: this.newEntryTask,
                     checked: false,
                     type: this.newEntryType,
@@ -445,12 +454,24 @@ angular.module('cycloneApp')
                     var projectName = entry.project || '';
                     var taskName = entry.task || '';
                     var groupType = entry.type || '';
+                    var groupIdentifaction = entry.group || '';
+                    var groupTimestamp = entry.timestamp;
 
                     // TODO: Make some real groupID if not set, and set it into the data.
                     // This could solve the issues of updating lines because of new project or task name
-                    // var groupId   = projectName + '_' + groupType  + '_' + taskName || '-';
+                    // var groupIdDefinition   = projectName + '_' + groupType  + '_' + taskName || '-';
                     // Solves the issues when moving around, but does not support same entries with different type
-                    var groupId   = projectName + '_' + taskName || '-';
+                    // var groupId   = projectName + '_' + taskName || '-';
+
+                    // Check for ID
+                    // Go over all the groups and check if the same project+task+type exists and use its groupID
+
+                    // This is probably only a fallback scenario. We need to do the group update on add / update.
+                    if (!groupIdentifaction){
+                        groupId = getGroupId(groupsNew, projectName, taskName, groupType, groupTimestamp);
+                    } else {
+                        groupId = groupIdentifaction;
+                    }
 
 
                     // Make sure the elements are set
@@ -470,6 +491,7 @@ angular.module('cycloneApp')
                         groupsNew[groupId].task = taskName;
                         groupsNew[groupId].project = projectName;
                         groupsNew[groupId].type = groupType;
+                        groupsNew[groupId].timestamp = 0; // initial timestamp, we use for ordering
                         groupsNew[groupId].showDetails = true; // Show details per default
                         //console.log('GroupID created:' + groupId);
                     }
@@ -477,6 +499,11 @@ angular.module('cycloneApp')
                     // Sum up
                     groupsNew[groupId].amountAll += 1;
                     groupsNew[groupId]['tasks'][data.key] = entry;
+
+                    // Add the latest timestamp to the group
+                    if (groupsNew[groupId].timestamp < entry.timestamp) {
+                        groupsNew[groupId].timestamp = entry.timestamp;
+                    }
 
                     // Add specific data with some conditions
                     if (entry.checked) {
@@ -546,17 +573,6 @@ angular.module('cycloneApp')
                     }
                 }
 
-                console.log("current");
-                console.log(ctrl.groupsCurrent['test_work_trust']);
-                console.log("checked");
-                console.log(ctrl.groupsChecked['test_work_trust']);
-                console.log("unchecked");
-                console.log(ctrl.groupsUncheckable['test_trust_trust']);
-                //console.log('new groups:');
-                //console.log(groupsNew);
-
-                // // TODO: Should we make separate Groups for Open / Done tasks ?
-                // ctrl.entriesCurrentGroups = groupsNew;
                 ctrl.doneLoadingGroups = true;
 
                 // TODO: return arrays for ng repeat and filters
@@ -565,6 +581,31 @@ angular.module('cycloneApp')
                 //     ctrl.entriesArray.push(element);
                 // });
                 // console.log(ctrl.entriesArray);
+            }
+            function getGroupId(existingGroups, projectName, taskName, groupType, groupTimestamp){
+                for (var gId in existingGroups) {
+                    if (existingGroups.hasOwnProperty(gId)) {
+                        if (
+                            existingGroups[gId].project === projectName
+                            && existingGroups[gId].task === taskName
+                            && existingGroups[gId].type === groupType
+                        ){
+                            // console.log("getGroupID debug");
+                            // console.log(existingGroups[gId]);
+                            // Use this group if available
+                            if (existingGroups[gId].group){
+                                return existingGroups[gId].group;
+                            }
+                        }
+                    }
+                }
+                // console.log("no project match found");
+                // Defining new group name
+                // When we use the timestamp it will be ordered and grouped correctly (timestamp of the latest entry)
+                var groupIdDefinition = groupTimestamp;
+                // Grouping with name or task or type, did not work as the ng-repeat re-ordered the elements
+                // var groupIdDefinition = groupTimestamp + '_' + projectName + '_' + groupType  + '_' + taskName || '-';
+                return groupIdDefinition;
             }
 
             // Group update status checked on several tasks
@@ -594,11 +635,14 @@ angular.module('cycloneApp')
 
             // Group update data on all sub entries belonging to this task
             this.updateGroupData = function (taskData) {
+                // // Check if there is a group id we need to apply
+                var groups = this.entries;
+                var groupId = getGroupId(groups, taskData.project, taskData.task, taskData.type, taskData.timestamp);
+
                 for (var taskKey in taskData.tasks) {
                     var Entry = this.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
                     Entry.project = taskData.project;
-                    // TODO: do we need group?
-                    Entry.group = taskData.group;
+                    Entry.group = groupId;
                     Entry.task = taskData.task;
                     Entry.type = taskData.type;
                     // Save Entry
