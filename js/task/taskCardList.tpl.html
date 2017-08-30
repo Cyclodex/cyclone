@@ -14,7 +14,7 @@
          layout="column"
          layout-align="space-between stretch">
         <!-- Checkbox -->
-        <div class="task__checkbox">
+        <div class="task__checkbox" ng-if="GroupData.type === 'work' || GroupData.type === 'internal'">
             <md-checkbox aria-label="GroupsChecked"
                          ng-checked="GroupData.checkedState"
                          md-indeterminate="GroupData.indeterminate"
