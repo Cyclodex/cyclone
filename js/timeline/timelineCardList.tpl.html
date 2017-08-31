@@ -71,7 +71,9 @@
                 </md-input-container>
 
                 <!-- Task name -->
-                <md-input-container md-no-float class="entry__info__input entry__info__input--task">
+                <md-input-container md-no-float
+                                    class="entry__info__input entry__info__input--task"
+                                    ng-if="GroupData.type !== 'system'">
                     <input ng-model="GroupData.task"
                            ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                            type="text"
@@ -176,7 +178,8 @@
             >
                 <md-button class="md-fab md-primary md-mini show-on-hover"
                            aria-label="Use task"
-                           ng-click="$ctrl.timeline.cloneEntry(GroupData)">
+                           ng-click="$ctrl.timeline.cloneEntry(GroupData)"
+                           ng-if="GroupData.type !== 'system'">
                     <md-tooltip md-direction="top">
                         Use this project & description for current timer
                     </md-tooltip>
@@ -184,7 +187,8 @@
                 </md-button>
                 <md-button class="md-fab md-primary md-mini show-on-hover"
                            aria-label="Add current timer to this Group"
-                           ng-click="$ctrl.timeline.addEntryToGroup(GroupData)">
+                           ng-click="$ctrl.timeline.addEntryToGroup(GroupData)"
+                           ng-if="GroupData.type !== 'system'">
                     <md-tooltip md-direction="top">
                         Track current timer into this group
                     </md-tooltip>
