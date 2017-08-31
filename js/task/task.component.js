@@ -384,7 +384,6 @@ angular.module('cycloneApp')
                     this.newEntryText = GroupTaskData.text;
                 }
 
-                // TODO: Should we warn user, if he adds different projectname/type/task than current group?
                 // Take over project
                 this.newEntryProject = GroupTaskData.project;
 
