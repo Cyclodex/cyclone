@@ -124,7 +124,7 @@
                                    type="text"
                                    class="validate"
                                    aria-label="Task description"
-                                   placeholder="Task description"
+                                   placeholder=""
                                    autocomplete="task description"
                                    ng-model-options="{updateOn: 'blur'}"
                             />
@@ -138,15 +138,6 @@
                                             <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong>h</span>
                             </div>
                         </md-tooltip>
-                        <!--<div class="entry__time-information">-->
-                            <!--<div class="duration duration&#45;&#45;human">-->
-                                <!--<span>{{ entry.timestampDuration | humanizeDate  }}</span>-->
-                                <!--<span>&nbsp;|&nbsp;</span>-->
-                                <!--<span class="duration duration&#45;&#45;decimal">-->
-                                            <!--&lt;!&ndash; timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) &ndash;&gt;-->
-                                            <!--<strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong>h</span>-->
-                            <!--</div>-->
-                        <!--</div>-->
                     </div>
 
                     <!-- Delete task entry -->

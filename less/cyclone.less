@@ -530,7 +530,16 @@ button.dayVisualize-entry.md-button:hover {
 }
 
 .entry__details {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    max-height: 0;
+    opacity: 0;
+    transition: 0.5s linear max-height, 0.5s linear opacity;
+    transition-delay: 100ms;
+    .task:hover & {
+        max-height: 300px;
+        opacity: 1;
+        transition-delay: 1s;
+    }
 }
 
 .cyclone-table--tasks {
@@ -656,7 +665,6 @@ button.dayVisualize-entry.md-button:hover {
     &.ng-leave {
         opacity: 1.0 ;
         transition: 1000ms cubic-bezier(0.165, 0.84, 0.44, 1) all;
-        //transform: translateX(0);
         transform: scale(1);
         height: 76px;
 
