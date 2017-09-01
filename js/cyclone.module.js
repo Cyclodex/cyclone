@@ -28,6 +28,7 @@ angular.module("cycloneApp").run(function($transitions) {
                 var today = new Date();
                 today.setTime(Date.now());
                 // TODO: Sometimes it goes back to the time view, must be related to this somehow:
+                // was transitionTo
                 $state.go("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
             }
         });
