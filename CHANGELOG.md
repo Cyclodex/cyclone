@@ -1,7 +1,12 @@
 # CHANGELOG
-## 0.xx - xx.xx.2017 - Task view feature
+## 0.52 - 01.09.2017 - Task view feature
+* Changing list rendering of tasks: Breaks / Trust is separate
+* Several smaller updates on styling
+* Several small fixes and reducing duplicate code
+
+## 0.51 - 23.08.2017 - Task view feature
 * Enhancement: Changed routing to ui-router, several updates according to this
-* Adding project color idea to autocomplete component
+* Adding project color idea to autocomplete component (test feature)
 
 ## 0.49 - 16.07.2017
 * Adding GA
