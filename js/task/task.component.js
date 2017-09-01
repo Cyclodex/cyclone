@@ -66,7 +66,7 @@ angular.module('cycloneApp')
             // TODO: Of course it would be even better to not have to reference the user
             // But we have it already, seems to be strange to promise again the userPromise...
             // Because we have the user here already.
-            var queryRef = this.firebaseRef.getReference(this.user);
+            var queryRef = this.firebaseRef.getTimeReference(this.user);
             // Order the query, from recent to older entries
             var query = queryRef.orderByChild("order");
             // TODO: We could get rid of the ordering, if we save every entry into the "order" timestamp instead the firebase one.

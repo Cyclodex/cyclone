@@ -2,7 +2,7 @@
 angular.module('cycloneApp').factory("firebaseRef", ['Auth', 'moment', '$stateParams', 'stateService',
     function(Auth, moment, $stateParams, stateService) {
 
-        function getReference(user){
+        function getTimeReference(user){
             // Load the current date (from stateService = URL) to load correct data
             currentDate = stateService.getCurrentDate();
             this.year = currentDate.year();
@@ -16,13 +16,19 @@ angular.module('cycloneApp').factory("firebaseRef", ['Auth', 'moment', '$statePa
             return reference;
         }
 
+        function getCurrentTaskReference(user){
+            var ref = firebase.database().ref();
+            var reference = ref.child("currentTask/" + user.uid);
+            return reference;
+        }
+
         return {
-            getReference: function(user) {
-                return getReference(user);
+            getTimeReference: function(user) {
+                return getTimeReference(user);
+            },
+            getCurrentTaskReference: function(user) {
+                return getCurrentTaskReference(user);
             }
-            // getCurrentDate: function() {
-            //     return getCurrentDate();
-            // }
         }
     }
 ]);

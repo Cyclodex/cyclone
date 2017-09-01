@@ -52,12 +52,33 @@ angular.module('cycloneApp')
             // Focus input
             focus('newTaskProject');
 
+            var queryRefCurrentTask = this.firebaseRef.getCurrentTaskReference(this.user);
+            this.currentTask = this.$firebaseArray(queryRefCurrentTask);
+
+            // Add a start entry if we are on today and no entries in yet.
+            // TODO: Do we need this for tasks? Probably also better outside in a service
+            this.currentTask.$loaded().then(function () {
+                if (ctrl.currentTask.length !== 0) {
+                    console.log('loaded');
+                    console.log(ctrl.currentTask);
+                    ctrl.newEntryProject = ctrl.currentTask[0].newEntryProject;
+                    ctrl.newEntryText = ctrl.currentTask[0].newEntryText;
+                    // TODO: Make the fields iterate over the ctrl.currentTask, and use same save as "time.ctrl"
+                    console.log(ctrl.newEntryText);
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:", error);
+            });
+
+
+
             // Call the data etc.
             // New grouped current time entries
             // TODO: Of course it would be even better to not have to reference the user
             // But we have it already, seems to be strange to promise again the userPromise...
             // Because we have the user here already.
-            var queryRef = this.firebaseRef.getReference(this.user);
+            var queryRef = this.firebaseRef.getTimeReference(this.user);
             // Order the query, from recent to older entries
             var query = queryRef.orderByChild("order");
 
