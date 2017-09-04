@@ -18,7 +18,7 @@ angular.module('cycloneApp').factory("firebaseRef", ['Auth', 'moment', '$statePa
 
         function getCurrentTaskReference(user){
             var ref = firebase.database().ref();
-            var reference = ref.child("currentTask/" + user.uid);
+            var reference = ref.child("userSettings/" + user.uid + "/currentTask");
             return reference;
         }
 

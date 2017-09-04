@@ -9,6 +9,7 @@ angular.module('cycloneApp')
             timeTypesService: '<',
             moment: '<',
             $firebaseArray: '<',
+            $firebaseObject: '<',
             $timeout: '<',
             addEntryForm: '=', // This binds the form, but would need further changes still
             newEntryProject: '<',
@@ -39,9 +40,6 @@ angular.module('cycloneApp')
             this.doneLoading = false;
             this.doneLoadingGroups = false;
 
-            // Note: This is defining the  and values also for the stats.
-            this.newEntryType = 'work';
-
             // Initially set lastEntry to now.
             var lastEntryTimestamp = Date.now();
 
@@ -52,26 +50,9 @@ angular.module('cycloneApp')
             // Focus input
             focus('newTaskProject');
 
+            // Current entry (TODO: Merge into component)
             var queryRefCurrentTask = this.firebaseRef.getCurrentTaskReference(this.user);
-            this.currentTask = this.$firebaseArray(queryRefCurrentTask);
-
-            // Add a start entry if we are on today and no entries in yet.
-            // TODO: Do we need this for tasks? Probably also better outside in a service
-            this.currentTask.$loaded().then(function () {
-                if (ctrl.currentTask.length !== 0) {
-                    console.log('loaded');
-                    console.log(ctrl.currentTask);
-                    ctrl.newEntryProject = ctrl.currentTask[0].newEntryProject;
-                    ctrl.newEntryText = ctrl.currentTask[0].newEntryText;
-                    // TODO: Make the fields iterate over the ctrl.currentTask, and use same save as "time.ctrl"
-                    console.log(ctrl.newEntryText);
-                }
-            })
-            .catch(function (error) {
-                console.log("Error:", error);
-            });
-
-
+            this.currentTask = this.$firebaseObject(queryRefCurrentTask);
 
             // Call the data etc.
             // New grouped current time entries
@@ -168,31 +149,31 @@ angular.module('cycloneApp')
                 // Check if the entry should be marked as private (break)
                 // TODO: Lets change the type field after the user entered a project; not here on add.
                 // Check the project name for auto assignment
-                if (this.newEntryProject !== undefined) {
-                    var breakMatches = this.newEntryProject.match(/break/i);
+                if (this.currentTask.newEntryProject !== undefined) {
+                    var breakMatches = this.currentTask.newEntryProject.match(/break/i);
                     if (breakMatches) {
-                        this.newEntryType = 'private';
+                        this.currentTask.newEntryType = 'private';
                     }
                 } else {
-                    this.newEntryProject = '';
+                    this.currentTask.newEntryProject = '';
                 }
-                if (this.newEntryType === undefined) {
-                    this.newEntryType = 'work';
+                if (this.currentTask.newEntryType === undefined) {
+                    this.currentTask.newEntryType = 'work';
                 }
 
                 // Project name empty if not yet set
-                if (this.newEntryProject === undefined) {
-                    this.newEntryProject = '';
+                if (this.currentTask.newEntryProject === undefined) {
+                    this.currentTask.newEntryProject = '';
                 }
 
                 // newEntryText empty if not yet set
-                if (this.newEntryText === undefined) {
-                    this.newEntryText = '';
+                if (this.currentTask.newEntryText === undefined) {
+                    this.currentTask.newEntryText = '';
                 }
 
                 // newEntryTask
-                if (this.newEntryTask === undefined) {
-                    this.newEntryTask = '';
+                if (this.currentTask.newEntryTask === undefined) {
+                    this.currentTask.newEntryTask = '';
                 }
 
                 //
@@ -201,15 +182,15 @@ angular.module('cycloneApp')
 
                 // Check if there is a group id we need to apply
                 var groups = this.entries;
-                groupId = ctrl.helperService.getGroupId(groups, this.newEntryProject, this.newEntryTask, this.newEntryType, timestamp);
+                groupId = ctrl.helperService.getGroupId(groups, this.currentTask.newEntryProject, this.currentTask.newEntryTask, this.currentTask.newEntryType, timestamp);
 
                 this.entries.$add({
-                    text: this.newEntryText,
-                    project: this.newEntryProject,
+                    text: this.currentTask.newEntryText,
+                    project: this.currentTask.newEntryProject,
                     group: groupId,
-                    task: this.newEntryTask,
+                    task: this.currentTask.newEntryTask,
                     checked: false,
-                    type: this.newEntryType,
+                    type: this.currentTask.newEntryType,
                     timestamp: timestamp, // we don't want milliseconds - just seconds! (rounds it as well),
                     timestampStart: start,
                     timestampDuration: duration,
@@ -218,28 +199,31 @@ angular.module('cycloneApp')
                 }).then(function (queryRef) {
                     // Entry added, now do something
                     // Clear the input fields again
-                    ctrl.newEntryText = '';
-                    ctrl.newEntryProject = '';
-                    ctrl.newEntryTask = '';
-                    ctrl.newEntryManualTime = '';
-                    ctrl.newEntryType = 'work';
+                    ctrl.currentTask.newEntryText = '';
+                    ctrl.currentTask.newEntryProject = '';
+                    ctrl.currentTask.newEntryTask = '';
+                    ctrl.currentTask.newEntryManualTime = '';
+                    ctrl.currentTask.newEntryType = 'work';
+                    ctrl.currentTask.$save().then(function(ref) {
+                    }, function(error) {
+                        console.log("Error:", error);
+                    });
 
                     // Take over continue task if available
-                    // TODO: Add the group here as well ?!
                     if (ctrl.newContinueEntryProject !== undefined) {
-                        ctrl.newEntryProject = ctrl.newContinueEntryProject;
+                        ctrl.currentTask.newEntryProject = ctrl.newContinueEntryProject;
                         ctrl.newContinueEntryProject = ''; // Clear it again
                     }
                     if (ctrl.newContinueEntryText !== undefined) {
-                        ctrl.newEntryText = ctrl.newContinueEntryText;
+                        ctrl.currentTask.newEntryText = ctrl.newContinueEntryText;
                         ctrl.newContinueEntryText = ''; // Clear it again
                     }
                     if (ctrl.newContinueEntryTask !== undefined) {
-                        ctrl.newEntryTask = ctrl.newContinueEntryTask;
+                        ctrl.currentTask.newEntryTask = ctrl.newContinueEntryTask;
                         ctrl.newContinueEntryTask = ''; // Clear it again
                     }
                     if (ctrl.newContinueEntryType !== undefined) {
-                        ctrl.newEntryType = ctrl.newContinueEntryType;
+                        ctrl.currentTask.newEntryType = ctrl.newContinueEntryType;
                         ctrl.newContinueEntryType = 'work'; // Default it again
                     }
 
@@ -327,10 +311,14 @@ angular.module('cycloneApp')
 
             // Clone text and project to current timer
             this.cloneEntry = function (entry) {
-                ctrl.newEntryText = entry.text;
-                ctrl.newEntryProject = entry.project;
-                ctrl.newEntryType = entry.type;
-                ctrl.newEntryTask = entry.task;
+                ctrl.currentTask.newEntryText = entry.text;
+                ctrl.currentTask.newEntryProject = entry.project;
+                ctrl.currentTask.newEntryType = entry.type;
+                ctrl.currentTask.newEntryTask = entry.task;
+                ctrl.currentTask.$save().then(function(ref) {
+                }, function(error) {
+                    console.log("Error:", error);
+                });
             };
 
             // Continue task feature (tracks current timer and continues with the selected one)
@@ -365,23 +353,19 @@ angular.module('cycloneApp')
 
             // Add the current timer to this group
             this.addEntryToGroup = function (GroupTaskData) {
-                // TODO: do we need the group?
-                // this.newEntryGroup = GroupTaskData.group;
-
                 // Take over text
-                if (angular.isUndefined(this.newEntryText) || !this.newEntryText ) {
-                    this.newEntryText = GroupTaskData.text;
+                if (angular.isUndefined(this.currentTask.newEntryText) || !this.currentTask.newEntryText ) {
+                    this.currentTask.newEntryText = GroupTaskData.text;
                 }
 
-                // TODO: Should we warn user, if he adds different projectname/type/task than current group?
                 // Take over project
-                this.newEntryProject = GroupTaskData.project;
+                this.currentTask.newEntryProject = GroupTaskData.project;
 
                 // Take over task
-                this.newEntryTask = GroupTaskData.task;
+                this.currentTask.newEntryTask = GroupTaskData.task;
 
                 // Take over type
-                this.newEntryType = GroupTaskData.type;
+                this.currentTask.newEntryType = GroupTaskData.type;
 
                 this.addEntry();
             };

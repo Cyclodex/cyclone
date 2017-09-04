@@ -10,16 +10,26 @@
             </div>
         </div>
         <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
-            <autocomplete-project
+            <!--<autocomplete-project
                     flex="20"
                     project="$ctrl.newEntryProject"
                     set-focus="$ctrl.focusNewEntryProject">
-            </autocomplete-project>
+            </autocomplete-project>-->
+            <md-input-container flex="15">
+                <input id="newEntryProject"
+                       type="text"
+                       ng-model="$ctrl.currentTask.newEntryProject"
+                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
+                       aria-label="Project"
+                       set-focus="$ctrl.focusNewEntryProject">
+                <label for="newEntryProject">Project</label>
+            </md-input-container>
 
             <md-input-container flex="15">
                 <input id="newTaskName"
                        type="text"
-                       ng-model="$ctrl.newEntryTask"
+                       ng-model="$ctrl.currentTask.newEntryTask"
+                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
                        aria-label="Task">
                 <label for="newTaskName">Task / Issue</label>
             </md-input-container>
@@ -27,7 +37,8 @@
             <md-input-container flex="33">
                 <input id="newTaskText"
                        type="text"
-                       ng-model="$ctrl.newEntryText"
+                       ng-model="$ctrl.currentTask.newEntryText"
+                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
                        aria-label="Description text of new task">
                 <label for="newTaskText">Description</label>
             </md-input-container>
@@ -35,7 +46,8 @@
             <md-input-container class="entry__info__select entry__info__select--type">
                 <label>Type</label>
                 <md-select id="newTaskType"
-                           ng-model="$ctrl.newEntryType"
+                           ng-model="$ctrl.currentTask.newEntryType"
+                           ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
                            aria-label="Type of entry"
                            ng-keydown="$event.which === 13 && addEntry()">
                     <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
@@ -50,6 +62,8 @@
                        name="input"
                        ng-model="$ctrl.newEntryManualTime.value"
                        placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                <!--ng-model="$ctrl.currentTask.newEntryManualTime"-->
+                <!--ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"-->
                 <label for="newTaskManualTime">Manual end time</label>
             </md-input-container>
             <div class="flex">

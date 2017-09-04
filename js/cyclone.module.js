@@ -100,6 +100,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 $firebaseArray: function($firebaseArray) {
                     return $firebaseArray;
                 },
+                $firebaseObject: function($firebaseObject) {
+                    return $firebaseObject;
+                },
                 $timeout: function($timeout) {
                     return $timeout;
                 },
@@ -152,6 +155,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 $firebaseArray: function($firebaseArray) {
                     return $firebaseArray;
+                },
+                $firebaseObject: function($firebaseObject) {
+                    return $firebaseObject;
                 },
                 $timeout: function($timeout) {
                     return $timeout;
