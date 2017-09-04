@@ -20,6 +20,8 @@ angular.module("cycloneApp").run(function($transitions) {
 
             // Go to the current date, if today was requested
             if (trans.$to().name === 'today'){
+                console.log("wants to go somewhere now... why?");
+
                 console.log('######################');
                 console.log("trans $to === today");
                 console.log(trans);
@@ -28,7 +30,8 @@ angular.module("cycloneApp").run(function($transitions) {
                 var today = new Date();
                 today.setTime(Date.now());
                 // TODO: Sometimes it goes back to the time view, must be related to this somehow:
-                $state.go("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
+                // was transitionTo
+                //$state.go("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
             }
         });
     });
