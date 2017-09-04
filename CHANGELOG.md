@@ -1,6 +1,10 @@
 # CHANGELOG
-## 0.53 - 01.09.2017 - Disabled auto routing of today
 
+## 0.54 - 04.09.2017 - Refinements
+* Animation improvements
+
+## 0.53 - 01.09.2017 - Disabled auto routing of today
+* Disabled auto routing, because it made issues
 ## 0.52 - 01.09.2017 - Task view feature
 * Changing list rendering of tasks: Breaks / Trust is separate
 * Several smaller updates on styling
