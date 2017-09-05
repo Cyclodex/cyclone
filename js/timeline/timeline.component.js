@@ -202,7 +202,9 @@ angular.module('cycloneApp')
                     ctrl.currentTask.newEntryText = '';
                     ctrl.currentTask.newEntryProject = '';
                     ctrl.currentTask.newEntryTask = '';
-                    ctrl.currentTask.newEntryManualTime = '';
+                    // TODO: time is not yet part of the saving process
+                    // ctrl.currentTask.newEntryManualTime = '';
+                    ctrl.newEntryManualTime = '';
                     ctrl.currentTask.newEntryType = 'work';
                     ctrl.currentTask.$save().then(function(ref) {
                     }, function(error) {
