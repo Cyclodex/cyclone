@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.54 - 04.09.2017 - Refinements
+## 0.54 - 07.09.2017 - Refinements
 * Animation improvements
 * Save current entry (but not the manual time field yet)
 * Adding welcome page, and making navigation entries going to today's date.
