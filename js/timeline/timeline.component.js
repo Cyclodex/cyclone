@@ -108,6 +108,13 @@ angular.module('cycloneApp')
             });
 
             updateDurations();
+            // var updateDurationsTimer = updateDurations();
+            // TODO: Destroy this timer!
+            // $scope.$on("$destroy", function() {
+            //     if (updateDurationsTimer) {
+            //         $timeout.cancel(updateDurationsTimer);
+            //     }
+            // });
 
 
             // ADD

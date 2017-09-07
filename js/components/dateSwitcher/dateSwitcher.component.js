@@ -2,13 +2,11 @@
 // <date-switcher></date-switcher>
 angular.module('cycloneApp').component('dateSwitcher', {
     template: require('./date_switcher.tpl.html'),
-    controller: ['stateService', 'moment', '$timeout', function dateSwitcherCtrl(stateService, moment, $timeout) {
+    controller: ['stateService', 'moment', '$timeout', '$scope', function dateSwitcherCtrl(stateService, moment, $timeout, $scope) {
         var $ctrl = this;
 
-        checkTime();
-
         // Run this code all 10min to verify if its still today
-        function checkTime() {
+        var checkTime = function() {
             var today = moment();
             console.log('checking time for dateswitcher');
             console.log(today);
@@ -42,8 +40,17 @@ angular.module('cycloneApp').component('dateSwitcher', {
 
             // Call it over and over again, every 10min ( 1000ms * 60 (=1min) * 10 (=10min) )
             // TODO: for testing its set to 1min for now:
-            $timeout(checkTime, 60000, true);
-        }
+            dateSwitcherTimer = $timeout(checkTime, 60000, true);
+        };
 
+        var dateSwitcherTimer = $timeout(checkTime, 0, true);
+
+        // Important! Destroy the time, or it repeats adding more and more
+        // http://odetocode.com/blogs/scott/archive/2013/07/16/angularjs-listening-for-destroy.aspx
+        $scope.$on("$destroy", function() {
+            if (dateSwitcherTimer) {
+                $timeout.cancel(dateSwitcherTimer);
+            }
+        });
     }]
 });
