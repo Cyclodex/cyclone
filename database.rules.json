@@ -2,7 +2,16 @@
   "rules": {
     ".write": false,
     ".read" : false,
+    // Time / Task feature
     "time": {
+      "$uid": {
+        // Read and write access only to the users own path
+        ".write": "$uid === auth.uid",
+        ".read": "$uid === auth.uid"
+      }
+    },
+    // User settings
+    "userSettings": {
       "$uid": {
         // Read and write access only to the users own path
         ".write": "$uid === auth.uid",
