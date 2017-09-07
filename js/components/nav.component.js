@@ -1,12 +1,10 @@
 angular.module('cycloneApp').component('nav', {
     template: require('./nav.tpl.html'),
-    controller: ['stateService', 'moment', function navCtrl(stateService, moment) {
+    controller: ['stateService', function navCtrl(stateService) {
         var $ctrl = this;
 
-        // var today = moment();
         var currentDate = stateService.getCurrentDate();
         $ctrl.pageType = stateService.getPageType();
-
 
         // Current date values
         $ctrl.currentDate = {

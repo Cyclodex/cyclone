@@ -3,6 +3,7 @@
 ## 0.54 - 04.09.2017 - Refinements
 * Animation improvements
 * Save current entry (but not the manual time field yet)
+* Adding welcome page, and making navigation entries going to today's date.
 
 ## 0.53 - 01.09.2017 - Disabled auto routing of today
 * Disabled auto routing, because it made issues

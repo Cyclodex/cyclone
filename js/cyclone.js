@@ -52,6 +52,4 @@ require('./components/state.service');
 require('./filters/type.js');
 require('./components/helper.service.js');
 require('./components/addTime/addTime.component.js');
-
-// Testing component:
-require('./test/welcome.component.js');
+require('./welcome/welcome.component.js');

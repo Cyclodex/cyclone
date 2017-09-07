@@ -10,10 +10,15 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
     };
 
     StateService.prototype.getCurrentDate = function() {
-        // Get the requested date
-        var requestedDate = $stateParams.year
-            + '-' + $stateParams.month
-            + '-' + $stateParams.day;
+        // Get the requested date if available
+        if ($stateParams.year && $stateParams.month && $stateParams.day){
+            var requestedDate = $stateParams.year
+                + '-' + $stateParams.month
+                + '-' + $stateParams.day;
+        } else {
+            // Otherwise we take today
+            requestedDate = new Date();
+        }
         // Parse the date from the URL with different formats
         requestedDate = moment(requestedDate,
             [

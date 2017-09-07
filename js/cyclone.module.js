@@ -46,12 +46,20 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
         .warnPalette('red');
 
     // Routing
-    $urlRouterProvider.otherwise("/today");
+    $urlRouterProvider.otherwise("/welcome");
 
     // Today route - will forward to the current date
     $stateProvider
-        .state('today', {
-            url: "/today"
+        .state('welcome', {
+            url: "/welcome",
+            views: {
+                nav: {
+                    component: "nav",
+                },
+                content: {
+                    component: 'welcome'
+                }
+            }
         });
     // Login
     $stateProvider
