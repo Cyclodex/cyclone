@@ -1,4 +1,6 @@
 # CHANGELOG
+## 0.55 - TBD - Refinements
+* Made it possible to enter time entrie in the past (if time is given)
 
 ## 0.54 - 07.09.2017 - Refinements
 * Animation improvements

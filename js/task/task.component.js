@@ -17,7 +17,8 @@ angular.module('cycloneApp')
             newEntryTask: '<',
             newEntryManualTime: '<',
             firebaseRef: '<',
-            helperService: '<'
+            helperService: '<',
+            stateService: '<'
         }, // Notice the binding on the router! (its currentUser.user)
         controller: function () {
             var ctrl = this;
@@ -39,8 +40,6 @@ angular.module('cycloneApp')
             this.error = false;
             this.doneLoading = false;
             this.doneLoadingGroups = false;
-
-            var today = this.moment();
 
             // Initially set lastEntry to now.
             var lastEntryTimestamp = Date.now();
@@ -146,18 +145,23 @@ angular.module('cycloneApp')
 
                 // Default time is now
                 var timestamp = Date.now();
-                var duration = cleanupDuration(timestamp - this.lastEntryTimestamp);
-                var start = this.lastEntryTimestamp;
+                var today = this.moment();
+
+                // Get the right day (the one we are looking at)
+                var currentDate = this.stateService.getCurrentDate();
 
                 // Check if we need to add some manual end time.
+                // This is allowed for TODAY and also PAST entries
+                // Maybe someone wants to fill his yesterday or whatever.
                 if (this.newEntryManualTime !== undefined &&
                     this.newEntryManualTime.value !== undefined &&
                     this.newEntryManualTime.value !== null
                 ) {
                     // If we have a manual end time, we don't know the prev time entry
-                    // We need a date of today
+                    // We need a date of the day we are on.
                     var manualTime = new Date();
-                    manualTime.setTime(Date.now());
+                    // Get the right day (the one we are looking at)
+                    manualTime.setTime(currentDate.valueOf());
 
                     // And manually set the hours + minutes
                     var hours = this.newEntryManualTime.value.getHours();
@@ -173,7 +177,19 @@ angular.module('cycloneApp')
                     // For now we save the same start time as end time. If there is a previous entry, we will update it later in code.
                     // But this allows us to have first manual end time entries which have 0 duration.
                     start = timestamp;
+                } else {
+                    // No manual time, we take the NOW
+                    // But only if the date is today!
+                    // This is not allowed on past days. (doesn't make sense there)
+                    if (!currentDate.isSame(today, 'day')) {
+                        console.error('OVER AND OUT, not on today!');
+                        // TODO: Show a warning, info or whatever
+                        return false;
+                    }
 
+                    // Defines the duration and start time
+                    var duration = cleanupDuration(timestamp - this.lastEntryTimestamp);
+                    var start = this.lastEntryTimestamp;
                 }
 
                 // Check if the entry should be marked as private (break)
