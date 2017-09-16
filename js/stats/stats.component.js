@@ -115,6 +115,7 @@ angular.module("cycloneApp")
                   timeTypeVisualisation["type"]     = $scope.types[timeType].value;
                   timeTypeVisualisation["_name"]    = $scope.types[timeType].name;
                   timeTypeVisualisation["_color"]   = $scope.types[timeType].color;
+                  timeTypeVisualisation["_icon"]   = $scope.types[timeType].icon;
                   timeTypeVisualisation["duration"] = $scope.types[timeType].timeSum;
                   timeTypeVisualisation["_width"]   = $scope.types[timeType].timeSum / 1000 / secondsOfOneHour;
                   timeTypeVisualisation["_order"]   = $scope.types[timeType].order;
@@ -124,10 +125,10 @@ angular.module("cycloneApp")
 
                   // Count up total of work (ignores private and trust time)
                   if (timeType === 'work' || timeType === 'internal') {
-                      // Sum of all work hours - everything else than private: (internal, external, trust)
+                      // Sum of all work hours
                       $ctrl.statsTotalWork += $scope.types[timeType].timeSum;
                   }
-              };
+              }
 
               // Create an element for every work and/or private separated
               for (var projectName in projects) {

@@ -122,6 +122,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 helperService: function(helperService) {
                     return helperService;
+                },
+                stateService: function(stateService) {
+                    return stateService;
                 }
             }
         });
@@ -178,6 +181,9 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
                 },
                 helperService: function(helperService) {
                     return helperService;
+                },
+                stateService: function(stateService) {
+                    return stateService;
                 }
             }
         });

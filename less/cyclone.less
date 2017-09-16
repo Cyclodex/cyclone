@@ -163,7 +163,6 @@
 .cyclone-table {
     position: relative;
     padding: 20px 0;
-    margin: 30px 0;
 
     &.cyclone-table--grouped {
         max-width: 400px;
@@ -349,9 +348,7 @@ md-radio-button {
 }
 
 .stats-totals {
-    position: absolute;
-    top: 0;
-    right: 0;
+    padding: 0 10px;
     color: grey;
 
     .day-visualize {
@@ -399,7 +396,6 @@ md-radio-button {
 .day-visualize {
     width: 90%;
     text-align: center;
-    margin: 0 auto 20px;
 
     display: flex;
     align-items: flex-end;
@@ -408,8 +404,8 @@ md-radio-button {
         display: inline-block;
         margin: 1px;
         height: 20px;
-        min-height: 20px;
-        min-width: 10px;
+        min-height: 50px;
+        min-width: 50px;
         color: black;
         overflow: visible;
 
@@ -477,7 +473,7 @@ md-radio-button {
 button.dayVisualize-entry.md-button {
     font-size: 0.7rem;
 }
-button.dayVisualize-entry.md-button:hover {
+button.dayVisualize-entry--extend.md-button:hover {
     min-width: 150px !important;
 }
 

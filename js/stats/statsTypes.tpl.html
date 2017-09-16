@@ -4,8 +4,10 @@
          class="dayVisualize-entry project-type--{{entry.type}}"
          ng-style="{'background-color':'' + entry._color + '', 'flex-grow':'' + entry._width + ''}"
          aria-label="info">
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--type">{{entry._name}}</div>
-            <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | humanizeDate }}</div>
+            <md-icon>{{entry._icon}}</md-icon>
+            <!-- TODO: Make the full name as tooltip or something like that -->
+            <!--<div class="dayVisualize-entry-content dayVisualize-entry-content&#45;&#45;type">{{entry._name}}</div>-->
+            <div class="dayVisualize-entry-content dayVisualize-entry-content--time">{{entry.duration | humanizeDateShort }}</div>
         </md-button>
     </div>
 </div>
