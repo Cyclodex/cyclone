@@ -1,0 +1,72 @@
+<div class="project">
+    <form name="projectDetailForm" novalidate>
+        <div>
+            <label>
+                Projectname
+            </label>
+            <input
+                type="text"
+                name="name"
+                required="required"
+                ng-change="$ctrl.updateProject();"
+                ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }"
+                ng-model="$ctrl.project.name">
+        </div>
+        <div>
+            <label>
+                Type
+            </label>
+            <input
+                type="text"
+                name="type"
+                required="required"
+                ng-change="$ctrl.updateProject();"
+                ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }"
+                ng-model="$ctrl.project.type">
+        </div>
+        <div>
+            <label>
+                Color
+            </label>
+            <input
+                type="text"
+                name="color"
+                required="required"
+                ng-change="$ctrl.updateProject();"
+                ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }"
+                ng-model="$ctrl.project.color">
+        </div>
+
+        <div ng-if="$ctrl.isNewProject">
+            <button
+                ng-disabled="projectDetailForm.$invalid"
+                ng-click="$ctrl.saveProject();">
+                Create Project
+            </button>
+        </div>
+        <div ng-if="!$ctrl.isNewProject">
+            <button
+                ng-click="$ctrl.deleteProject();">
+                Delete Project
+            </button>
+        </div>
+    </form>
+</div>

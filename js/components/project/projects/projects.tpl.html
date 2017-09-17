@@ -1,0 +1,16 @@
+<div class="projects">
+  <ul class="projects-list">
+    <li ng-repeat="project in $ctrl.projects">
+      <project
+        project="project"
+        on-select="$ctrl.goToProject($event);">
+      </project>
+    </li>
+  </ul>
+  <div
+    class="projects__empty"
+    ng-if="!$ctrl.projects.length">
+    <i class="material-icons">face</i>
+    There's nothing yet here...
+  </div>
+</div>
