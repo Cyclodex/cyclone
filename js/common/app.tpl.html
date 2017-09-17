@@ -1,0 +1,13 @@
+<div class="root">
+    <div class="app">
+        <ui-view name="nav"
+                 user="$ctrl.user"
+                 class="navigation-left-side"
+                 md-colors="{background:'primary'}"
+        ></ui-view>
+        <div class="page-content">
+            <ui-view name="content"></ui-view>
+            <ui-view></ui-view>
+        </div>
+    </div>
+</div>

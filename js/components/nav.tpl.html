@@ -16,24 +16,28 @@
         <md-icon>playlist_add_check</md-icon>
         <div>task</div>
     </md-button>
-    <!-- STATS page ? -->
+    <md-button
+            class="nav__element"
+            ui-sref="projects"
+            ui-sref-active="md-active">
+        <md-icon>playlist_add_check</md-icon>
+        <div>projects</div>
+    </md-button>
     <div class="nav__element" ng-if="nextDateLink">
         <span>archive</span>
     </div>
     <div flex="grow"></div>
     <div flex="nogrow">
-        <!-- TODO: This is still the ProfileCtrl which should be its own component -->
-        <div ng-controller="ProfileCtrl" class="card-content white-text">
+        <div class="card-content white-text">
             <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
                 <md-icon>account_circle</md-icon>
-                <span>{{ username }}</span>
+                <span>{{ $ctrl.user.username }}</span>
             </a>
-            <span ng-if="!username" class="status">{{ connection }}</span>
-            <div ng-show="ProfileOpen || !username" id="ProfileOpen">
+            <div ng-show="ProfileOpen" id="ProfileOpen">
                 <a id="logoutButton"
-                   ng-click="logout()"
+                   ng-click="$ctrl.logout()"
                    class=""
-                   ng-show="username">
+                   ng-show="$ctrl.user">
                     <md-button class="md-raised md-primary" aria-label="Login">Logout</md-button>
                 </a>
                 <div id="account-details" ng-show="userIsAdmin"></div>

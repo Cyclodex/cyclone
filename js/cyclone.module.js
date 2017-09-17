@@ -1,11 +1,20 @@
-angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ui.router', 'angular-clipboard', 'angularMoment', 'ngAnimate']);
+// Instead of "app" we use cycloneApp already...
+angular.module("cycloneApp", [
+    'firebase',
+    'ngMaterial',
+    'ui.router','angular-clipboard',
+    'angularMoment',
+    'ngAnimate',
+    'angular-loading-bar'
+]);
 
 // Make sure user is authenticated, otherwise send to login state
-angular.module("cycloneApp").run(function($transitions) {
+angular.module("cycloneApp").run(function($transitions, cfpLoadingBar) {
     $transitions.onStart(
     {
         // Special function match, so we require authentication everywhere but not on "login" state.
         to: function(state) {
+            cfpLoadingBar.start();
             return state.name != null && state.name !== 'login';
         }
     }, function(trans) {
@@ -35,6 +44,9 @@ angular.module("cycloneApp").run(function($transitions) {
             }
         });
     });
+
+    // Finish the loading bar
+    $transitions.onSuccess({}, cfpLoadingBar.complete);
 });
 
 // Config / Routing
@@ -46,12 +58,13 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
         .warnPalette('red');
 
     // Routing
-    $urlRouterProvider.otherwise("/welcome");
+    $urlRouterProvider.otherwise("/app/welcome");
 
     // Today route - will forward to the current date
     $stateProvider
         .state('welcome', {
             url: "/welcome",
+            parent: 'app',
             views: {
                 nav: {
                     component: "nav",
@@ -65,16 +78,13 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
     $stateProvider
         .state('login', {
             url: "/login",
-            views: {
-                content: {
-                    component: 'login'
-                }
-            }
+            component: 'login'
         });
     // Time-line
     $stateProvider
         .state('time', {
             url: "/time/{year:int}/{month:int}/{day:int}",
+            parent: 'app',
             views: {
                 nav: {
                     component: "nav",
@@ -133,13 +143,12 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
     $stateProvider
         .state('task', {
             url: "/task/{year:int}/{month:int}/{day:int}",
+            parent: 'app',
             views: {
                 nav: {
                     component: "nav",
                 },
                 content: {
-                    // controller: "TaskCtrl",
-                    // template: require('./task/task.tpl.html'),
                     component: "task",
                     bindings: { user: 'currentUser.user' },
                 }

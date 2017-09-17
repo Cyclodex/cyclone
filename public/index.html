@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="root">
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
@@ -41,18 +41,21 @@
 
 <body translate="no">
 
-<div ng-app="cycloneApp" class="page page--time-line">
-    <div>
-        <ui-view
-                name="nav"
-                class="navigation-left-side"
-                md-colors="{background:'primary'}"
-        ></ui-view>
-        <div class="page-content">
-            <ui-view name="content"></ui-view>
-            <ui-view></ui-view>
-        </div>
-    </div>
+<div class="page page--time-line">
+    <root>
+        <span class="loader">Loading...</span>
+    </root>
+    <!--<div>-->
+        <!--<ui-view-->
+                <!--name="nav"-->
+                <!--class="navigation-left-side"-->
+                <!--md-colors="{background:'primary'}"-->
+        <!--&gt;</ui-view>-->
+        <!--<div class="page-content">-->
+            <!--<ui-view name="content"></ui-view>-->
+            <!--<ui-view></ui-view>-->
+        <!--</div>-->
+    <!--</div>-->
 
 </div>
 

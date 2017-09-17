@@ -1,6 +1,5 @@
 require('./statsTotal.component.js');
 require('./statsTypes.component.js');
-require('../user/profile.controller.js');
 // Stats display component
 // <stats></stats>
 //

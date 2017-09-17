@@ -13,6 +13,7 @@ require('angular-messages');
 require('angular-material');
 require('angular-clipboard');
 require('angular-moment');
+require('angular-loading-bar');
 
 // Firebase
 var firebase = require('firebase/app');
@@ -29,8 +30,18 @@ if (!FIREBASE_PRODUCTION) {
     require('./config/config.staging.js');
 }
 
+// ROOT
+require('./root.module');
+require('./root.component');
+// COMMON
+require('./common/app.module');
+require('./common/app.component');
+require('./common/app.controller');
+
 // Cyclone app files
 require('./cyclone.module.js');
+require('./components/components.module'); // components module
+require('./components/auth/auth.module'); // components module
 require('./components/auth.factory.js');
 require('./components/nav.component.js');
 require('./components/firebase.factory.js');
@@ -53,3 +64,20 @@ require('./filters/type.js');
 require('./components/helper.service.js');
 require('./components/addTime/addTime.component.js');
 require('./welcome/welcome.component.js');
+
+// Project
+require('./components/project/project.module');
+require('./components/project/project.service');
+require('./components/project/project-detail/project-detail.component');
+require('./components/project/project-detail/project-detail.controller');
+require('./components/project/project-new/project-new.component');
+require('./components/project/project-new/project-new.controller');
+require('./components/project/project-edit/project-edit.component');
+require('./components/project/project-edit/project-edit.controller');
+require('./components/project/projects/projects.component');
+require('./components/project/projects/projects.controller');
+require('./components/project/project/project.component');
+require('./components/project/project/project.controller');
+
+// Auth
+require('./components/auth/auth.service'); // Auth components
