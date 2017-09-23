@@ -1,38 +1,32 @@
 <add-time></add-time>
 
-<div
-     ng-show="$ctrl.user.username"
-     class="cyclone-content"
-     layout="row" layout-align="center center">
-    <div flex="100"
-         flex-gt-md="80">
-
-        <md-card ng-if="$ctrl.error">
-            <md-card-title>
-                <div class="md-headline">
-                    Error
-                </div>
-            </md-card-title>
-            <md-card-content>
-                {{$ctrl.error}}
-            </md-card-content>
-        </md-card>
-
-        <div class="cyclone-table cyclone-table--tasks" flex="grow">
-            <date-switcher></date-switcher>
-            <stats></stats>
-            <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+<div ng-show="$ctrl.user.username"
+     class="component__content">
+    <md-card ng-if="$ctrl.error">
+        <md-card-title>
+            <div class="md-headline">
+                Error
             </div>
+        </md-card-title>
+        <md-card-content>
+            {{$ctrl.error}}
+        </md-card-content>
+    </md-card>
 
-            <timeline-card-list list-title="Timeline" data="$ctrl.entries"></timeline-card-list>
+    <div class="cyclone-table cyclone-table--tasks" flex="grow">
+        <date-switcher></date-switcher>
+        <stats></stats>
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
-        <!-- END: cyclone-table-->
 
-        <!--<pre>
-            {{ $ctrl.entriesCurrentGroups | json }}
-        </pre>-->
+        <timeline-card-list list-title="Timeline" data="$ctrl.entries"></timeline-card-list>
     </div>
+    <!-- END: cyclone-table-->
+
+    <!--<pre>
+        {{ $ctrl.entriesCurrentGroups | json }}
+    </pre>-->
 
 
     <!--
