@@ -1,6 +1,6 @@
 <div class="project">
     <form name="projectDetailForm" novalidate>
-        <div>
+        <md-input-container>
             <label>
                 Projectname
             </label>
@@ -17,8 +17,8 @@
                     }
                 }"
                 ng-model="$ctrl.project.name">
-        </div>
-        <div>
+        </md-input-container>
+        <md-input-container>
             <label>
                 Type
             </label>
@@ -35,8 +35,8 @@
                     }
                 }"
                 ng-model="$ctrl.project.type">
-        </div>
-        <div>
+        </md-input-container>
+        <md-input-container>
             <label>
                 Color
             </label>
@@ -53,7 +53,7 @@
                     }
                 }"
                 ng-model="$ctrl.project.color">
-        </div>
+        </md-input-container>
 
         <div ng-if="$ctrl.isNewProject">
             <button

@@ -14,7 +14,7 @@ angular
         $stateProvider
             .state('project', {
                 parent: 'app',
-                url: '/project/:id',
+                url: '/project/edit/:id',
                 component: 'projectEdit',
                 resolve: {
                     project: function ($transition$, ProjectService){

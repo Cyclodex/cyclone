@@ -3,14 +3,14 @@
     href=""
     class="project-card__link"
     ng-click="$ctrl.selectProject();">
-    <div class="project-card__column project-card__column--name">
+    <span class="project-card__column project-card__column--name">
       {{ ::$ctrl.project.name }}
       <span class="project-card__pill project-card__pill--{{ ::$ctrl.project.type }}">
         {{ ::$ctrl.project.type }}
       </span>
-    </div>
-    <div class="project-card__column project-card__column--color">
+    </span>
+    <span class="project-card__column project-card__column--color">
       {{ ::$ctrl.project.color }}
-    </div>
+    </span>
   </a>
 </div>
