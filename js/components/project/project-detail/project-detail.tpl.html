@@ -49,13 +49,14 @@
                 ng-model="$ctrl.project.color">
         </md-input-container>
 
-        <md-input-container ng-if="$ctrl.isNewProject">
-            <button
-                ng-disabled="projectDetailForm.$invalid"
-                ng-click="$ctrl.saveProject();">
-                Add Project
-            </button>
-        </md-input-container>
+        <a class=""
+           ng-if="$ctrl.isNewProject"
+           ng-click="$ctrl.saveProject();"
+           ng-disabled="projectDetailForm.$invalid">
+            <md-button class="md-fab md-accent" aria-label="Add project">
+                <md-icon>add</md-icon>
+            </md-button>
+        </a>
         <div class="actions" ng-if="!$ctrl.isNewProject">
             <!-- DELETE BUTTON -->
             <md-button ng-click="$ctrl.deleteProject();"
