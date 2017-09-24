@@ -9,8 +9,12 @@ angular
     .config(function ($stateProvider){
         $stateProvider
             .state('new', {
-                parent: 'app', // would be good, if we have auth on the app level, so its usable everywhere.
+                parent: 'projects',
                 url: '/new',
-                component: 'projectNew'
+                views: {
+                    'head@projects': {
+                        component: 'projectNew'
+                    }
+                }
             })
     });

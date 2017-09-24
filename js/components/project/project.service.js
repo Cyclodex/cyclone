@@ -23,6 +23,14 @@ function ProjectService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
         },
         deleteProject: function (project) {
             return project.$remove();
+        },
+        // For the CRUD:
+        // TODO: Maybe we could load the 'getProjectList' including the $loaded in here, to reference the array correctly.
+        saveProject: function (project, projectFirebaseArray) {
+            return projectFirebaseArray.$save(project);
+        },
+        removeProject: function (project, projectFirebaseArray) {
+            return projectFirebaseArray.$remove(project);
         }
     };
 }

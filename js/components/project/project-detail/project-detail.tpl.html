@@ -1,5 +1,6 @@
 <div class="project">
-    <form name="projectDetailForm" novalidate>
+    <form name="projectDetailForm" novalidate
+          layout="row">
         <md-input-container>
             <label>
                 Projectname
@@ -55,18 +56,23 @@
                 ng-model="$ctrl.project.color">
         </md-input-container>
 
-        <div ng-if="$ctrl.isNewProject">
+        <md-input-container ng-if="$ctrl.isNewProject">
             <button
                 ng-disabled="projectDetailForm.$invalid"
                 ng-click="$ctrl.saveProject();">
                 Create Project
             </button>
-        </div>
-        <div ng-if="!$ctrl.isNewProject">
-            <button
-                ng-click="$ctrl.deleteProject();">
-                Delete Project
-            </button>
+        </md-input-container>
+        <div class="actions" ng-if="!$ctrl.isNewProject">
+            <!-- DELETE BUTTON -->
+            <md-button ng-click="$ctrl.deleteProject();"
+                       class="md-fab md-mini show-on-hover"
+                       aria-label="Delete entry">
+                <md-tooltip md-direction="top">
+                    Delete
+                </md-tooltip>
+                <md-icon>delete_forever</md-icon>
+            </md-button>
         </div>
     </form>
 </div>

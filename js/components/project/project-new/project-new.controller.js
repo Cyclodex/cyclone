@@ -13,10 +13,9 @@ function ProjectNewController(ProjectService, $state) {
             .createNewProject(event.project)
             .then(function (project){
                 // success
-                console.log(project);
-                $state.go('project', {
-                    id: project.key
-                });
+                // $state.go('project', {
+                //     id: project.key
+                // });
             });
     }
 }

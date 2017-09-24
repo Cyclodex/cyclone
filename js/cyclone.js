@@ -78,6 +78,9 @@ require('./components/project/projects/projects.component');
 require('./components/project/projects/projects.controller');
 require('./components/project/project/project.component');
 require('./components/project/project/project.controller');
+require('./components/project/projects-crud/projects-crud.component');
+require('./components/project/projects-crud/projects-crud.controller');
+
 
 // Auth
 require('./components/auth/auth.service'); // Auth components

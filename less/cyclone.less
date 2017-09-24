@@ -650,9 +650,9 @@ button.dayVisualize-entry--extend.md-button:hover {
 // Trying out crazy animation stuff
 // https://codepen.io/jonespen/pen/avBZpO
 // https://docs.angularjs.org/api/ngAnimate
-// Works on task but not yet timeline ?
 .task,
-.card {
+.card,
+.ui-row--animation {
     &.ng-anchor {
         /* this animation will last for 1 second since there are
            two phases to the animation (an `in` and an `out` phase) */
@@ -739,5 +739,14 @@ md-input-container {
     &:focus,
     .activate--show-on-hover:hover &{
         opacity: 1;
+    }
+}
+
+// Show which row is getting hovered
+.ui-row {
+    margin: 0;
+    padding: 10px;
+    &:hover {
+        box-shadow: inset 0 0 2px 0 #3f51b5;
     }
 }
