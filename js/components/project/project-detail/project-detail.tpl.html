@@ -1,6 +1,8 @@
 <div class="project">
-    <form name="projectDetailForm" novalidate
-          layout="row">
+    <form name="projectDetailForm"
+          novalidate
+          layout="row"
+          class="ui-form">
         <md-input-container>
             <label>
                 Projectname
@@ -19,23 +21,15 @@
                 }"
                 ng-model="$ctrl.project.name">
         </md-input-container>
-        <md-input-container>
-            <label>
-                Type
-            </label>
-            <input
-                type="text"
-                name="type"
-                required="required"
-                ng-change="$ctrl.updateProject();"
-                ng-model-options="{
-                    'updateOn': 'default blur',
-                    'debounce': {
-                        'default': 250,
-                        'blur': 0
-                    }
-                }"
-                ng-model="$ctrl.project.type">
+        <md-input-container class="entry__info__select entry__info__select--type">
+            <label>Type</label>
+            <md-select ng-model="$ctrl.project.type"
+                       ng-change="$ctrl.updateProject();"
+                       aria-label="Type of entry">
+                <md-option ng-repeat="type in $ctrl.timeTypes" ng-value="type.value">
+                    <span style="display: none">{{type.name}}</span><md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                </md-option>
+            </md-select>
         </md-input-container>
         <md-input-container>
             <label>
@@ -44,7 +38,6 @@
             <input
                 type="text"
                 name="color"
-                required="required"
                 ng-change="$ctrl.updateProject();"
                 ng-model-options="{
                     'updateOn': 'default blur',
@@ -60,7 +53,7 @@
             <button
                 ng-disabled="projectDetailForm.$invalid"
                 ng-click="$ctrl.saveProject();">
-                Create Project
+                Add Project
             </button>
         </md-input-container>
         <div class="actions" ng-if="!$ctrl.isNewProject">

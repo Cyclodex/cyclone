@@ -4,18 +4,21 @@ function ProjectNewController(ProjectService, $state) {
         ctrl.project = {
             name: '',
             color: '',
-            type: ''
+            type: 'work'
         };
     };
     ctrl.createNewProject = function(event){
         // ProjectService
         return ProjectService
             .createNewProject(event.project)
-            .then(function (project){
+            .then(function (){
                 // success
-                // $state.go('project', {
-                //     id: project.key
-                // });
+                // Reset inputs
+                ctrl.project = {
+                    name: '',
+                    color: '',
+                    type: 'work'
+                };
             });
     }
 }

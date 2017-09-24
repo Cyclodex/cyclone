@@ -1,7 +1,9 @@
-function ProjectDetailController() {
+function ProjectDetailController(timeTypesService) {
     var ctrl = this;
     ctrl.$onInit = function () {
         ctrl.isNewProject = !ctrl.project.$id;
+
+        ctrl.timeTypes = timeTypesService.getTimeTypes();
     };
     ctrl.saveProject = function () {
         ctrl.onSave({
