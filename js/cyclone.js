@@ -72,15 +72,16 @@ require('./components/project/project-detail/project-detail.component');
 require('./components/project/project-detail/project-detail.controller');
 require('./components/project/project-new/project-new.component');
 require('./components/project/project-new/project-new.controller');
-require('./components/project/project-edit/project-edit.component');
-require('./components/project/project-edit/project-edit.controller');
-require('./components/project/projects/projects.component');
-require('./components/project/projects/projects.controller');
-require('./components/project/project/project.component');
-require('./components/project/project/project.controller');
 require('./components/project/projects-crud/projects-crud.component');
 require('./components/project/projects-crud/projects-crud.controller');
 
+//Profile
+require('./components/profile/profile.module');
+require('./components/profile/profile.service');
+require('./components/profile/profile-crud/profile-crud.component');
+require('./components/profile/profile-crud/profile-crud.controller');
+require('./components/profile/profile-detail/profile-detail.component');
+require('./components/profile/profile-detail/profile-detail.controller');
 
 // Auth
 require('./components/auth/auth.service'); // Auth components

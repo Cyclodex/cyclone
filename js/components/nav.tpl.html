@@ -16,20 +16,13 @@
         <md-icon>playlist_add_check</md-icon>
         <div>task</div>
     </md-button>
-    <md-button
-            class="nav__element"
-            ui-sref="projects-crud"
-            ui-sref-active="md-active">
-        <md-icon>bookmark_border</md-icon>
-        <div>projects</div>
-    </md-button>
     <div class="nav__element" ng-if="nextDateLink">
         <span>archive</span>
     </div>
     <div flex="grow"></div>
     <div flex="nogrow">
         <div class="card-content white-text">
-            <a ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
+            <a ui-sref="profile-crud" ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
                 <md-icon>account_circle</md-icon>
                 <span>{{ $ctrl.user.username }}</span>
             </a>
