@@ -1,11 +1,9 @@
 function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthService){
-
     var user = AuthService.getUser();
     var refFeatures = firebaseRef.getFeaturesReference(user);
 
-    return {
-        // Verify that the features are all defined, otherwise will set default values for this user
-        createDefaultFeatures: function (feature) {
+    var service = {};
+    service.createDefaultFeatures = function (feature) {
             var refFeature = refFeatures.child('/' + feature.key);
             var objFeature = $firebaseObject(refFeature);
             return objFeature.$loaded()
@@ -21,34 +19,65 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     }
                     return data;
                 });
-        },
-        updateFeatures: function (feature) {
+        };
+    service.updateFeatures = function (feature) {
             return feature.$save().then(function(refFeatures) {
                 // Success
             }, function(error) {
                 console.log("Error:", error);
             });
-        },
-        getFeatures: function (){
+        };
+
+    // Definition / default of features:
+    service.getFeatures = function (){
             // Define the features we have, where the user can enable or disable
             return {
+                // User type 1 behaviour
+                'copyButton' : {
+                    'name': 'Copy Button',
+                    'key' : 'copyButton',
+                    'default': true,
+                    'description': 'Use this project & task for current timer',
+                    'icon': 'arrow_upward'
+                },
+                'attachButton' : {
+                    'name': 'Direct attach',
+                    'key' : 'attachButton',
+                    'default': false,
+                    'description': 'Directly track current timer into this task',
+                    'icon': 'playlist_add'
+                },
+                // User type 2 behaviour
                 'continueButton' : {
                     'name': 'Continue Button',
                     'key' : 'continueButton',
                     'default': false,
-                    'description': 'Track current timer and continue on this Task',
+                    'description': 'Track current timer and continue on this task',
                     'icon': 'play_arrow'
-                },
-                'copyButton' : {
-                    'name': 'Copy Button',
-                    'key' : 'copyButton',
-                    'default': false,
-                    'description': 'Use this project & description for current timer',
-                    'icon': 'arrow_upward'
                 }
             }
-        }
+        };
+
+    // State of features for current user
+    service.getFeatureStates = function (){
+        var featureStates = service.getFeatures();
+        var featureSettings = $firebaseObject(refFeatures);
+        featureSettings.$loaded().then(function(){
+            for (var feature in featureStates) {
+                featureStates[feature].enabled = !!featureSettings[feature];
+            }
+        });
+        return featureStates;
     };
+
+    // Check the state of a feature
+    service.checkFeature = function(key){
+        return !!userFeatureStates[key];
+    };
+
+    var userFeatureStates = service.getFeatureStates;
+
+    return service;
 }
 
 angular

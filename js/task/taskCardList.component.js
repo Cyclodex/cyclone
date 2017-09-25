@@ -10,4 +10,8 @@ angular.module('cycloneApp').component('taskCardList', {
         task: '^^'
     },
     template: require('./taskCardList.tpl.html'),
+    controller: ['ProfileService', function taskCardList(ProfileService) {
+        var $ctrl = this;
+        $ctrl.features = ProfileService.getFeatureStates();
+    }]
 });

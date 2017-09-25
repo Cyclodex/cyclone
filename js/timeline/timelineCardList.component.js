@@ -7,4 +7,8 @@ angular.module('cycloneApp').component('timelineCardList', {
         timeline: '^^'
     },
     template: require('./timelineCardList.tpl.html'),
+    controller: ['ProfileService', function timelineCardList(ProfileService) {
+        var $ctrl = this;
+        $ctrl.features = ProfileService.getFeatureStates();
+    }]
 });

@@ -21,12 +21,15 @@
     </div>
     <div flex="grow"></div>
     <div flex="nogrow">
+        <md-button
+                class="nav__element"
+                ui-sref="profile-crud"
+                ui-sref-active="md-active">
+            <md-icon>account_circle</md-icon>
+            <div>{{ $ctrl.user.username }}</div>
+        </md-button>
         <div class="card-content white-text">
-            <a ui-sref="profile-crud" ng-click="ProfileOpen = !ProfileOpen" class="profileLink">
-                <md-icon>account_circle</md-icon>
-                <span>{{ $ctrl.user.username }}</span>
-            </a>
-            <div ng-show="ProfileOpen" id="ProfileOpen">
+            <div id="ProfileOpen">
                 <a id="logoutButton"
                    ng-click="$ctrl.logout()"
                    class=""
@@ -35,7 +38,6 @@
                 </a>
                 <div id="account-details" ng-show="userIsAdmin"></div>
             </div>
-
         </div>
     </div>
     <version-display></version-display>

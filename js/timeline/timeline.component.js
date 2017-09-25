@@ -20,7 +20,7 @@ angular.module('cycloneApp')
             helperService: '<',
             stateService: '<'
         }, // Notice the binding on the router! (its currentUser.user)
-        controller: function () {
+        controller: function ($q) {
             var ctrl = this;
 
             // TODO: move "copy" out from here, into service something like that.
@@ -121,7 +121,7 @@ angular.module('cycloneApp')
             // ADD
             // Add new entry to current week and day
             this.addEntry = function () {
-
+                var deferred = $q.defer();
                 // Default time is now
                 var timestamp = Date.now();
                 var today = this.moment();
@@ -228,32 +228,13 @@ angular.module('cycloneApp')
                     ctrl.currentTask.newEntryText = '';
                     ctrl.currentTask.newEntryProject = '';
                     ctrl.currentTask.newEntryTask = '';
-                    // TODO: time is not yet part of the saving process
-                    // ctrl.currentTask.newEntryManualTime = '';
                     ctrl.newEntryManualTime = '';
                     ctrl.currentTask.newEntryType = 'work';
                     ctrl.currentTask.$save().then(function(ref) {
+                        deferred.resolve(ref);
                     }, function(error) {
                         console.log("Error:", error);
                     });
-
-                    // Take over continue task if available
-                    if (ctrl.newContinueEntryProject !== undefined) {
-                        ctrl.currentTask.newEntryProject = ctrl.newContinueEntryProject;
-                        ctrl.newContinueEntryProject = ''; // Clear it again
-                    }
-                    if (ctrl.newContinueEntryText !== undefined) {
-                        ctrl.currentTask.newEntryText = ctrl.newContinueEntryText;
-                        ctrl.newContinueEntryText = ''; // Clear it again
-                    }
-                    if (ctrl.newContinueEntryTask !== undefined) {
-                        ctrl.currentTask.newEntryTask = ctrl.newContinueEntryTask;
-                        ctrl.newContinueEntryTask = ''; // Clear it again
-                    }
-                    if (ctrl.newContinueEntryType !== undefined) {
-                        ctrl.currentTask.newEntryType = ctrl.newContinueEntryType;
-                        ctrl.newContinueEntryType = 'work'; // Default it again
-                    }
 
                     // TODO: put the following logic into a function to get called also by other change options later
                     // Which id and location did we save the entry? We need to check the prev and next entry to update the duration!
@@ -316,10 +297,11 @@ angular.module('cycloneApp')
                     }
 
                 })
-                    .catch(function (error) {
-                        console.log("Error:", error);
-                    });
+                .catch(function (error) {
+                    console.log("Error:", error);
+                });
 
+                return deferred.promise;
             };// End of ADD
 
             // Calculates the difference for duration on entries.
@@ -351,24 +333,17 @@ angular.module('cycloneApp')
 
             // Continue task feature (tracks current timer and continues with the selected one)
             this.continueEntry = function (entry) {
-                console.log(entry);
-                ctrl.newContinueEntryProject = entry.project;
-                ctrl.newContinueEntryText = entry.text;
-                ctrl.newContinueEntryType = entry.type;
-                ctrl.newContinueEntryTask = entry.task;
-                ctrl.addEntry();
+                ctrl.addEntry().then(function(){
+                    ctrl.currentTask.newEntryProject = entry.project;
+                    ctrl.currentTask.newEntryText = entry.text;
+                    ctrl.currentTask.newEntryType = entry.type;
+                    ctrl.currentTask.newEntryTask = entry.task;
+                    ctrl.currentTask.$save().then(function(ref) {
+                    }, function(error) {
+                        console.log("Error:", error);
+                    });
+                });
             };
-
-            // Continue is disabled
-/*            this.continueGroup = function (GroupTaskData) {
-                // We just try to access any of the tasks (could be the first one because of the object
-                var oneOfTheTasks = GroupTaskData.tasks[Object.keys(GroupTaskData.tasks)[0]];
-                console.log("one of the tasks");
-                console.log(oneOfTheTasks);
-
-                // Continue this task
-                this.continueEntry(oneOfTheTasks);
-            };*/
 
             // Toggles the display of group details
             this.toggleDetails = function (GroupTaskData) {
@@ -386,13 +361,9 @@ angular.module('cycloneApp')
                     this.currentTask.newEntryText = GroupTaskData.text;
                 }
 
-                // Take over project
+                // Take over project, task and type
                 this.currentTask.newEntryProject = GroupTaskData.project;
-
-                // Take over task
                 this.currentTask.newEntryTask = GroupTaskData.task;
-
-                // Take over type
                 this.currentTask.newEntryType = GroupTaskData.type;
 
                 this.addEntry();
