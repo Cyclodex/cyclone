@@ -8,8 +8,8 @@ angular.module('cycloneApp').component('dateSwitcher', {
         // Run this code all 10min to verify if its still today
         var checkTime = function() {
             var today = moment();
-            console.log('checking time for dateswitcher');
-            console.log(today);
+            // console.log('checking time for dateswitcher');
+            // console.log(today);
 
             var currentDate = stateService.getCurrentDate();
             var prevDate = currentDate.clone();

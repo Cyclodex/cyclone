@@ -42,6 +42,8 @@ require('./common/app.controller');
 require('./cyclone.module');
 require('./components/components.module'); // components module
 require('./components/auth/auth.module'); // components module
+
+// TODO refine those
 require('./components/auth.factory');
 require('./components/nav.component');
 require('./components/firebase.factory');
@@ -52,20 +54,33 @@ require('./components/timeTypes.service');
 require('./stats/stats.component');
 require('./version/version.component');
 require('./components/login.component');
-require('./task/task.component');
-require('./task/taskCardList.component');
-require('./components/autocomplete/autocompleteProject.component');
-require('./timeline/timeline.component');
-require('./timeline/timeline.controller');
-require('./timeline/timelineCardList.component');
 require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
-require('./filters/type');
 require('./components/helper.service');
-require('./components/addTime/addTime.component');
-require('./components/addTime/addTime.controller');
-require('./components/addTime/addTime.service');
+
+// Task
+require('./task/task.component');
+require('./task/taskCardList.component');
+
+// Time
+require('./components/time/time.module');
+require('./components/time/timeline/timeline.component');
+require('./components/time/timeline/timeline.controller');
+require('./components/time/timeline-list/timelineCardList.component');
+// Autocomplete
+require('./components/time/autocomplete/autocompleteProject.component');
+// AddTime
+require('./components/time/addTime/addTime.component');
+require('./components/time/addTime/addTime.controller');
+require('./components/time/addTime/addTime.service');
+
+
+
+// Welcome
 require('./welcome/welcome.component');
+
+// Filters
+require('./filters/type');
 
 // Project
 require('./components/project/project.module');

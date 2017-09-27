@@ -1,4 +1,4 @@
-angular.module('cycloneApp').component('timelineCardList', {
+var timelineCardList = {
     bindings: {
         listTitle: '@',
         data: '<'
@@ -11,4 +11,8 @@ angular.module('cycloneApp').component('timelineCardList', {
         var $ctrl = this;
         $ctrl.features = ProfileService.getFeatureStates();
     }]
-});
+};
+
+angular
+    .module('components.time')
+    .component('timelineCardList', timelineCardList);

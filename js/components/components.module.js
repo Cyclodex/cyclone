@@ -4,7 +4,3 @@ angular.module('components', [
     'components.auth',
     'components.time'
 ]);
-
-angular.module("components.time", [
-
-]);

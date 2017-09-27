@@ -80,64 +80,6 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
             url: "/login",
             component: 'login'
         });
-    // Time-line
-    $stateProvider
-        .state('time', {
-            url: "/time/{year:int}/{month:int}/{day:int}",
-            parent: 'app',
-            views: {
-                nav: {
-                    component: "nav",
-                },
-                content: {
-                    // controller: "TimeCtrl",
-                    // template: require('./time/time.tpl.html')
-                    component: "timeline",
-                    bindings: { user: 'currentUser.user' },
-                }
-            },
-            resolve: {
-                currentUser:
-                    ["userPromise", "$state", function(userPromise, $state) {
-                        return userPromise.getPromise().then(function(success){
-                            return success;
-                        }, function(reason){
-                            console.log("userPromise Failed: " + reason);
-                            // $state.transitionTo('login');
-                        }, function(notification){
-                            console.log("notification: " + notification);
-                        });
-                    }]
-                ,
-                timeTypesService: function(timeTypesService) {
-                    return timeTypesService.getTimeTypes();
-                },
-                moment: function(moment) {
-                    return moment;
-                },
-                $firebaseArray: function($firebaseArray) {
-                    return $firebaseArray;
-                },
-                $firebaseObject: function($firebaseObject) {
-                    return $firebaseObject;
-                },
-                $timeout: function($timeout) {
-                    return $timeout;
-                },
-                firebaseRef: function(firebaseRef) {
-                    return firebaseRef;
-                },
-                $stateParams: function($stateParams){
-                    return $stateParams;
-                },
-                helperService: function(helperService) {
-                    return helperService;
-                },
-                stateService: function(stateService) {
-                    return stateService;
-                }
-            }
-        });
 
     // Task
     $stateProvider
