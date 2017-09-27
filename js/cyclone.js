@@ -62,7 +62,9 @@ require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
 require('./filters/type.js');
 require('./components/helper.service.js');
-require('./components/addTime/addTime.component.js');
+require('./components/addTime/addTime.component');
+require('./components/addTime/addTime.controller');
+require('./components/addTime/addTime.service');
 require('./welcome/welcome.component.js');
 
 // Project

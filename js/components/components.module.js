@@ -1,5 +1,10 @@
 angular.module('components', [
     'components.project',
     'components.profile',
-    'components.auth'
+    'components.auth',
+    'components.time'
+]);
+
+angular.module("components.time", [
+
 ]);

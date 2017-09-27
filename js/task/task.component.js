@@ -374,17 +374,8 @@ angular.module('cycloneApp')
                 this.continueEntry(oneOfTheTasks);
             };
 
-            // Toggles the display of group details
-            this.toggleDetails = function (GroupTaskData) {
-                if (GroupTaskData.showDetails === undefined || typeof GroupTaskData.showDetails === 'function') {
-                    GroupTaskData.showDetails = true;
-                } else {
-                    GroupTaskData.showDetails = !GroupTaskData.showDetails;
-                }
-            };
-
             // Add the current timer to this group
-            this.addEntryToGroup = function (GroupTaskData) {
+            this.addEntryToTask = function (GroupTaskData) {
                 // Take over text
                 if (angular.isUndefined(this.currentTask.newEntryText) || !this.currentTask.newEntryText ) {
                     this.currentTask.newEntryText = GroupTaskData.text;
@@ -647,22 +638,6 @@ angular.module('cycloneApp')
                 this.entries.$save(Entry).then(function (queryRef) {
                     // data has been saved to our database
                     //console.log("Entry (update Group) entry saved with index" + queryRef.key)
-                });
-            };
-
-            //
-            // Single entry update
-            // Could also be reached with this simple call: "entry.checked = true; entries.$save(entry);" in the html.
-            // This however seems to be more clean for functionality.
-            // NOTE: This does not work with the single entries in the grouped "continue" tasks, because the keys don't exist in there.
-            // Rather use updateGroup if needed.
-            this.updateSingleEntry = function (entry) {
-                // Mark it checked
-                entry.checked = true;
-                // Save Entry
-                this.entries.$save(entry).then(function (queryRef) {
-                    // data has been saved to our database
-                    //console.log("Entry (single Entry) saved with index" + queryRef.key)
                 });
             };
         }

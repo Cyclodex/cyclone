@@ -133,7 +133,7 @@
                 <md-button ng-if="$ctrl.features.copyButton.enabled"
                            class="md-fab md-primary md-mini show-on-hover"
                            aria-label="$ctrl.features.copyButton.name"
-                           ng-click="$ctrl.timeline.cloneEntry(GroupData)"
+                           ng-click="$ctrl.timeline.updateCurrentTask(GroupData)"
                            ng-if="GroupData.type !== 'system'">
                     <md-tooltip md-direction="top">
                         {{ $ctrl.features.copyButton.description }}
@@ -144,7 +144,7 @@
                 <md-button ng-if="$ctrl.features.attachButton.enabled"
                            class="md-fab md-primary md-mini show-on-hover"
                            aria-label="$ctrl.features.attachButton.name"
-                           ng-click="$ctrl.timeline.addEntryToGroup(GroupData)"
+                           ng-click="$ctrl.timeline.addEntryToTask(GroupData)"
                            ng-if="GroupData.type !== 'system'">
                     <md-tooltip md-direction="top">
                         {{ $ctrl.features.attachButton.description }}

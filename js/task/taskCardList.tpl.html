@@ -83,26 +83,8 @@
              layout-align="start end"
              flex="nogrow"
              >
-            <!-- Detail toggler / Disabled for now -->
-            <!--<md-button class="group__time-information__details md-icon-button"
-                       ng-click="$ctrl.task.toggleDetails(GroupData)"
-                       aria-label="Toggle display of details">
-                <div ng-if="!GroupData.showDetails">
-                    <md-tooltip md-direction="top">
-                        Show details
-                    </md-tooltip>
-                    <md-icon ng-if="!GroupData.showDetails">keyboard_arrow_down</md-icon>
-                </div>
-                <div ng-if="GroupData.showDetails">
-                    <md-tooltip md-direction="top">
-                        Hide details
-                    </md-tooltip>
-                    <md-icon ng-if="GroupData.showDetails">keyboard_arrow_up</md-icon>
-                </div>
-            </md-button>-->
 
             <!-- entries -->
-            <!--disabled detail switching for now: ng-if="GroupData.showDetails"-->
             <div
                  ng-repeat="(entryKey, entry) in GroupData.tasks"
                  layout="row"
@@ -231,7 +213,7 @@
             <md-button ng-if="$ctrl.features.attachButton.enabled"
                        class="md-fab md-primary md-mini show-on-hover"
                        aria-label="$ctrl.features.attachButton.name"
-                       ng-click="$ctrl.task.addEntryToGroup(GroupData)"
+                       ng-click="$ctrl.task.addEntryToTask(GroupData)"
                        ng-if="GroupData.type !== 'system'">
                 <md-tooltip md-direction="top">
                     {{ $ctrl.features.attachButton.description }}

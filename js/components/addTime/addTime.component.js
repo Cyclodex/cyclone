@@ -1,10 +1,11 @@
-function addTime() {
-    return {
-        restrict: 'E',
-        template: require('./addTime.tpl.html'),
-    };
-}
+var addTime = {
+    template: require('./addTime.tpl.html'),
+    controller: 'AddTimeController',
+    bindings: {
+        entries: '='
+    }
+};
 
 angular
-    .module('cycloneApp')
-    .directive('addTime', addTime);
+    .module('components.time')
+    .component('addTime', addTime);
