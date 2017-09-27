@@ -24,10 +24,10 @@ var firebaseui = require('firebaseui');
 
 // Webpack loads the environment specific config file
 if (FIREBASE_PRODUCTION) {
-    require('./config/config.production.js');
+    require('./config/config.production');
 }
 if (!FIREBASE_PRODUCTION) {
-    require('./config/config.staging.js');
+    require('./config/config.staging');
 }
 
 // ROOT
@@ -39,33 +39,33 @@ require('./common/app.component');
 require('./common/app.controller');
 
 // Cyclone app files
-require('./cyclone.module.js');
+require('./cyclone.module');
 require('./components/components.module'); // components module
 require('./components/auth/auth.module'); // components module
-require('./components/auth.factory.js');
-require('./components/nav.component.js');
-require('./components/firebase.factory.js');
-require('./components/focus.directive.js');
-require('./components/order.filter.js');
-require('./components/humanizeDate.filter.js');
-require('./components/timeTypes.service.js');
-require('./stats/stats.component.js');
-require('./time/time.controller.js');
-require('./version/version.component.js');
-require('./components/login.component.js');
-require('./task/task.component.js');
-require('./task/taskCardList.component.js');
-require('./components/autocomplete/autocompleteProject.component.js');
-require('./timeline/timeline.component.js');
-require('./timeline/timelineCardList.component.js');
+require('./components/auth.factory');
+require('./components/nav.component');
+require('./components/firebase.factory');
+require('./components/focus.directive');
+require('./components/order.filter');
+require('./components/humanizeDate.filter');
+require('./components/timeTypes.service');
+require('./stats/stats.component');
+require('./version/version.component');
+require('./components/login.component');
+require('./task/task.component');
+require('./task/taskCardList.component');
+require('./components/autocomplete/autocompleteProject.component');
+require('./timeline/timeline.component');
+require('./timeline/timeline.controller');
+require('./timeline/timelineCardList.component');
 require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
-require('./filters/type.js');
-require('./components/helper.service.js');
+require('./filters/type');
+require('./components/helper.service');
 require('./components/addTime/addTime.component');
 require('./components/addTime/addTime.controller');
 require('./components/addTime/addTime.service');
-require('./welcome/welcome.component.js');
+require('./welcome/welcome.component');
 
 // Project
 require('./components/project/project.module');
