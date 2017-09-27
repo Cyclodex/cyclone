@@ -7,7 +7,7 @@
         md-search-text="$ctrl.project"
         md-selected-item-change="$ctrl.selectedItemChange(item)"
         md-items="item in $ctrl.querySearch($ctrl.project)"
-        md-item-text="item.display"
+        md-item-text="item.name"
         md-min-length="1"
         placeholder="Project"
         md-clear-button="false"
@@ -19,6 +19,6 @@
         class="autocomplete autocomplete--project">
     <md-item-template>
         <div class="autocomplete__color" style="background-color:{{item.color}}"></div>
-        <span md-highlight-text="$ctrl.project" md-highlight-flags="^i">{{item.display}}</span>
+        <span md-highlight-text="$ctrl.project" md-highlight-flags="^i">{{item.name}}</span>
     </md-item-template>
 </md-autocomplete>

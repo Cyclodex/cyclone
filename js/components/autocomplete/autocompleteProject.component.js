@@ -1,24 +1,25 @@
-angular.module('cycloneApp').component('autocompleteProject', {
+var autocompleteProject = {
     template: require('./autocompleteProject.tpl.html'),
-    require: {
-        task: '?^^',
-        timeline: '?^^'
-    },
+    // require: {
+    //     task: '?^^',
+    //     timeline: '?^^'
+    // },
     bindings: {
         project: '<',
-        setFocus: '<'
+        setFocus: '<',
+        onUpdate: '&'
     },
-    controller: function($log, $document) {
-        var self = this;
+    controller: function($log, $document, ProjectService) {
+        var ctrl = this;
 
-        self.projects        = loadAll();
-        self.querySearch   = querySearch;
-        self.selectedItemChange = selectedItemChange;
-        self.searchTextChange   = searchTextChange;
+        ctrl.projects = null;
+        ctrl.querySearch   = querySearch;
+        ctrl.selectedItemChange = selectedItemChange;
+        ctrl.searchTextChange   = searchTextChange;
 
         // Initial values
         this.$onInit = function() {
-            self.setFocus = false;
+            ctrl.setFocus = false;
 
             // This is for sure the wrong way, but I am learning so its fine for now.
             // This makes this component work also in the timeline.
@@ -26,6 +27,10 @@ angular.module('cycloneApp').component('autocompleteProject', {
             if (this.task === null ){
                 this.task = this.timeline;
             }
+            // Get project list
+            ProjectService.getProjectList().$loaded().then(function(list){
+                ctrl.projects = list;
+            });
         };
 
         // Act on changes from outside
@@ -33,8 +38,8 @@ angular.module('cycloneApp').component('autocompleteProject', {
             if (changesObj.setFocus) {
                 if (changesObj.setFocus.currentValue){
                     // We reset the focus attribute again
-                    // self.setFocus = false;
-                    self.task.focusNewEntryProject = false;
+                    // ctrl.setFocus = false;
+                    ctrl.task.focusNewEntryProject = false;
                 }
             }
         };
@@ -44,13 +49,14 @@ angular.module('cycloneApp').component('autocompleteProject', {
          * TODO: Implement firebase lookup.
          */
         function querySearch (query) {
-            var results = query ? self.projects.filter( createFilterFor(query) ) : self.projects;
+            var results = query ? ctrl.projects.filter( createFilterFor(query) ) : ctrl.projects;
             return results;
         }
 
         function searchTextChange(text) {
+            console.log(text);
             //$log.info('Text changed to ' + text);
-            self.task.newEntryProject = text;
+            // ctrl.task.newEntryProject = text;
             // TODO: This should go out with a function call to the parent (on-change) not directly
         }
 
@@ -58,7 +64,14 @@ angular.module('cycloneApp').component('autocompleteProject', {
             if (item){
                 $log.info('Item changed to ' + JSON.stringify(item));
                 // TODO: This should go out with a function call to the parent (on-change) not directly
-                self.task.newEntryProject = item.display;
+                // ctrl.task.newEntryProject = item.display;
+
+                // Send out the selected project
+                ctrl.onUpdate({
+                    $event: {
+                        project: item
+                    }
+                });
             }
         }
 
@@ -67,25 +80,30 @@ angular.module('cycloneApp').component('autocompleteProject', {
          * TODO: Hook this up with users added projects
          */
         function loadAll() {
-            return allProjects = [
-                {
-                    "display": "Kime",
-                    "value": "kime",
-                    "color": "blue"
-                },{
-                    "display": "SIKA",
-                    "value": "sika",
-                    "color": "red"
-                },{
-                    "display": "Viseca",
-                    "value": "viseca",
-                    "color": "yellow"
-                },{
-                    "display": "Kobler-Partner",
-                    "value": "kobler-partner",
-                    "color": "blue"
-                }
-            ];
+            ProjectService.getProjectList().$loaded().then(function(list){
+                console.log("project loaded");
+                console.log(list);
+                return list;
+            });
+            // return allProjects = [
+            //     {
+            //         "display": "Kime",
+            //         "value": "kime",
+            //         "color": "blue"
+            //     },{
+            //         "display": "SIKA",
+            //         "value": "sika",
+            //         "color": "red"
+            //     },{
+            //         "display": "Viseca",
+            //         "value": "viseca",
+            //         "color": "yellow"
+            //     },{
+            //         "display": "Kobler-Partner",
+            //         "value": "kobler-partner",
+            //         "color": "blue"
+            //     }
+            // ];
         }
 
         /**
@@ -93,12 +111,18 @@ angular.module('cycloneApp').component('autocompleteProject', {
          */
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
+            console.log(lowercaseQuery);
 
             return function filterFn(project) {
+                console.log(project);
                 // Return all entries which contain the query somewhere
-                return (project.value.indexOf(lowercaseQuery) !== -1);
+                return (project.name.indexOf(lowercaseQuery) !== -1);
             };
 
         }
     }
-});
+};
+
+angular
+    .module('components.time')
+    .component('autocompleteProject', autocompleteProject);
