@@ -121,17 +121,6 @@
                             </div>
                         </md-tooltip>
                     </div>
-
-                    <!-- Delete task entry -->
-                    <!-- Delete option is disabled - because its unclear where this time will go for the user -->
-                    <!--<md-button ng-click="$ctrl.task.deleteEntryHelper(entryKey)"
-                               class="task__group__entry__delete"
-                               aria-label="Delete entry">
-                        <md-tooltip md-direction="top">
-                            Delete task
-                        </md-tooltip>
-                        <md-icon>close</md-icon>
-                    </md-button>-->
                 </div>
             </div>
         </div>
@@ -202,7 +191,7 @@
             <md-button ng-if="$ctrl.features.copyButton.enabled"
                        class="md-fab md-primary md-mini show-on-hover"
                        aria-label="$ctrl.features.copyButton.name"
-                       ng-click="$ctrl.task.cloneEntry(GroupData)"
+                       ng-click="$ctrl.task.updateCurrentTask(GroupData)"
                        ng-if="GroupData.type !== 'system'">
                 <md-tooltip md-direction="top">
                     {{ $ctrl.features.copyButton.description }}

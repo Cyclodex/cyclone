@@ -341,10 +341,10 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     service.updateCurrentTask = function (entry) {
         // Promise
         return $q(function (resolve, reject) {
-            ctrl.currentTask.newEntryProject = entry.project;
-            ctrl.currentTask.newEntryTask = entry.task;
-            ctrl.currentTask.newEntryText = entry.text;
-            ctrl.currentTask.newEntryType = entry.type;
+            ctrl.currentTask.newEntryProject = entry.project || null;
+            ctrl.currentTask.newEntryTask = entry.task || null;
+            ctrl.currentTask.newEntryText = entry.text || null;
+            ctrl.currentTask.newEntryType = entry.type || null;
             ctrl.currentTask.$save().then(function(response) {
                 resolve(response);
             }, function(error) {

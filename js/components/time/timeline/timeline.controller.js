@@ -22,10 +22,9 @@ function TimelineController($q, AddTimeService) {
     focus('newTaskProject');
 
     // Current entry
-    ctrl.currentTask = AddTimeService.getCurrentTask();
+    // ctrl.currentTask = AddTimeService.getCurrentTask();
 
     // Entries
-    // Call the data etc.
     ctrl.entries = AddTimeService.getEntries();
     // Add a start entry if we are on today and no entries in yet.
     ctrl.entries.$loaded().then(function () {
@@ -57,7 +56,6 @@ function TimelineController($q, AddTimeService) {
 
     // updateCurrentTask
     // Copy / Clone text and project to current timer
-    // MIGRATED
     ctrl.updateCurrentTask = function (entry) {
         AddTimeService.updateCurrentTask(entry);
     };
@@ -70,7 +68,7 @@ function TimelineController($q, AddTimeService) {
         });
     };
 
-    // Add the current timer to this group
+    // Add the current timer to this task
     ctrl.addEntryToTask = function (GroupTaskData) {
         AddTimeService.updateCurrentTask(GroupTaskData).then(function(){
             AddTimeService.addEntry();

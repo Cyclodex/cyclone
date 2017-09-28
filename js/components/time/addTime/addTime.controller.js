@@ -8,6 +8,13 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         ctrl.user = AuthService.getUser();
         AddTimeService.updateCurrentTimer();
         ctrl.updateDurations();
+        // TODO: CHECK regarding the destroy:
+        // var updateDurationsTimer = updateDurations();
+        // $scope.$on("$destroy", function() {
+        //     if (updateDurationsTimer) {
+        //         $timeout.cancel(updateDurationsTimer);
+        //     }
+        // });
         ctrl.currentTask = AddTimeService.getCurrentTask();
     };
 
