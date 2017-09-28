@@ -58,15 +58,17 @@ require('./components/dateSwitcher/dateSwitcher.component');
 require('./components/state.service');
 require('./components/helper.service');
 
-// Task
-require('./task/task.component');
-require('./task/taskCardList.component');
-
 // Time
 require('./components/time/time.module');
 require('./components/time/timeline/timeline.component');
 require('./components/time/timeline/timeline.controller');
 require('./components/time/timeline-list/timelineCardList.component');
+
+// Task
+require('./components/time/time-task/time-task.component');
+require('./components/time/time-task/time-task.controller');
+require('./components/time/time-task-list/time-task-list.component');
+
 // Autocomplete
 require('./components/time/autocomplete/autocompleteProject.component');
 // AddTime
