@@ -2,13 +2,18 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
     var ctrl = this;
 
     ctrl.$onInit = function () {
-        // ctrl.currentTask = AddTimeService.getCurrentTask();
         ctrl.timeTypesService = timeTypesService.getTimeTypes();
-        // ctrl.newEntryManualTime = null; // fails if null
+        // TODO: Improve the ManualTime field
+        ctrl.newEntryManualTime = null; // fails if null
         ctrl.user = AuthService.getUser();
         AddTimeService.updateCurrentTimer();
         ctrl.updateDurations();
         ctrl.currentTask = AddTimeService.getCurrentTask();
+    };
+
+    // Manual end time field update
+    ctrl.timeUpdate = function() {
+        AddTimeService.setCurrentTaskManualTime(ctrl.newEntryManualTime);
     };
 
     // Realtime duration display
@@ -31,7 +36,10 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
 
     // Add entry
     ctrl.addEntry = function(){
-        AddTimeService.addEntry();
+        AddTimeService.addEntry().then(function(){
+            // Hack: Reset the time entry after saving
+            ctrl.newEntryManualTime = null;
+        });
     }
 
 }

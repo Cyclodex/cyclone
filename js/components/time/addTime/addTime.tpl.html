@@ -62,9 +62,8 @@
                        id="newTaskManualTime"
                        name="input"
                        ng-model="$ctrl.newEntryManualTime.value"
+                       ng-change="$ctrl.timeUpdate($ctrl.newEntryManualTime)"
                        placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
-                <!--ng-model="$ctrl.currentTask.newEntryManualTime"-->
-                <!--ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"-->
                 <label for="newTaskManualTime">Manual end time</label>
             </md-input-container>
             <div class="flex">

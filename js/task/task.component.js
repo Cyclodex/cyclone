@@ -39,7 +39,6 @@ angular.module('cycloneApp')
 
             this.error = false;
             this.doneLoading = false;
-            this.doneLoadingGroups = false;
 
             // Initially set lastEntry to now.
             var lastEntryTimestamp = Date.now();
@@ -568,8 +567,6 @@ angular.module('cycloneApp')
                         delete groupsNew[groupId];
                     }
                 }
-
-                ctrl.doneLoadingGroups = true;
 
                 // TODO: return arrays for ng repeat and filters
                 // ctrl.entriesArray = [];

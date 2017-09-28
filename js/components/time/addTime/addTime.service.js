@@ -42,6 +42,36 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     service.getCurrentTask = function(){
         return ctrl.currentTask;
     };
+    // TODO: getCurrentTaskManualTime() not done yet
+    /*service.getCurrentTaskManualTime = function(currentTask) {
+        console.log(currentTask);
+        // Get the right day (the one we are looking at)
+        var manualTime = new Date();
+        var currentDate = stateService.getCurrentDate();
+        manualTime.setTime(currentDate.valueOf());
+
+        // And manually set the hours + minutes
+        var hours = ctrl.currentTask.newEntryManualTime.getHours();
+        var minutes = ctrl.currentTask.newEntryManualTime.getMinutes();
+        console.log(hours);
+        console.log(minutes);
+        manualTime.setHours(hours);
+        manualTime.setMinutes(minutes);
+        manualTime.setSeconds(0);
+        //console.log("hours: " + hours + ":" + minutes);
+        //console.log(manualTime);
+        //console.log(manualTime.getTime());
+        timestamp = manualTime.getTime();
+        console.log("what we return:");
+        console.log(timestamp);
+        return timestamp;
+    };*/
+
+    // We need to get / tell the service which manual time we have.
+    // TODO: why is this not part of the currentTask? The date maybe can't be saved into fb.
+    service.setCurrentTaskManualTime = function(time){
+        ctrl.newEntryManualTime = time;
+    };
 
     service.getEntries = function (){
         var refTime = firebaseRef.getTimeReference(user);
@@ -87,10 +117,10 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 manualTime.setHours(hours);
                 manualTime.setMinutes(minutes);
                 manualTime.setSeconds(0);
-                //console.log("hours: " + hours + ":" + minutes);
-                //console.log(manualTime);
-                //console.log(manualTime.getTime());
                 timestamp = manualTime.getTime();
+
+                // TODO: OK or needs promise ?
+                // var timestamp = service.getCurrentTaskManualTime();
                 duration = 0;
                 // For now we save the same start time as end time. If there is a previous entry, we will update it later in code.
                 // But this allows us to have first manual end time entries which have 0 duration.
