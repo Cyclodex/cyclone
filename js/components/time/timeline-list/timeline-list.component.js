@@ -1,4 +1,4 @@
-var timelineCardList = {
+var timelineList = {
     bindings: {
         listTitle: '@',
         data: '<'
@@ -6,8 +6,8 @@ var timelineCardList = {
     require: {
         timeline: '^^'
     },
-    template: require('./timelineCardList.tpl.html'),
-    controller: ['ProfileService', function timelineCardList(ProfileService) {
+    template: require('./timeline-list.tpl.html'),
+    controller: ['ProfileService', function timelineList(ProfileService) {
         var ctrl = this;
         ctrl.features = ProfileService.getFeatureStates();
 
@@ -21,4 +21,4 @@ var timelineCardList = {
 
 angular
     .module('components.time')
-    .component('timelineCardList', timelineCardList);
+    .component('timelineList', timelineList);

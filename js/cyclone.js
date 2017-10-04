@@ -62,7 +62,7 @@ require('./components/helper.service');
 require('./components/time/time.module');
 require('./components/time/timeline/timeline.component');
 require('./components/time/timeline/timeline.controller');
-require('./components/time/timeline-list/timelineCardList.component');
+require('./components/time/timeline-list/timeline-list.component');
 
 // Task
 require('./components/time/time-task/time-task.component');
