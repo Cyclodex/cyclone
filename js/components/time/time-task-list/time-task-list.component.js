@@ -11,8 +11,13 @@ var timeTaskList = {
     },
     template: require('./time-task-list.tpl.html'),
     controller: ['ProfileService', function timeTaskList(ProfileService) {
-        var $ctrl = this;
-        $ctrl.features = ProfileService.getFeatureStates();
+        var ctrl = this;
+
+        ctrl.$onInit = function () {
+            ctrl.features = ProfileService.getFeatureStates();
+            // Load the different time types from the parent controller
+            ctrl.timeTypesService = ctrl.timeTask.timeTypesService;
+        };
     }]
 };
 

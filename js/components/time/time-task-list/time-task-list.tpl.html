@@ -35,9 +35,8 @@
             <md-select ng-model="GroupData.type"
                        aria-label="Type of the entry"
                        ng-change="$ctrl.task.updateGroupData(GroupData)"
-                       class="show-on-hover hide-6"
-                       >
-                <md-option ng-repeat="type in $ctrl.task.timeTypesService" ng-value="type.value">
+                       class="show-on-hover hide-6">
+                <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
                     <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                 </md-option>
             </md-select>
