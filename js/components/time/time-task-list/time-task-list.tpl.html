@@ -20,8 +20,8 @@
                          md-indeterminate="GroupData.indeterminate"
                          clipboard
                          text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                         on-copied="$ctrl.task.copySuccess(); $ctrl.task.updateGroupStatus(GroupData)"
-                         on-error="$ctrl.task.copyFail(err)"
+                         on-copied="$ctrl.timeTask.copySuccess(); $ctrl.timeTask.updateGroupStatus(GroupData)"
+                         on-error="$ctrl.timeTask.copyFail(err)"
                          class="md-primary show-on-hover hide-6">
             </md-checkbox>
             <md-tooltip md-direction="top">
@@ -34,9 +34,9 @@
         <md-input-container md-no-float class="entry__info__select entry__info__select--type">
             <md-select ng-model="GroupData.type"
                        aria-label="Type of the entry"
-                       ng-change="$ctrl.task.updateGroupData(GroupData)"
+                       ng-change="$ctrl.timeTask.updateGroupData(GroupData)"
                        class="show-on-hover hide-6">
-                <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
+                <md-option ng-repeat="type in $ctrl.timeTask.timeTypesService" ng-value="type.value">
                     <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
                 </md-option>
             </md-select>
@@ -54,7 +54,7 @@
             <!-- Project -->
             <md-input-container md-no-float class="entry__info__input entry__info__input--project">
                 <input ng-model="GroupData.project"
-                       ng-change="$ctrl.task.updateGroupData(GroupData)"
+                       ng-change="$ctrl.timeTask.updateGroupData(GroupData)"
                        type="text"
                        aria-label="project"
                        placeholder="Project"
@@ -66,7 +66,7 @@
             <!-- Task name -->
             <md-input-container flex="auto" md-no-float class="entry__info__input entry__info__input--task">
                 <input ng-model="GroupData.task"
-                       ng-change="$ctrl.task.updateGroupData(GroupData)"
+                       ng-change="$ctrl.timeTask.updateGroupData(GroupData)"
                        type="text"
                        aria-label="Task"
                        placeholder="Task / Issue"
@@ -101,7 +101,7 @@
                         <md-icon>description</md-icon>
                         <md-input-container md-no-float class="entry__info__input entry__info__input--text">
                             <input ng-model="entry.text"
-                                   ng-change="$ctrl.task.updateEntry(entryKey, entry)"
+                                   ng-change="$ctrl.timeTask.updateEntry(entryKey, entry)"
                                    type="text"
                                    class="validate"
                                    aria-label="Task description"
@@ -139,10 +139,10 @@
                         <span
                                 clipboard
                                 text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                                on-copied="$ctrl.task.copySuccess();"
-                                on-error="$ctrl.task.copyFail(err)"
+                                on-copied="$ctrl.timeTask.copySuccess();"
+                                on-error="$ctrl.timeTask.copyFail(err)"
                                 class="">
-                            <!-- on-copied+= $ctrl.task.updateGroupStatus(GroupData, true); -->
+                            <!-- on-copied+= $ctrl.timeTask.updateGroupStatus(GroupData, true); -->
                             <md-tooltip md-direction="bottom">
                                 Copy time
                             </md-tooltip>
@@ -158,8 +158,8 @@
                                         <span
                                                 clipboard
                                                 text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
-                                                on-copied="$ctrl.task.copySuccess();"
-                                                on-error="$ctrl.task.copyFail(err)"
+                                                on-copied="$ctrl.timeTask.copySuccess();"
+                                                on-error="$ctrl.timeTask.copyFail(err)"
                                                 class="done">
                                             <md-tooltip md-direction="bottom">
                                                 Copy time
@@ -182,7 +182,7 @@
             <md-button ng-if="$ctrl.features.continueButton.enabled"
                        class="md-fab md-primary md-mini show-on-hover"
                        aria-label="{{ $ctrl.features.continueButton.name }}"
-                       ng-click="$ctrl.task.continueGroup(GroupData)">
+                       ng-click="$ctrl.timeTask.continueGroup(GroupData)">
                 <md-tooltip md-direction="top"><span>{{ $ctrl.features.continueButton.description }}</span></md-tooltip>
                 <md-icon>{{ $ctrl.features.continueButton.icon }}</md-icon>
             </md-button>
@@ -190,18 +190,18 @@
             <md-button ng-if="$ctrl.features.copyButton.enabled"
                        class="md-fab md-primary md-mini show-on-hover"
                        aria-label="$ctrl.features.copyButton.name"
-                       ng-click="$ctrl.task.updateCurrentTask(GroupData)"
+                       ng-click="$ctrl.timeTask.updateCurrentTask(GroupData)"
                        ng-if="GroupData.type !== 'system'">
                 <md-tooltip md-direction="top">
                     {{ $ctrl.features.copyButton.description }}
                 </md-tooltip>
                 <md-icon>{{ $ctrl.features.copyButton.icon }}</md-icon>
             </md-button>
-            <!-- Attach directly into this task button-->
+            <!-- Attach directly into this timeTask button-->
             <md-button ng-if="$ctrl.features.attachButton.enabled"
                        class="md-fab md-primary md-mini show-on-hover"
                        aria-label="$ctrl.features.attachButton.name"
-                       ng-click="$ctrl.task.addEntryToTask(GroupData)"
+                       ng-click="$ctrl.timeTask.addEntryToTask(GroupData)"
                        ng-if="GroupData.type !== 'system'">
                 <md-tooltip md-direction="top">
                     {{ $ctrl.features.attachButton.description }}

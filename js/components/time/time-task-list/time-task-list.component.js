@@ -15,8 +15,6 @@ var timeTaskList = {
 
         ctrl.$onInit = function () {
             ctrl.features = ProfileService.getFeatureStates();
-            // Load the different time types from the parent controller
-            ctrl.timeTypesService = ctrl.timeTask.timeTypesService;
         };
     }]
 };

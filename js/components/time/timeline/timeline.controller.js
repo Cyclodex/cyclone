@@ -11,10 +11,6 @@ function TimelineController($q, AddTimeService) {
         console.info('Not supported browser, press Ctrl+C to copy time');
     };
 
-    // Load the different time types
-    ctrl.types = ctrl.timeTypesService;
-    // TODO: Make this a configuration option or save it in the firebasedb
-
     ctrl.error = false;
     ctrl.doneLoading = false;
 

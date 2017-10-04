@@ -83,6 +83,7 @@ function TimeTaskController($q, AddTimeService) {
     // updateCurrentTask
     // Copy / Clone text and project to current timer
     ctrl.updateCurrentTask = function (entry) {
+        console.log(entry);
         AddTimeService.updateCurrentTask(entry);
     };
 
@@ -282,7 +283,7 @@ function TimeTaskController($q, AddTimeService) {
             // Save Entry
             ctrl.entries.$save(Entry).then(function (queryRef) {
                 // data has been saved to our database
-                //console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                console.log("Entry (update Group) entry saved with index" + queryRef.key)
             });
         }
     };
