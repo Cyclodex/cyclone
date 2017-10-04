@@ -1,6 +1,9 @@
 <!-- TODO: This would be rather its own component, but needs all the stats data in a service or similar -->
 <stats-total work-total="$ctrl.statsTotalWork" flex="none"></stats-total>
-<stats-types work-types="$ctrl.dayVisualizeWorkTypeTotals"></stats-types>
+<div>
+    <!--ng-if="$ctrl.features.showWorkTypeStats.enabled"-->
+    <stats-types work-types="$ctrl.dayVisualizeWorkTypeTotals"></stats-types>
+</div>
 
 <!-- TODO: Make this its own component please :)
 <div

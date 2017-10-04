@@ -54,6 +54,14 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     'default': false,
                     'description': 'Track current timer and continue on this task',
                     'icon': 'play_arrow'
+                },
+                // Statistic bar
+                'showWorkTypeStats' : {
+                    'name': 'Stats of work type',
+                    'key' : 'showWorkTypeStats',
+                    'default': false,
+                    'description': 'Shows daily type allocation',
+                    'beta': true // Makes it not visible
                 }
             }
         };
