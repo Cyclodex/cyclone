@@ -281,7 +281,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
         // Save Entry
         ctrl.entries.$save(Entry).then(function (queryRef) {
             // data has been saved to our database
-            console.log("Entry (updateEntry) saved with index" + queryRef.key)
+            //console.log("Entry (updateEntry) saved with index" + queryRef.key)
         });
     };
 
