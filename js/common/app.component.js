@@ -9,7 +9,7 @@ angular
     .config(function ($stateProvider) {
         $stateProvider
             .state('app', {
-                redirectTo: 'projects',
+                redirectTo: 'projects', // should this be project-crud? auto redirect?
                 url: '/app',
                 data: {
                     requiredAuth: true
