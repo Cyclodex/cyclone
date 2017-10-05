@@ -10,21 +10,21 @@
             </div>
         </div>
         <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
-            <!--<autocomplete-project-->
-                <!--flex="20"-->
-                <!--project="$ctrl.currentTask.newEntryProject"-->
-                <!--set-focus="$ctrl.focusNewEntryProject"-->
-                <!--on-update="console.log('test');$ctrl.updateProject($event)">-->
-            <!--</autocomplete-project>-->
-            <md-input-container flex="15">
-                <input id="newEntryProject"
-                       type="text"
-                       ng-model="$ctrl.currentTask.newEntryProject"
-                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
-                       aria-label="Project"
-                       set-focus="$ctrl.focusNewEntryProject">
-                <label for="newEntryProject">Project</label>
-            </md-input-container>
+            <autocomplete-project
+                flex="20"
+                project="$ctrl.currentTask.newEntryProject"
+                set-focus="$ctrl.focusNewEntryProject"
+                on-update="$ctrl.updateProject($event)">
+            </autocomplete-project>
+            <!--<md-input-container flex="15">-->
+                <!--<input id="newEntryProject"-->
+                       <!--type="text"-->
+                       <!--ng-model="$ctrl.currentTask.newEntryProject"-->
+                       <!--ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"-->
+                       <!--aria-label="Project"-->
+                       <!--set-focus="$ctrl.focusNewEntryProject">-->
+                <!--<label for="newEntryProject">Project</label>-->
+            <!--</md-input-container>-->
 
             <md-input-container flex="15">
                 <input id="newTaskName"

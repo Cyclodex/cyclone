@@ -31,18 +31,19 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
 
     // update
     ctrl.updateProject = function (event) {
-        // cfpLoadingBar.start();
-        console.log("addtimer - UPDATE PROJECT RECEIVES THE UPDATE");
-        console.log(event.project);
-        // return ProjectService
-        // .saveProject(event.project)
-        // 'projects': Helps us to save the entry directly with $save
-        //     .saveProject(event.project, projects)
-        //     .then(cfpLoadingBar.complete, cfpLoadingBar.complete);
+        cfpLoadingBar.start();
+        // Translate the incoming project to the current task
+        var entry = {};
+        entry.project = event.project.name;
+        entry.type = event.project.type;
+        // Set the default values of this project
+        AddTimeService.updateCurrentTask(entry)
+            .then(cfpLoadingBar.complete, cfpLoadingBar.complete);
     };
 
     // Add entry
     ctrl.addEntry = function(){
+        // TODO: Make sure the time is from today! (after switching day etc)
         AddTimeService.addEntry().then(function(){
             // Hack: Reset the time entry after saving
             ctrl.newEntryManualTime = null;

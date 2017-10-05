@@ -1,4 +1,4 @@
-<md-autocomplete
+<md-autocomplete flex
         md-autofocus
         do-focus="$ctrl.setFocus"
         md-no-cache="$ctrl.noCache"
@@ -9,7 +9,6 @@
         md-items="item in $ctrl.querySearch($ctrl.project)"
         md-item-text="item.name"
         md-min-length="1"
-        placeholder="Project"
         md-clear-button="false"
         md-match-case-insensitive="true"
         md-input-id="newTaskProject"
