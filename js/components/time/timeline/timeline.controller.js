@@ -76,9 +76,10 @@ function TimelineController($q, AddTimeService) {
         AddTimeService.deleteEntry(entry);
     };
 
-    // Entry update. Needs the key and some data to merge with current Entry
+    // Entry update
+    // Needs the key and some data to merge with current Entry
     ctrl.updateEntry = function (entryKey, entryData) {
-        AddTimeService.updateEntry(entryKey, entryData);
+        AddTimeService.updateEntry(entryKey, entryData, true);
     };
 }
 

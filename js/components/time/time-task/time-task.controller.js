@@ -83,7 +83,6 @@ function TimeTaskController($q, AddTimeService) {
     // updateCurrentTask
     // Copy / Clone text and project to current timer
     ctrl.updateCurrentTask = function (entry) {
-        console.log(entry);
         AddTimeService.updateCurrentTask(entry);
     };
 
@@ -117,9 +116,11 @@ function TimeTaskController($q, AddTimeService) {
     };
 
 
-    // Entry update. Needs the key and some data to merge with current Entry
+    // Entry update
+    // Needs the key and some data to merge with current Entry
     ctrl.updateEntry = function (entryKey, entryData) {
-        AddTimeService.updateEntry(entryKey, entryData);
+        // But we don't want an update on the group ID (false)
+        AddTimeService.updateEntry(entryKey, entryData, false);
     };
 
     //
@@ -137,20 +138,15 @@ function TimeTaskController($q, AddTimeService) {
             var taskName = entry.task || '';
             var groupType = entry.type || '';
             var groupIdentifaction = entry.group || '';
-            var groupTimestamp = entry.timestamp;
 
-            // TODO: Make some real groupID if not set, and set it into the data.
-            // This could solve the issues of updating lines because of new project or task name
-            // var groupIdDefinition   = projectName + '_' + groupType  + '_' + taskName || '-';
-            // Solves the issues when moving around, but does not support same entries with different type
-            // var groupId   = projectName + '_' + taskName || '-';
-
-            // Check for ID
-            // Go over all the groups and check if the same project+task+type exists and use its groupID
-
-            // This is probably only a fallback scenario. We need to do the group update on add / update.
+            // This is probably only a fallback scenario.
             if (!groupIdentifaction){
-                groupId = ctrl.helperService.getGroupId(groupsNew, projectName, taskName, groupType, groupTimestamp);
+                groupId = ctrl.helperService.getGroupId(groupsNew,
+                    projectName,
+                    taskName,
+                    groupType,
+                    true
+                );
             } else {
                 groupId = groupIdentifaction;
             }
@@ -291,13 +287,20 @@ function TimeTaskController($q, AddTimeService) {
     // Group update data on all sub entries belonging to this task
     ctrl.updateGroupData = function (taskData) {
         // // Check if there is a group id we need to apply
-        var groups = ctrl.entries;
-        var groupId = ctrl.helperService.getGroupId(groups, taskData.project, taskData.task, taskData.type, taskData.timestamp);
+        var entries = ctrl.entries;
+        var groupId = ctrl.helperService.getGroupId(entries,
+            taskData.project,
+            taskData.task,
+            taskData.type,
+            false
+        );
 
         for (var taskKey in taskData.tasks) {
             var Entry = ctrl.entries.$getRecord(taskKey); // record with $id === nextEntryKey or null
             Entry.project = taskData.project;
-            Entry.group = groupId;
+            if (groupId){
+                Entry.group = groupId;
+            }
             Entry.task = taskData.task;
             Entry.type = taskData.type;
             // Save Entry

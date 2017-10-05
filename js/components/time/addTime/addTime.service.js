@@ -176,7 +176,12 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
             //
 
             // Check if there is a group id we need to apply
-            groupId = helperService.getGroupId(ctrl.entries, ctrl.currentTask.newEntryProject, ctrl.currentTask.newEntryTask, ctrl.currentTask.newEntryType, timestamp);
+            groupId = helperService.getGroupId(ctrl.entries,
+                ctrl.currentTask.newEntryProject,
+                ctrl.currentTask.newEntryTask,
+                ctrl.currentTask.newEntryType,
+                true
+            );
 
             ctrl.entries.$add({
                 text: ctrl.currentTask.newEntryText,
@@ -234,7 +239,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 // Save new entry
                 ctrl.entries.$save(newEntry).then(function (refTime) {
                     // data has been saved to our database
-                    console.log("newEntry entry saved with index" + refTime.key)
+                    //console.log("newEntry entry saved with index" + refTime.key)
 
                     // Temporary solution, for setting focus again
                     ctrl.focusNewEntryProject = true;
@@ -269,15 +274,31 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
 
     // Entry update
     // Needs the key and some data to merge with current Entry
-    service.updateEntry = function (entryKey, entryData) {
+    /**
+     * Update entry
+     * @param entryKey
+     * @param entryData
+     * @param defineNewGroup
+     */
+    service.updateEntry = function (entryKey, entryData, defineNewGroup) {
         var Entry = ctrl.entries.$getRecord(entryKey); // record with $id === nextEntryKey or null
         Entry.project = entryData.project;
         // Check if there is a group id we need to apply
-        Entry.group = helperService.getGroupId(ctrl.entries, entryData.project, entryData.task, entryData.type, entryData.timestamp, entryData.$id);
+        Entry.group = helperService.getGroupId(ctrl.entries,
+            entryData.project,
+            entryData.task,
+            entryData.type,
+            defineNewGroup,
+            entryData.$id
+        );
         Entry.task = entryData.task;
         Entry.type = entryData.type;
+
+        // Remove the old group, otherwise it does override on merge
+        delete entryData.group;
         // Merge the entryData into the Entry object
         Object.assign(Entry, entryData);
+
         // Save Entry
         ctrl.entries.$save(Entry).then(function (queryRef) {
             // data has been saved to our database
