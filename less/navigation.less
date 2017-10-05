@@ -1,5 +1,5 @@
 // New navigation
-@navigationWidth: 150px;
+@navigationWidth: 100px;
 .navigation-left-side {
   position: fixed;
   left: 0;
@@ -17,19 +17,44 @@
 
 .nav__element {
   display: flex;
+  margin: 5px 0;
+  padding: 0;
+  width: 100%;
   min-height: 35px;
   color: white;
   text-decoration: none;
 
-  &.md-active {
-    background-color: @colorSecondary;
+  md-icon {
+    color: white;
   }
+
+  &.md-active {
+    background-color: @colorPrimaryDark;
+  }
+
+  .material-icons {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+}
+.nav__element--logo {
+  min-height: 50px;
+  margin: 0;
+  .nav__element__content {
+    align-items: center;
+  }
+}
+
+.nav__element__content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 
 .cyclone-logo {
   height: 30px;
-  width: 30px;
+  width: 100%;
   max-width: 100%;
 }
 
