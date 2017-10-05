@@ -29,8 +29,6 @@ angular.module("cycloneApp").run(function($transitions, cfpLoadingBar) {
 
             // Go to the current date, if today was requested
             if (trans.$to().name === 'today'){
-                console.log("wants to go somewhere now... why?");
-
                 console.log('######################');
                 console.log("trans $to === today");
                 console.log(trans);
