@@ -1,4 +1,4 @@
-function TimelineController($q, AddTimeService) {
+function TimelineController(AddTimeService) {
     var ctrl = this;
 
     // TODO: move "copy" out from here, into service something like that.
@@ -13,9 +13,6 @@ function TimelineController($q, AddTimeService) {
 
     ctrl.error = false;
     ctrl.doneLoading = false;
-
-    // Focus input
-    focus('newTaskProject');
 
     // Current entry
     // ctrl.currentTask = AddTimeService.getCurrentTask();

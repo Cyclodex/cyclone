@@ -16,6 +16,8 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         //     }
         // });
         ctrl.currentTask = AddTimeService.getCurrentTask();
+
+        ctrl.setFocus = true;
     };
 
     // Manual end time field update
@@ -29,24 +31,31 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         $timeout(ctrl.updateDurations, 1000, true);
     };
 
-    // update
+    // update project
     ctrl.updateProject = function (event) {
         cfpLoadingBar.start();
-        // Translate the incoming project to the current task
-        var entry = {};
-        entry.project = event.project.name;
-        entry.type = event.project.type;
-        // Set the default values of this project
-        AddTimeService.updateCurrentTask(entry)
+
+        ctrl.currentTask.newEntryProject = event.project.name;
+        // Update the type if we have one (from existing project)
+        if (event.project.type) {
+            ctrl.currentTask.newEntryType = event.project.type;
+        }
+        // Firebase save
+        ctrl.currentTask.$save(ctrl.currentTask)
             .then(cfpLoadingBar.complete, cfpLoadingBar.complete);
     };
 
     // Add entry
     ctrl.addEntry = function(){
         // TODO: Make sure the time is from today! (after switching day etc)
+
+        // make sure the focus will work (resetting it)
+        ctrl.setFocus = false;
         AddTimeService.addEntry().then(function(){
             // Hack: Reset the time entry after saving
             ctrl.newEntryManualTime = null;
+
+            ctrl.setFocus = true;
         });
     }
 

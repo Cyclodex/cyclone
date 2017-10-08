@@ -245,8 +245,9 @@ function TimeTaskController($q, AddTimeService) {
             }
             // Delete the group in new if there is no entry anymore
             if (Object.keys(groupsNew).length == 0) {
-                console.log('deleting for what ????????????????:');
-                console.log(groupId);
+                // TODO: check whats up with this:
+                // console.log('deleting for what ????????????????:');
+                // console.log(groupId);
                 delete groupsNew[groupId];
             }
         }
@@ -279,7 +280,7 @@ function TimeTaskController($q, AddTimeService) {
             // Save Entry
             ctrl.entries.$save(Entry).then(function (queryRef) {
                 // data has been saved to our database
-                console.log("Entry (update Group) entry saved with index" + queryRef.key)
+                //console.log("Entry (update Group) entry saved with index" + queryRef.key)
             });
         }
     };

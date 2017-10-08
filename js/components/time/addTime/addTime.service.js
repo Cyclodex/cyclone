@@ -241,9 +241,6 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     // data has been saved to our database
                     //console.log("newEntry entry saved with index" + refTime.key)
 
-                    // Temporary solution, for setting focus again
-                    ctrl.focusNewEntryProject = true;
-
                     //
                     // update next entry
                     //
@@ -257,7 +254,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                         // Save nextEntry
                         ctrl.entries.$save(nextEntry).then(function (refTime) {
                             // data has been saved to our database
-                            console.log("nextEntry entry saved with index" + refTime.key)
+                            //console.log("nextEntry entry saved with index" + refTime.key)
                             resolve(refTime);
                         });
                     } else {
@@ -339,7 +336,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                         // Save nextEntry
                         entries.$save(nextEntry).then(function () {
                             // data has been saved to our database
-                            console.log("(removed) nextEntry saved with index" + refTime.key)
+                            //console.log("(removed) nextEntry saved with index" + refTime.key)
                             resolve(refTime);
                         }, function(error) {
                             console.log("Error:", error);
@@ -362,10 +359,19 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     service.updateCurrentTask = function (entry) {
         // Promise
         return $q(function (resolve, reject) {
-            ctrl.currentTask.newEntryProject = entry.project || null;
-            ctrl.currentTask.newEntryTask = entry.task || null;
-            ctrl.currentTask.newEntryText = entry.text || null;
-            ctrl.currentTask.newEntryType = entry.type || null;
+            if (entry.project) {
+                ctrl.currentTask.newEntryProject = entry.project || null;
+            }
+            if (entry.task) {
+                ctrl.currentTask.newEntryTask = entry.task || null;
+            }
+            if (entry.text) {
+                ctrl.currentTask.newEntryText = entry.text || null;
+            }
+            if (entry.type) {
+                ctrl.currentTask.newEntryType = entry.type || null;
+            }
+
             ctrl.currentTask.$save().then(function(response) {
                 resolve(response);
             }, function(error) {

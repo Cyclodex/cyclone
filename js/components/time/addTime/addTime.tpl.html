@@ -12,17 +12,21 @@
         <form ng-submit="$ctrl.addEntry()" layout="row" name="addEntryForm">
             <autocomplete-project
                 flex="20"
+                ng-blur="$ctrl.onBlur($event)"
+                on-update="$ctrl.updateProject($event)"
                 project="$ctrl.currentTask.newEntryProject"
-                set-focus="$ctrl.focusNewEntryProject"
-                on-update="$ctrl.updateProject($event)">
+                set-focus="$ctrl.setFocus"
+            >
             </autocomplete-project>
+
             <!--<md-input-container flex="15">-->
                 <!--<input id="newEntryProject"-->
                        <!--type="text"-->
                        <!--ng-model="$ctrl.currentTask.newEntryProject"-->
                        <!--ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"-->
                        <!--aria-label="Project"-->
-                       <!--set-focus="$ctrl.focusNewEntryProject">-->
+                       <!--do-focus="$ctrl.setFocus"-->
+                <!--&gt;-->
                 <!--<label for="newEntryProject">Project</label>-->
             <!--</md-input-container>-->
 

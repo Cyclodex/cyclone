@@ -1,24 +1,3 @@
-// Focus an input element - directive
-// http://stackoverflow.com/questions/14833326/how-to-set-focus-on-input-field
-angular.module('cycloneApp').directive('focusOn', function() {
-    return function(scope, elem, attr) {
-        scope.$on('focusOn', function(e, name) {
-            if (name === attr.focusOn) {
-                elem[0].focus();
-            }
-        });
-    };
-});
-
-// TODO: How to load this factory into the new components?
-angular.module('cycloneApp').factory('focus', function($rootScope, $timeout) {
-    return function(name) {
-        $timeout(function() {
-            $rootScope.$broadcast('focusOn', name);
-        });
-    }
-});
-
 /**
  * New temporary solution for focus project autocomplete
  */
@@ -31,6 +10,9 @@ function doFocus() {
                 if (!newValue) {
                     return;
                 }
+                // Reset the value again
+                $scope.$ctrl.setFocus = false;
+
                 // Push this event to the end of the call stack, otherwise it might not work correctly
                 setTimeout(function () {
                     $element[0].focus();
@@ -40,5 +22,5 @@ function doFocus() {
     };
 }
 angular
-    .module('cycloneApp')
+    .module('components')
     .directive('doFocus', doFocus);

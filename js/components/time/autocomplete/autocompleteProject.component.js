@@ -1,64 +1,23 @@
 var autocompleteProject = {
     template: require('./autocompleteProject.tpl.html'),
     bindings: {
-        project: '<',
+        project: '=',
         setFocus: '<',
-        onUpdate: '&'
+        onUpdate: '&',
+        onSetFocus: '&'
     },
-    controller: function($log, $document, ProjectService) {
+    controller: function($log, $document, ProjectService, $timeout) {
         var ctrl = this;
 
         ctrl.projects = null;
-        ctrl.selectedItemChange = selectedItemChange;
-        ctrl.searchTextChange   = searchTextChange;
 
         // Initial values
         this.$onInit = function() {
-            ctrl.setFocus = false;
-
             // Get project list
             ProjectService.getProjectList().$loaded().then(function(list){
                 ctrl.projects = list;
             });
         };
-
-        // Act on changes from outside
-        this.$onChanges = function (changesObj) {
-            if (changesObj.setFocus) {
-                if (changesObj.setFocus.currentValue){
-                    // We reset the focus attribute again
-                    // ctrl.setFocus = false;
-                    ctrl.task.focusNewEntryProject = false;
-                }
-            }
-        };
-
-        /**
-         * Search for projects...
-         * TODO: Implement firebase lookup.
-         */
-        ctrl.querySearch = function(query) {
-            var results = query ? ctrl.projects.filter( createFilterFor(query) ) : ctrl.projects;
-            return results;
-        };
-
-        function searchTextChange(text) {
-            // TODO: We probably don't need this.
-            //$log.info('Text changed to ' + text);
-            // ctrl.task.newEntryProject = text;
-        }
-
-        function selectedItemChange(item) {
-            if (item){
-                $log.info('Item changed to ' + JSON.stringify(item));
-                // Send out the selected project
-                ctrl.onUpdate({
-                    $event: {
-                        project: item
-                    }
-                });
-            }
-        }
 
         /**
          * Create filter function for a query string
@@ -73,6 +32,46 @@ var autocompleteProject = {
             };
 
         }
+        /**
+         * Search for projects...
+         */
+        ctrl.querySearch = function(query) {
+            var results = query ? ctrl.projects.filter( createFilterFor(query) ) : ctrl.projects;
+            return results;
+        };
+
+        // This is the change event when the string doesn't match a predefined project
+        ctrl.searchTextChange = function searchTextChange(text) {
+            // $log.info('Text changed to ' + text);
+        };
+
+        // This is the event when a project matches (so its selected)
+        ctrl.selectedItemChange = function selectedItemChange(item) {
+            if (item){
+                //$log.info('Item changed to ' + JSON.stringify(item));
+                // Send out the selected project (as object)
+                ctrl.onUpdate({
+                    $event: {
+                        project: item
+                    }
+                });
+            }
+        };
+
+        /**
+         * When leaving the autocomplete with a value which is not in the list, we need to send this back
+         * @param event
+         */
+        ctrl.onBlur = function (event){
+            ctrl.onUpdate({
+                $event: {
+                    project: {
+                        // For new projects we only send the new name
+                        name: ctrl.project // we take the model which should be up to date
+                    }
+                }
+            });
+        };
     }
 };
 
