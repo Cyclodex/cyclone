@@ -40,6 +40,7 @@ angular.module('cycloneApp').component('dateSwitcher', {
 
             // Call it over and over again, every 10min ( 1000ms * 60 (=1min) * 10 (=10min) )
             // TODO: for testing its set to 1min for now:
+            // TODO: Maybe we can calculate how long it goes to the end of the day, and iterate only then :)
             dateSwitcherTimer = $timeout(checkTime, 60000, true);
         };
 

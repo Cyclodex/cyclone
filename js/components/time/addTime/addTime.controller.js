@@ -18,6 +18,14 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         ctrl.currentTask = AddTimeService.getCurrentTask();
 
         ctrl.setFocus = true;
+
+        // Check if its today or not to hide this component
+        var today = moment();
+        ctrl.hideAddTime = true;
+        var urlDate = stateService.getCurrentDate();
+        if (urlDate.isSame(today, 'day')) {
+            ctrl.hideAddTime = false;
+        }
     };
 
     // Manual end time field update
