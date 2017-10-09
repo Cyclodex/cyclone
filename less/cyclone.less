@@ -770,3 +770,18 @@ md-input-container {
         min-height: unset;
     }
 }
+
+.time-task-list {
+    // Fade out the done / break lists
+    &.time-task-list--done,
+    &.time-task-list--break {
+        .time-task-list__content {
+            transition: all 300ms ease;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.7)), to(rgba(0,0,0,0)));
+            &:hover {
+                -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,1)));
+            }
+        }
+    }
+}
+

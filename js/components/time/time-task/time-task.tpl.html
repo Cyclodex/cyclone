@@ -20,9 +20,9 @@
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-        <time-task-list list-title="Open" list-icon="playlist_play" data="$ctrl.groupsCurrent"></time-task-list>
-        <time-task-list list-title="Done" list-icon="playlist_add_check" data="$ctrl.groupsChecked"></time-task-list>
-        <time-task-list list-title="Break & Trust" list-icon="playlist_add_check" data="$ctrl.groupsUncheckable"></time-task-list>
+        <time-task-list list-title="Open" class="time-task-list time-task-list--open" list-icon="playlist_play" data="$ctrl.groupsCurrent"></time-task-list>
+        <time-task-list list-title="Done" class="time-task-list time-task-list--done" list-icon="playlist_add_check" data="$ctrl.groupsChecked"></time-task-list>
+        <time-task-list list-title="Break & Trust" class="time-task-list time-task-list--break" list-icon="playlist_add_check" data="$ctrl.groupsUncheckable"></time-task-list>
     </div>
     <!-- END: cyclone-table-->
 
