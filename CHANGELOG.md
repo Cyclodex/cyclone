@@ -1,5 +1,5 @@
 # CHANGELOG
-## 0.55 - TBD - Refinements
+## 1.0.0-beta1 - 19.10.2017 - Features, Projects, Components
 * Improved addTime service
 * Stats-bar for "types" are shown again
 * Further progress making it a more component driven setup
