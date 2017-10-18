@@ -1,20 +1,28 @@
 function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthService, stateService, moment, $q, helperService, firebaseRef, $timeout, cfpLoadingBar){
+    //
+    // Factory code which runs once, as preparing the service
+    //
     var ctrl = this;
 
-    var user = AuthService.getUser();
-    var refCurrentTask = firebaseRef.getCurrentTaskReference(user);
-    ctrl.currentTask = $firebaseObject(refCurrentTask);
-
-    // ctrl.newEntryManualTime = null; // fails if null
+    // Service needed user reference
     ctrl.user = AuthService.getUser();
 
-    var refTime = firebaseRef.getTimeReference(user);
-    // Order the query, from recent to older entries
-    var queryTime = refTime.orderByChild("order");
-    // Create a synchronized array
-    ctrl.entries = $firebaseArray(queryTime);
+    // Load current Task
+    var refCurrentTask = firebaseRef.getCurrentTaskReference(ctrl.user);
+    ctrl.currentTask = $firebaseObject(refCurrentTask);
 
+    // TODO: is that really needed?
+    // Initially set lastEntry to now.
+    // ctrl.newEntryManualTime = null; // fails if null
 
+    // var lastEntryTimestamp = Date.now();
+    // Duration
+    ctrl.currentDuration = 0;
+    ctrl.lastEntryTimestamp = Date.now(); // So the first entry works
+
+    //
+    // Service functions
+    //
     var service = {};
     service.checkCurrentTask = function () {
         var objCurrentTask = $firebaseObject(refCurrentTask);
@@ -72,22 +80,13 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     service.setCurrentTaskManualTime = function(time){
         ctrl.newEntryManualTime = time;
     };
-
     service.getEntries = function (){
-        var refTime = firebaseRef.getTimeReference(user);
+        var refTime = firebaseRef.getTimeReference(ctrl.user);
         var queryTime = refTime.orderByChild("order");
         return $firebaseArray(queryTime);
     };
 
-    // Initially set lastEntry to now.
-    var lastEntryTimestamp = Date.now();
-    // Duration
-    ctrl.currentDuration = 0;
-    this.lastEntryTimestamp = lastEntryTimestamp; // So the first entry works
-
-
-    // ADD
-    // Add new entry to current week and day
+    // Add new entry (to current week and day)
     service.addEntry = function () {
         // Promise
         return $q(function (resolve, reject) {
@@ -99,8 +98,9 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
             var currentDate = stateService.getCurrentDate();
 
             // Check if we need to add some manual end time.
-            // This is allowed for TODAY and also PAST entries
-            // Maybe someone wants to fill his yesterday or whatever.
+            // This is allowed for TODAY
+            // But NOT yet for PAST entries
+            // Maybe someone wants to fill his yesterday.
             if (ctrl.newEntryManualTime !== undefined &&
                 ctrl.newEntryManualTime.value !== undefined &&
                 ctrl.newEntryManualTime.value !== null
@@ -128,7 +128,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
 
             } else {
                 // No manual time, we take the NOW
-                // But only if the date is today!
+                // We only allow this for today!
                 // This is not allowed on past days. (doesn't make sense there)
                 if (!currentDate.isSame(today, 'day')) {
                     console.error('OVER AND OUT, not on today!');
@@ -136,9 +136,15 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     return false;
                 }
 
+                console.log("allowed");
+
                 // Defines the duration and start time
+                console.log(timestamp);
+                console.log(ctrl.lastEntryTimestamp);
                 var duration = service.cleanupDuration(timestamp - ctrl.lastEntryTimestamp);
                 var start = ctrl.lastEntryTimestamp;
+                console.log("start");
+                console.log(start);
             }
 
             // Check if the entry should be marked as private (break)
@@ -262,10 +268,10 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     }
                 });
             })
-            .catch(function (error) {
-                console.log("Error:", error);
-                reject(error);
-            });
+                .catch(function (error) {
+                    console.log("Error:", error);
+                    reject(error);
+                });
         });
     };
 
@@ -420,6 +426,13 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     };
     service.updateCurrentTimer();
 
+    // Update the reference of the day (needed on day switching)
+    service.updateEntriesReference = function() {
+        ctrl.entries = service.getEntries();
+    };
+    service.updateEntriesReference();
+
+    // TODO: Refactor this to a correct factory return
     return service;
 }
 

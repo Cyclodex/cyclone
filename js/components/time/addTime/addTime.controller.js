@@ -21,6 +21,10 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
 
         // Check if its today or not to hide this component
         var today = moment();
+
+        // Important when we switch the day: update the services reference, or we are on the wrong entry.
+        AddTimeService.updateEntriesReference();
+
         ctrl.hideAddTime = true;
         var urlDate = stateService.getCurrentDate();
         if (urlDate.isSame(today, 'day')) {

@@ -1,10 +1,10 @@
 # CHANGELOG
 ## 0.55 - TBD - Refinements
-* Made it possible to enter time entries in the past (if time is given)
-* Stats-bar for "types" are shown.
-* More component driven setup
+* Improved addTime service
+* Stats-bar for "types" are shown again
+* Further progress making it a more component driven setup
 * Created project-component to save defaults
-* Created profile-component which allows to enable / disable features.
+* Created profile-component which allows to enable / disable features
 
 
 ## 0.54 - 07.09.2017 - Refinements
