@@ -136,15 +136,9 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                     return false;
                 }
 
-                console.log("allowed");
-
                 // Defines the duration and start time
-                console.log(timestamp);
-                console.log(ctrl.lastEntryTimestamp);
                 var duration = service.cleanupDuration(timestamp - ctrl.lastEntryTimestamp);
                 var start = ctrl.lastEntryTimestamp;
-                console.log("start");
-                console.log(start);
             }
 
             // Check if the entry should be marked as private (break)

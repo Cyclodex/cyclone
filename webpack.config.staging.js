@@ -66,7 +66,7 @@ module.exports = {
             minimize: true,
             comments: false,
             sourceMap: false,
-            mangle: true
+            mangle: false // was true - but fails
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
         new webpack.optimize.DedupePlugin(),
