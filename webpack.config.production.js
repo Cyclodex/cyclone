@@ -78,7 +78,6 @@ module.exports = {
             mangle: true
         }),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.AggressiveMergingPlugin(),
         new FileChanger({
             change: [{

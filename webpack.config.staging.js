@@ -64,7 +64,7 @@ module.exports = {
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                warnings: false,
+                warnings: true,
                 drop_console: false,
                 global_defs: {
                     PRODUCTION: false,
@@ -74,12 +74,11 @@ module.exports = {
             debug: true,
             minimize: true,
             comments: false,
-            sourceMap: false,
+            sourceMap: true,
             mangle: false, // was true - but fails because of injection issues since new components
             // TODO: fix this, or update webpack builder to maybe include it directly automatically
         }),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.AggressiveMergingPlugin(),
         new FileChanger({
             change: [{
