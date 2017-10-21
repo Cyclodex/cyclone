@@ -1,4 +1,4 @@
-function AddTimeController(AuthService, AddTimeService, timeTypesService, stateService, moment, $q, helperService, firebaseRef, $timeout, cfpLoadingBar) {
+function AddTimeController(AuthService, AddTimeService, timeTypesService, stateService, moment, $timeout, cfpLoadingBar) {
     var ctrl = this;
 
     ctrl.$onInit = function () {
@@ -72,7 +72,7 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
     }
 
 }
-
+AddTimeController.$inject = ["AuthService", "AddTimeService", "timeTypesService", "stateService", "moment", "$timeout", "cfpLoadingBar"];
 angular
     .module('components.time')
     .controller('AddTimeController', AddTimeController);
