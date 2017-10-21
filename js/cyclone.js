@@ -17,6 +17,10 @@ require('angular-clipboard');
 require('angular-moment');
 require('angular-loading-bar');
 
+// Analytics
+require('angulartics');
+require('angulartics-google-analytics');
+
 // Firebase
 var firebase = require('firebase/app');
 require('firebase/auth');

@@ -29,6 +29,10 @@
 * Enhancement: Changed routing to ui-router, several updates according to this
 * Adding project color idea to autocomplete component (test feature)
 
+## 0.50 - 18.07.2017
+* Adding GA events
+* Replaced the label for checking entries
+
 ## 0.49 - 16.07.2017
 * Adding GA
 

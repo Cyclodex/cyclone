@@ -35,7 +35,10 @@
         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
         ga('create', 'UA-102586826-1', 'auto');
-        ga('send', 'pageview');
+        // Don't send hits on localhost
+        if (location.hostname == 'localhost') {
+            ga('set', 'sendHitTask', null);
+        }
     </script>
 </head>
 
@@ -48,7 +51,7 @@
 </div>
 
 <!-- Cyclone app -->
-<script src="build/vendors.js"></script>
+<script src="build/vendors.js?v=3"></script>
 <script src="build/cyclone.js"></script>
 </body>
 </html>
