@@ -1,15 +1,83 @@
-angular.module("cycloneApp", ["firebase", 'ngMaterial', 'ngRoute', 'angular-clipboard', 'angularMoment', 'angulartics', 'angulartics.google.analytics']);
+// Instead of "app" we use cycloneApp already...
+angular.module("cycloneApp", [
+    'firebase',
+    'ngMaterial',
+    'ui.router','angular-clipboard',
+    'angularMoment',
+    'ngAnimate',
+    'angular-loading-bar',
+    'angulartics',
+    'angulartics.google.analytics'
+]);
 
-// Routing
-angular.module("cycloneApp").config(function($routeProvider, $locationProvider) {
-    $routeProvider
-        .when('/:type', {templateUrl: 'index.html', controller: 'TimeCtrl'})
-        .when('/:type/:year/:month/:day*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
-        .when('/:type/:weekNumber/:weekDay*', {templateUrl: 'index.html', controller: 'TimeCtrl'})
-        .otherwise({redirectTo: '/today'});
+// Make sure user is authenticated, otherwise send to login state
+angular.module("cycloneApp").run(function($transitions, cfpLoadingBar) {
+    $transitions.onStart(
+    {
+        // Special function match, so we require authentication everywhere but not on "login" state.
+        to: function(state) {
+            cfpLoadingBar.start();
+            return state.name != null && state.name !== 'login';
+        }
+    }, function(trans) {
+        var $state = trans.router.stateService;
+        // Check if we have a firebase user
+        var Auth = trans.injector().get('Auth');
+        Auth.$onAuthStateChanged(function(user) {
+            if (!user){
+                $state.transitionTo('login');
+                return;
+            }
 
-    $locationProvider.html5Mode({
-        enabled: false,
-        requireBase: false
+            // Go to the current date, if today was requested
+            if (trans.$to().name === 'today'){
+                console.log('######################');
+                console.log("trans $to === today");
+                console.log(trans);
+                console.log($state);
+                // Redirect to the current date
+                var today = new Date();
+                today.setTime(Date.now());
+                // TODO: Sometimes it goes back to the time view, must be related to this somehow:
+                // was transitionTo
+                //$state.go("time", {year: today.getFullYear(), month: today.getMonth()+1, day: today.getDate()});
+            }
+        });
     });
+
+    // Finish the loading bar
+    $transitions.onSuccess({}, cfpLoadingBar.complete);
+});
+
+// Config / Routing
+angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
+    // Define the theme / pallete colors we use (these are the md defaults)
+    $mdThemingProvider.theme('default')
+        .primaryPalette('indigo')
+        .accentPalette('pink')
+        .warnPalette('red');
+
+    // Routing
+    $urlRouterProvider.otherwise("/app/welcome");
+
+    // Today route - will forward to the current date
+    $stateProvider
+        .state('welcome', {
+            url: "/welcome",
+            parent: 'app',
+            views: {
+                nav: {
+                    component: "nav",
+                },
+                content: {
+                    component: 'welcome'
+                }
+            }
+        });
+    // Login
+    $stateProvider
+        .state('login', {
+            url: "/login",
+            component: 'login'
+        });
 });
