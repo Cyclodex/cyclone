@@ -10,8 +10,8 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     context: __dirname,
@@ -21,7 +21,7 @@ module.exports = {
         ],
         vendors: [
             'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
-            'firebase/auth', 'firebase/database', 'angularfire'
+            'firebase', 'firebaseui', 'firebase/auth', 'firebase/database', 'angularfire', 'angular-ui-router', 'angular-loading-bar'
         ]
     },
     resolve: {
@@ -42,7 +42,7 @@ module.exports = {
                     use: [
                         "css-loader",
                         "less-loader"
-                        ]
+                    ]
                     // publicPath: "/dist"
                 })
             },
@@ -50,7 +50,7 @@ module.exports = {
                 test: /\.tpl\.html$/,
                 use: [
                     'raw-loader'
-                    ],
+                ],
                 exclude: /node_modules/
             }
         ]

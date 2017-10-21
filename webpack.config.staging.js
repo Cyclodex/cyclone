@@ -3,24 +3,25 @@
 /* jshint node: true */
 
 /**
- * Cyclone webpack production build.
- * Build by running `npm run build`
+ * Cyclone webpack staging build.
  */
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 const FileChanger = require('webpack-file-changer');
 
 module.exports = {
+    context: __dirname,
     entry: {
         app: [
-            "./less/master.less",
             "./js/cyclone.js"
-            ],
+        ],
         vendors: [
             'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
-            'firebase/auth', 'firebase/database', 'angularfire'
+            'firebase', 'firebaseui', 'firebase/auth', 'firebase/database', 'angularfire', 'angular-ui-router', 'angular-loading-bar'
         ]
     },
     output: {
@@ -51,6 +52,10 @@ module.exports = {
     },
     devtool: 'cheap-module-source-map',
     plugins: [
+        new CleanWebpackPlugin(__dirname + '/public/'),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
+        }),
         new CopyWebpackPlugin([
             { from: 'src', to: __dirname + '/public/' },
         ]),
