@@ -39,16 +39,16 @@
   },
   "devDependencies": {
     "browser-sync": "^2.15.0",
-    "browser-sync-webpack-plugin": "^1.1.2",
     "css-loader": "^0.25.0",
-    "extract-text-webpack-plugin": "^1.0.1",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "style-loader": "^0.13.1",
     "raw-loader": "0.5.1",
-    "webpack": "^1.13.2",
     "ng-annotate-webpack-plugin": "^0.1.1",
+    "firebase-tools": "",
+    "webpack": "^2.6.1",
     "webpack-file-changer": "2.0.1",
-    "firebase-tools": ""
+    "extract-text-webpack-plugin": "^2.1.2",
+    "browser-sync-webpack-plugin": "^1.1.2"
   }
 }

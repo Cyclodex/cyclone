@@ -31,7 +31,11 @@ module.exports = {
         loaders: [
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader!less-loader"
+                    // publicPath: "/dist"
+                })
             },
             {
                 test: /\.tpl\.html$/,
@@ -68,7 +72,7 @@ module.exports = {
             sourceMap: false,
             mangle: true
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.AggressiveMergingPlugin(),
         new FileChanger({
