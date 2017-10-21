@@ -3,6 +3,8 @@
  *
  * Created by Fabian Gander | Cyclodex
  */
+// Load less / css files
+require('../less/master.less');
 
 // Load angular libraries
 require('angular');

@@ -14,9 +14,9 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
+    context: __dirname,
     entry: {
         app: [
-            "./less/master.less",
             "./js/cyclone.js"
         ],
         vendors: [
