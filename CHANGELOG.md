@@ -1,5 +1,7 @@
 # CHANGELOG
 
+### DEPRECATED OLD RELEASE
+
 ## 0.50 - 18.07.2017
 * Adding GA events
 * Replaced the label for checking entries
