@@ -3,7 +3,7 @@
 /* jshint node: true */
 
 /**
- * Cyclone webpack production build.
+ * Cyclone webpack production build. (FOR THE OLD RELEASE!!!)
  * Build by running `npm run build`
  */
 const webpack = require('webpack');
