@@ -11,6 +11,7 @@ const path = require("path");
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -60,6 +61,9 @@ module.exports = {
             'NODE_ENV': JSON.stringify('development'),
             'PRODUCTION': JSON.stringify(false),
             'FIREBASE_PRODUCTION': JSON.stringify(false)
-        })
+        }),
+        new ngAnnotatePlugin({
+            add: true
+        }),
     ]
 };

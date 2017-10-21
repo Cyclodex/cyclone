@@ -66,7 +66,8 @@ module.exports = {
             minimize: true,
             comments: false,
             sourceMap: false,
-            mangle: false // was true - but fails
+            mangle: false, // was true - but fails because of injection issues since new components
+            // TODO: fix this, or update webpack builder to maybe include it directly automatically
         }),
         new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
         new webpack.optimize.DedupePlugin(),
