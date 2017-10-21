@@ -1,4 +1,34 @@
 # CHANGELOG
+## 1.0.0-beta2 - xx.10.2017 - Webpack update
+* Webpack: Update and migrated config from 1.x to 2.x
+* Setup: Improved file structure and build process
+* Setup: BundleAnalyzerPlugin to have better insights into into the built bundle files
+* Merged the GA code implementation from old release
+
+## 1.0.0-beta1 - 19.10.2017 - Features, Projects, Components
+* Improved addTime service
+* Stats-bar for "types" are shown again
+* Further progress making it a more component driven setup
+* Created project-component to save defaults
+* Created profile-component which allows to enable / disable features
+
+
+## 0.54 - 07.09.2017 - Refinements
+* Animation improvements
+* Save current entry (but not the manual time field yet)
+* Adding welcome page, and making navigation entries going to today's date.
+* Adding date checking for the date-switcher, which should enable to go to next day if available
+
+## 0.53 - 01.09.2017 - Disabled auto routing of today
+* Disabled auto routing, because it made issues
+## 0.52 - 01.09.2017 - Task view feature
+* Changing list rendering of tasks: Breaks / Trust is separate
+* Several smaller updates on styling
+* Several small fixes and reducing duplicate code
+
+## 0.51 - 23.08.2017 - Task view feature
+* Enhancement: Changed routing to ui-router, several updates according to this
+* Adding project color idea to autocomplete component (test feature)
 
 ## 0.50 - 18.07.2017
 * Adding GA events

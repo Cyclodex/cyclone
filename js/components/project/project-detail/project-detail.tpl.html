@@ -1,0 +1,72 @@
+<div class="project">
+    <form name="projectDetailForm"
+          novalidate
+          layout="row"
+          class="ui-form">
+        <md-input-container>
+            <label>
+                Projectname
+            </label>
+            <input
+                type="text"
+                name="name"
+                required="required"
+                ng-change="$ctrl.updateProject();"
+                ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }"
+                ng-model="$ctrl.project.name">
+        </md-input-container>
+        <md-input-container class="entry__info__select entry__info__select--type">
+            <label>Type</label>
+            <md-select ng-model="$ctrl.project.type"
+                       ng-change="$ctrl.updateProject();"
+                       aria-label="Type of entry">
+                <md-option ng-repeat="type in $ctrl.timeTypes" ng-value="type.value">
+                    <span style="display: none">{{type.name}}</span><md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container>
+            <label>
+                Color
+            </label>
+            <input
+                type="text"
+                name="color"
+                ng-change="$ctrl.updateProject();"
+                ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }"
+                ng-model="$ctrl.project.color">
+        </md-input-container>
+
+        <a class=""
+           ng-if="$ctrl.isNewProject"
+           ng-click="$ctrl.saveProject();"
+           ng-disabled="projectDetailForm.$invalid">
+            <md-button class="md-fab md-accent" aria-label="Add project">
+                <md-icon>add</md-icon>
+            </md-button>
+        </a>
+        <div class="actions" ng-if="!$ctrl.isNewProject">
+            <!-- DELETE BUTTON -->
+            <md-button ng-click="$ctrl.deleteProject();"
+                       class="md-fab md-mini show-on-hover"
+                       aria-label="Delete entry">
+                <md-tooltip md-direction="top">
+                    Delete
+                </md-tooltip>
+                <md-icon>delete_forever</md-icon>
+            </md-button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,14 @@
+<div class="feature">
+    <md-switch
+            ng-if="!$ctrl.feature.beta"
+            ng-model="$ctrl.featureModel.$value"
+            ng-change="$ctrl.updateFeature();"
+            aria-label="$ctrl.feature.name">
+        <md-button class="md-fab md-primary md-mini"
+                   ng-if="$ctrl.feature.icon">
+            <md-icon>{{ $ctrl.feature.icon }}</md-icon>
+        </md-button>
+        {{ $ctrl.feature.name }}:
+        {{ $ctrl.feature.description }}
+    </md-switch>
+</div>

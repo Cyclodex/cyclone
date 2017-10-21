@@ -1,0 +1,51 @@
+<div class="nav" layout="column" layout-align="center center">
+    <md-button
+            class="nav__element nav__element--logo"
+            ui-sref="welcome"
+            ui-sref-active="md-active"
+            aria-label="Welcome page">
+        <div class="nav__element__content">
+            <img class="cyclone-logo" src="img/cycloneWhite.svg">
+        </div>
+    </md-button>
+    <md-button
+            class="nav__element"
+            ui-sref="time({year: $ctrl.currentDate.year, month: $ctrl.currentDate.month, day: $ctrl.currentDate.day})"
+            ui-sref-active="md-active">
+        <div class="nav__element__content">
+            <md-icon class="md-light">timeline</md-icon>
+            <div>time</div>
+        </div>
+    </md-button>
+    <md-button
+            class="nav__element"
+            ui-sref="task({year: $ctrl.currentDate.year, month: $ctrl.currentDate.month, day: $ctrl.currentDate.day})"
+            ui-sref-active="md-active">
+        <div class="nav__element__content">
+            <md-icon>playlist_add_check</md-icon>
+            <div>task</div>
+        </div>
+    </md-button>
+    <div flex="grow"></div>
+    <md-button
+            class="nav__element"
+            ui-sref="profile-crud"
+            ui-sref-active="md-active">
+        <div class="nav__element__content">
+            <md-icon>account_circle</md-icon>
+            <div>{{ $ctrl.user.username }}</div>
+        </div>
+    </md-button>
+    <md-button
+            id="logoutButton"
+            ng-click="$ctrl.logout()"
+            class="nav__element"
+            ui-sref-active="md-active"
+            ng-show="$ctrl.user">
+        <div class="nav__element__content">
+            Logout
+        </div>
+    </md-button>
+    <div id="account-details" ng-show="userIsAdmin"></div>
+    <version-display></version-display>
+</div>

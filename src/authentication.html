@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>Cyclone - Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Styling files -->
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet prefetch" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="img/favicons/manifest.json">
+    <link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#3f51b5">
+    <link rel="shortcut icon" href="img/favicons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Cyclone">
+    <meta name="application-name" content="Cyclone">
+    <meta name="msapplication-config" content="img/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="build/cyclone.css">
+
+</head>
+<body>
+
+    <div class="login">
+        <h1>Cyclone</h1>
+        <div id="firebaseui-auth-container"></div>
+    </div>
+
+    <!-- Right now we call all the js files, but later we need only a specific one (the config) -->
+    <script src="build/vendors.js?v=3"></script>
+    <script src="build/cyclone.js"></script>
+    <script>
+        // FirebaseUI config.
+        var uiConfig = {
+            'signInSuccessUrl': '/#',
+            'signInOptions': [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                //firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+            // Terms of service url.
+            'tosUrl': ''
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+
+</body>
+</html>

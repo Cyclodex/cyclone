@@ -1,0 +1,22 @@
+<h1><md-icon>bookmark_border</md-icon> Projects</h1>
+<ui-view name="head"></ui-view>
+<br>
+<div class="projects projects--crud">
+  <div class="projects-list">
+    <md-card ng-repeat="project in $ctrl.projects"
+    class="ui-row ui-row--animation activate--show-on-hover">
+      <project-detail
+        project="project"
+        on-delete="$ctrl.deleteProject($event)"
+        on-update="$ctrl.updateProject($event)">
+      </project-detail>
+    </md-card>
+  </div>
+  <div
+    class="projects__empty"
+    ng-if="!$ctrl.projects.length">
+    <i class="material-icons">face</i>
+    There's nothing yet here...
+  </div>
+  <ui-view></ui-view>
+</div>

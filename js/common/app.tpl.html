@@ -1,0 +1,20 @@
+<div class="root">
+    <div class="app">
+        <ui-view name="nav"
+                 user="$ctrl.user"
+                 class="navigation-left-side app__navigation"
+                 md-colors="{background:'primary'}"
+        ></ui-view>
+        <div class="app__content"
+             layout="row"
+             layout-align="center center"
+        >
+                <div flex="100"
+                     flex-gt-md="80">
+                    <ui-view name="header"></ui-view>
+                    <ui-view name="content"></ui-view>
+                    <ui-view></ui-view>
+                </div>
+        </div>
+    </div>
+</div>

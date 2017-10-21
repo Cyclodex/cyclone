@@ -1,0 +1,167 @@
+<div class="md-toolbar-tools">
+    <h1>
+        <md-icon>featured_play_list</md-icon> {{ $ctrl.listTitle }}
+    </h1>
+</div>
+<div layout="row"
+     ng-repeat="(Group, GroupData) in $ctrl.data"
+     ng-if="GroupData"
+     layout-align="start stretch"
+     class="task project-type--{{GroupData.type}} activate--show-on-hover"
+     ng-class="{true: 'done', false: ''}[GroupData.checked == true]"
+     >
+     <!--ng-animate-ref="{{ Group }}"-->
+
+    <div class="timeline-visual" flex="none">
+        {{ GroupData.timestamp | date:'HH:mm' }}
+    </div>
+
+    <md-card layout="row" class="card" flex="grow">
+        <div class="task__identifier"
+         layout="column"
+         layout-align="space-around stretch">
+        <!-- Checkbox -->
+        <div class="task__checkbox" ng-if="GroupData.type === 'work' || GroupData.type === 'internal'">
+            <md-checkbox aria-label="GroupsChecked"
+                         ng-checked="GroupData.checked"
+                         clipboard
+                         text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                         on-copied="$ctrl.timeline.copySuccess(); GroupData.checked = !GroupData.checked; $ctrl.data.$save(GroupData)"
+                         on-error="$ctrl.timeline.copyFail(err)"
+                         class="md-primary show-on-hover hide-6">
+            </md-checkbox>
+            <md-tooltip md-direction="top">
+                <span ng-if="!GroupData.checked">Check & copy time</span>
+                <span ng-if="GroupData.checked">Un-check</span>
+            </md-tooltip>
+        </div>
+        <!-- Type -->
+        <md-input-container md-no-float class="entry__info__select entry__info__select--type">
+            <md-select ng-model="GroupData.type"
+                       aria-label="Type of the entry"
+                       ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
+                       class="show-on-hover hide-6">
+                <md-option ng-repeat="type in $ctrl.timeline.timeTypesService" ng-value="type.value">
+                    <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                </md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+        <div class="entry entry--group"
+             layout="row">
+
+            <div class="entry__info"
+                 layout-wrap
+                 layout="row"
+                 layout-align="start center"
+                 flex="auto"
+            >
+
+                <!-- Project -->
+                <md-input-container md-no-float class="entry__info__input entry__info__input--project">
+                    <input ng-model="GroupData.project"
+                           ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
+                           type="text"
+                           aria-label="project"
+                           placeholder="Project"
+                           autocomplete="Project"
+                           ng-model-options="{updateOn: 'blur'}"
+                    />
+                </md-input-container>
+
+                <!-- Task name -->
+                <md-input-container md-no-float
+                                    class="entry__info__input entry__info__input--task"
+                                    ng-if="GroupData.type !== 'system'">
+                    <input ng-model="GroupData.task"
+                           ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
+                           type="text"
+                           aria-label="Task"
+                           placeholder="Task / Issue"
+                           autocomplete="Task"
+                           ng-model-options="{updateOn: 'blur'}"
+                    />
+                </md-input-container>
+
+                <!-- Description -->
+                <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                    <input ng-model="GroupData.text"
+                           ng-change="$ctrl.data.$save(GroupData)"
+                           type="text"
+                           class="validate"
+                           aria-label="Task description"
+                           placeholder="Task description"
+                           autocomplete="task description"
+                           ng-model-options="{updateOn: 'blur'}"
+                    />
+                </md-input-container>
+            </div>
+
+            <!-- Time output-->
+            <div class="entry__time-information" layout="row" layout-align="center center">
+                <div class="duration duration--human">
+                    <span>{{ GroupData.timestampDuration | humanizeDate  }}</span>
+                    <span>&nbsp;|&nbsp;</span>
+                    <span class="duration duration--decimal"
+                          clipboard
+                          text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                          on-copied="$ctrl.timeline.copySuccess();"
+                          on-error="$ctrl.timeline.copyFail(err)">
+                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
+                        <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
+                </div>
+            </div>
+
+            <!-- Add button -->
+            <div class="entry__actions"
+                 flex="nogrow"
+                 layout="row"
+                 layout-align="end none"
+            >
+                <!-- Continue button -->
+                <md-button ng-if="$ctrl.features.continueButton.enabled"
+                           class="md-fab md-primary md-mini show-on-hover"
+                           aria-label="$ctrl.features.continueButton.name"
+                           ng-click="$ctrl.timeline.continueEntry(GroupData)">
+                        <md-tooltip md-direction="top">
+                            {{ $ctrl.features.continueButton.description }}
+                        </md-tooltip>
+                        <md-icon>{{ $ctrl.features.continueButton.icon }}</md-icon>
+                </md-button>
+                <!-- Clone/copy entry button-->
+                <md-button ng-if="$ctrl.features.copyButton.enabled"
+                           class="md-fab md-primary md-mini show-on-hover"
+                           aria-label="$ctrl.features.copyButton.name"
+                           ng-click="$ctrl.timeline.updateCurrentTask(GroupData)"
+                           ng-if="GroupData.type !== 'system'">
+                    <md-tooltip md-direction="top">
+                        {{ $ctrl.features.copyButton.description }}
+                    </md-tooltip>
+                    <md-icon>{{ $ctrl.features.copyButton.icon }}</md-icon>
+                </md-button>
+                <!-- Attach directly into this task button-->
+                <md-button ng-if="$ctrl.features.attachButton.enabled"
+                           class="md-fab md-primary md-mini show-on-hover"
+                           aria-label="$ctrl.features.attachButton.name"
+                           ng-click="$ctrl.timeline.addEntryToTask(GroupData)"
+                           ng-if="GroupData.type !== 'system'">
+                    <md-tooltip md-direction="top">
+                        {{ $ctrl.features.attachButton.description }}
+                    </md-tooltip>
+                    <md-icon>{{ $ctrl.features.attachButton.icon }}</md-icon>
+                </md-button>
+                <!-- DELETE BUTTON -->
+                <md-button ng-click="$ctrl.timeline.deleteEntry(GroupData);"
+                           class="md-fab md-mini show-on-hover"
+                           aria-label="Delete entry">
+                    <md-tooltip md-direction="top">
+                        Delete
+                    </md-tooltip>
+                    <md-icon>delete_forever</md-icon>
+                </md-button>
+            </div>
+
+        </div> <!-- END of entry entry--group -->
+    </md-card>
+</div>

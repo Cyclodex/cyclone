@@ -1,0 +1,26 @@
+<md-autocomplete
+        aria-label="Project name of new task"
+        class="autocomplete autocomplete--project"
+        do-focus="$ctrl.setFocus"
+        flex
+        md-autofocus
+        md-autoselect="true"
+        md-clear-button="false"
+        md-floating-label="Project"
+        md-input-id="newTaskProject"
+        md-item-text="item.name"
+        md-items="item in $ctrl.querySearch($ctrl.project)"
+        md-match-case-insensitive="true"
+        md-min-length="1"
+        md-no-cache="$ctrl.noCache"
+        md-search-text="$ctrl.project"
+        md-search-text-change="$ctrl.searchTextChange($ctrl.project)"
+        md-selected-item="$ctrl.selectedItem"
+        md-selected-item-change="$ctrl.selectedItemChange(item)"
+        ng-blur="$ctrl.onBlur($event)"
+>
+    <md-item-template>
+        <!--<div class="autocomplete__color" style="background-color:{{item.color}}"></div>-->
+        <span md-highlight-text="$ctrl.project" md-highlight-flags="i">{{item.name}}</span>
+    </md-item-template>
+</md-autocomplete>

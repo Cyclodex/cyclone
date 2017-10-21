@@ -3,11 +3,11 @@
 /* jshint node: true */
 
 /**
- * Cyclone webpack production build.
+ * Cyclone webpack production build. (FOR THE OLD RELEASE!!!)
  * Build by running `npm run build`
  */
-const path = require("path");
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 const FileChanger = require('webpack-file-changer');
@@ -15,7 +15,7 @@ const FileChanger = require('webpack-file-changer');
 module.exports = {
     entry: {
         app: [
-            "./less/cyclone.less",
+            "./less/master.less",
             "./js/cyclone.js"
             ],
         vendors: [
@@ -29,24 +29,38 @@ module.exports = {
         filename: "cyclone.[chunkhash].js"
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [
+                        "css-loader",
+                        "less-loader"
+                    ]
+                    // publicPath: "/dist"
+                })
             },
             {
                 test: /\.tpl\.html$/,
-                loader: 'raw-loader',
+                use: [
+                    'raw-loader'
+                ],
                 exclude: /node_modules/
             }
         ]
     },
     devtool: 'cheap-module-source-map',
     plugins: [
+        new CopyWebpackPlugin([
+            { from: 'src', to: __dirname + '/public/' },
+        ]),
         new ExtractTextPlugin("cyclone.css"),
         new webpack.DefinePlugin({
             'process.env': {
-                'NODE_ENV': JSON.stringify('production')
+                'NODE_ENV': JSON.stringify('production'),
+                'PRODUCTION': JSON.stringify(true),
+                'FIREBASE_PRODUCTION': JSON.stringify(true)
             }
         }),
         new ngAnnotatePlugin({
@@ -55,7 +69,11 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,
-                drop_console: false
+                drop_console: false,
+                global_defs: {
+                    PRODUCTION: true,
+                    FIREBASE_PRODUCTION: true
+                }
             },
             debug: true,
             minimize: true,
@@ -63,8 +81,7 @@ module.exports = {
             sourceMap: false,
             mangle: true
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
-        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
         new webpack.optimize.AggressiveMergingPlugin(),
         new FileChanger({
             change: [{

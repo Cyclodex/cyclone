@@ -1,0 +1,34 @@
+<div ng-show="$ctrl.user.username"
+     class="component__content">
+    <md-card ng-if="$ctrl.error">
+        <md-card-title>
+            <div class="md-headline">
+                Error
+            </div>
+        </md-card-title>
+        <md-card-content>
+            {{$ctrl.error}}
+        </md-card-content>
+    </md-card>
+
+    <div class="cyclone-table cyclone-table--tasks" flex="grow">
+        <date-switcher></date-switcher>
+        <stats></stats>
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <timeline-list list-title="Timeline" data="$ctrl.entries"></timeline-list>
+    </div>
+    <!-- END: cyclone-table-->
+
+    <!--<pre>
+        {{ $ctrl.entriesCurrentGroups | json }}
+    </pre>-->
+
+
+    <!--
+    <pre>{{ data | json }}</pre>
+    <pre>{{ profile | json }}</pre>
+    -->
+</div>

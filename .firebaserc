@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "cyclone-806dd"
+    "default": "cyclone-806dd",
+    "staging": "cyclone-staging",
+    "production": "cyclone-806dd"
   }
 }

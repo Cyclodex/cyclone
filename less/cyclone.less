@@ -47,7 +47,7 @@
 
 .entry {
     position: relative;
-    margin: 2px 0;
+    margin: 0 0;
 
     .md-input-has-value {
         margin: 0;
@@ -122,8 +122,48 @@
         width: 100%;
     }
 }
+
+// Colors
+@colorPrimary: #3f51b5;
+@colorPrimaryDark: #1b255a;
+@colorSecondary: #ff4081;
+@colorWork: lightyellow;
+@colorInternal: #ffdb6e;
+@colorTrust: #e1c2e6;
+@colorPrivate: lightblue;
+
+.project-type--work {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorWork !important;
+    }
+}
+.project-type--internal {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorInternal !important;
+    }
+}
+.project-type--trust {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorTrust !important;
+    }
+}
+.project-type--private {
+    &.dayVisualize-entry,
+    .task__identifier,
+    .entry-card {
+        background-color: @colorPrivate !important;
+    }
+}
+
 .cyclone-table {
-    padding: 20px 10px;
+    position: relative;
+    padding: 20px 0;
 
     &.cyclone-table--grouped {
         max-width: 400px;
@@ -133,31 +173,13 @@
         padding-top: 20px;
     }
 
-    .project-type--work md-card{
-        background-color: lightyellow;
-        border-bottom: 2px solid orange;
-    }
-    .project-type--internal md-card {
-        background-color: #ffdb6e;
-        border-bottom: 2px solid orange;
-    }
-    .project-type--trust md-card{
-        background-color: #e1c2e6;
-        border-bottom: 2px solid #9724e6;
-    }
-    .project-type--private md-card{
-        background-color: lightblue;
-        border-bottom: 2px solid blue;
-    }
-
     .project-type--system {
         .entry-card {
             height: 80px;
         }
     }
     // Done entries are green
-    .done md-card {
-        opacity: 1;
+    .done .task__identifier {
         background-color: #c6ffc6;
     }
 
@@ -166,7 +188,7 @@
         position: relative;
         -webkit-transition: opacity 400ms ease-in-out;
         transition: opacity 400ms ease-in-out;
-        opacity: 0;
+        opacity: 0.1;
     }
 
     &.timeline {
@@ -254,6 +276,10 @@
     opacity: 0;
 }
 
+.fadeIn(){
+    opacity: 1;
+}
+
 
 md-radio-button {
     opacity: 0.3;
@@ -323,9 +349,8 @@ md-radio-button {
 }
 
 .stats-totals {
-    text-align: left;
-    width: 90%;
-    margin: 0 auto;
+    padding: 0 10px;
+    color: grey;
 
     .day-visualize {
         width: 100%;
@@ -337,11 +362,6 @@ md-radio-button {
     font-size: 0.7rem;
 }
 
-.page {
-  @media only screen and (min-width: 960px) {
-    padding-bottom: 300px;
-  }
-}
 .md-headline {
   font-size: 1rem;
   @media only screen and (min-width: 960px) {
@@ -377,7 +397,6 @@ md-radio-button {
 .day-visualize {
     width: 90%;
     text-align: center;
-    margin: 0px auto 20px;
 
     display: flex;
     align-items: flex-end;
@@ -385,8 +404,9 @@ md-radio-button {
     .dayVisualize-entry {
         display: inline-block;
         margin: 1px;
-        height: 50px;
-        min-width: 10px;
+        height: 20px;
+        min-height: 50px;
+        min-width: 50px;
         color: black;
         overflow: visible;
 
@@ -417,7 +437,6 @@ md-radio-button {
     }
     &.dayVisualize-entry-content--time-start {
         position: absolute;
-        color: white;
         bottom: -20px;
         left: -10px;
     }
@@ -433,18 +452,18 @@ md-radio-button {
     // Increase height of elements which are not checked
     &.project-type--internal.checked--no,
     &.project-type--work.checked--no {
-        height: 80px;
+        height: 30px;
     }
 
     // diagonal lines in the background for trust and private time
-    &.project-type--trust,
+    /*&.project-type--trust,
     &.project-type--private {
         background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
     }
     // Vertical lines for the internal backgrounds
     &.project-type--internal {
         background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.5) 5px, rgba(255,255,255,.5) 15px);
-    }
+    }*/
 
     &.project-type--system {
         flex-grow: 0 !important;
@@ -455,7 +474,7 @@ md-radio-button {
 button.dayVisualize-entry.md-button {
     font-size: 0.7rem;
 }
-button.dayVisualize-entry.md-button:hover {
+button.dayVisualize-entry--extend.md-button:hover {
     min-width: 150px !important;
 }
 
@@ -470,10 +489,6 @@ button.dayVisualize-entry.md-button:hover {
 // The continue tasks time summary
 .project-card ._md-subheader-inner {
     padding: 0;
-}
-// Smaller human times
-.duration.duration--human {
-  font-size: 0.6rem;
 }
 
 // Grouped
@@ -492,6 +507,281 @@ button.dayVisualize-entry.md-button:hover {
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+}
+
+.task__group__entry__delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    min-width: unset;
+}
+
+.task__group__entry {
+    margin: 0 0 5px;
+}
+
+.task__group__entry md-card {
+    padding: 5px 40px 5px 5px;
+}
+
+.entry__details {
+    flex-wrap: nowrap;
+    max-height: 50px;
+    opacity: 0;
+    transition: 0.5s linear max-height, 0.5s linear opacity;
+    transition-delay: 0s;
+    .task:hover & {
+        max-height: 300px;
+        opacity: 1;
+        transition-delay: 600ms;
+    }
+}
+
+.cyclone-table--tasks {
+    .entry__info__input {
+        max-width: 150px;
+        padding: 0;
+
+        input {
+            border: 0;
+        }
+    }
+
+    .task {
+        position: relative;
+    }
+
+    .card {
+        position: relative;
+        margin: 0;
+
+        &:hover .entry--group {
+            box-shadow: inset 0 0 2px 0 #3f51b5;
+        }
+    }
+
+    .task__identifier {
+        position: relative;
+        min-width: 40px;
+        padding: 10px 5px;
+    }
+    .task__checkbox {
+        margin: 0 auto;
+
+        md-checkbox {
+            width: 20px;
+            margin: 0;
+        }
+    }
+
+    .md-select-value {
+        min-width: unset;
+    }
+
+    .task__group__entry {
+        .task__group__entry__delete {
+            .fadeOutPrepare();
+            .fadeOut();
+
+        }
+        &:hover .task__group__entry__delete {
+            .fadeIn();
+        }
+    }
+
+    .entry--group {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .entry__info__select {
+        min-width: 140px;
+    }
+}
+
+.entry__time-information {
+    padding: 5px 20px;
+    color: darkgrey;
+    font-size: 0.8rem;
+}
+
+// Overriding the toolbar color, we don't want the primary or accent colors here.
+.cyclone-toolbar {
+    position: relative;
+    height: 130px;
+
+    md-card {
+        background-color: white !important;
+        position: fixed;
+        top: 0;
+        left: @navigationWidth; // Navigation on the left side
+        right: 0;
+        margin: 0;
+        z-index: 2;
+        padding: 10px;
+    }
+}
+
+.add-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translateY(50%);
+}
+
+.timeline-visual {
+    padding: 0 5px;
+    &:before {
+        content: '';
+        position: absolute;
+        display: block;
+        left: 25px;
+        border-left: 1px dotted @colorPrimary;
+        opacity: 0.5;
+        top: 30px;
+        bottom: 10px;
+
+        .task:hover & {
+            opacity: 1;
+        }
+    }
+}
+// Trying out crazy animation stuff
+// https://codepen.io/jonespen/pen/avBZpO
+// https://docs.angularjs.org/api/ngAnimate
+.task,
+.card,
+.ui-row--animation {
+    &.ng-anchor {
+        /* this animation will last for 1 second since there are
+           two phases to the animation (an `in` and an `out` phase) */
+        transition: 0.5s linear all;
+    }
+    &.ng-leave {
+        opacity: 1.0 ;
+        transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1) all;
+        transform: scale(1);
+        height: 76px;
+
+        &.ng-leave-active {
+            opacity: 0.0 ;
+            //transform: translateX(-150%);
+            transform: scale(0);
+            height: 0;
+        }
+    }
+
+    &.ng-enter {
+        transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1) all;
+        //transform: translateX(-150%);
+        transform: scale(0);
+        height: 0;
+    }
+    &.ng-enter-active {
+        //transform: translateX(0);
+        transform: scale(1);
+        height: 76px;
+    }
+}
+
+
+.md-autocomplete-suggestions-container li .highlight{
+    font-weight: bold;
+    color: @colorPrimary;
+}
+
+.autocomplete {
+    min-width: 100px;
+}
+
+// Fixing placement of autocomplete list
+.autocomplete--project {
+    md-input-container {
+        margin-bottom: 18px;
+    }
+}
+
+.autocomplete__color {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: grey;
+    position: relative;
+    top: 0;
+}
+
+.entry__info__select.entry__info__select--type {
+    min-width: unset;
+
+    .task__identifier &{
+        margin: 0 auto;
+    }
+
+    .option__name {
+        display: none;
+
+        .md-select-menu-container & {
+            display: block;
+        }
+    }
+
+    .md-select-icon {
+        display: none;
+    }
+}
+
+// Not so much space around inputs
+md-input-container {
+    margin-bottom: 0;
+}
+
+
+// Special show on hover feature.
+// Just put these classes accordingly: .activate--show-on-hover > .show-on-hover
+.show-on-hover {
+    position: relative;
+    -webkit-transition: opacity 400ms ease-in-out;
+    transition: opacity 400ms ease-in-out;
+    opacity: 0.1;
+
+    &.hide-6 {opacity: 0.6}
+
+    &:focus,
+    .activate--show-on-hover:hover &{
+        opacity: 1;
+    }
+}
+
+// Show which row is getting hovered
+.ui-row {
+    margin: 0;
+    padding: 10px;
+    &:hover {
+        box-shadow: inset 0 0 2px 0 #3f51b5;
+    }
+}
+
+// Forms
+.ui-form {
+    .md-errors-spacer{
+        min-height: unset;
+    }
+}
+
+.time-task-list {
+    // Fade out the done / break lists
+    &.time-task-list--done,
+    &.time-task-list--break {
+        .time-task-list__content {
+            transition: all 300ms ease;
+            -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.7)), to(rgba(0,0,0,0)));
+            &:hover {
+                -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,1)));
+            }
+        }
     }
 }
 
