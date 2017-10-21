@@ -6,8 +6,8 @@
  * Cyclone webpack production build.
  * Build by running `npm run build`
  */
-const path = require("path");
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 const FileChanger = require('webpack-file-changer');
@@ -51,6 +51,9 @@ module.exports = {
     },
     devtool: 'cheap-module-source-map',
     plugins: [
+        new CopyWebpackPlugin([
+            { from: 'src', to: __dirname + '/public/' },
+        ]),
         new ExtractTextPlugin("cyclone.css"),
         new webpack.DefinePlugin({
             'process.env': {

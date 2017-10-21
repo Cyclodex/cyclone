@@ -13,4 +13,4 @@ js/config/config.production.js
 js/config/config.staging.js
 
 # Project build files
-public/build/
+public/

@@ -7,8 +7,8 @@
  * Build by running `npm run dev`
  * For development use `npm start`
  */
-const path = require("path");
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
@@ -26,7 +26,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            config: path.join(__dirname, '/js/config/config.js'),
+            config: __dirname + '/js/config/config.js',
         },
     },
     output: {
@@ -57,6 +57,9 @@ module.exports = {
     },
     devtool: 'inline-source-map',
     plugins: [
+        new CopyWebpackPlugin([
+            { from: 'src', to: __dirname + '/public/' },
+        ]),
         new ExtractTextPlugin("cyclone.css"),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
         new BrowserSyncPlugin({
