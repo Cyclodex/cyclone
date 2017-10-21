@@ -28,18 +28,23 @@ module.exports = {
         filename: "cyclone.[chunkhash].js"
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: "css-loader!less-loader"
+                    use: [
+                        "css-loader",
+                        "less-loader"
+                    ]
                     // publicPath: "/dist"
                 })
             },
             {
                 test: /\.tpl\.html$/,
-                loader: 'raw-loader',
+                use: [
+                    'raw-loader'
+                ],
                 exclude: /node_modules/
             }
         ]

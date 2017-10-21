@@ -1,6 +1,7 @@
 # CHANGELOG
 ## 1.0.0-beta2 - xx.10.2017 - Webpack update
 * Webpack: Update and migrated config from 1.x to 2.x
+* Webpack: Migrated "chaining loaders"
 
 ## 1.0.0-beta1 - 19.10.2017 - Features, Projects, Components
 * Improved addTime service
