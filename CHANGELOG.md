@@ -1,5 +1,5 @@
 # CHANGELOG
-## 1.0.0-beta2 - xx.10.2017 - Webpack update
+## 1.0.0-beta2 - 22.10.2017 - Webpack update
 * Webpack: Update and migrated config from 1.x to 2.x
 * Setup: Improved file structure and build process
 * Setup: BundleAnalyzerPlugin to have better insights into into the built bundle files
