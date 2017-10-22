@@ -54,7 +54,7 @@
         display: block;
     }
     .entry__info {
-        margin-right: 1em;
+        margin-right: 1rem;
     }
     .entry__info__input {
         display: block;
@@ -78,9 +78,14 @@
             padding-left: 36px;
         }
     }
-    .entry__info__input--project input {
-        font-weight: bold;
-        font-size: 1.3rem;
+    .entry__info__input--project {
+        @media @gt-xs {
+            max-width: 200px;
+        }
+        input {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
     }
     .md-errors-spacer {
         min-height: unset;
@@ -541,11 +546,10 @@ button.dayVisualize-entry--extend.md-button:hover {
 
 .cyclone-table--tasks {
     .entry__info__input {
-        max-width: 150px;
         padding: 0;
 
-        input {
-            border: 0;
+        @media @gt-xs {
+            margin-right: 20px;
         }
     }
 
@@ -602,7 +606,7 @@ button.dayVisualize-entry--extend.md-button:hover {
 }
 
 .entry__time-information {
-    padding: 5px 20px;
+    margin-right: 1rem;
     color: darkgrey;
     font-size: 0.8rem;
 }
@@ -785,3 +789,8 @@ md-input-container {
     }
 }
 
+.duration {
+    .duration--human {
+        white-space: nowrap;
+    }
+}

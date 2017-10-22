@@ -49,7 +49,8 @@
     </div>
 
         <div class="entry entry--group"
-             layout="row">
+             layout="row"
+             layout-xs="column">
 
             <div class="entry__info"
                  layout-wrap
@@ -59,7 +60,10 @@
             >
 
                 <!-- Project -->
-                <md-input-container md-no-float class="entry__info__input entry__info__input--project">
+                <md-input-container
+                        md-no-float
+                        class="entry__info__input entry__info__input--project"
+                        flex="auto">
                     <input ng-model="GroupData.project"
                            ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                            type="text"
@@ -67,13 +71,15 @@
                            placeholder="Project"
                            autocomplete="Project"
                            ng-model-options="{updateOn: 'blur'}"
+                           flex="auto"
                     />
                 </md-input-container>
 
                 <!-- Task name -->
                 <md-input-container md-no-float
                                     class="entry__info__input entry__info__input--task"
-                                    ng-if="GroupData.type !== 'system'">
+                                    ng-if="GroupData.type !== 'system'"
+                                    flex="auto">
                     <input ng-model="GroupData.task"
                            ng-change="$ctrl.timeline.updateEntry(GroupData.$id, GroupData)"
                            type="text"
@@ -85,7 +91,10 @@
                 </md-input-container>
 
                 <!-- Description -->
-                <md-input-container md-no-float class="entry__info__input entry__info__input--text">
+                <md-input-container
+                        md-no-float
+                        class="entry__info__input entry__info__input--text"
+                        flex="auto">
                     <input ng-model="GroupData.text"
                            ng-change="$ctrl.data.$save(GroupData)"
                            type="text"
@@ -100,8 +109,8 @@
 
             <!-- Time output-->
             <div class="entry__time-information" layout="row" layout-align="center center">
-                <div class="duration duration--human">
-                    <span>{{ GroupData.timestampDuration | humanizeDate  }}</span>
+                <div class="duration">
+                    <span class="duration--human">{{ GroupData.timestampDuration | humanizeDate  }}</span>
                     <span>&nbsp;|&nbsp;</span>
                     <span class="duration duration--decimal"
                           clipboard
@@ -118,6 +127,7 @@
                  flex="nogrow"
                  layout="row"
                  layout-align="end none"
+                 layout-align-xs="center center"
             >
                 <!-- Continue button -->
                 <md-button ng-if="$ctrl.features.continueButton.enabled"

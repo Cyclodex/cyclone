@@ -44,7 +44,9 @@
             </md-input-container>
         </div>
 
-        <div class="entry entry--group" layout="row">
+        <div class="entry entry--group"
+             layout="row"
+             layout-xs="column">
             <div class="entry__info"
                  layout-wrap
                  layout="row"
@@ -53,7 +55,10 @@
             >
 
                 <!-- Project -->
-                <md-input-container md-no-float class="entry__info__input entry__info__input--project">
+                <md-input-container
+                        md-no-float
+                        class="entry__info__input entry__info__input--project"
+                        flex="auto">
                     <input ng-model="GroupData.project"
                            ng-change="$ctrl.timeTask.updateGroupData(GroupData)"
                            type="text"
@@ -65,7 +70,10 @@
                 </md-input-container>
 
                 <!-- Task name -->
-                <md-input-container flex="auto" md-no-float class="entry__info__input entry__info__input--task">
+                <md-input-container
+                        flex="auto"
+                        md-no-float class="entry__info__input entry__info__input--task"
+                        flex="auto">
                     <input ng-model="GroupData.task"
                            ng-change="$ctrl.timeTask.updateGroupData(GroupData)"
                            type="text"
@@ -112,8 +120,8 @@
                                 />
                             </md-input-container>
                             <md-tooltip md-direction="top">
-                                <div class="duration duration--human">
-                                    <span>{{ entry.timestampDuration | humanizeDate  }}</span>
+                                <div class="duration">
+                                    <span class="duration--human">{{ entry.timestampDuration | humanizeDate  }}</span>
                                     <span>&nbsp;|&nbsp;</span>
                                     <span class="duration duration--decimal">
                                                 <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
@@ -178,6 +186,7 @@
                  flex="nogrow"
                  layout="row"
                  layout-align="end none"
+                 layout-align-xs="center center"
             >
                 <!-- Continue button -->
                 <md-button ng-if="$ctrl.features.continueButton.enabled"
