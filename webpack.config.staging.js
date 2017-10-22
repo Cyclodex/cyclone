@@ -39,7 +39,6 @@ module.exports = {
                         "css-loader",
                         "less-loader"
                     ]
-                    // publicPath: "/dist"
                 })
             },
             {
@@ -80,10 +79,9 @@ module.exports = {
                     FIREBASE_PRODUCTION: false
                 }
             },
-            debug: true,
-            minimize: true,
-            comments: false,
-            sourceMap: true,
+            minimize: true, // Does this exist still?
+            extractComments: false,
+            sourceMap: false,
             mangle: false, // was true - but fails because of injection issues since new components
             // TODO: fix this, or update webpack builder to maybe include it directly automatically
         }),

@@ -9,8 +9,7 @@
  */
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+// const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
@@ -38,21 +37,25 @@ module.exports = {
         rules: [
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [
-                        "css-loader",
-                        "less-loader"
-                    ]
-                    // publicPath: "/dist"
-                })
+                use: [{
+                    loader: "style-loader"
+                }, {
+                    loader: "css-loader", options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: "less-loader", options: {
+                        sourceMap: true
+                    }
+                }]
             },
             {
                 test: /\.tpl\.html$/,
-                use: [
-                    'raw-loader'
-                ],
-                exclude: /node_modules/
+                use: [{
+                    loader: "raw-loader", options: {
+                        exclude: /node_modules/
+                    }
+                }],
             }
         ]
     },
@@ -61,7 +64,7 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: 'src', to: __dirname + '/public/' },
         ]),
-        new ExtractTextPlugin("cyclone.css"),
+        // // new ExtractTextPlugin("cyclone.css"),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
         new BrowserSyncPlugin({
             host: 'localhost',
@@ -74,9 +77,6 @@ module.exports = {
             'NODE_ENV': JSON.stringify('development'),
             'PRODUCTION': JSON.stringify(false),
             'FIREBASE_PRODUCTION': JSON.stringify(false)
-        }),
-        new ngAnnotatePlugin({
-            add: true
         }),
     ]
 };
