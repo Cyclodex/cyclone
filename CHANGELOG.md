@@ -4,6 +4,8 @@
 * Setup: Improved file structure and build process
 * Setup: BundleAnalyzerPlugin to have better insights into into the built bundle files
 * Merged the GA code implementation from old release
+* Styling: General improvements
+* Styling: Adding new media queries
 
 ## 1.0.0-beta1 - 19.10.2017 - Features, Projects, Components
 * Improved addTime service
