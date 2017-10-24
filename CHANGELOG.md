@@ -1,4 +1,7 @@
 # CHANGELOG
+## 1.0.0-beta2 - ??.10.2017 - Automatic day jump
+* dateSwitcher: Will switch to a new date, when detected.
+
 ## 1.0.0-beta2 - 22.10.2017 - Webpack update
 * Webpack: Update and migrated config from 1.x to 2.x
 * Setup: Improved file structure and build process
