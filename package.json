@@ -9,7 +9,7 @@
     "build dev": "node_modules/webpack/bin/webpack.js",
     "build staging": "node_modules/webpack/bin/webpack.js --config webpack.config.staging.js --progress",
     "build production": "node_modules/webpack/bin/webpack.js --config webpack.config.production.js --progress",
-    "deploy staging": "firebase use staging; firebase deploy",
+    "deploy staging": "nvm use; firebase use staging; firebase deploy",
     "deploy production": "firebase use production; firebase deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

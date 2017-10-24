@@ -397,11 +397,10 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
         return timestampDuration;
     };
 
-    // Realtime duration display
+    // Real time duration display
     service.updateDurations = function() {
         ctrl.currentDuration = ((Date.now() - ctrl.lastEntryTimestamp));
         return ctrl.currentDuration;
-        // $timeout(service.updateDurations, 1000, true);
     };
 
     // Update current time
