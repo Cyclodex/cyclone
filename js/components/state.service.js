@@ -5,7 +5,7 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
     function StateService() {};
 
     StateService.prototype.getPageType = function() {
-        // Get the requested date
+        // Get the requested type
         return $stateParams.type;
     };
 
@@ -22,12 +22,11 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
         // Parse the date from the URL with different formats
         requestedDate = moment(requestedDate,
             [
-                'YYYY-MMMM-DD'  // DE long month name
-                ,'YYYY-MMM-DD'  // DE short month name
-                ,'YYYY-MM-DD'   // DE date format short
+                // 'YYYY-MMMM-DD'  // DE long month name
+                // ,'YYYY-MMM-DD'  // DE short month name
+                'YYYY-MM-DD'   // DE date format short
                 ,'YYYY-M-DD'    // DE date format short
                 ,'YYYY-M-D'     //  DE date format short
-                //,'YYYY-DD-MM'    // US - date format
             ],
             true // strict parsing
         );
