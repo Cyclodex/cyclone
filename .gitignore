@@ -4,8 +4,9 @@
 # Dependency directories
 node_modules
 
-# Ignore php storm
+# Ignore editors
 .idea
+.vscode
 
 # Firebase related excludes
 public/404.html
