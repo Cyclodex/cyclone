@@ -3,7 +3,6 @@
   "author": "Cyclodex",
   "version": "1.0.0-beta2",
   "description": "Time tracking",
-  "private": true,
   "scripts": {
     "start": "node_modules/webpack/bin/webpack.js --watch",
     "build dev": "node_modules/webpack/bin/webpack.js",
@@ -17,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/Cyclodex/cyclone.git"
   },
-  "license": "MIT",
+  "license": "GPL-3.0+",
   "bugs": {
     "url": "https://github.com/Cyclodex/cyclone/issues"
   },
