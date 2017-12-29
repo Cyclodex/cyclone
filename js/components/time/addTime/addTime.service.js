@@ -337,7 +337,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                         entries.$save(nextEntry).then(function () {
                             // data has been saved to our database
                             //console.log("(removed) nextEntry saved with index" + refTime.key)
-                            resolve(refTime);
+                            resolve(response);
                         }, function(error) {
                             console.log("Error:", error);
                             reject(error);
