@@ -1,5 +1,43 @@
-<div class="cyclone-toolbar add-time" ng-hide="$ctrl.hideAddTime">
-    <md-card>
+<div class="cyclone-toolbar add-time" ng-show="$ctrl.showAddTime" ng-if="$ctrl.doneLoading">
+    <md-card ng-if="$ctrl.entries.length === 0">
+        <div class="md-headline">
+            <span>Define the time you started today</span>
+        </div>
+        <form ng-submit="$ctrl.addStartingTheDay()">
+            <label for="startTimes">Select start time</label>
+            <md-input-container class="">
+                <md-select  id="startTimes"
+                            ng-model="$ctrl.selectedStartTime"
+                            aria-label="Detected start times">
+                    <md-option ng-value="NOW">NOW</md-option>
+                    <md-option  ng-repeat="startTime in $ctrl.startTimes | orderBy : value : true"
+                                ng-value="startTime.$value">
+                        <span class="option__name">{{startTime.$value | date : 'HH:mm'}}</span>
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <label for="manualStartTime">or define it manually:</label>
+            <md-input-container
+                    flex="auto"
+                    class="">
+                <input type="time"
+                    id="manualStartTime"
+                    name="input"
+                    ng-model="$ctrl.manualStartTime.value"
+                    placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+            </md-input-container>
+
+            <a class="add-button"
+                ng-click="$ctrl.addStartingTheDay()">
+                <md-button class="md-fab md-accent" aria-label="Add Entry">
+                    <md-icon>add</md-icon>
+                </md-button>
+            </a>
+            <button type="submit" class="submitbutton hide">Submit</button>
+        </form>
+    </md-card>
+
+    <md-card ng-if="$ctrl.entries.length > 0">
         <div class="md-headline">
             <div ng-if="!$ctrl.newEntryManualTime.value">
                 <span>What have you done in the last</span>
@@ -83,4 +121,6 @@
             <button type="submit" class="submitbutton hide">Submit</button>
         </form>
     </md-card>
+
+    {{ $ctrl.entries | json }}
 </div>

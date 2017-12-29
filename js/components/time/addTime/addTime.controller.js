@@ -1,5 +1,6 @@
 function AddTimeController(AuthService, AddTimeService, timeTypesService, stateService, moment, $timeout, cfpLoadingBar) {
     var ctrl = this;
+    ctrl.doneLoading = false;
 
     ctrl.$onInit = function () {
         ctrl.timeTypesService = timeTypesService.getTimeTypes();
@@ -17,6 +18,30 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         // });
         ctrl.currentTask = AddTimeService.getCurrentTask();
 
+        // Load entries
+        ctrl.entries = AddTimeService.getEntries();
+        // If no entries, show the start times feature
+        ctrl.entries.$loaded().then(function () {
+            if (ctrl.entries.length === 0) {
+                // Add the current timestamp
+                var timestamp = Date.now();            
+                AddTimeService.addStartTime(timestamp);
+
+                // List all the timestamps we have detected today
+                ctrl.startTimes = AddTimeService.getStartTimes();
+                ctrl.startTimes.$loaded().then(function () {
+                    ctrl.doneLoading = true;
+                });
+            } else {
+                ctrl.doneLoading = true;
+                // Found entries, so we should make sure that start times are cleaned.
+                AddTimeService.resetStartTimes();
+            }
+        })
+            .catch(function (error) {
+                console.log("Error:", error);
+            });
+
         ctrl.setFocus = true;
 
         // Check if its today or not to hide this component
@@ -25,10 +50,10 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
         // Important when we switch the day: update the services reference, or we are on the wrong entry.
         AddTimeService.updateEntriesReference();
 
-        ctrl.hideAddTime = true;
+        ctrl.showAddTime = false;
         var urlDate = stateService.getCurrentDate();
         if (urlDate.isSame(today, 'day')) {
-            ctrl.hideAddTime = false;
+            ctrl.showAddTime = true;
         }
     };
 
@@ -69,6 +94,40 @@ function AddTimeController(AuthService, AddTimeService, timeTypesService, stateS
 
             ctrl.setFocus = true;
         });
+    }
+
+    // Add starting the day entry
+    ctrl.addStartingTheDay = function() {
+        // Default time is now
+        var timestamp = Date.now();
+        // Get the right day (the one we are looking at)
+        var currentDate = stateService.getCurrentDate();
+
+        // Apply the date of the selected or manual input field.
+        if (ctrl.manualStartTime !== undefined &&
+            ctrl.manualStartTime.value !== undefined &&
+            ctrl.manualStartTime.value !== null
+        ) {
+            // TODO: Move this duplicated code into a function
+
+            // If we have a manual end time, we don't know the prev time entry
+            // We need a date of the day we are on.
+            var manualTime = new Date();
+            // Get the right day (the one we are looking at)
+            manualTime.setTime(currentDate.valueOf());
+
+            // And manually set the hours + minutes
+            var hours = ctrl.manualStartTime.value.getHours();
+            var minutes = ctrl.manualStartTime.value.getMinutes();
+            manualTime.setHours(hours);
+            manualTime.setMinutes(minutes);
+            manualTime.setSeconds(0);
+            timestamp = manualTime.getTime();
+        } else if (ctrl.selectedStartTime) {
+            timestamp = ctrl.selectedStartTime;
+        }
+        
+        AddTimeService.addStartingTheDay(timestamp);
     }
 
 }

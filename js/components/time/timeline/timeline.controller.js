@@ -19,33 +19,28 @@ function TimelineController(AddTimeService) {
 
     // Entries
     ctrl.entries = AddTimeService.getEntries();
-    // Add a start entry if we are on today and no entries in yet.
     ctrl.entries.$loaded().then(function () {
         ctrl.doneLoading = true;
-        if (ctrl.entries.length === 0) {
-            var timestamp = Date.now();
-            var duration = 0;
-            var start = timestamp;
-            // TODO: Instead of just adding an entry, ask the user for what to do with some suggestions.
-            ctrl.entries.$add({
-                text: 'Starting the day',
-                project: 'CYCLONE',
-                checked: true,
-                type: 'system',
-                timestamp: timestamp,
-                timestampStart: start,
-                timestampDuration: duration,
-                order: -timestamp,
-                user: ctrl.user.username // Now it takes the first part of the email address of the logged in user
-            }).then(function (queryRef) {
-                // Entry added, now do something
-                console.log("Auto starting the day entry added!");
-            });
-        }
-    })
-        .catch(function (error) {
-            console.log("Error:", error);
-        });
+    });
+
+    // // TODO: remove this logic here to the addTime Controller!
+    
+    // // Add a start entry if we are on today and no entries in yet.
+    // ctrl.entries.$loaded().then(function () {
+    //     ctrl.doneLoading = true;
+    //     if (ctrl.entries.length === 0) {
+    //         // Instead of just adding an entry, ask the user for what to do with some suggestions.
+    //         // Add the current timestamp
+    //         var timestamp = Date.now();            
+    //         AddTimeService.addStartTime(timestamp);
+    //     } else {
+    //         // Found entries, so we should make sure that start times are cleaned.
+    //         AddTimeService.resetStartTimes();
+    //     }
+    // })
+    //     .catch(function (error) {
+    //         console.log("Error:", error);
+    //     });
 
     // updateCurrentTask
     // Copy / Clone text and project to current timer
