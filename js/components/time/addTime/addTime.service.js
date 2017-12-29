@@ -11,6 +11,9 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     var refCurrentTask = firebaseRef.getCurrentTaskReference(ctrl.user);
     ctrl.currentTask = $firebaseObject(refCurrentTask);
 
+    // Load start times reference
+    ctrl.refStartTimes = firebaseRef.getStartTimesReference(ctrl.user);
+
     // TODO: is that really needed?
     // Initially set lastEntry to now.
     // ctrl.newEntryManualTime = null; // fails if null
@@ -80,6 +83,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     service.setCurrentTaskManualTime = function(time){
         ctrl.newEntryManualTime = time;
     };
+
     service.getEntries = function (){
         var refTime = firebaseRef.getTimeReference(ctrl.user);
         var queryTime = refTime.orderByChild("order");
@@ -403,6 +407,38 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
         return ctrl.currentDuration;
     };
 
+    // Start Time helpers
+    service.addStartTime = function(timestamp) {
+        ctrl.refStartTimes.push(timestamp);
+    }
+
+    service.getStartTimes = function() {
+        return $firebaseArray(ctrl.refStartTimes);
+    }
+
+    service.resetStartTimes = function() {
+        ctrl.refStartTimes.remove();
+    }
+
+    // Add start the day entry
+    service.addStartingTheDay = function(timestamp) {
+        ctrl.entries.$add({
+            text: 'Starting the day',
+            project: 'CYCLONE',
+            checked: true,
+            type: 'system',
+            timestamp: timestamp,
+            timestampStart: timestamp,
+            timestampDuration: 0,
+            order: -timestamp,
+            user: ctrl.user.username // Now it takes the first part of the email address of the logged in user
+        }).then(function (queryRef) {
+            // Entry added, now do something
+            console.log("Auto starting the day entry added!");
+        });
+
+    }
+
     // Update current time
     service.updateCurrentTimer = function() {
         var refTime = firebaseRef.getTimeReference(ctrl.user);
@@ -419,7 +455,7 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     };
     service.updateCurrentTimer();
 
-    // Update the reference of the day (needed on day switching)
+    // Initialize and update the reference of the day (needed on day switching)
     service.updateEntriesReference = function() {
         ctrl.entries = service.getEntries();
     };

@@ -34,6 +34,12 @@ angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', '
             return reference;
         }
 
+        function getStartTimesReference(user){
+            var ref = firebase.database().ref();
+            var reference = ref.child("userSettings/" + user.uid + "/startTimes");
+            return reference;
+        }
+
         return {
             getTimeReference: function(user) {
                 return getTimeReference(user);
@@ -46,6 +52,9 @@ angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', '
             },
             getFeaturesReference: function(user) {
                 return getFeaturesReference(user);
+            },
+            getStartTimesReference: function(user) {
+                return getStartTimesReference(user);
             }
         }
     }
