@@ -7,7 +7,13 @@ angular.module('cycloneApp').component('dateSwitcher', {
 
         // Run this code all 10min to verify if its still today
         var checkTime = function() {
+
+            // Date simulation (for testing day jumps)
+            if (ctrl.dateSimulation){
+                today = moment(ctrl.dateSimulation);
+            } else {
             var today = moment();
+            }
             console.log('checking time for dateswitcher');
             console.log('today:');
             console.log(today);
