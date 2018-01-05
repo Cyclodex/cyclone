@@ -63,8 +63,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('staging'),
-                'PRODUCTION': JSON.stringify(false),
-                'FIREBASE_PRODUCTION': JSON.stringify(false)
+                'FIREBASE_DB_INSTANCE': JSON.stringify('v1')
             }
         }),
         new ngAnnotatePlugin({
@@ -76,7 +75,7 @@ module.exports = {
                 drop_console: false,
                 global_defs: {
                     PRODUCTION: false,
-                    FIREBASE_PRODUCTION: false
+                    FIREBASE_DB_INSTANCE: 'v1'
                 }
             },
             minimize: true, // Does this exist still?

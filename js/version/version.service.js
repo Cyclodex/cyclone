@@ -5,15 +5,12 @@ angular.module('cycloneApp').factory('versionService', [function() {
     }
 
     VersionService.prototype.getVersion = function() {
-        var version = 'V 1.0.0-beta2 22.10.2017';
-        if (!PRODUCTION) {
-            if (FIREBASE_PRODUCTION) {
-                return version + ' (PRODUCTION DB)';
-            }
-            if (!FIREBASE_PRODUCTION) {
-                return version + ' (STAGING DB)';
-            }
+        var version = 'V 1.0.0-beta3';
+        if (FIREBASE_DB_INSTANCE !== '') {
+            version = version + ' (DB ' + FIREBASE_DB_INSTANCE + ')';
         }
+        version = version + ' 05.01.2018';
+        return version;
     }
 
     VersionService.prototype.getChanglogUrl = function() {

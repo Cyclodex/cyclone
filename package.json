@@ -1,16 +1,17 @@
 {
   "name": "cyclone",
   "author": "Cyclodex",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "Time tracking",
   "private": true,
   "scripts": {
     "start": "node_modules/webpack/bin/webpack.js --watch",
-    "build dev": "node_modules/webpack/bin/webpack.js",
-    "build staging": "node_modules/webpack/bin/webpack.js --config webpack.config.staging.js --progress",
-    "build production": "node_modules/webpack/bin/webpack.js --config webpack.config.production.js --progress",
-    "deploy staging": "nvm use; firebase use staging; firebase deploy",
-    "deploy production": "firebase use production; firebase deploy",
+    "dev-build": "node_modules/webpack/bin/webpack.js",
+    "dev-deploy": "firebase use dev; firebase deploy",
+    "v1-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v1.js --progress",
+    "v1-deploy": "firebase use v1; firebase deploy",
+    "v0-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v0.js --progress",
+    "v0-deploy": "firebase use v0; firebase deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

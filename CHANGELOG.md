@@ -1,6 +1,9 @@
 # CHANGELOG
-## 1.0.0-beta2 - ??.10.2017 - Automatic day jump
+## 1.0.0-beta3 - ??.10.2017 - Automatic day jump
 * dateSwitcher: Will switch to a new date, when detected.
+* Setup: Renamed production to "v0"
+* Setup: Renamed staging to "v1"
+* Setup: Introducing a dev-environment
 
 ## 1.0.0-beta2 - 22.10.2017 - Webpack update
 * Webpack: Update and migrated config from 1.x to 2.x

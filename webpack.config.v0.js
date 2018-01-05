@@ -59,8 +59,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('production'),
-                'PRODUCTION': JSON.stringify(true),
-                'FIREBASE_PRODUCTION': JSON.stringify(true)
+                'FIREBASE_DB_INSTANCE': JSON.stringify('v0')
             }
         }),
         new ngAnnotatePlugin({
@@ -72,7 +71,7 @@ module.exports = {
                 drop_console: false,
                 global_defs: {
                     PRODUCTION: true,
-                    FIREBASE_PRODUCTION: true
+                    FIREBASE_DB_INSTANCE: 'v0'
                 }
             },
             debug: true,

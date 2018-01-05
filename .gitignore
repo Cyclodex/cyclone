@@ -10,8 +10,7 @@ node_modules
 
 # Firebase related excludes
 public/404.html
-js/config/config.production.js
-js/config/config.staging.js
+js/config/config.*.js
 
 # Project build files
 public/
