@@ -75,8 +75,7 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'NODE_ENV': JSON.stringify('development'),
-            'PRODUCTION': JSON.stringify(false),
-            'FIREBASE_PRODUCTION': JSON.stringify(false)
+            'FIREBASE_DB_INSTANCE': JSON.stringify('v1')
         }),
     ]
 };

@@ -29,11 +29,14 @@ require('angularfire');
 var firebaseui = require('firebaseui');
 
 // Webpack loads the environment specific config file
-if (FIREBASE_PRODUCTION) {
-    require('./config/config.production');
-}
-if (!FIREBASE_PRODUCTION) {
-    require('./config/config.staging');
+// if (FIREBASE_PRODUCTION) {
+//     require('./config/config.production');
+// }
+// if (!FIREBASE_PRODUCTION) {
+//     require('./config/config.staging');
+// }
+if (FIREBASE_DB_INSTANCE) {
+    require('./config/config.' + FIREBASE_DB_INSTANCE);
 }
 
 // ROOT
