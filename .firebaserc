@@ -3,7 +3,6 @@
     "default": "cyclone-development",
     "dev": "cyclone-development",
     "development": "cyclone-development",
-    "staging": "cyclone-staging",
     "v1": "cyclone-staging",
     "v0": "cyclone-806dd"
   }
