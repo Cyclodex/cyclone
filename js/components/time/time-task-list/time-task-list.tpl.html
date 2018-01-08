@@ -17,12 +17,10 @@
             <!-- Checkbox -->
             <div class="task__checkbox" ng-if="GroupData.type === 'work' || GroupData.type === 'internal'">
                 <md-checkbox aria-label="GroupsChecked"
-                             ng-checked="GroupData.checkedState"
+                             ng-model="GroupData.checkedState"
                              md-indeterminate="GroupData.indeterminate"
-                             clipboard
-                             text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
-                             on-copied="$ctrl.timeTask.copySuccess(); $ctrl.timeTask.updateGroupStatus(GroupData)"
-                             on-error="$ctrl.timeTask.copyFail(err)"
+                             ng-focus="$ctrl.timeTask.clipboardCopyPrepare($event)"
+                             ng-change="$ctrl.timeTask.clipboardCopy(GroupData)"
                              class="md-primary show-on-hover hide-6">
                 </md-checkbox>
                 <md-tooltip md-direction="top">
