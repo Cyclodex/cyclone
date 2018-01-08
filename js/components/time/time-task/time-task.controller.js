@@ -271,8 +271,6 @@ function TimeTaskController($q, AddTimeService, clipboard) {
 
     // Group update status checked on several tasks
     ctrl.updateGroupStatus = function (taskData, status) {
-        console.log(taskData);
-        console.log(status);
         var checked = false;
         if (status === undefined) {
             if (taskData.indeterminate) {
