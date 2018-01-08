@@ -3,12 +3,7 @@
     <span class="inline">{{ $ctrl.currentDate | date : "EEE d. MMM yyyy" }}</span>
     <a ng-if="$ctrl.nextDateLink" data-ui-state="$ctrl.pageType" data-ui-state-params="{'year': $ctrl.nextDateLink.year, 'month': $ctrl.nextDateLink.month, 'day': $ctrl.nextDateLink.day}"><md-icon>keyboard_arrow_right</md-icon></a>
     
-    <!-- Date simulator -->
-    <label for="newTaskName">Date Simulation:
-        <input id="newTaskName"
-        type="date"
-        ng-model="$ctrl.dateSimulation"
-        aria-label="Date Simulation">
-    </label>
+    <!-- Date simulation: -->
+    <!-- <date-simulation></date-simulation> -->
 
 </div>

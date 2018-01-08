@@ -85,7 +85,9 @@ require('./components/time/addTime/addTime.component');
 require('./components/time/addTime/addTime.controller');
 require('./components/time/addTime/addTime.service');
 
-
+// Date Simulation
+require('./components/dateSimulation/dateSimulation.component');
+require('./components/dateSimulation/dateSimulation.controller');
 
 // Welcome
 require('./welcome/welcome.component');

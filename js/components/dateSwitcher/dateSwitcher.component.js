@@ -8,16 +8,7 @@ angular.module('cycloneApp').component('dateSwitcher', {
         // Run this code all 10min to verify if its still today
         var checkTime = function() {
 
-            // Date simulation (for testing day jumps)
-            if (ctrl.dateSimulation){
-                today = moment(ctrl.dateSimulation);
-            } else {
             var today = moment();
-            }
-            console.log('checking time for dateswitcher');
-            console.log('today:');
-            console.log(today);
-
             var currentDate = stateService.getCurrentDate();
             var prevDate = currentDate.clone();
             var nextDate = currentDate.clone();
@@ -46,22 +37,20 @@ angular.module('cycloneApp').component('dateSwitcher', {
             // Check for auto jumping to next day
             if (ctrl.currentDayVisited !== undefined && ctrl.currentDayVisited !== false && today.isAfter(ctrl.currentDayVisited, 'day')){
                 // today is before the last visited day, so lets jump ahead
-                console.log("now we jump to today's date!");
+                // console.log("Visited: Jump ahead!");
                 var pageType = $state.current.name;
                 // Automatically go to today!
                 $state.go(pageType, {year: today.year(), month: today.month()+1, day: today.date()});
-            } else {
-                console.log("No action for **auto switch day** needed (ctrl.currentDayVisited:)");
-                console.log(ctrl.currentDayVisited);
             }
 
             // Initialize an automatic day jump for next day, because we are on today now.
             if (currentDate.isSame(today, 'day')){
-                console.log('Initializing a next day jump');
+                // console.log('Initializing: Its today, ready for day switch');
                 ctrl.currentDayVisited = today;
-                console.log(ctrl.currentDayVisited);
+                // console.log(ctrl.currentDayVisited);
             } else {
                 // Not on today, so no auto switch initialization
+                // console.log('Initializing: -');
                 ctrl.currentDayVisited = false;
             }
 
