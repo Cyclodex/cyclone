@@ -2,15 +2,16 @@
 // <date-switcher></date-switcher>
 angular.module('cycloneApp').component('dateSwitcher', {
     template: require('./date_switcher.tpl.html'),
-    controller: ['stateService', 'moment', '$timeout', '$scope', '$state', function dateSwitcherCtrl(stateService, moment, $timeout, $scope, $state) {
+    controller: ['$log', 'stateService', 'moment', '$timeout', '$scope', '$state', function dateSwitcherCtrl($log, stateService, moment, $timeout, $scope, $state) {
         var ctrl = this;
+        var log = $log.getInstance('dateSwitcher');
 
         // Run this code all 10min to verify if its still today
         var checkTime = function() {
             var today = moment();
-            console.log('checking time for dateswitcher');
-            console.log('today:');
-            console.log(today);
+            log.debug('checking time for dateswitcher');
+            log.debug('today:'+ today);
+            log.debug(today);
 
             var currentDate = stateService.getCurrentDate();
             var prevDate = currentDate.clone();
@@ -40,20 +41,19 @@ angular.module('cycloneApp').component('dateSwitcher', {
             // Check for auto jumping to next day
             if (ctrl.currentDayVisited !== undefined && ctrl.currentDayVisited !== false && today.isAfter(ctrl.currentDayVisited, 'day')){
                 // today is before the last visited day, so lets jump ahead
-                console.log("now we jump to today's date!");
+                log.info("now we jump to today's date!");
                 var pageType = $state.current.name;
                 // Automatically go to today!
                 $state.go(pageType, {year: today.year(), month: today.month()+1, day: today.date()});
             } else {
-                console.log("No action for **auto switch day** needed (ctrl.currentDayVisited:)");
-                console.log(ctrl.currentDayVisited);
+                log.debug("No action for **auto switch day** needed (ctrl.currentDayVisited:)");
             }
 
             // Initialize an automatic day jump for next day, because we are on today now.
             if (currentDate.isSame(today, 'day')){
-                console.log('Initializing a next day jump');
+                log.info('Initializing a next day jump');
                 ctrl.currentDayVisited = today;
-                console.log(ctrl.currentDayVisited);
+                log.debug(ctrl.currentDayVisited);
             } else {
                 // Not on today, so no auto switch initialization
                 ctrl.currentDayVisited = false;
