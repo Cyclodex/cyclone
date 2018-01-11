@@ -17,6 +17,7 @@
             <!-- Checkbox -->
             <div class="task__checkbox" ng-if="GroupData.type === 'work' || GroupData.type === 'internal'">
                 <md-checkbox aria-label="GroupsChecked"
+                             ng-checked="GroupData.checkedState"
                              ng-model="GroupData.checkedState"
                              md-indeterminate="GroupData.indeterminate"
                              ng-focus="$ctrl.timeTask.clipboardCopyPrepare($event)"
