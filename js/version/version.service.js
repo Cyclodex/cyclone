@@ -1,3 +1,4 @@
+import { appVersion } from 'js/version/version.js';
 angular.module('cycloneApp').factory('versionService', [function() {
     'use strict';
 
@@ -6,6 +7,7 @@ angular.module('cycloneApp').factory('versionService', [function() {
 
     VersionService.prototype.getVersion = function() {
         var version = 'V 1.0.0-beta2 22.10.2017';
+        version = appVersion;
         if (!PRODUCTION) {
             if (FIREBASE_PRODUCTION) {
                 return version + ' (PRODUCTION DB)';

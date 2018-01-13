@@ -10,6 +10,7 @@
     "build production": "node_modules/webpack/bin/webpack.js --config webpack.config.production.js --progress",
     "deploy staging": "firebase use staging; firebase deploy",
     "deploy production": "firebase use production; firebase deploy",
+    "version": "./version.sh $npm_package_version",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
