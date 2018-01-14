@@ -1,4 +1,9 @@
 # CHANGELOG
+## 1.0.0-beta3 - 15.01.2018 - Keyboard improvements
+* Keyboard improvements
+* Version number changes
+* Added Licence info
+
 ## 1.0.0-beta2 - 22.10.2017 - Webpack update
 * Webpack: Update and migrated config from 1.x to 2.x
 * Setup: Improved file structure and build process
