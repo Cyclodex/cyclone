@@ -1,4 +1,5 @@
 const { version: appVersion } = require('../../package.json')
+const releaseDate = '15.01.2018';
 angular.module('cycloneApp').factory('versionService', [function() {
     'use strict';
 
@@ -6,7 +7,7 @@ angular.module('cycloneApp').factory('versionService', [function() {
     }
 
     VersionService.prototype.getVersion = function() {
-        var version = 'V ' + appVersion + ' 22.10.2017';
+        var version = 'V ' + appVersion + ' ' + releaseDate;
         if (!PRODUCTION) {
             if (FIREBASE_PRODUCTION) {
                 return version + ' (PRODUCTION DB)';
