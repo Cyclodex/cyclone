@@ -1,10 +1,10 @@
 {
   "name": "cyclone",
-  "author": "Cyclodex",
-  "version": "1.0.0-beta3",
+  "author": "Fabian Gander <cyclodex@jumps.ch>",
+  "version": "1.0.0-beta4",
   "description": "Time tracking",
-  "private": true,
   "scripts": {
+    "version": "./version.sh $npm_package_version",
     "start": "node_modules/webpack/bin/webpack.js --watch",
     "dev-build": "node_modules/webpack/bin/webpack.js",
     "dev-deploy": "firebase use dev; firebase deploy",
@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/Cyclodex/cyclone.git"
   },
-  "license": "MIT",
+  "license": "GPL-3.0+",
   "bugs": {
     "url": "https://github.com/Cyclodex/cyclone/issues"
   },

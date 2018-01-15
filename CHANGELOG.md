@@ -1,5 +1,11 @@
 # CHANGELOG
-## 1.0.0-beta3 - ??.10.2017 - Automatic day jump
+## 1.0.0-beta4 - ??.01.2018 - Automatic day jump
+* ONGOING
+
+## 1.0.0-beta3 - 15.01.2018 - Keyboard improvements
+* Keyboard improvements
+* Version number changes
+* Added Licence info
 * dateSwitcher: Will switch to a new date, when detected.
 * Setup: Renamed production to "v0"
 * Setup: Renamed staging to "v1"
