@@ -2,12 +2,14 @@
 angular.module("cycloneApp", [
     'firebase',
     'ngMaterial',
-    'ui.router','angular-clipboard',
+    'ui.router',
+    'angular-clipboard',
     'angularMoment',
     'ngAnimate',
     'angular-loading-bar',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'angular-logger'
 ]);
 
 // Make sure user is authenticated, otherwise send to login state
@@ -50,7 +52,11 @@ angular.module("cycloneApp").run(function($transitions, cfpLoadingBar) {
 });
 
 // Config / Routing
-angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
+angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, logEnhancerProvider) {
+    // Configure log
+    //logEnhancerProvider.prefixPattern = '%s - %s: ';
+    logEnhancerProvider.prefixPattern = '%3$s - %2$s: ';
+
     // Define the theme / pallete colors we use (these are the md defaults)
     $mdThemingProvider.theme('default')
         .primaryPalette('indigo')

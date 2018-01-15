@@ -1,15 +1,24 @@
-function TimelineController(AddTimeService) {
+function TimelineController(AddTimeService, clipboard) {
     var ctrl = this;
 
-    // TODO: move "copy" out from here, into service something like that.
-    // Angular-clipboard
-    ctrl.copySuccess = function () {
-        console.log('Copied time!');
-    };
-    ctrl.copyFail = function (err) {
-        console.error('Error!', err);
-        console.info('Not supported browser, press Ctrl+C to copy time');
-    };
+    // ng-change can't get $event! We need workaround with focusCallback
+    ctrl.clipboardCopy = function (GroupData) {
+        // TODO: make helper?!
+        var duration = ( GroupData.timestampDuration / 1000 / 60 / 60 ).toFixed(2);
+        // TODO-feature: only if enabled ?
+        clipboard.copyText(duration);
+        // Save the state of the checkbox
+        ctrl.entries.$save(GroupData);
+        // Focus the field again, otherwise you can't navigate further with keyboard
+        ctrl.clipboardCopyTargetField.focus();
+    }
+    // The workaround to know which element we are focusing on
+    ctrl.clipboardCopyPrepare = function ($event) {
+        if($event.target === null) {
+            return;
+        }
+        ctrl.clipboardCopyTargetField = $event.target;
+    }
 
     ctrl.error = false;
     ctrl.doneLoading = false;

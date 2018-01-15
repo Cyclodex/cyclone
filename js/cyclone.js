@@ -14,6 +14,7 @@ require('angular-aria');
 require('angular-messages');
 require('angular-material');
 require('angular-clipboard');
+require('angular-logger');
 require('angular-moment');
 require('angular-loading-bar');
 
