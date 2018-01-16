@@ -1,12 +1,11 @@
-function TimeTaskController($q, AddTimeService, clipboard) {
+function TimeTaskController($q, AddTimeService, clipboard, $filter) {
     var ctrl = this;
 
     // ng-change can't get $event! We need workaround with focusCallback
     ctrl.clipboardCopy = function (GroupData) {
-        // TODO: make helper?!
-        // $filter('filtername')(arg1,arg2);
-        var duration = ( GroupData.durationNotChecked / 1000 / 60 / 60 ).toFixed(2);
-        // TODO-feature: only if enabled / configured?
+        // Filter the duration to the wanted format
+        duration = $filter('timestampInDecimalHours')(GroupData.durationNotChecked);
+        // TODO-feature: Copy what was configured
         clipboard.copyText(duration);
         // Save the state of the checkbox
         ctrl.updateGroupStatus(GroupData, GroupData.checkedState);

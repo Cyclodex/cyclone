@@ -1,10 +1,10 @@
-function TimelineController(AddTimeService, clipboard) {
+function TimelineController(AddTimeService, clipboard, $filter) {
     var ctrl = this;
 
     // ng-change can't get $event! We need workaround with focusCallback
     ctrl.clipboardCopy = function (GroupData) {
-        // TODO: make helper?!
-        var duration = ( GroupData.timestampDuration / 1000 / 60 / 60 ).toFixed(2);
+        // Filter the duration to the wanted format
+        duration = $filter('timestampInDecimalHours')(GroupData.timestampDuration);
         // TODO-feature: only if enabled ?
         clipboard.copyText(duration);
         // Save the state of the checkbox
