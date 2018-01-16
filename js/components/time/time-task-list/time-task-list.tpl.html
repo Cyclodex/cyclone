@@ -120,10 +120,8 @@
                             </md-input-container>
                             <md-tooltip md-direction="top">
                                 <div class="duration">
-                                    <span class="duration--human">{{ entry.timestampDuration | humanizeDate  }}</span>
-                                    <span>&nbsp;|&nbsp;</span>
-                                    <span class="duration duration--decimal">
-                                        <strong>{{ entry.timestampDuration | timestampInDecimalHours }}</strong>
+                                    <span class="duration duration--human duration--decimal">
+                                        <strong>{{ entry.timestampDuration | timeInUserSelectedFormat : $ctrl.features.timeFormat.value  }}</strong>
                                     </span>
                                 </div>
                             </md-tooltip>
@@ -143,36 +141,35 @@
                 <div>
                     <div ng-if="GroupData.durationNotChecked > 0">
                         <span ng-if="GroupData.indeterminate">Un-checked time:</span>
-                        <span class="duration duration--decimal">
+                        <span class="duration duration--human duration--decimal">
                             <span
                                     clipboard
-                                    text="GroupData.durationNotChecked | timestampInDecimalHours"
+                                    text="GroupData.durationNotChecked | timeInUserSelectedFormat:$ctrl.features.timeFormat.value"
                                     on-copied="$ctrl.timeTask.copySuccess();"
                                     on-error="$ctrl.timeTask.copyFail(err)"
                                     class="">
-                                <!-- on-copied+= $ctrl.timeTask.updateGroupStatus(GroupData, true); -->
                                 <md-tooltip md-direction="bottom">
                                     Copy time
                                 </md-tooltip>
-                                <strong>{{ GroupData.durationNotChecked | timestampInDecimalHours }}</strong>
+                                <strong>{{ GroupData.durationNotChecked | timeInUserSelectedFormat:$ctrl.features.timeFormat.value }}</strong>
                             </span>
                         </span>
                         <span>in {{ GroupData.amountNotChecked }} slots</span>
                     </div>
                     <div ng-if="GroupData.durationChecked > 0">
-                                        <span class="duration duration--decimal">
+                                        <span class="duration duration--human duration--decimal">
                                             <!-- TODO: Verify if we really should force an update, even when the group is "indeterminate". -->
                                             <span ng-if="GroupData.indeterminate">Checked time:</span>
                                             <span
                                                     clipboard
-                                                    text="GroupData.durationChecked  | timestampInDecimalHours"
+                                                    text="GroupData.durationChecked | timeInUserSelectedFormat : $ctrl.features.timeFormat.value"
                                                     on-copied="$ctrl.timeTask.copySuccess();"
                                                     on-error="$ctrl.timeTask.copyFail(err)"
                                                     class="done">
                                                 <md-tooltip md-direction="bottom">
                                                     Copy time
                                                 </md-tooltip>
-                                                {{ GroupData.durationChecked | timestampInDecimalHours }}
+                                                {{ GroupData.durationChecked | timeInUserSelectedFormat : $ctrl.features.timeFormat.value }}
                                             </span>
                                         </span>
                         <span>in {{ GroupData.amountChecked }} slots</span>

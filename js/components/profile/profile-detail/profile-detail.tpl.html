@@ -1,14 +1,35 @@
-<div class="feature">
-    <md-switch
-            ng-if="!$ctrl.feature.beta"
-            ng-model="$ctrl.featureModel.$value"
-            ng-change="$ctrl.updateFeature();"
-            aria-label="$ctrl.feature.name">
-        <md-button class="md-fab md-primary md-mini"
-                   ng-if="$ctrl.feature.icon">
-            <md-icon>{{ $ctrl.feature.icon }}</md-icon>
-        </md-button>
-        {{ $ctrl.feature.name }}:
-        {{ $ctrl.feature.description }}
-    </md-switch>
+<div class="feature"
+     ng-if="!$ctrl.feature.beta">
+     <!-- On/Off switch -->
+     <div ng-if="!$ctrl.feature.type">
+         <md-switch
+             ng-model="$ctrl.featureModel.$value"
+             ng-change="$ctrl.updateFeature();"
+             aria-label="$ctrl.feature.name">
+     
+             <md-button class="md-fab md-primary md-mini"
+                        ng-if="$ctrl.feature.icon">
+                 <md-icon>{{ $ctrl.feature.icon }}</md-icon>
+             </md-button>
+     
+             {{ $ctrl.feature.name }}:
+             {{ $ctrl.feature.description }}
+         </md-switch>
+     </div>
+
+    <!-- Radio -->
+    <div ng-if="$ctrl.feature.type === 'radio'">
+            <h3>{{ $ctrl.feature.name }}</h3>
+            <p>{{ $ctrl.feature.description }}</p>
+            <md-radio-group ng-model="$ctrl.featureModel.$value"
+                            ng-change="$ctrl.updateFeature();">
+                <md-radio-button
+                    ng-repeat="(key, value) in $ctrl.feature.options"
+                    ng-value="key"
+                    aria-label="value"
+                    class="md-primary">
+                        {{ value }}
+                </md-radio-button>
+            </md-radio-group>
+    </div>
 </div>

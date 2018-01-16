@@ -108,14 +108,15 @@
             <!-- Time output-->
             <div class="entry__time-information" layout="row" layout-align="center center">
                 <div class="duration">
-                    <span class="duration--human">{{ GroupData.timestampDuration | humanizeDate  }}</span>
-                    <span>&nbsp;|&nbsp;</span>
-                    <span class="duration duration--decimal"
+                    <span class="duration duration--human duration--decimal"
                           clipboard
-                          text="GroupData.timestampDuration | timestampInDecimalHours"
+                          text="GroupData.timestampDuration | timeInUserSelectedFormat : $ctrl.features.timeFormat.value "
                           on-copied="$ctrl.timeline.copySuccess();"
                           on-error="$ctrl.timeline.copyFail(err)">
-                        <strong>{{ GroupData.timestampDuration | timestampInDecimalHours }}</strong>
+                        <md-tooltip md-direction="bottom">
+                            Copy time
+                        </md-tooltip>
+                        <strong>{{ GroupData.timestampDuration | timeInUserSelectedFormat : $ctrl.features.timeFormat.value  }}</strong>
                     </span>
                 </div>
             </div>
