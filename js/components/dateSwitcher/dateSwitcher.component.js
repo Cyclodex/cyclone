@@ -6,59 +6,64 @@ angular.module('cycloneApp').component('dateSwitcher', {
         var ctrl = this;
         var log = $log.getInstance('dateSwitcher');
 
+        // Get the prev and next date links
+        var today = moment();
+        var currentDate = stateService.getCurrentDate();
+        var prevDate = currentDate.clone();
+        var nextDate = currentDate.clone();
+
+        // PREV
+        prevDate = prevDate.subtract(1, 'days');
+        ctrl.prevDateLink = {
+            "year": prevDate.year(),
+            "month": prevDate.format('MM'),
+            "day": prevDate.format('DD')
+        };
+
+        // NEXT (but not for the future)
+        nextDate = nextDate.add(1, 'days');
+        if (nextDate.isSameOrBefore(today, 'day')) {
+            ctrl.nextDateLink = {
+                "year": nextDate.year(),
+                "month": nextDate.format('MM'),
+                "day": nextDate.format('DD')
+            };
+        } else {
+            ctrl.nextDateLink = false;
+        }
+
         // Run this code all 10min to verify if its still today
         var checkTime = function() {
             var today = moment();
-            log.debug('checking time for dateswitcher');
-            log.debug('today:'+ today);
+            log.debug('Checking time - today:');
             log.debug(today);
-
-            var today = moment();
             var currentDate = stateService.getCurrentDate();
-            var prevDate = currentDate.clone();
-            var nextDate = currentDate.clone();
             ctrl.currentDate = currentDate.toDate();
 
-            // PREV
-            prevDate = prevDate.subtract(1, 'days');
-            ctrl.prevDateLink = {
-                "year": prevDate.year(),
-                "month": prevDate.format('MM'),
-                "day": prevDate.format('DD')
-            };
-
-            // NEXT (but not for the future)
-            nextDate = nextDate.add(1, 'days');
-            if (nextDate.isSameOrBefore(today, 'day')) {
-                ctrl.nextDateLink = {
-                    "year": nextDate.year(),
-                    "month": nextDate.format('MM'),
-                    "day": nextDate.format('DD')
-                };
-            } else {
-                ctrl.nextDateLink = false;
-            }
-
             // Check for auto jumping to next day
-            if (ctrl.currentDayVisited !== undefined && ctrl.currentDayVisited !== false && today.isAfter(ctrl.currentDayVisited, 'day')){
-                // today is before the last visited day, so lets jump ahead
-                log.info("now we jump to today's date!");
-                var pageType = $state.current.name;
-                // Automatically go to today!
-                $state.go(pageType, {year: today.year(), month: today.month()+1, day: today.date()});
+            if (ctrl.currentDayVisited !== undefined && ctrl.currentDayVisited !== false){
+                // Something is set, check if today is ahead
+                if (today.isAfter(ctrl.currentDayVisited, 'day')) {
+                    // Today is after the last visited day, so lets jump ahead
+                    log.info("New day detected, jumping ahead.");
+                    var pageType = $state.current.name;
+                    // Automatically go to today!
+                    $state.go(pageType, {year: today.year(), month: today.month()+1, day: today.date()});
+                } else {
+                    log.debug("Waiting for a new day. Day visited is set to:");
+                    log.debug(ctrl.currentDayVisited);
+                }
             } else {
-                log.debug("No action for **auto switch day** needed (ctrl.currentDayVisited:)");
-            }
-
-            // Initialize an automatic day jump for next day, because we are on today now.
-            if (currentDate.isSame(today, 'day')){
-                log.info('Initializing a next day jump');
-                ctrl.currentDayVisited = today;
-                log.debug(ctrl.currentDayVisited);
-            } else {
-                // Not on today, so no auto switch initialization
-                // console.log('Initializing: -');
-                ctrl.currentDayVisited = false;
+                // Register "a watcher" for automatic day jump for next day, because we are on today now.
+                if (currentDate.isSame(today, 'day')){
+                    log.info('Initializing waiting for a new day...');
+                    ctrl.currentDayVisited = today;
+                    log.debug(ctrl.currentDayVisited);
+                } else {
+                    // Not on today, so no auto switch initialization
+                    // console.log('Initializing: -');
+                    ctrl.currentDayVisited = false;
+                }
             }
 
             // Call it over and over again, every 10min ( 1000ms * 60 (=1min) * 10 = 600000(=10min) )
