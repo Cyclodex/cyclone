@@ -123,8 +123,8 @@
                                     <span class="duration--human">{{ entry.timestampDuration | humanizeDate  }}</span>
                                     <span>&nbsp;|&nbsp;</span>
                                     <span class="duration duration--decimal">
-                                                <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                                                <strong>{{ entry.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong>h</span>
+                                        <strong>{{ entry.timestampDuration | timestampInDecimalHours }}</strong>
+                                    </span>
                                 </div>
                             </md-tooltip>
                         </div>
@@ -146,7 +146,7 @@
                         <span class="duration duration--decimal">
                             <span
                                     clipboard
-                                    text="GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2"
+                                    text="GroupData.durationNotChecked | timestampInDecimalHours"
                                     on-copied="$ctrl.timeTask.copySuccess();"
                                     on-error="$ctrl.timeTask.copyFail(err)"
                                     class="">
@@ -154,7 +154,7 @@
                                 <md-tooltip md-direction="bottom">
                                     Copy time
                                 </md-tooltip>
-                                <strong>{{ GroupData.durationNotChecked / 1000 / 60 / 60 | number : 2 }}</strong>h
+                                <strong>{{ GroupData.durationNotChecked | timestampInDecimalHours }}</strong>
                             </span>
                         </span>
                         <span>in {{ GroupData.amountNotChecked }} slots</span>
@@ -165,14 +165,14 @@
                                             <span ng-if="GroupData.indeterminate">Checked time:</span>
                                             <span
                                                     clipboard
-                                                    text="GroupData.durationChecked / 1000 / 60 / 60 | number : 2"
+                                                    text="GroupData.durationChecked  | timestampInDecimalHours"
                                                     on-copied="$ctrl.timeTask.copySuccess();"
                                                     on-error="$ctrl.timeTask.copyFail(err)"
                                                     class="done">
                                                 <md-tooltip md-direction="bottom">
                                                     Copy time
                                                 </md-tooltip>
-                                                {{ GroupData.durationChecked / 1000 / 60 / 60 | number : 2 }}h
+                                                {{ GroupData.durationChecked | timestampInDecimalHours }}
                                             </span>
                                         </span>
                         <span>in {{ GroupData.amountChecked }} slots</span>

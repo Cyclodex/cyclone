@@ -37,3 +37,10 @@ angular.module('cycloneApp').filter('humanizeDateShort', ['$filter', 'moment', f
         return duration.format(format);
     };
 }]);
+// Helps to render timestamp into decimal hours (x.xx)
+angular.module('cycloneApp').filter('timestampInDecimalHours', ['$filter', 'moment', function ($filter, moment) {
+    return function (input, units) {
+        var decimal = (input / 1000 / 60 / 60 ).toFixed(2);
+        return decimal;
+    };
+}]);

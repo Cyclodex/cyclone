@@ -112,11 +112,11 @@
                     <span>&nbsp;|&nbsp;</span>
                     <span class="duration duration--decimal"
                           clipboard
-                          text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                          text="GroupData.timestampDuration | timestampInDecimalHours"
                           on-copied="$ctrl.timeline.copySuccess();"
                           on-error="$ctrl.timeline.copyFail(err)">
-                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                        <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
+                        <strong>{{ GroupData.timestampDuration | timestampInDecimalHours }}</strong>
+                    </span>
                 </div>
             </div>
 
