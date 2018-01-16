@@ -39,7 +39,7 @@ angular.module("cycloneApp")
             $ctrl.dayVisualizeProjectTotals = [];
 
             $ctrl.refDayVisArray.$watch(function(event) {
-              var secondsOfOneHour = 60 * 60;
+              var milisecondsOfOneHour = 60 * 60 * 1000;
 
               // Get the time types
               $scope.types = timeTypesService.getTimeTypes();
@@ -67,7 +67,7 @@ angular.module("cycloneApp")
                 var index = $ctrl.refDayVisArray.$indexFor(data.$id);
                 // Add some none DB values (use _)
                 // The width is defined as a flex-grow unit, which represents the amount of "hour" in decimal
-                var width = data.timestampDuration / 1000 / secondsOfOneHour;
+                var width = data.timestampDuration / milisecondsOfOneHour;
                 $ctrl.refDayVisArray[index]._color = projectsColor[projectName]; // load the projects color
                 $ctrl.refDayVisArray[index]._width = width;
 
@@ -116,7 +116,7 @@ angular.module("cycloneApp")
                   timeTypeVisualisation["_color"]   = $scope.types[timeType].color;
                   timeTypeVisualisation["_icon"]   = $scope.types[timeType].icon;
                   timeTypeVisualisation["duration"] = $scope.types[timeType].timeSum;
-                  timeTypeVisualisation["_width"]   = $scope.types[timeType].timeSum / 1000 / secondsOfOneHour;
+                  timeTypeVisualisation["_width"]   = $scope.types[timeType].timeSum / milisecondsOfOneHour;
                   timeTypeVisualisation["_order"]   = $scope.types[timeType].order;
 
                   // Why push it when we can directly set on the order id:
@@ -140,7 +140,7 @@ angular.module("cycloneApp")
                     projectVisualisation["type"]     = timeType;
                     projectVisualisation["_color"]   = projectsColor[projectName]; // load the projects color
                     projectVisualisation["duration"] = projects[projectName].sums[timeType];
-                    projectVisualisation["_width"]   = projectVisualisation["duration"] / 1000 / secondsOfOneHour;
+                    projectVisualisation["_width"]   = projectVisualisation["duration"] / milisecondsOfOneHour;
 
                     $ctrl.dayVisualizeProjectTotals.push(projectVisualisation);
                 }
