@@ -68,8 +68,8 @@ angular.module('cycloneApp').component('dateSwitcher', {
 
             // Call it again tomorrow (0:00) - calculated with miliseconds difference to now.
             var milisecondsUntilTomorrow = nextDate.startOf('day').diff(moment(), 'miliseconds'); // The difference from now until next day
-            log.error("milisecondsUntilTomorrow:");
-            log.error(milisecondsUntilTomorrow);
+            log.debug("milisecondsUntilTomorrow:");
+            log.debug(milisecondsUntilTomorrow);
             if (milisecondsUntilTomorrow > 0){
                 dateSwitcherTimer = $timeout(checkTime, milisecondsUntilTomorrow, true);
             }
