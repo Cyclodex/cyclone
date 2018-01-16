@@ -13,7 +13,7 @@ angular.module('cycloneApp').component('dateSwitcher', {
         var nextDate = currentDate.clone();
 
         // PREV
-        prevDate = prevDate.subtract(1, 'days');
+        prevDate.subtract(1, 'days');
         ctrl.prevDateLink = {
             "year": prevDate.year(),
             "month": prevDate.format('MM'),
@@ -21,7 +21,7 @@ angular.module('cycloneApp').component('dateSwitcher', {
         };
 
         // NEXT (but not for the future)
-        nextDate = nextDate.add(1, 'days');
+        nextDate.add(1, 'days');
         if (nextDate.isSameOrBefore(today, 'day')) {
             ctrl.nextDateLink = {
                 "year": nextDate.year(),
@@ -61,15 +61,18 @@ angular.module('cycloneApp').component('dateSwitcher', {
                     log.debug(ctrl.currentDayVisited);
                 } else {
                     // Not on today, so no auto switch initialization
-                    // console.log('Initializing: -');
+                    log.log('Not on today, not initializing day jump!');
                     ctrl.currentDayVisited = false;
                 }
             }
 
-            // Call it over and over again, every 10min ( 1000ms * 60 (=1min) * 10 = 600000(=10min) )
-            // TODO: for testing its set to 1min for now (60000):
-            // TODO: Maybe we can calculate how long it goes to the end of the day, and iterate only then :)
-            dateSwitcherTimer = $timeout(checkTime, 60000, true);
+            // Call it again tomorrow (0:00) - calculated with miliseconds difference to now.
+            var milisecondsUntilTomorrow = nextDate.startOf('day').diff(moment(), 'miliseconds'); // The difference from now until next day
+            log.error("milisecondsUntilTomorrow:");
+            log.error(milisecondsUntilTomorrow);
+            if (milisecondsUntilTomorrow > 0){
+                dateSwitcherTimer = $timeout(checkTime, milisecondsUntilTomorrow, true);
+            }
         };
 
         var dateSwitcherTimer = $timeout(checkTime, 0, true);
