@@ -19,8 +19,8 @@ angular
                 url: "/task/{year:int}/{month:int}/{day:int}",
                 parent: 'app', // Make a new parent to have the addTime component stable there
                 views: {
-                    nav: {
-                        component: "nav",
+                    navigation: {
+                        component: "navigation",
                     },
                     header: {
                         component: "addTime"

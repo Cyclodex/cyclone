@@ -106,6 +106,8 @@ require('./components/project/projects-crud/projects-crud.controller');
 
 //Profile
 require('./components/profile/profile.module');
+require('./components/profile/profile.component');
+require('./components/profile/profile.controller');
 require('./components/profile/profile.service');
 require('./components/profile/profile-crud/profile-crud.component');
 require('./components/profile/profile-crud/profile-crud.controller');

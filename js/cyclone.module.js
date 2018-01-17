@@ -72,8 +72,8 @@ angular.module("cycloneApp").config(function($mdThemingProvider, $stateProvider,
             url: "/welcome",
             parent: 'app',
             views: {
-                nav: {
-                    component: "nav",
+                navigation: {
+                    component: "navigation",
                 },
                 content: {
                     component: 'welcome'

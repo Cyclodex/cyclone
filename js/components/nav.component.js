@@ -1,4 +1,4 @@
-angular.module('cycloneApp').component('nav', {
+angular.module('cycloneApp').component('navigation', {
     template: require('./nav.tpl.html'),
     bindings: {
         user: '<'

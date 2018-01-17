@@ -16,8 +16,8 @@ angular
                 url: "/time/{year:int}/{month:int}/{day:int}",
                 parent: 'app',
                 views: {
-                    nav: {
-                        component: "nav",
+                    navigation: {
+                        component: "navigation",
                     },
                     header: {
                         component: "addTime"
