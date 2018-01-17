@@ -12,10 +12,10 @@ angular
     .config(function ($stateProvider) {
         $stateProvider
             .state('profile-crud', {
-                parent: 'app',
-                url: '/profile-crud',
+                parent: 'profile',
+                url: '/:group',
                 views: {
-                    'content@app': {
+                    '': {
                         component: 'profileCrud'
                     }
                 },

@@ -1,26 +1,23 @@
-<h1><md-icon>account_circle</md-icon> Profile</h1>
-<br>
-<h2>Settings</h2>
-<md-button
-        class=""
-        ui-sref="projects-crud"
-        ui-sref-active="md-active">
-  <md-icon>bookmark_border</md-icon>
-  <div>Project defaults</div>
-</md-button>
-<h2>Features</h2>
-<h3>Action buttons</h3>
-<div class="profile profile--crud">
-  <profile-detail
-    ng-repeat="feature in $ctrl.features"
-    feature="feature"
-    on-update="$ctrl.updateFeature($event)">
-  </profile-detail>
+<div>
+  {{$ctrl.currentNavItem}}
+  <md-content class="md-padding">
+    <div class="profile profile--crud">
+      <md-toolbar class="md-warn">
+        <strong>currentNavItem: {{ $ctrl.currentNavItem }}</strong>
+        TODO: Filter the features according to the $ctrl.currentNavItem
+      </md-toolbar>
+      <profile-detail
+        ng-repeat="feature in $ctrl.features"
+        feature="feature"
+        on-update="$ctrl.updateFeature($event)">
+      </profile-detail>
+    </div>
+  </md-content>
   <div
-    class="profile__empty"
-    ng-if="!$ctrl.features">
-    <i class="material-icons">face</i>
-    There's nothing yet here...
-  </div>
-  <ui-view></ui-view>
+        class="profile__empty"
+        ng-if="!$ctrl.features">
+        <i class="material-icons">face</i>
+        There's nothing yet here...
+      </div>
+      <ui-view></ui-view>
 </div>

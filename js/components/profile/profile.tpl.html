@@ -1,0 +1,10 @@
+<h1><md-icon>account_circle</md-icon> Profile</h1>
+<br>
+<md-nav-bar md-selected-nav-item="$ctrl.currentNavItem" nav-bar-aria-label="navigation links">
+    <md-nav-item md-nav-sref="profile" name="profile">Profile</md-nav-item>
+    <md-nav-item md-nav-sref="profile-crud({group: 'action-buttons'})" name="action-buttons">Action-buttons</md-nav-item>
+    <md-nav-item md-nav-sref="profile-crud({group: 'timeformat'})" name="timeformat">Time format</md-nav-item>
+    <md-nav-item md-nav-sref="projects-crud" name="projects">Projects</md-nav-item>
+</md-nav-bar>
+
+<ui-view><h3>Maybe we show some user info here ?</h3></ui-view>
