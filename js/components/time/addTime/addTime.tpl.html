@@ -1,11 +1,9 @@
 <div class="cyclone-toolbar add-time" ng-show="$ctrl.showAddTime" ng-if="$ctrl.doneLoading">
     <md-card ng-if="$ctrl.entries.length === 0">
-        <div class="md-headline">
-            <span>Define the time you started today</span>
-        </div>
-        <form ng-submit="$ctrl.addStartingTheDay()">
+        <form ng-submit="$ctrl.addStartingTheDay()"
+              class="add-time__form add-time__form--starting-the-day">
             <label for="startTimes">Select start time</label>
-            <md-input-container class="">
+            <md-input-container class="start-time">
                 <md-select  id="startTimes"
                             ng-model="$ctrl.selectedStartTime"
                             aria-label="Detected start times">
@@ -38,85 +36,108 @@
     </md-card>
 
     <md-card ng-if="$ctrl.entries.length > 0">
-        <div class="md-headline">
-            <div ng-if="!$ctrl.newEntryManualTime.value">
-                <span>What have you done in the last</span>
-                <em>{{ $ctrl.currentDuration | humanizeDate }}</em>
-            </div>
-            <div ng-if="$ctrl.newEntryManualTime.value">
-                <span>What have you done until {{$ctrl.newEntryManualTime.value | date : "H:mm"}}</span>
-            </div>
-        </div>
+        
         <form ng-submit="$ctrl.addEntry()"
-              layout="row"
-              layout-wrap
+              layout-nowrap
+              layout="column" layout-gt-sm="row"
               name="addEntryForm"
               class="add-time__form">
-            <autocomplete-project
-                flex="50"
-                flex-gt-sm="20"
-                ng-blur="$ctrl.onBlur($event)"
-                on-update="$ctrl.updateProject($event)"
-                project="$ctrl.currentTask.newEntryProject"
-                set-focus="$ctrl.setFocus"
-            >
-            </autocomplete-project>
 
-            <md-input-container
+            <div layout="row" layout-wrap flex="auto">
+                <div
+                    layout="row"
+                    layout-align="start center"
+                    flex-xs="100"
+                    flex-sm="100"
+                    flex-gt-sm="none"
+                    class="add-time__form--intro">
+                    <div>Track </div>
+                </div>
+                <autocomplete-project
                     flex="50"
-                    flex-gt-sm="20">
-                <input id="newTaskName"
-                       type="text"
-                       ng-model="$ctrl.currentTask.newEntryTask"
-                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
-                       aria-label="Task">
-                <label for="newTaskName">Task / Issue</label>
-            </md-input-container>
+                    flex-gt-sm="25"
+                    ng-blur="$ctrl.onBlur($event)"
+                    on-update="$ctrl.updateProject($event)"
+                    project="$ctrl.currentTask.newEntryProject"
+                    set-focus="$ctrl.setFocus"
+                >
+                </autocomplete-project>
 
-            <md-input-container
-                    flex="50"
-                    flex-gt-sm="20">
-                <input id="newTaskText"
-                       type="text"
-                       ng-model="$ctrl.currentTask.newEntryText"
-                       ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
-                       aria-label="Description text of new task">
-                <label for="newTaskText">Description</label>
-            </md-input-container>
+                <md-input-container
+                        flex="50"
+                        flex-gt-sm="25">
+                    <input id="newTaskName"
+                        type="text"
+                        ng-model="$ctrl.currentTask.newEntryTask"
+                        ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
+                        aria-label="Task">
+                    <label for="newTaskName">Task / Issue</label>
+                </md-input-container>
 
-            <md-input-container class="entry__info__select entry__info__select--type">
-                <label>Type</label>
-                <md-select id="newTaskType"
-                           ng-model="$ctrl.currentTask.newEntryType"
-                           ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
-                           aria-label="Type of entry"
-                           ng-keydown="$event.which === 13 && addEntry()">
-                    <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
-                        <span style="display: none">{{type.name}}</span><md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
-                    </md-option>
-                </md-select>
-            </md-input-container>
+                <md-input-container
+                        flex="50"
+                        flex-gt-sm="25">
+                    <input id="newTaskText"
+                        type="text"
+                        ng-model="$ctrl.currentTask.newEntryText"
+                        ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
+                        aria-label="Description text of new task">
+                    <label for="newTaskText">Description</label>
+                </md-input-container>
 
-            <md-input-container
-                    flex="auto"
-                    class="add-time__form__time">
-                <input type="time"
-                       id="newTaskManualTime"
-                       name="input"
-                       ng-model="$ctrl.newEntryManualTime.value"
-                       ng-change="$ctrl.timeUpdate($ctrl.newEntryManualTime)"
-                       placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
-                <label for="newTaskManualTime">Manual end time</label>
-            </md-input-container>
-            <div flex="nogrow"
-                 class="add-time__form__submit">
-                <a class="add-button"
-                   ng-click="$ctrl.addEntry()">
-                    <md-button class="md-fab md-accent" aria-label="Add Entry">
-                        <md-icon>add</md-icon>
-                    </md-button>
-                </a>
+                <md-input-container class="entry__info__select entry__info__select--type"
+                flex="none">
+                    <label>Type</label>
+                    <md-select id="newTaskType"
+                            ng-model="$ctrl.currentTask.newEntryType"
+                            ng-change="$ctrl.currentTask.$save($ctrl.currentTask)"
+                            aria-label="Type of entry"
+                            ng-keydown="$event.which === 13 && addEntry()">
+                        <md-option ng-repeat="type in $ctrl.timeTypesService" ng-value="type.value">
+                            <span style="display: none">{{type.name}}</span><md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container
+                        flex="none"
+                        class="add-time__form__time">
+                    <input type="time"
+                        id="newTaskManualTime"
+                        name="input"
+                        ng-model="$ctrl.newEntryManualTime.value"
+                        ng-change="$ctrl.timeUpdate($ctrl.newEntryManualTime)"
+                        placeholder="HH:mm" min="00:00:00" max="24:00:00"/>
+                    <label for="newTaskManualTime">Manual end time</label>
+                </md-input-container>
+                
+                <div flex="nogrow"
+                    class="add-time__form__submit">
+                    <a class="add-button"
+                    ng-click="$ctrl.addEntry()">
+                        <md-button class="md-fab md-accent" aria-label="Add Entry">
+                            <md-icon>add</md-icon>
+                        </md-button>
+                    </a>
+                </div>
             </div>
+            <div
+                flex="none"
+                class="add-time__form--time-info"
+                layout="row"
+                layout-align-gt-sm="start center"
+                layout-align="center center"
+                >
+                <div flex="nogrow">
+                    <div ng-if="!$ctrl.newEntryManualTime.value">
+                        <em>for the last {{ $ctrl.currentDuration | humanizeDate }}</em>
+                    </div>
+                    <div ng-if="$ctrl.newEntryManualTime.value">
+                        <span>until {{$ctrl.newEntryManualTime.value | date : "H:mm"}}</span>
+                    </div>
+                </div>
+            </div>
+
 
             <button type="submit" class="submitbutton hide">Submit</button>
         </form>

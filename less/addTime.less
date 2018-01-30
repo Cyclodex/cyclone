@@ -1,14 +1,52 @@
 .add-time {
     .add-time__form {
         min-width: 100px;
+        margin: 0 auto;
+        width: 100%;
+        @media @gt-md {
+            max-width: 80%;
+        }
+
+        .layout-row {
+            @media @gt-xs {
+                flex-wrap: nowrap;
+            }
+        }
     }
 
     .add-time__form__time {
         max-width: 120px;
+        label {
+            transform: translate3d(0,16px,0) scale(.75) !important;
+            white-space: normal !important;
+        }
     }
+
+    // The "+" add button
     .add-time__form__submit {
-        position: relative;
         width: 70px;
         max-width: 70px;
+        position: absolute;
+        right: 50px;
+        bottom: -35px;
+        @media @gt-sm {
+            position: relative;
+            right: 0;
+        }
+    }
+
+    .add-time__form--intro {
+        width: 80px;
+    }
+
+    .add-time__form--intro,
+    .add-time__form--time-info {
+        font-size: 1.4rem;
+    }
+
+    // Position the autocomplete so it does not influence size of the header
+    md-autocomplete-wrap {
+        position: absolute;
+        width: 100%;
     }
 }

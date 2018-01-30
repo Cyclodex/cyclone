@@ -168,7 +168,7 @@
 
 .cyclone-table {
     position: relative;
-    padding: 20px 0;
+    padding: 0;
 
     &.cyclone-table--grouped {
         max-width: 400px;
@@ -615,14 +615,20 @@ button.dayVisualize-entry--extend.md-button:hover {
 // Overriding the toolbar color, we don't want the primary or accent colors here.
 .cyclone-toolbar {
     position: relative;
-    height: 130px;
+    @media @gt-sm {
+        height: 86px;
+    }
 
     md-card {
         background-color: white !important;
-        position: fixed;
-        top: 0;
-        left: @navigationWidth; // Navigation on the left side
-        right: 0;
+        @media @gt-sm {
+            position: fixed;
+            top: 0;
+            left: @navigationWidth; // Navigation on the left side
+            right: 0;
+            padding-bottom: 0;
+        }
+        
         margin: 0;
         z-index: 2;
         padding: 10px;
@@ -631,9 +637,8 @@ button.dayVisualize-entry--extend.md-button:hover {
 
 .add-button {
     position: absolute;
-    right: 0;
     bottom: 0;
-    transform: translateY(50%);
+    z-index: 1;
 }
 
 .timeline-visual {
@@ -794,4 +799,8 @@ md-input-container {
     .duration--human {
         white-space: nowrap;
     }
+}
+
+.start-time {
+    margin: 0;
 }
