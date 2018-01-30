@@ -36,6 +36,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'copyButton' : {
                     'name': 'Copy Button',
                     'key' : 'copyButton',
+                    'group': 'actions',
                     'default': true,
                     'description': 'Use this project & task for current timer',
                     'icon': 'arrow_upward'
@@ -43,6 +44,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'attachButton' : {
                     'name': 'Direct attach',
                     'key' : 'attachButton',
+                    'group': 'actions',
                     'default': false,
                     'description': 'Directly track current timer into this task',
                     'icon': 'playlist_add'
@@ -51,6 +53,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'continueButton' : {
                     'name': 'Continue Button',
                     'key' : 'continueButton',
+                    'group': 'actions',
                     'default': false,
                     'description': 'Track current timer and continue on this task',
                     'icon': 'play_arrow'
@@ -59,6 +62,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'showWorkTypeStats' : {
                     'name': 'Stats of work type',
                     'key' : 'showWorkTypeStats',
+                    'group': 'stats',
                     'default': false,
                     'description': 'Shows daily type allocation',
                     'beta': true // Makes it not visible
@@ -67,6 +71,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'timeFormat' : {
                     'name': 'Timeformat',
                     'key' : 'timeFormat',
+                    'group': 'time',
                     'type': 'radio',
                     'default': 'hShort+dec',
                     'options': {

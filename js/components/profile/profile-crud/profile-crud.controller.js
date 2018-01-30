@@ -3,8 +3,7 @@ function ProfileCrudController($stateParams, ProfileService, cfpLoadingBar) {
     var features = ctrl.features;
 
     ctrl.$onInit = function () {
-        ctrl.currentNavItem = 'action-buttons';
-        console.log($stateParams);
+        ctrl.currentNavItem = 'actions';
         if ($stateParams.group){
             ctrl.currentNavItem = $stateParams.group;
         }

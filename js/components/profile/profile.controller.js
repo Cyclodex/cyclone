@@ -1,7 +1,10 @@
-function ProfileController() {
+function ProfileController($stateParams) {
     var ctrl = this;
     ctrl.$onInit = function () {
-        ctrl.currentNavItem = 'profile';
+        ctrl.currentNavItem = 'actions';
+        if ($stateParams.group){
+            ctrl.currentNavItem = $stateParams.group;
+        }
     };
 }
 
