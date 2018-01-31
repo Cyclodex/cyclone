@@ -6,8 +6,12 @@
 <md-nav-bar md-selected-nav-item="$ctrl.currentNavItem" nav-bar-aria-label="navigation links">
     <md-nav-item md-nav-sref="profile-crud({group: 'actions'})" name="actions">Action-buttons</md-nav-item>
     <md-nav-item md-nav-sref="profile-crud({group: 'time'})" name="time">Time format</md-nav-item>
-    <md-nav-item md-nav-sref="projects-crud" name="projects">Projects</md-nav-item>
-    <md-nav-item md-nav-sref="profile" name="profile">Profile</md-nav-item>
+    <md-nav-item md-nav-sref="projects" name="projects">Projects</md-nav-item>
+    <md-nav-item class="hide" md-nav-sref="profile" name="profile">Profile</md-nav-item>
 </md-nav-bar>
 
-<ui-view><h3>Maybe we show some user info here ?</h3></ui-view>
+<md-card class="profile-content md-padding">
+    <ui-view>
+            <h3>Maybe we show some user info here at some point...</h3>
+    </ui-view>
+</md-card>

@@ -7,7 +7,6 @@ function ProfileCrudController($stateParams, ProfileService, cfpLoadingBar) {
         if ($stateParams.group){
             ctrl.currentNavItem = $stateParams.group;
         }
-        console.log(ctrl.currentNavItem);
     };
 
 

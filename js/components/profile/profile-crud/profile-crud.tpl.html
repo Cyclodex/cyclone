@@ -1,18 +1,13 @@
-<div>
-  <md-content class="md-padding">
-    <div class="profile profile--crud">
-      <profile-detail
-        ng-repeat="feature in $ctrl.features | filterGroup:$ctrl.currentNavItem"
-        feature="feature"
-        on-update="$ctrl.updateFeature($event)">
-      </profile-detail>
-    </div>
-  </md-content>
-  <div
-        class="profile__empty"
-        ng-if="!$ctrl.features">
-        <i class="material-icons">face</i>
-        There's nothing yet here...
-      </div>
-      <ui-view></ui-view>
+<div class="profile profile--crud">
+  <profile-detail
+    ng-repeat="feature in $ctrl.features | filterGroup:$ctrl.currentNavItem"
+    feature="feature"
+    on-update="$ctrl.updateFeature($event)"
+    class="profile-detail">
+  </profile-detail>
+  <div class="profile__empty" ng-if="!$ctrl.features">
+    <i class="material-icons">face</i>
+    There's nothing yet here...
+  </div>
+  <ui-view></ui-view>
 </div>
