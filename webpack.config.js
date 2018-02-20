@@ -9,7 +9,7 @@
  */
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = {
@@ -37,17 +37,21 @@ module.exports = {
         rules: [
             {
                 test: /\.less$/,
-                use: [{
-                    loader: "style-loader"
-                }, {
-                    loader: "css-loader", options: {
-                        sourceMap: true
-                    }
-                }, {
-                    loader: "less-loader", options: {
-                        sourceMap: true
-                    }
-                }]
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            minimize: false
+                        }
+                    }, {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }],
+                })
             },
             {
                 test: /\.tpl\.html$/,
@@ -59,12 +63,12 @@ module.exports = {
             }
         ]
     },
-    devtool: 'inline-source-map',
+    devtool: 'source-map', // cheap-module-source-map // inline-source-map
     plugins: [
         new CopyWebpackPlugin([
             { from: 'src', to: __dirname + '/public/' },
         ]),
-        // // new ExtractTextPlugin("cyclone.css"),
+        new ExtractTextPlugin("cyclone.css"),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
         new BrowserSyncPlugin({
             host: 'localhost',
