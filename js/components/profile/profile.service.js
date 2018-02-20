@@ -82,6 +82,25 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                         'hLong+dec': '0 hours 0 minutes | 0,00',
                     },
                     'description': 'Timeformat of displayed durations',
+                },
+                // Copy
+                'copyFormat' : {
+                    'name': 'Copyformat',
+                    'key' : 'copyFormat',
+                    'group': 'copy',
+                    'type': 'radio',
+                    'default': 'dec',
+                    'options': {
+                        'disabled': 'Disable copy feature',
+                        'timeformat': 'Use the displayed time format',
+                        'dec': '0,00',
+                        'hShort': '0h 00m',
+                        'hLong': '0 hours 0 minutes',
+                        'project': 'Project',
+                        'task': 'Task',
+                        'description': 'Description',
+                    },
+                    'description': 'What should be copied when you check a task as tracked (checkbox)',
                 }
             }
         };
