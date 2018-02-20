@@ -2,9 +2,10 @@
 
 ## 1.0.0-beta4 - 20.02.2018 - Timeformat configurable
 
-* New user profile with more features to configure
+* New feature: Starting the day time entry with suggestions
 * New feature: Timeformat configurable
 * New feature: Copyformat configurable
+* New user profile page
 
 ## 1.0.0-beta3 - 15.01.2018 - Keyboard improvements
 

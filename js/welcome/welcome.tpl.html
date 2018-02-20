@@ -4,13 +4,26 @@
      layout-padding>
     <div flex="100"
          flex-gt-md="80">
-        <h1>Welcome to Cyclone</h1>
-        <p>Please use the navigation to proceed to the <b>time</b> or <b>task</b> view of <b>TODAY</b>.<br>
-            We need to to find a more stable way for the automatic redirection.<br>
-            <br>
-            Visit your <b>profile</b>, to set some features you want to use. Or just enjoy the defaults.
-            <br>
-            Have fun and thanks, Cyclo
+        <h1>Welcome to Cyclone beta4</h1>
+        <p>Improvements:
+            <ul>
+                <li>
+                    Cyclone will now try to detect when a new day starts. It will <b>automatically switch to the new day</b>.<br>
+                    This will only happen if you left Cyclone on the current day.
+                </li>
+                <li>
+                    Once on a new day, Cyclone will <b>ask you</b> when you <b>started the day</b> and might have some suggestions. (whenever it detects)
+                </li>
+                <li>
+                    <a ui-sref="profile-crud({group: 'time'})"><b>Timeformat:</b></a> can now be changed to other formats.
+                </li>
+                <li>
+                    <a ui-sref="profile-crud({group: 'copy'})"><b>Copy format:</b></a> The copied time when marking an entry as done is now also configurable.
+                </li>
+            </ul>
+            Visit your <a ui-sref="profile-crud({group: 'actions'})"><b>profile</b></a>, to set your own settings for the available features. Or just enjoy the defaults.
+            <br><br>
+            Have a great day using Cyclone - your Fäbu | Fabian Gander
         </p>
     </div>
 </div>
