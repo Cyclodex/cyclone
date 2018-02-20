@@ -1,12 +1,13 @@
-function TimeTaskController($q, AddTimeService, clipboard) {
+function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileService) {
     var ctrl = this;
+    var features = ProfileService.getFeatureStates();
 
     // ng-change can't get $event! We need workaround with focusCallback
     ctrl.clipboardCopy = function (GroupData) {
-        // TODO: make helper?!
-        var duration = ( GroupData.durationNotChecked / 1000 / 60 / 60 ).toFixed(2);
-        // TODO-feature: only if enabled ?
+        // Filter the duration to the wanted format
+        duration = $filter('getCopy')(features, GroupData);
         clipboard.copyText(duration);
+        
         // Save the state of the checkbox
         ctrl.updateGroupStatus(GroupData, GroupData.checkedState);
         // Focus the field again, otherwise you can't navigate further with keyboard

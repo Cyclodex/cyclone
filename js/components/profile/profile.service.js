@@ -36,6 +36,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'copyButton' : {
                     'name': 'Copy Button',
                     'key' : 'copyButton',
+                    'group': 'actions',
                     'default': true,
                     'description': 'Use this project & task for current timer',
                     'icon': 'arrow_upward'
@@ -43,6 +44,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'attachButton' : {
                     'name': 'Direct attach',
                     'key' : 'attachButton',
+                    'group': 'actions',
                     'default': false,
                     'description': 'Directly track current timer into this task',
                     'icon': 'playlist_add'
@@ -51,6 +53,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'continueButton' : {
                     'name': 'Continue Button',
                     'key' : 'continueButton',
+                    'group': 'actions',
                     'default': false,
                     'description': 'Track current timer and continue on this task',
                     'icon': 'play_arrow'
@@ -59,20 +62,68 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'showWorkTypeStats' : {
                     'name': 'Stats of work type',
                     'key' : 'showWorkTypeStats',
+                    'group': 'stats',
                     'default': false,
                     'description': 'Shows daily type allocation',
                     'beta': true // Makes it not visible
+                },
+                // Time
+                'timeFormat' : {
+                    'name': 'Timeformat',
+                    'key' : 'timeFormat',
+                    'group': 'time',
+                    'type': 'radio',
+                    'default': 'hShort+dec',
+                    'options': {
+                        'dec': '0,00',
+                        'hShort': '0h 00m',
+                        'hShort+dec': '0h 00m | 0,00',
+                        'hLong': '0 hours 0 minutes',
+                        'hLong+dec': '0 hours 0 minutes | 0,00',
+                    },
+                    'description': 'Timeformat of displayed durations',
+                },
+                // Copy
+                'copyFormat' : {
+                    'name': 'Copyformat',
+                    'key' : 'copyFormat',
+                    'group': 'copy',
+                    'type': 'radio',
+                    'default': 'dec',
+                    'options': {
+                        'disabled': 'Disable copy feature',
+                        'timeformat': 'Use the displayed time format',
+                        'dec': '0,00',
+                        'hShort': '0h 00m',
+                        'hLong': '0 hours 0 minutes',
+                        'project': 'Project',
+                        'task': 'Task',
+                        'description': 'Description',
+                    },
+                    'description': 'What should be copied when you check a task as tracked (checkbox)',
                 }
             }
         };
 
-    // State of features for current user
+    // Status and preferences of features for the current user
+    // TODO: This is loaded 3 times now, we should make this different, so it only loads once.
     service.getFeatureStates = function (){
         var featureStates = service.getFeatures();
         var featureSettings = $firebaseObject(refFeatures);
         featureSettings.$loaded().then(function(){
             for (var feature in featureStates) {
-                featureStates[feature].enabled = !!featureSettings[feature];
+                var featureValue = featureSettings[feature];
+                if ( typeof(featureValue) === 'boolean'){
+                    // Boolean sets enabled state
+                    featureStates[feature].enabled = !!featureSettings[feature];
+                } else if ( typeof(featureValue) === 'string') {
+                    // String sets the value
+                    featureStates[feature].value = featureSettings[feature];
+                } else {
+                    console.warn("Feature " + featureStates[feature].name + ": No user settings found, using defaults");
+                    featureStates[feature].value = featureStates[feature].default;
+                    featureStates[feature].enabled = !!featureStates[feature].default;
+                }
             }
         });
         return featureStates;

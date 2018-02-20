@@ -15,11 +15,11 @@ angular
                     requiredAuth: true
                 },
                 views: {
+                    'navigation@app': {
+                        component: 'navigation'
+                    },
                     '@': {
                         component: 'app'
-                    },
-                    'nav@app': {
-                        component: 'nav'
                     }
                 }
         });

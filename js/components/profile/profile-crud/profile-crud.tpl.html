@@ -1,23 +1,11 @@
-<h1><md-icon>account_circle</md-icon> Profile</h1>
-<br>
-<h2>Settings</h2>
-<md-button
-        class=""
-        ui-sref="projects-crud"
-        ui-sref-active="md-active">
-  <md-icon>bookmark_border</md-icon>
-  <div>Project defaults</div>
-</md-button>
-<h2>Features</h2>
 <div class="profile profile--crud">
   <profile-detail
-    ng-repeat="feature in $ctrl.features"
+    ng-repeat="feature in $ctrl.features | filterGroup:$ctrl.currentNavItem"
     feature="feature"
-    on-update="$ctrl.updateFeature($event)">
+    on-update="$ctrl.updateFeature($event)"
+    class="profile-detail">
   </profile-detail>
-  <div
-    class="profile__empty"
-    ng-if="!$ctrl.features">
+  <div class="profile__empty" ng-if="!$ctrl.features">
     <i class="material-icons">face</i>
     There's nothing yet here...
   </div>

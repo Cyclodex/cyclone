@@ -11,14 +11,14 @@ angular
     .component('projectsCrud', projectsCrud)
     .config(function ($stateProvider) {
         $stateProvider
-            .state('projects-crud', {
-                parent: 'app',
-                url: '/projects-crud',
+            .state('projects', {
+                parent: 'profile',
+                url: '/projects',
                 views: {
-                    'head@projects-crud': {
+                    'head@projects': {
                         component: 'projectNew'
                     },
-                    'content@app': {
+                    '': {
                         component: 'projectsCrud'
                     }
                 },

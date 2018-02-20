@@ -1,8 +1,12 @@
-function ProfileCrudController($state, ProfileService, cfpLoadingBar) {
+function ProfileCrudController($stateParams, ProfileService, cfpLoadingBar) {
     var ctrl = this;
     var features = ctrl.features;
 
     ctrl.$onInit = function () {
+        ctrl.currentNavItem = 'actions';
+        if ($stateParams.group){
+            ctrl.currentNavItem = $stateParams.group;
+        }
     };
 
 

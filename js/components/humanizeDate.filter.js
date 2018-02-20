@@ -37,3 +37,42 @@ angular.module('cycloneApp').filter('humanizeDateShort', ['$filter', 'moment', f
         return duration.format(format);
     };
 }]);
+// Helps to render timestamp into decimal hours (x.xx)
+angular.module('cycloneApp').filter('timestampInDecimalHours', ['$filter', 'moment', function ($filter, moment) {
+    return function (input, units) {
+        var decimal = (input / 1000 / 60 / 60 ).toFixed(2);
+        return decimal;
+    };
+}]);
+// Helps to render a time value in the user selected format (feature)
+angular.module('cycloneApp').filter('timeInUserSelectedFormat', ['$filter', '$log', function ($filter, $log) {
+    var log = $log.getInstance('filter');
+    return function (value, type) {
+        var separator = ' | ';
+        var output = '';
+        //log.warn("Value: [%s], Type: [%s]", value, type)
+        switch(type) {
+            case 'dec':
+                output = $filter('timestampInDecimalHours')(value);
+                break;
+            case 'hShort':
+                output = $filter('humanizeDateShort')(value);
+                break;
+            case 'hShort+dec':
+            default:
+                output = $filter('humanizeDateShort')(value);
+                output += separator;
+                output += $filter('timestampInDecimalHours')(value);
+                break;
+            case 'hLong':
+                output = $filter('humanizeDate')(value);
+                break;
+            case 'hLong+dec':
+                output = $filter('humanizeDate')(value);
+                output += separator;
+                output += $filter('timestampInDecimalHours')(value);
+                break;
+        }
+        return output;
+    };
+}]);

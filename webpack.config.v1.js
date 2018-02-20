@@ -35,10 +35,18 @@ module.exports = {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: [
-                        "css-loader",
-                        "less-loader"
-                    ]
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            minimize: true
+                        }
+                    }, {
+                        loader: 'less-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    }],
                 })
             },
             {
@@ -50,7 +58,7 @@ module.exports = {
             }
         ]
     },
-    devtool: 'cheap-module-source-map',
+    devtool: 'cheap-module-source-map', // inline-source-map
     plugins: [
         new CleanWebpackPlugin(__dirname + '/public/'),
         new BundleAnalyzerPlugin({

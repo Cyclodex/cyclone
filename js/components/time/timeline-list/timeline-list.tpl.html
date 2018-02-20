@@ -108,15 +108,16 @@
             <!-- Time output-->
             <div class="entry__time-information" layout="row" layout-align="center center">
                 <div class="duration">
-                    <span class="duration--human">{{ GroupData.timestampDuration | humanizeDate  }}</span>
-                    <span>&nbsp;|&nbsp;</span>
-                    <span class="duration duration--decimal"
+                    <span class="duration duration--human duration--decimal"
                           clipboard
-                          text="GroupData.timestampDuration / 1000 / 60 / 60 | number : 2"
+                          text="GroupData.timestampDuration | timeInUserSelectedFormat : $ctrl.features.timeFormat.value "
                           on-copied="$ctrl.timeline.copySuccess();"
                           on-error="$ctrl.timeline.copyFail(err)">
-                        <!-- timediff / miliseconds (1000) / minutes(60) / calculate decimal hours (60) -->
-                        <strong>{{ GroupData.timestampDuration / 1000 / 60 / 60 | number : 2 }}</strong> h</span>
+                        <md-tooltip md-direction="bottom">
+                            Copy time
+                        </md-tooltip>
+                        <strong>{{ GroupData.timestampDuration | timeInUserSelectedFormat : $ctrl.features.timeFormat.value  }}</strong>
+                    </span>
                 </div>
             </div>
 
