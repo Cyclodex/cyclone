@@ -354,9 +354,6 @@ md-radio-button {
 }
 
 .stats-totals {
-    padding: 0 10px;
-    color: grey;
-
     .day-visualize {
         width: 100%;
     }
@@ -409,8 +406,9 @@ md-radio-button {
     .dayVisualize-entry {
         display: inline-block;
         margin: 1px;
-        height: 20px;
-        min-height: 50px;
+        height: 25px;
+        min-height: auto;
+        line-height: normal;
         min-width: 50px;
         color: black;
         overflow: visible;
@@ -431,6 +429,7 @@ md-radio-button {
 }
 
 .dayVisualize-entry-content {
+    display: inline-block;
     line-height: 1rem;
 
     &.dayVisualize-entry-content--project {

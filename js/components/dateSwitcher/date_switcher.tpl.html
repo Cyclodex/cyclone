@@ -1,4 +1,4 @@
-<div class="date-switcher" md-colors="{background:'primary'}">
+<div class="date-switcher">
     <a data-ui-state="$ctrl.pageType" data-ui-state-params="{'year': $ctrl.prevDateLink.year, 'month': $ctrl.prevDateLink.month, 'day': $ctrl.prevDateLink.day}"><md-icon>keyboard_arrow_left</md-icon></a>
     <span class="inline">{{ $ctrl.currentDate | date : "EEE d. MMM yyyy" }}</span>
     <a ng-if="$ctrl.nextDateLink" data-ui-state="$ctrl.pageType" data-ui-state-params="{'year': $ctrl.nextDateLink.year, 'month': $ctrl.nextDateLink.month, 'day': $ctrl.nextDateLink.day}"><md-icon>keyboard_arrow_right</md-icon></a>

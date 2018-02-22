@@ -1,5 +1,8 @@
 <!-- TODO: This would be rather its own component, but needs all the stats data in a service or similar -->
-<stats-total work-total="$ctrl.statsTotalWork" flex="none"></stats-total>
+<div class="cyclone-table-header" md-colors="{background:'primary'}" layout="row">
+    <date-switcher flex="40"></date-switcher>
+    <stats-total work-total="$ctrl.statsTotalWork" flex="auto" layout="row" layout-align="start center"></stats-total>
+</div>
 <div>
     <!--ng-if="$ctrl.features.showWorkTypeStats.enabled"-->
     <stats-types work-types="$ctrl.dayVisualizeWorkTypeTotals"></stats-types>
