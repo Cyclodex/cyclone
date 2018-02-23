@@ -4,9 +4,12 @@ function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileServi
 
     // ng-change can't get $event! We need workaround with focusCallback
     ctrl.clipboardCopy = function (GroupData) {
-        // Filter the duration to the wanted format
-        duration = $filter('getCopy')(features, GroupData);
-        clipboard.copyText(duration);
+        // Don't copy anything if all tasks are checked
+        if (GroupData.amountNotChecked !== 0){
+            // Filter the duration to the wanted format
+            duration = $filter('getCopy')(features, GroupData);
+            clipboard.copyText(duration);
+        }
         
         // Save the state of the checkbox
         ctrl.updateGroupStatus(GroupData, GroupData.checkedState);

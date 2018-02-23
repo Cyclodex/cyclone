@@ -12,13 +12,15 @@ angular.module('components.profile').filter('filterGroup', function() {
 });
 // Helps to render a time value in the user selected format (feature)
 angular.module('components.profile').filter('getCopy', ['$filter', '$log', function ($filter, $log) {
-    var log = $log.getInstance('filter');
+    //var log = $log.getInstance('filter');
     //log.error(features.copyFormat.value);
     
     return function (features, data) {
         var separator = ' | ';
         var output = '';
         var type = features.copyFormat.value || '';
+        // Get the timestamp from the time or task definition:
+        var timestamp = data.timestampDuration || data.durationNotChecked || '';
         
         // Precheck if type needs to be redefined first
         if (type === 'timeformat') {
@@ -36,7 +38,7 @@ angular.module('components.profile').filter('getCopy', ['$filter', '$log', funct
             case 'hLong':
             case 'hLong+dec':
                 // Filter the duration to the wanted format
-                output = $filter('timeInUserSelectedFormat')(data.timestampDuration, type);
+                output = $filter('timeInUserSelectedFormat')(timestamp, type);
                 break;
             case 'project':
                 output = data.project;

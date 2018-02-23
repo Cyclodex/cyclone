@@ -26,10 +26,10 @@ angular.module('cycloneApp').filter('humanizeDateShort', ['$filter', 'moment', f
             format = "";
 
         // Show hours
-        if(duration.hour() > 0){ format += "H[h] "; }
+        if(duration.hour() > 0){ format += "H[h]"; }
 
         // Show minutes
-        if(duration.minute() > 0){ format += "m[m] "; }
+        if(duration.minute() > 0){ format += " m[m]"; }
 
         // Only if smaller than a minute, we show seconds
         if(duration.hour() === 0 && duration.minute() === 0){ format += "s[s]"; }
@@ -46,7 +46,7 @@ angular.module('cycloneApp').filter('timestampInDecimalHours', ['$filter', 'mome
 }]);
 // Helps to render a time value in the user selected format (feature)
 angular.module('cycloneApp').filter('timeInUserSelectedFormat', ['$filter', '$log', function ($filter, $log) {
-    var log = $log.getInstance('filter');
+    //var log = $log.getInstance('filter');
     return function (value, type) {
         var separator = ' | ';
         var output = '';
