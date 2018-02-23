@@ -86,6 +86,7 @@
                            autocomplete="Task"
                            ng-model-options="{updateOn: 'blur'}"
                     />
+                    <span ng-bind-html="GroupData.task | filterLink "></span>
                 </md-input-container>
 
                 <!-- Description -->

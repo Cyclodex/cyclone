@@ -91,6 +91,7 @@ require('./welcome/welcome.component');
 
 // Filters
 require('./filters/type');
+require('./filters/link.filter');
 
 // Project
 require('./components/project/project.module');

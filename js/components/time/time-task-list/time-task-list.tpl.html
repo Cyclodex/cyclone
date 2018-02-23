@@ -82,6 +82,7 @@
                            ng-model-options="{updateOn: 'blur'}"
                     />
                 </md-input-container>
+                <span ng-bind-html="GroupData.task | filterLink "></span>
             </div><!-- END of entry__info -->
 
             <!-- List of slots / elements -->
