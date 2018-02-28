@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.0-beta5 - xx.03.2018 - Link issues
+
+* New feature: Detects links in the Task/Issue field
+* Improved Stats presentation
+
 ## 1.0.0-beta4 - 20.02.2018 - Timeformat configurable
 
 * New feature: Starting the day time entry with suggestions
