@@ -85,9 +85,16 @@
                            placeholder="Task / Issue"
                            autocomplete="Task"
                            ng-model-options="{updateOn: 'blur'}"
+                           ng-focus="showInput = true;"
+                           ng-blur="showInput = false;"
+                           ng-mouseleave="showInput = false;"
                     />
-                    <span ng-bind-html="GroupData.task | filterLink "></span>
+                    <div class="link-presentation" ng-mouseover="showInput = true;" ng-hide="showInput">
+                        <span ng-bind-html="GroupData.task | filterLastWord" class="link-presentation__url-part md-input"></span>
+                    </div>
+                    
                 </md-input-container>
+                <div class="link-presentation__links" ng-bind-html="GroupData.task | createLink "></div>
 
                 <!-- Description -->
                 <md-input-container

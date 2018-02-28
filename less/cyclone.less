@@ -546,6 +546,7 @@ button.dayVisualize-entry--extend.md-button:hover {
 .cyclone-table--tasks {
     .entry__info__input {
         padding: 0;
+        display: flex;
 
         @media @gt-xs {
             margin-right: 20px;
@@ -609,6 +610,7 @@ button.dayVisualize-entry--extend.md-button:hover {
     color: darkgrey;
     font-size: 0.8rem;
     cursor: copy;
+    min-width: 50px;
 }
 
 // Overriding the toolbar color, we don't want the primary or accent colors here.
@@ -806,4 +808,17 @@ md-input-container {
 
 .profile-content {
     margin: 0;
+}
+
+.link-presentation {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+}
+.link-presentation__links {
+    margin-right: 10px;
+    margin-left: -20px;
 }
