@@ -46,7 +46,6 @@ angular.module('cycloneApp').filter('filterLastWord', function($sce) {
             });
         }
         //return shortLinkText;
-        console.log(shortLinkText);
         return $sce.trustAsHtml(shortLinkText);
     }
 });
