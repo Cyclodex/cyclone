@@ -11,7 +11,6 @@ angular.module('cycloneApp').factory('versionService', [function() {
         if (FIREBASE_DB_INSTANCE !== '') {
             version = version + ' (DB ' + FIREBASE_DB_INSTANCE + ')';
         }
-        version = version + ' 05.01.2018';
         return version;
     }
 
