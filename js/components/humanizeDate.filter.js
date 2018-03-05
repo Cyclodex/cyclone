@@ -1,8 +1,14 @@
 // Helps to render numbers as hours, minutes or seconds in simple and human way.
 angular.module('cycloneApp').filter('humanizeDate', ['$filter', 'moment', function ($filter, moment) {
     return function (input, units) {
-        var duration = moment().startOf('day').add(input, units),
-            format = "";
+        var format = '';
+        if (input > 0) {
+            var negative = '';
+            var duration = moment().startOf('day').add(input, units);
+        } else {
+            var negative = '-';
+            var duration = moment().startOf('day').subtract(input, units);
+        }
 
         // Show hours
         if(duration.hour() > 1){ format += "H [hours] "; }
@@ -15,7 +21,7 @@ angular.module('cycloneApp').filter('humanizeDate', ['$filter', 'moment', functi
         // Only if smaller than a minute, we show seconds
         if(duration.hour() === 0 && duration.minute() === 0){ format += "s [seconds]"; }
 
-        return duration.format(format);
+        return negative + duration.format(format);
     };
 }]);
 
