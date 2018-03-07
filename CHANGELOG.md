@@ -1,9 +1,10 @@
 # CHANGELOG
 
-## 1.0.0-beta5 - xx.03.2018 - Link issues
+## 1.0.0-beta5 - 07.03.2018 - Link issues
 
-* New feature: Detects links in the Task/Issue field
+* New feature: Detects URLs in the Task/Issue field
 * Improved Stats presentation
+* Fixed copy issues
 
 ## 1.0.0-beta4 - 20.02.2018 - Timeformat configurable
 

@@ -4,25 +4,38 @@
      layout-padding>
     <div flex="100"
          flex-gt-md="80">
-        <h1>Welcome to Cyclone beta4</h1>
-        <p>Improvements:
-            <ul>
-                <li>
-                    Cyclone will now try to detect when a new day starts. It will <b>automatically switch to the new day</b> if you left Cyclone on the current day.
-                </li>
-                <li>
-                    Once a new day started, Cyclone will <b>ask you</b> when you <b>started the day</b> and might have some suggestions.
-                </li>
-                <li>
-                    <a ui-sref="profile-crud({group: 'time'})"><b>Timeformat:</b></a> can now be changed to other formats.
-                </li>
-                <li>
-                    <a ui-sref="profile-crud({group: 'copy'})"><b>Copy format:</b></a> The copied time when marking an entry as done is now also configurable.
-                </li>
-            </ul>
-            Visit your <a ui-sref="profile-crud({group: 'actions'})"><b>profile</b></a>, to set your own settings for the available features. Or just enjoy the defaults.
-            <br><br>
-            Have a great day using Cyclone - your <a href="https://github.com/Cyclodex" target="_blank">Fäbu | Fabian Gander</a>
-        </p>
+         <h1>Welcome to Cyclone</h1>
+         Visit your <a ui-sref="profile-crud({group: 'actions'})"><b>profile</b></a>, to set your own settings for the available features. Or just enjoy the defaults.
+        <br><br>
+        Have a great day using Cyclone - your <a href="https://github.com/Cyclodex" target="_blank">Fäbu | Fabian Gander</a>
+        <div>
+            <a href="" ng-click="showBeta5 = !showBeta5"><h2>Beta 5</h2></a>
+            <div ng-show="!showBeta5">
+                <ul>
+                    <li>New feature: Detects URLs in the Task/Issue field</li>
+                    <li>Improved Stats presentation</li>
+                    <li>Fixed copy issues</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <a href="" ng-click="showBeta4 = !showBeta4"><h2>Beta 4</h2></a>
+            <div ng-show="showBeta4">
+                <ul>
+                    <li>
+                        Cyclone will now try to detect when a new day starts. It will <b>automatically switch to the new day</b> if you left Cyclone on the current day.
+                    </li>
+                    <li>
+                        Once a new day started, Cyclone will <b>ask you</b> when you <b>started the day</b> and might have some suggestions.
+                    </li>
+                    <li>
+                        <a ui-sref="profile-crud({group: 'time'})"><b>Timeformat:</b></a> can now be changed to other formats.
+                    </li>
+                    <li>
+                        <a ui-sref="profile-crud({group: 'copy'})"><b>Copy format:</b></a> The copied time when marking an entry as done is now also configurable.
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
