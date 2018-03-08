@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.0.0-beta5 - 07.03.2018 - Link issues
+## 1.0.0-beta5 - 08.03.2018 - Link issues
 
 * New feature: Detects URLs in the Task/Issue field
 * Improved Stats presentation
