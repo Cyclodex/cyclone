@@ -13,7 +13,8 @@ angular.module('cycloneApp').component('navigation', {
         $ctrl.currentDate = {
             "year": currentDate.year(),
             "month": currentDate.format('MM'),
-            "day": currentDate.format('DD')
+            "day": currentDate.format('DD'),
+            "week": currentDate.week()
         };
 
         $ctrl.logout = function() {

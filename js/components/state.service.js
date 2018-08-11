@@ -37,5 +37,15 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
         return requestedDate;
     };
 
+    StateService.prototype.getWeek = function() {
+        // Get the requested date if available
+        if ($stateParams.year && $stateParams.week){
+            return {
+                year: $stateParams.year,
+                week: $stateParams.week,
+            }
+        }
+    };
+
     return new StateService();
 }]);

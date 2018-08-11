@@ -1,0 +1,46 @@
+<div ng-show="$ctrl.user.username"
+     class="component__content">
+    <md-card ng-if="$ctrl.error">
+        <md-card-title>
+            <div class="md-headline">
+                Error
+            </div>
+        </md-card-title>
+        <md-card-content>
+            {{$ctrl.error}}
+        </md-card-content>
+    </md-card>
+
+    <div class="cyclone-table cyclone-table--tasks" flex="grow">
+        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        </div>
+
+        <!-- <calendar-list list-title="Calendar" data="$ctrl.entries"></calendar-list> -->
+        <md-grid-list
+            md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+            md-row-height-gt-md="1:1" md-row-height="2:2"
+            md-gutter="12px" md-gutter-gt-sm="8px" >
+            <md-grid-tile
+                ng-repeat="(Day, DayData) in $ctrl.entries"
+                class="calendar__tile"
+                md-colors="{background:'primary'}">
+                <md-chip>{{ DayData.date | date : "d. MMM" }}</md-chip>
+                <md-grid-tile-footer>
+                    {{ DayData.sum | timeInUserSelectedFormat : $ctrl.features.timeFormat.value }}
+                </md-grid-tile-footer>
+            </md-grid-tile>
+        </md-grid-list>
+    </div>
+    <!-- END: cyclone-table-->
+
+    <!--<pre>
+        {{ $ctrl.entriesCurrentGroups | json }}
+    </pre>-->
+
+
+    
+    <pre>{{ $ctrl.entries | json }}</pre>
+    <!-- <pre>{{ profile | json }}</pre> -->
+   
+</div>

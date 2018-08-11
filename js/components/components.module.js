@@ -7,5 +7,6 @@ angular.module('components', [
     'components.profile',
     'components.auth',
     'components.time',
+    'components.calendar',
     'components.date'
 ]);

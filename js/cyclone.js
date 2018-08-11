@@ -79,6 +79,14 @@ require('./components/time/time-task/time-task.component');
 require('./components/time/time-task/time-task.controller');
 require('./components/time/time-task-list/time-task-list.component');
 
+// Calendar
+require('./components/time/calendar/calendar.module');
+require('./components/time/calendar/calendar.service');
+require('./components/time/calendar/calendar.component');
+require('./components/time/calendar/calendar.controller');
+// require('./components/time/calendar-list/calendar-list.component');
+
+
 // Autocomplete
 require('./components/time/autocomplete/autocompleteProject.component');
 // AddTime
