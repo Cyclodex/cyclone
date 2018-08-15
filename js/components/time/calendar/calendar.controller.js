@@ -11,9 +11,9 @@ function CalendarController(CalendarService, clipboard, $filter, ProfileService)
     
     // Entries
     ctrl.entries = CalendarService.getCurrentWeekData();
-    // ctrl.entries.$loaded().then(function () {
-    //     ctrl.doneLoading = true;
-    // });
+    ctrl.entries.$loaded().then(function () {
+        ctrl.doneLoading = true;
+    });
 
 }
 

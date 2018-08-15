@@ -4,7 +4,6 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
     const refCurrentWeek = firebaseRef.getCurrentWeekReference(user);
     const refCurrentWeekVis = refCurrentWeek.orderByChild("order");
     const refDayVisArray = $firebaseArray(refCurrentWeekVis);
-    const printInfo = {};
 
     return {
         getCurrentWeekData: function () {
@@ -32,11 +31,19 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                         }
 
                         // Save the date
-                        if (!printInfo[dayKey]) {
-                            printInfo[dayKey] = {};
+                        if (!refDayVisArray[dayKey]) {
+                            refDayVisArray[dayKey] = {};
                         }
-                        if (!printInfo[dayKey].date) {
-                            printInfo[dayKey]['date'] = data.timestampStart;
+                        if (!refDayVisArray[dayKey].date) {
+                            refDayVisArray[dayKey]['date'] = data.timestampStart;
+                        }
+
+                        // Save the project
+                        if (!refDayVisArray[dayKey].projects) {
+                            refDayVisArray[dayKey].projects = [];
+                        }
+                        if (refDayVisArray[dayKey].projects.indexOf(data.project) === -1) {
+                            refDayVisArray[dayKey].projects.push(data.project);
                         }
 
                         // Sum up every work type
@@ -44,20 +51,19 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                         types[data.type]['timeSumHours'] += data.timestampDuration  / milisecondsOfOneHour;
                     });
 
-                    printInfo[dayKey]['sum'] = 0;
-                    printInfo[dayKey]['sumHours'] = 0;
+                    refDayVisArray[dayKey]['sum'] = 0;
+                    refDayVisArray[dayKey]['sumHours'] = 0;
                     for (var timeType in types) {
                         // Count up total of work (ignores private and trust time)
                         if (timeType === 'work' || timeType === 'internal') {
                             // Sum of all work hours
-                            printInfo[dayKey]['sum'] += types[timeType].timeSum;
-                            printInfo[dayKey]['sumHours'] += types[timeType].timeSumHours;
+                            refDayVisArray[dayKey]['sum'] += types[timeType].timeSum;
+                            refDayVisArray[dayKey]['sumHours'] += types[timeType].timeSumHours;
                         }
                     }
                 });
             });
-            console.log(printInfo);
-            return printInfo;
+            return refDayVisArray;
         },
     };
 }

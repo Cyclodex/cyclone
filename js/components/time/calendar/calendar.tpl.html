@@ -26,6 +26,12 @@
                 class="calendar__tile"
                 md-colors="{background:'primary'}">
                 <md-chip>{{ DayData.date | date : "d. MMM" }}</md-chip>
+                <div class="calendar__content">
+                    <strong>Projects:</strong>
+                    <div ng-repeat="entry in DayData.projects">
+                        {{ entry }}
+                    </div>
+                </div>
                 <md-grid-tile-footer>
                     {{ DayData.sum | timeInUserSelectedFormat : $ctrl.features.timeFormat.value }}
                 </md-grid-tile-footer>
