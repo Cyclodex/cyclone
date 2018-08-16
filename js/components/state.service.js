@@ -59,7 +59,8 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment', 
                 month: $stateParams.month,
                 weeks: weeksOfMonth,
                 weekStart: weekStart,
-                lastDay: lastDay
+                lastDay: lastDay,
+                date: date
             }
         }
     };

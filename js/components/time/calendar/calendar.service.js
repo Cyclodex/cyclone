@@ -10,9 +10,12 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
             const getWeeksOfMonthReferences = firebaseRef.getWeeksOfMonthReferences(user);
             const refWeeksReferences = getWeeksOfMonthReferences.references;
             const details = getWeeksOfMonthReferences.details;
+            const date = details.date;
             const month = details.month -1; // zero indexed
             for (var day = 1; day <= details.lastDay; day++) {
                 calendar[day] = {};
+                date.date(day);
+                calendar[day]['date'] = date.valueOf();
             }
 
             refWeeksReferences.forEach(ref => {
