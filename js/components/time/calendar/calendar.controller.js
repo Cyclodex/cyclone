@@ -1,4 +1,4 @@
-function CalendarController(CalendarService, clipboard, $filter, ProfileService) {
+function CalendarController(CalendarService, ProfileService) {
     var ctrl = this;
     // var features = ProfileService.getFeatureStates();
     
@@ -10,11 +10,10 @@ function CalendarController(CalendarService, clipboard, $filter, ProfileService)
     };
     
     // Entries
-    ctrl.entries = CalendarService.getCurrentWeekData();
-    ctrl.entries.$loaded().then(function () {
-        ctrl.doneLoading = true;
-    });
-
+    data = CalendarService.getCurrentMonthData();
+    ctrl.calendar = data.calendar;
+    ctrl.weekStart = data.weekStart - 1;
+    ctrl.doneLoading = true;
 }
 
 angular

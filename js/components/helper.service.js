@@ -45,5 +45,15 @@ angular.module('cycloneApp').factory('helperService', [
         return false;
     };
 
+    HelperService.prototype.getWeeksOfMonth = function(date) {
+        const startWeek = date.clone().startOf('month').weeks();
+        const endWeek = date.clone().endOf('month').weeks();
+        const weeks = [];
+        for (var weekNumber = startWeek; weekNumber <= endWeek; weekNumber++) {
+            weeks.push(weekNumber);
+        }
+        return weeks;
+    }
+
     return new HelperService();
 }]);

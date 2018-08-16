@@ -18,16 +18,19 @@
 
         <!-- <calendar-list list-title="Calendar" data="$ctrl.entries"></calendar-list> -->
         <md-grid-list
-            md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+            md-cols-xs="7" md-cols-sm="7" md-cols-md="7" md-cols-gt-md="7"
             md-row-height-gt-md="1:1" md-row-height="2:2"
-            md-gutter="12px" md-gutter-gt-sm="8px" >
+            md-gutter="12px" md-gutter-gt-sm="8px">
             <md-grid-tile
-                ng-repeat="(Day, DayData) in $ctrl.entries"
+                ng-if="$ctrl.weekStart > 0"
+                ng-repeat="day in [].constructor($ctrl.weekStart) track by $index">
+            </md-grid-tile>
+            <md-grid-tile
+                ng-repeat="(Day, DayData) in $ctrl.calendar"
                 class="calendar__tile"
                 md-colors="{background:'primary'}">
-                <md-chip>{{ DayData.date | date : "d. MMM" }}</md-chip>
-                <div class="calendar__content">
-                    <strong>Projects:</strong>
+                <md-chip>{{ DayData.date | date : "EEE d. MMM" }}</md-chip>
+                <div class="calendar__content" layout-align="center">
                     <div ng-repeat="entry in DayData.projects">
                         {{ entry }}
                     </div>

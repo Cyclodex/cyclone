@@ -1,5 +1,5 @@
-angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
-    function($stateParams, moment) {
+angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment', 'helperService',
+    function($stateParams, moment, helperService) {
     'use strict';
 
     function StateService() {};
@@ -43,6 +43,23 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment',
             return {
                 year: $stateParams.year,
                 week: $stateParams.week,
+            }
+        }
+    };
+
+    StateService.prototype.getMonthDetails = function() {
+        // Get the requested date if available
+        if ($stateParams.year && $stateParams.month){
+            const date = moment($stateParams.year + '-' + $stateParams.month, 'YYYY-MM');
+            const weeksOfMonth = helperService.getWeeksOfMonth(date);
+            const weekStart = date.clone().startOf('month').day();
+            const lastDay = date.clone().endOf('month').date();
+            return {
+                year: $stateParams.year,
+                month: $stateParams.month,
+                weeks: weeksOfMonth,
+                weekStart: weekStart,
+                lastDay: lastDay
             }
         }
     };

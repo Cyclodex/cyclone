@@ -51,6 +51,22 @@ angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', '
             return reference;
         }
 
+        function getWeeksOfMonthReferences(user){
+            const weekDate = stateService.getMonthDetails();
+            const year = weekDate.year;
+            const references = [];
+
+            weekDate.weeks.forEach(weekNumber => {
+                const ref = firebase.database().ref();
+                references.push(ref.child("time/" + user.uid + "/" + year + "/" + weekNumber));
+            });
+            
+            return {
+                details: weekDate,
+                references: references
+            }
+        }
+
         return {
             getTimeReference: function(user) {
                 return getTimeReference(user);
@@ -69,6 +85,9 @@ angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', '
             },
             getCurrentWeekReference: function(user) {
                 return getCurrentWeekReference(user);
+            },
+            getWeeksOfMonthReferences: function(user) {
+                return getWeeksOfMonthReferences(user);
             },
         }
     }

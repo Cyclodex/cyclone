@@ -13,7 +13,7 @@ angular
     .config(function ($stateProvider) {
         $stateProvider
             .state('calendar', {
-                url: "/calendar/{year:int}/{week:int}",
+                url: "/calendar/{year:int}/{month:int}",
                 parent: 'app',
                 views: {
                     navigation: {

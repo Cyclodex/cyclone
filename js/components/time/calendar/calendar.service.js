@@ -1,22 +1,44 @@
-function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService){
+function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService, moment){
 
     var user = AuthService.getUser();
-    const refCurrentWeek = firebaseRef.getCurrentWeekReference(user);
-    const refCurrentWeekVis = refCurrentWeek.orderByChild("order");
-    const refDayVisArray = $firebaseArray(refCurrentWeekVis);
-
+    // const refCurrentWeek = firebaseRef.getCurrentWeekReference(user);
+    // const refCurrentWeekVis = refCurrentWeek.orderByChild("order");
+    // const refDayVisArray = $firebaseArray(refCurrentWeekVis);
     return {
-        getCurrentWeekData: function () {
-            console.log(refDayVisArray);
+        getCurrentMonthData: function() {
+            let calendar = {};
+            const getWeeksOfMonthReferences = firebaseRef.getWeeksOfMonthReferences(user);
+            const refWeeksReferences = getWeeksOfMonthReferences.references;
+            const details = getWeeksOfMonthReferences.details;
+            const month = details.month -1; // zero indexed
+            for (var day = 1; day <= details.lastDay; day++) {
+                calendar[day] = {};
+            }
 
-            refDayVisArray.$watch(function(event) {
+            refWeeksReferences.forEach(ref => {
+                const refOrder = ref.orderByChild("order");
+                const refVisArray = this.getCurrentWeekData($firebaseArray(refOrder), month);
+                calendar = Object.assign(refVisArray, calendar);
+            });
+
+            return {
+                calendar: calendar,
+                weekStart: details.weekStart
+            }
+        },
+        getCurrentWeekData: function (refDayVisArray, month) {
+            const output = {};
+
+            refDayVisArray.$loaded(function() {  
                 var milisecondsOfOneHour = 60 * 60 * 1000;
   
                 // Get the time types
                 const types = timeTypesService.getTimeTypes();
+                
+
                 if (!refDayVisArray) return;
 
-                refDayVisArray.forEach(function(day, dayKey) {
+                refDayVisArray.forEach(function(day, weekDayKey) {
                     // Set default values we need
                     for (var timeType in types) {
                         types[timeType].timeSum = 0;
@@ -30,40 +52,56 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                             return;
                         }
 
-                        // Save the date
-                        if (!refDayVisArray[dayKey]) {
-                            refDayVisArray[dayKey] = {};
-                        }
-                        if (!refDayVisArray[dayKey].date) {
-                            refDayVisArray[dayKey]['date'] = data.timestampStart;
+                        const dayMoment = moment(data.timestampStart);
+                        if (dayMoment.month() !== month){
+                            //console.error("day not from this month");
+                            return;
                         }
 
-                        // Save the project
-                        if (!refDayVisArray[dayKey].projects) {
-                            refDayVisArray[dayKey].projects = [];
+                        const dayKey = dayMoment.date();
+                        day["dayNumber"] = dayKey;
+
+                        // Save the date
+                        if (!output[dayKey]) {
+                            output[dayKey] = {};
                         }
-                        if (refDayVisArray[dayKey].projects.indexOf(data.project) === -1) {
-                            refDayVisArray[dayKey].projects.push(data.project);
+
+                        if (!output[dayKey].date) {
+                            output[dayKey]['date'] = data.timestampStart;
+                        }
+
+                        output[dayKey]['dayNumber'] = dayKey;
+                        output[dayKey]['sum'] = 0;
+                        output[dayKey]['sumHours'] = 0;
+
+                        // Save the project
+                        if (!output[dayKey].projects) {
+                            output[dayKey].projects = [];
+                        }
+                        if (output[dayKey].projects.indexOf(data.project) === -1) {
+                            output[dayKey].projects.push(data.project);
                         }
 
                         // Sum up every work type
                         types[data.type]['timeSum'] += data.timestampDuration;
                         types[data.type]['timeSumHours'] += data.timestampDuration  / milisecondsOfOneHour;
                     });
-
-                    refDayVisArray[dayKey]['sum'] = 0;
-                    refDayVisArray[dayKey]['sumHours'] = 0;
-                    for (var timeType in types) {
-                        // Count up total of work (ignores private and trust time)
-                        if (timeType === 'work' || timeType === 'internal') {
-                            // Sum of all work hours
-                            refDayVisArray[dayKey]['sum'] += types[timeType].timeSum;
-                            refDayVisArray[dayKey]['sumHours'] += types[timeType].timeSumHours;
+                    
+                    // TODO: correct?
+                    if (output[day.dayNumber]){
+                        for (var timeType in types) {
+                            // Count up total of work (ignores private and trust time)
+                            if (timeType === 'work' || timeType === 'internal') {
+                                // Sum of all work hours
+                                output[day.dayNumber]['sum'] += types[timeType].timeSum;
+                                output[day.dayNumber]['sumHours'] += types[timeType].timeSumHours;
+                            }
                         }
                     }
+
                 });
             });
-            return refDayVisArray;
+            return output;
         },
     };
 }
