@@ -16,6 +16,9 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                 calendar[day] = {};
                 date.date(day);
                 calendar[day]['date'] = date.valueOf();
+                if (date.day() === 6 || date.day() === 0) {
+                    calendar[day]['weekend'] = true;
+                }
             }
 
             refWeeksReferences.forEach(ref => {
