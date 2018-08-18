@@ -38,9 +38,19 @@
                 class="calendar__tile"
                 ng-class="{true: 'calendar__tile--weekend', false: ''}[DayData.weekend == true]">
                 <div class="calendar__content">
-                    <md-chip class="calendar__day">{{ DayData.date | date : "d." }}</md-chip>
+                    <md-chip class="calendar__day">
+                        <md-button
+                            class="calendar__link"
+                            ui-sref="task({year: DayData.dateDetails.year, month: DayData.dateDetails.month, day: DayData.dateDetails.date})"
+                            ui-sref-active="md-active">
+                            <div class="nav__element__content">
+                                {{ DayData.dateDetails.date }}.
+                            </div>
+                        </md-button>
+                    </md-chip>
                     <div class="calendar__text" layout-align="center">
-                        <div ng-repeat="entry in DayData.projects">
+                        <div ng-repeat="entry in DayData.projects"
+                             class="calendar__entry">
                             {{ entry }}
                         </div>
                     </div>
