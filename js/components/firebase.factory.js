@@ -10,9 +10,7 @@ angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', '
             this.weekDay = currentDate.weekday();
 
             var ref = firebase.database().ref();
-            // console.log("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.todayNumber);
             var reference = ref.child("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.weekDay);
-            //console.log("time/" + user.uid + "/" + this.year + "/" + this.weekNumber + "/" + this.weekDay);
             return reference;
         }
 

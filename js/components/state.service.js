@@ -52,7 +52,7 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', 'moment', 
         if ($stateParams.year && $stateParams.month){
             const date = moment($stateParams.year + '-' + $stateParams.month, 'YYYY-MM');
             const weeksOfMonth = helperService.getWeeksOfMonth(date);
-            const weekStart = date.clone().startOf('month').day();
+            const weekStart = date.clone().startOf('month').isoWeekday();
             const lastDay = date.clone().endOf('month').date();
             return {
                 year: $stateParams.year,
