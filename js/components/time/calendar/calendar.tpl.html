@@ -12,13 +12,21 @@
     </md-card>
 
     <div class="cyclone-table cyclone-table--tasks" flex="grow">
+        <div class="cyclone-table-header" md-colors="{background:'primary'}" layout="row">
+            <date-switcher flex="40"></date-switcher>
+        </div>
+        
         <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-        <!-- <calendar-list list-title="Calendar" data="$ctrl.entries"></calendar-list> -->
+        <div layout="row">
+            <div flex=20 ng-repeat="day in $ctrl.weekDays track by $index">
+                {{ day }}
+            </div>
+        </div>
         <md-grid-list
-            md-cols-xs="7" md-cols-sm="7" md-cols-md="7" md-cols-gt-md="7"
+            md-cols="7"
             md-row-height-gt-md="1:1" md-row-height="2:2"
             md-gutter="12px" md-gutter-gt-sm="8px">
             <md-grid-tile
@@ -29,10 +37,12 @@
                 ng-repeat="(Day, DayData) in $ctrl.calendar"
                 class="calendar__tile"
                 ng-class="{true: 'calendar__tile--weekend', false: ''}[DayData.weekend == true]">
-                <md-chip>{{ DayData.date | date : "EEE d. MMM" }}</md-chip>
-                <div class="calendar__content" layout-align="center">
-                    <div ng-repeat="entry in DayData.projects">
-                        {{ entry }}
+                <div class="calendar__content">
+                    <md-chip class="calendar__day">{{ DayData.date | date : "d." }}</md-chip>
+                    <div class="calendar__text" layout-align="center">
+                        <div ng-repeat="entry in DayData.projects">
+                            {{ entry }}
+                        </div>
                     </div>
                 </div>
                 <md-grid-tile-footer>

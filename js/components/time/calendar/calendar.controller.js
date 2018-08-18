@@ -1,4 +1,4 @@
-function CalendarController(CalendarService, ProfileService) {
+function CalendarController(CalendarService, ProfileService, moment) {
     var ctrl = this;
     // var features = ProfileService.getFeatureStates();
     
@@ -7,6 +7,10 @@ function CalendarController(CalendarService, ProfileService) {
 
     ctrl.$onInit = function () {
         ctrl.features = ProfileService.getFeatureStates();
+        const weekDays = moment.weekdaysShort();
+        const firstElement = weekDays.shift();
+        weekDays.push(firstElement);
+        ctrl.weekDays = weekDays;
     };
     
     // Entries
