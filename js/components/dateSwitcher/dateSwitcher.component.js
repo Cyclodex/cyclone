@@ -12,28 +12,51 @@ angular.module('cycloneApp').component('dateSwitcher', {
         var prevDate = currentDate.clone();
         var nextDate = currentDate.clone();
 
-        // PREV
-        prevDate.subtract(1, 'days');
-        ctrl.prevDateLink = {
-            "year": prevDate.year(),
-            "month": prevDate.format('MM'),
-            "day": prevDate.format('DD')
-        };
-
-        // NEXT (but not for the future)
-        nextDate.add(1, 'days');
-        if (nextDate.isSameOrBefore(today, 'day')) {
-            ctrl.nextDateLink = {
-                "year": nextDate.year(),
-                "month": nextDate.format('MM'),
-                "day": nextDate.format('DD')
+        console.log(currentDate);
+        console.log($state.current.name);
+        ctrl.type = $state.current.name;
+        if ($state.current.name === 'calendar') {
+            // PREV
+            prevDate.subtract(1, 'month');
+            ctrl.prevDateLink = {
+                "year": prevDate.year(),
+                "month": prevDate.format('MM'),
             };
+
+            // NEXT (but not for the future)
+            nextDate.add(1, 'month');
+            if (nextDate.isSameOrBefore(today, 'month')) {
+                ctrl.nextDateLink = {
+                    "year": nextDate.year(),
+                    "month": nextDate.format('MM'),
+                };
+            } else {
+                ctrl.nextDateLink = false;
+            }
         } else {
-            ctrl.nextDateLink = false;
+            // PREV
+            prevDate.subtract(1, 'days');
+            ctrl.prevDateLink = {
+                "year": prevDate.year(),
+                "month": prevDate.format('MM'),
+                "day": prevDate.format('DD')
+            };
+
+            // NEXT (but not for the future)
+            nextDate.add(1, 'days');
+            if (nextDate.isSameOrBefore(today, 'day')) {
+                ctrl.nextDateLink = {
+                    "year": nextDate.year(),
+                    "month": nextDate.format('MM'),
+                    "day": nextDate.format('DD')
+                };
+            } else {
+                ctrl.nextDateLink = false;
+            }
         }
 
         // Run this code all 10min to verify if its still today
-        var checkTime = function() {
+        const checkTime = function() {
             var today = moment();
             log.debug('Checking time - today:');
             log.debug(today);
