@@ -1,9 +1,6 @@
 function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService, moment){
-
     var user = AuthService.getUser();
-    // const refCurrentWeek = firebaseRef.getCurrentWeekReference(user);
-    // const refCurrentWeekVis = refCurrentWeek.orderByChild("order");
-    // const refDayVisArray = $firebaseArray(refCurrentWeekVis);
+    
     return {
         getCurrentMonthData: function() {
             let calendar = {};
