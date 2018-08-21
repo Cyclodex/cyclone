@@ -24,7 +24,6 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', '$state', 
                 ],
                 true // strict parsing
             );
-            console.log(requestedDate);
         } else {
             if ($stateParams.year && $stateParams.month && $stateParams.day){
                 var requestedDate = $stateParams.year
@@ -48,9 +47,6 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', '$state', 
             );
         }
         
-        
-        console.log(requestedDate);
-
         if (!requestedDate.isValid()){
             this.error = 'Invalid date entered!';
         }

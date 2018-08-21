@@ -12,8 +12,6 @@ angular.module('cycloneApp').component('dateSwitcher', {
         var prevDate = currentDate.clone();
         var nextDate = currentDate.clone();
 
-        console.log(currentDate);
-        console.log($state.current.name);
         ctrl.type = $state.current.name;
         if ($state.current.name === 'calendar') {
             // PREV
