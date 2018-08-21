@@ -16,10 +16,6 @@
             <date-switcher flex="40"></date-switcher>
         </div>
         
-        <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
-
         <div layout="row">
             <div flex=20 ng-repeat="day in $ctrl.weekDays track by $index">
                 {{ day }}
@@ -47,7 +43,12 @@
                                 {{ DayData.dateDetails.date }}.
                             </div>
                         </md-button>
+                        <div class="calendar__warning" ng-if="DayData.uncheckedWarning">⚠️</div>
                     </md-chip>
+                    Loading state: {{$ctrl.doneLoading}}
+                    <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
                     <div class="calendar__text" layout-align="center">
                         <div ng-repeat="entry in DayData.projects"
                              class="calendar__entry">

@@ -1,8 +1,11 @@
-function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService, moment){
+function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService, moment, $q){
     var user = AuthService.getUser();
     
     return {
         getCurrentMonthData: function() {
+            let defer = $q.defer();
+
+            console.log("start");
             let calendar = {};
             const getWeeksOfMonthReferences = firebaseRef.getWeeksOfMonthReferences(user);
             const refWeeksReferences = getWeeksOfMonthReferences.references;
@@ -22,16 +25,32 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                 calendar[day]['dateDetails']['date'] = date.date();
             }
 
+            const promises = [];
             refWeeksReferences.forEach(ref => {
                 const refOrder = ref.orderByChild("order");
                 const refVisArray = this.getCurrentWeekData($firebaseArray(refOrder), month);
-                calendar = Object.assign(refVisArray, calendar);
+                promises.push(refVisArray);
+                // calendar = Object.assign(refVisArray, calendar);
+            });
+            Promise.all(promises).then((data) => {
+                console.log("promised all", data);
+                data.forEach(week => {
+                    // calendar = Object.assign(week, calendar);
+                    console.log("each", week);
+                });
+                console.log(calendar);
+
+                if (calendar) {
+                    defer.resolve({
+                        calendar: calendar,
+                        weekStart: details.weekStart
+                    });
+                } else {
+                    defer.reject('Oops... something went wrong');
+                }
             });
 
-            return {
-                calendar: calendar,
-                weekStart: details.weekStart
-            }
+            return defer.promise;
         },
         getCurrentWeekData: function (refDayVisArray, month) {
             const output = {};
@@ -71,6 +90,12 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                         // Save the date
                         if (!output[dayKey]) {
                             output[dayKey] = {};
+                            output[dayKey].uncheckedWarning = false;
+                        }
+
+                        // if entry is not checked
+                        if (!data.checked && (data.type === 'work' || data.type === 'internal') ){
+                            output[dayKey].uncheckedWarning = true;
                         }
 
                         if (!output[dayKey].date) {
@@ -94,7 +119,6 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                         types[data.type]['timeSumHours'] += data.timestampDuration  / milisecondsOfOneHour;
                     });
                     
-                    // TODO: correct?
                     if (output[day.dayNumber]){
                         for (var timeType in types) {
                             // Count up total of work (ignores private and trust time)

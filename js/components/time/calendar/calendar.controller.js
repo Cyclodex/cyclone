@@ -3,7 +3,7 @@ function CalendarController(CalendarService, ProfileService, moment) {
     // var features = ProfileService.getFeatureStates();
     
     ctrl.error = false;
-    ctrl.doneLoading = false;
+    ctrl.doneLoading = "test";
 
     ctrl.$onInit = function () {
         ctrl.features = ProfileService.getFeatureStates();
@@ -11,13 +11,17 @@ function CalendarController(CalendarService, ProfileService, moment) {
         const firstElement = weekDays.shift();
         weekDays.push(firstElement);
         ctrl.weekDays = weekDays;
+        ctrl.doneLoading = "onInit";
     };
     
     // Entries
-    data = CalendarService.getCurrentMonthData();
-    ctrl.calendar = data.calendar;
-    ctrl.weekStart = data.weekStart - 1;
-    ctrl.doneLoading = true;
+    Promise.resolve(CalendarService.getCurrentMonthData()).then((data) => {
+        console.log("controller then() data");
+        ctrl.doneLoading = true;
+        ctrl.calendar = data.calendar;
+        ctrl.weekStart = data.weekStart - 1;
+    }).catch(error => console.log(error));
+    
 }
 
 angular
