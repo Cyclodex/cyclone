@@ -1,27 +1,41 @@
-function CalendarController(CalendarService, ProfileService, moment) {
+function CalendarController(CalendarService, ProfileService, moment, $firebaseArray) {
     var ctrl = this;
     // var features = ProfileService.getFeatureStates();
     
     ctrl.error = false;
-    ctrl.doneLoading = "test";
-
     ctrl.$onInit = function () {
         ctrl.features = ProfileService.getFeatureStates();
         const weekDays = moment.weekdaysShort();
         const firstElement = weekDays.shift();
         weekDays.push(firstElement);
         ctrl.weekDays = weekDays;
-        ctrl.doneLoading = "onInit";
+        ctrl.doneLoading = false;
+        ctrl.calendar = {};
+        getCalendarStructure();
+        getCalendarData();
     };
     
-    // Entries
-    Promise.resolve(CalendarService.getCurrentMonthData()).then((data) => {
-        console.log("controller then() data");
-        ctrl.doneLoading = true;
-        ctrl.calendar = data.calendar;
-        ctrl.weekStart = data.weekStart - 1;
-    }).catch(error => console.log(error));
+    getCalendarStructure = function (){
+        Promise.resolve(CalendarService.getCurrentMonthStructure()).then((data) => {
+            ctrl.calendar = Object.assign(ctrl.calendar, data.calendar);
+            ctrl.weekStart = data.weekStart - 1;
+        }).catch(error => console.log(error));
+    }
     
+
+    getCalendarData = function() {
+        const { references, details } = CalendarService.getWeeksOfMonthReferences();
+        const { month } = details;
+    
+        references.forEach(ref => {
+            const refOrder = ref.orderByChild("order");
+            Promise.resolve(CalendarService.getCurrentWeekData($firebaseArray(refOrder), month)).then((week) => {
+                Object.entries(week).forEach(([key, data]) => {
+                    Object.assign(ctrl.calendar[key], data, { doneLoading: true });
+                });
+            }).catch(error => console.log(error));
+        });
+    }
 }
 
 angular

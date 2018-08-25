@@ -46,7 +46,7 @@
                         <div class="calendar__warning" ng-if="DayData.uncheckedWarning">⚠️</div>
                     </md-chip>
                     Loading state: {{$ctrl.doneLoading}}
-                    <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!$ctrl.doneLoading">
+                    <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!DayData.doneLoading">
                         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                     </div>
                     <div class="calendar__text" layout-align="center">

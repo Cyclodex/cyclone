@@ -1,17 +1,13 @@
-function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesService, moment, $q){
+function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q){
     var user = AuthService.getUser();
     
     return {
-        getCurrentMonthData: function() {
+        getCurrentMonthStructure: function() {
             let defer = $q.defer();
 
-            console.log("start");
             let calendar = {};
-            const getWeeksOfMonthReferences = firebaseRef.getWeeksOfMonthReferences(user);
-            const refWeeksReferences = getWeeksOfMonthReferences.references;
-            const details = getWeeksOfMonthReferences.details;
-            const date = details.date;
-            const month = details.month -1; // zero indexed
+            const { details } = this.getWeeksOfMonthReferences();
+            const { date } = details;
             for (var day = 1; day <= details.lastDay; day++) {
                 calendar[day] = {};
                 date.date(day);
@@ -19,40 +15,30 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                 if (date.isoWeekday() === 6 || date.isoWeekday() === 7) {
                     calendar[day]['weekend'] = true;
                 }
-                calendar[day]['dateDetails'] = [];
-                calendar[day]['dateDetails']['year'] = date.year();
-                calendar[day]['dateDetails']['month'] = date.month() + 1;
-                calendar[day]['dateDetails']['date'] = date.date();
+                calendar[day]['dateDetails'] = Object.assign({}, {
+                    year: date.year(),
+                    month: date.month() + 1,
+                    date: date.date()
+                });
+                console.log( calendar[day]['dateDetails']);
             }
 
-            const promises = [];
-            refWeeksReferences.forEach(ref => {
-                const refOrder = ref.orderByChild("order");
-                const refVisArray = this.getCurrentWeekData($firebaseArray(refOrder), month);
-                promises.push(refVisArray);
-                // calendar = Object.assign(refVisArray, calendar);
-            });
-            Promise.all(promises).then((data) => {
-                console.log("promised all", data);
-                data.forEach(week => {
-                    // calendar = Object.assign(week, calendar);
-                    console.log("each", week);
+            if (calendar) {
+                defer.resolve({
+                    calendar: calendar,
+                    weekStart: details.weekStart
                 });
-                console.log(calendar);
-
-                if (calendar) {
-                    defer.resolve({
-                        calendar: calendar,
-                        weekStart: details.weekStart
-                    });
-                } else {
-                    defer.reject('Oops... something went wrong');
-                }
-            });
+            } else {
+                defer.reject('Oops... something went wrong');
+            }
 
             return defer.promise;
         },
+        getWeeksOfMonthReferences: function() {
+            return firebaseRef.getWeeksOfMonthReferences(user);
+        },
         getCurrentWeekData: function (refDayVisArray, month) {
+            let defer = $q.defer();
             const output = {};
 
             refDayVisArray.$loaded(function() {  
@@ -60,11 +46,10 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
   
                 // Get the time types
                 const types = timeTypesService.getTimeTypes();
-                
 
-                if (!refDayVisArray) return;
+                if (!refDayVisArray) defer.reject('Oops... something went wrong');
 
-                refDayVisArray.forEach(function(day, weekDayKey) {
+                refDayVisArray.forEach(function(day) {
                     // Set default values we need
                     for (var timeType in types) {
                         types[timeType].timeSum = 0;
@@ -79,7 +64,8 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                         }
 
                         const dayMoment = moment(data.timestampStart);
-                        if (dayMoment.month() !== month){
+                        // Zero indexed month (-1)
+                        if (dayMoment.month() !== (month - 1) ) {
                             //console.error("day not from this month");
                             return;
                         }
@@ -131,8 +117,10 @@ function CalendarService(firebaseRef, $firebaseArray, AuthService, timeTypesServ
                     }
 
                 });
+                defer.resolve( output );
             });
-            return output;
+
+            return defer.promise;
         },
     };
 }
