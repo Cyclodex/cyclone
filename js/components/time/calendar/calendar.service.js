@@ -20,7 +20,6 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
                     month: date.month() + 1,
                     date: date.date()
                 });
-                console.log( calendar[day]['dateDetails']);
             }
 
             if (calendar) {
@@ -41,13 +40,12 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
             let defer = $q.defer();
             const output = {};
 
-            refDayVisArray.$loaded(function() {  
-                var milisecondsOfOneHour = 60 * 60 * 1000;
-  
-                // Get the time types
-                const types = timeTypesService.getTimeTypes();
+            // Get the time types
+            const types = timeTypesService.getTimeTypes();
 
+            refDayVisArray.$loaded(function() {  
                 if (!refDayVisArray) defer.reject('Oops... something went wrong');
+                var milisecondsOfOneHour = 60 * 60 * 1000;
 
                 refDayVisArray.forEach(function(day) {
                     // Set default values we need
@@ -64,35 +62,27 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
                         }
 
                         const dayMoment = moment(data.timestampStart);
+                        const dayKey = day["dayNumber"] = dayMoment.date();
+
                         // Zero indexed month (-1)
                         if (dayMoment.month() !== (month - 1) ) {
                             //console.error("day not from this month");
                             return;
                         }
 
-                        const dayKey = dayMoment.date();
-                        day["dayNumber"] = dayKey;
-
-                        // Save the date
-                        if (!output[dayKey]) {
-                            output[dayKey] = {};
-                            output[dayKey].uncheckedWarning = false;
-                        }
-
+                        output[dayKey] = Object.assign({
+                            uncheckedWarning: false,
+                            date: data.timestampStart,
+                            dayNumber: dayKey,
+                            sum: 0,
+                            sumHours: 0}, output[dayKey]);
+                        
                         // if entry is not checked
                         if (!data.checked && (data.type === 'work' || data.type === 'internal') ){
                             output[dayKey].uncheckedWarning = true;
                         }
 
-                        if (!output[dayKey].date) {
-                            output[dayKey]['date'] = data.timestampStart;
-                        }
-
-                        output[dayKey]['dayNumber'] = dayKey;
-                        output[dayKey]['sum'] = 0;
-                        output[dayKey]['sumHours'] = 0;
-
-                        // Save the project
+                        // Save the projects
                         if (!output[dayKey].projects) {
                             output[dayKey].projects = [];
                         }

@@ -1,11 +1,11 @@
 .calendar__tile {
     color: white;
     padding: 5px;
-    // background-color: @colorPrimary;
-    background-color: lightsteelblue;
+    background-color: @colorPrimary;
 
     > figure {
         align-items: flex-start;
+        flex-direction: column;
     }
 }
 
@@ -13,9 +13,24 @@
     background-color: @colorPrivate;
 }
 
+.calendar__tile--warning {
+    background-color: @colorSecondary;
+}
+
 .calendar__content {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
+    box-sizing: border-box;
+    overflow: auto;
+    flex: 1 1 auto;
+}
+
+.calendar__footer {
+    justify-content: center;
+    height: 25px;
+    flex: 0 0 auto;
+    position: relative;
+    width: 100%;
 }
 
 .calendar__entry {
@@ -41,10 +56,6 @@
 
 .calendar__warning {
     position: absolute;
-    right: 10px;
-    top: 10px;
-}
-
-md-grid-tile-footer {
-    justify-content: center;
+    right: 5px;
+    top: 5px;
 }

@@ -29,9 +29,9 @@ function CalendarController(CalendarService, ProfileService, moment, $firebaseAr
     
         references.forEach(ref => {
             const refOrder = ref.orderByChild("order");
-            Promise.resolve(CalendarService.getCurrentWeekData($firebaseArray(refOrder), month)).then((week) => {
-                Object.entries(week).forEach(([key, data]) => {
-                    Object.assign(ctrl.calendar[key], data, { doneLoading: true });
+            Promise.resolve(CalendarService.getCurrentWeekData($firebaseArray(refOrder), month)).then((weekData) => {
+                Object.entries(weekData).forEach(([day, data]) => {
+                    Object.assign(ctrl.calendar[day], data, { doneLoading: true });
                 });
             }).catch(error => console.log(error));
         });

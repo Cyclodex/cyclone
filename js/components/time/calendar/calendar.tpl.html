@@ -32,7 +32,10 @@
             <md-grid-tile
                 ng-repeat="(Day, DayData) in $ctrl.calendar"
                 class="calendar__tile"
-                ng-class="{true: 'calendar__tile--weekend', false: ''}[DayData.weekend == true]">
+                ng-class="[
+                    {true: 'calendar__tile--weekend', false: ''}[DayData.weekend == true],
+                    {true: 'calendar__tile--warning', false: ''}[DayData.uncheckedWarning == true]
+                ]">
                 <div class="calendar__content">
                     <md-chip class="calendar__day">
                         <md-button
@@ -45,10 +48,6 @@
                         </md-button>
                         <div class="calendar__warning" ng-if="DayData.uncheckedWarning">⚠️</div>
                     </md-chip>
-                    Loading state: {{$ctrl.doneLoading}}
-                    <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!DayData.doneLoading">
-                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                    </div>
                     <div class="calendar__text" layout-align="center">
                         <div ng-repeat="entry in DayData.projects"
                              class="calendar__entry">
@@ -56,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <md-grid-tile-footer>
+                <md-grid-tile-footer class="calendar__footer">
                     {{ DayData.sum | timeInUserSelectedFormat : $ctrl.features.timeFormat.value }}
                 </md-grid-tile-footer>
             </md-grid-tile>
