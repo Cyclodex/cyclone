@@ -4,7 +4,7 @@ angular.module('cycloneApp').component('dateSwitcher', {
     template: require('./date_switcher.tpl.html'),
     controller: ['$log', 'stateService', 'moment', '$timeout', '$scope', '$state', function dateSwitcherCtrl($log, stateService, moment, $timeout, $scope, $state) {
         var ctrl = this;
-        var log = $log.getInstance('dateSwitcher');
+        // var log = $log.getInstance('dateSwitcher');
 
         // Get the prev and next date links
         var today = moment();
@@ -53,11 +53,11 @@ angular.module('cycloneApp').component('dateSwitcher', {
             }
         }
 
-        // Run this code all 10min to verify if its still today
+        // Run this code when it gets next day.
         const checkTime = function() {
             var today = moment();
-            log.debug('Checking time - today:');
-            log.debug(today);
+            // log.debug('Checking time - today:');
+            // log.debug(today);
             var currentDate = stateService.getCurrentDate();
             ctrl.currentDate = currentDate.toDate();
 
@@ -66,37 +66,39 @@ angular.module('cycloneApp').component('dateSwitcher', {
                 // Something is set, check if today is ahead
                 if (today.isAfter(ctrl.currentDayVisited, 'day')) {
                     // Today is after the last visited day, so lets jump ahead
-                    log.info("New day detected, jumping ahead.");
+                    // log.info("New day detected, jumping ahead.");
                     var pageType = $state.current.name;
                     // Automatically go to today!
                     $state.go(pageType, {year: today.year(), month: today.month()+1, day: today.date()});
                 } else {
-                    log.debug("Waiting for a new day. Day visited is set to:");
-                    log.debug(ctrl.currentDayVisited);
+                    // log.debug("Waiting for a new day. Day visited is set to:");
+                    // log.debug(ctrl.currentDayVisited);
                 }
             } else {
                 // Register "a watcher" for automatic day jump for next day, because we are on today now.
                 if (currentDate.isSame(today, 'day')){
-                    log.info('Initializing waiting for a new day...');
+                    // log.info('Initializing waiting for a new day...');
                     ctrl.currentDayVisited = today;
-                    log.debug(ctrl.currentDayVisited);
+                    // log.debug(ctrl.currentDayVisited);
                 } else {
                     // Not on today, so no auto switch initialization
-                    log.log('Not on today, not initializing day jump!');
+                    // log.log('Not on today, not initializing day jump!');
                     ctrl.currentDayVisited = false;
                 }
             }
 
             // Call it again tomorrow (0:00) - calculated with miliseconds difference to now.
             var milisecondsUntilTomorrow = nextDate.startOf('day').diff(moment(), 'miliseconds'); // The difference from now until next day
-            log.debug("milisecondsUntilTomorrow:");
-            log.debug(milisecondsUntilTomorrow);
+            // log.debug("milisecondsUntilTomorrow:");
+            // log.debug(milisecondsUntilTomorrow);
             if (milisecondsUntilTomorrow > 0){
                 dateSwitcherTimer = $timeout(checkTime, milisecondsUntilTomorrow, true);
             }
         };
 
-        var dateSwitcherTimer = $timeout(checkTime, 0, true);
+        if ($state.current.name !== 'calendar') {
+            var dateSwitcherTimer = $timeout(checkTime, 0, true);
+        }
 
         // Important! Destroy the time, or it repeats adding more and more
         // http://odetocode.com/blogs/scott/archive/2013/07/16/angularjs-listening-for-destroy.aspx
