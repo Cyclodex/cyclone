@@ -24,6 +24,11 @@ angular.module('cycloneApp').factory('stateService', ['$stateParams', '$state', 
                 ],
                 true // strict parsing
             );
+            var today = moment();
+            // Adding todays date for the navigation if calendar is on current month
+            if (requestedDate.isSame(today, 'month')) {
+                requestedDate.date(today.date());
+            }
         } else {
             if ($stateParams.year && $stateParams.month && $stateParams.day){
                 var requestedDate = $stateParams.year
