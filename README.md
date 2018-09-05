@@ -1,18 +1,21 @@
 # Cyclone
 
-Simple web time log tool.
+Simple online timelog tool.
 
 ## Description
 
 Cyclone allows you to track your tasks during a day and keep a good overview of it.
 
+You wonder, **what you did during a day**... Maybe you also need to keep **tracking time** into a company software or issue tracker and *switch tasks/projects multiple times*, **Cyclone** helps you to manage this.
+
+With Cyclone you can
+
 * **Track** your daily work as entries in a timeline
 * **Tracked** entries can be marked as "done". (eg. when booked into an other tool)
 * **Grouping** entries as tasks
-* **Work/Private** separate your entries from work and private time. (like breaks)
-* **Summary** A timebar will show you what and when you have worked on
-* **Project** summaries are also available
+* **Work/Private** separate your entries from work and private time. (like lunch & breaks)
 * **Archive** allows you to go back, and verify what you tracked in the past.
+* **Calendar (new)** Gives you a rough overview of projects you worked and if there are any missing entries you forgot to check as "done".
 
 **Access** is done with authentication:
 
@@ -21,10 +24,10 @@ Cyclone allows you to track your tasks during a day and keep a good overview of 
 
 ## Demo
 
-Ask me for access the tool: [cyclone@jumps.ch](cyclone@jumps.ch) or github issue.
+Ask me for access the tool: [cyclone@jumps.ch](cyclone@jumps.ch).
 Limited access, because I use the free google service with limited accounts.
 
-## Software / Framework
+## Software / Frameworks
 
 * AngularJS(1.x)
 * Firebase(3.x)
@@ -32,21 +35,13 @@ Limited access, because I use the free google service with limited accounts.
 
 ## Author
 
-**Fabian Gander** - **[@Cyclodex](https://github.com/Cyclodex)**
+**Fabian Gander** - **[@github](https://github.com/Cyclodex)**
 
-## Collaborators
-
-* **Patrick Fiaux** - **[@pfiaux](https://github.com/pfiaux)**
-* **David Sandoz** - **[@davidsandoz](https://github.com/davidsandoz)**
-
-## Version history and future plans
+## Version history
 
 * [CHANGELOG](CHANGELOG.md)
-* [TODO](TODO.md)
-* also see the github tickets.
-
-Please create feedback / bugs / feature requests into github issues!
+* also see the [github tickets](https://github.com/Cyclodex/cyclone)
 
 ## Supported Browsers
 
-Newest versions of modern browsers.
+Newest versions of modern browsers ;)s
