@@ -53,13 +53,15 @@ angular.module('cycloneApp').component('dateSwitcher', {
             }
         }
 
+        var currentDate = stateService.getCurrentDate();
+        ctrl.currentDate = currentDate.toDate();
+
         // Run this code when it gets next day.
         const checkTime = function() {
             var today = moment();
             // log.debug('Checking time - today:');
             // log.debug(today);
-            var currentDate = stateService.getCurrentDate();
-            ctrl.currentDate = currentDate.toDate();
+            
 
             // Check for auto jumping to next day
             if (ctrl.currentDayVisited !== undefined && ctrl.currentDayVisited !== false){

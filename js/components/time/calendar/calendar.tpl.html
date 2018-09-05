@@ -17,19 +17,24 @@
         </div>
         
         <div layout="row">
-            <div flex=20 ng-repeat="day in $ctrl.weekDays track by $index">
+            <div flex=20
+                ng-repeat="day in $ctrl.weekDays track by $index"
+                hide show-gt-sm>
                 {{ day }}
             </div>
         </div>
         <md-grid-list
-            md-cols="7"
-            md-row-height-gt-md="1:1" md-row-height="2:2"
-            md-gutter="12px" md-gutter-gt-sm="8px">
+            md-cols="7" md-cols-xs="2" md-cols-sm="6" md-cols-md="7" 
+            md-row-height="1:1" md-row-height-md="2:3" md-row-height-gt-md="1:1"
+            md-gutter="12px">
             <md-grid-tile
                 ng-if="$ctrl.weekStart > 0"
-                ng-repeat="day in [].constructor($ctrl.weekStart) track by $index">
+                ng-repeat="day in [].constructor($ctrl.weekStart) track by $index"
+                md-colspan-sm="{{(($index >= 5) && 1 || 2)}}"
+                >
             </md-grid-tile>
             <md-grid-tile
+                md-colspan="1" md-colspan-sm="{{((DayData.weekend == true) && 1 || 2)}}"
                 ng-repeat="(Day, DayData) in $ctrl.calendar"
                 class="calendar__tile"
                 ng-class="[
