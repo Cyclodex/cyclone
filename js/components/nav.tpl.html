@@ -27,6 +27,7 @@
         </div>
     </md-button>
     <md-button
+            ng-if="$ctrl.features.calendar.enabled"
             class="nav__element"
             ui-sref="calendar({year: $ctrl.currentDate.year, month: $ctrl.currentDate.month})"
             ui-sref-active="md-active">

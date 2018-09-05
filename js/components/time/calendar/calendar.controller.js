@@ -1,6 +1,5 @@
 function CalendarController(CalendarService, ProfileService, moment, $firebaseArray) {
     var ctrl = this;
-    // var features = ProfileService.getFeatureStates();
     
     ctrl.error = false;
     ctrl.$onInit = function () {

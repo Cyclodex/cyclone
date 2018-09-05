@@ -101,7 +101,16 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                         'description': 'Description',
                     },
                     'description': 'What should be copied when you check a task as tracked (checkbox)',
-                }
+                },
+                // Calendar / Report
+                'calendar' : {
+                    'name': 'Report',
+                    'key' : 'calendar',
+                    'group': 'calendar',
+                    'default': true,
+                    'description': 'A rough monthly calendar overview.',
+                    'icon': 'date_range'
+                },
             }
         };
 

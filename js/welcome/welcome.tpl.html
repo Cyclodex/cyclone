@@ -9,8 +9,17 @@
         <br><br>
         Have a great day using Cyclone - your <a href="https://github.com/Cyclodex" target="_blank">Fäbu | Fabian Gander</a>
         <div>
+            <a href="" ng-click="showRelease1 = !showRelease1"><h2>Release 1.0</h2></a>
+            <div ng-show="!showRelease1">
+                <ul>
+                    <li>New feature: <b>Report</b> a rough monthly overview as calendar</li>
+                    <li>You can <a ui-sref="profile-crud({group: 'calendar'})"><b>enable / disable</b></a> the feature in your profile</li>
+                </ul>
+            </div>
+        </div>
+        <div>
             <a href="" ng-click="showBeta5 = !showBeta5"><h2>Beta 5</h2></a>
-            <div ng-show="!showBeta5">
+            <div ng-show="showBeta5">
                 <ul>
                     <li>New feature: Detects URLs in the Task/Issue field</li>
                     <li>Improved Stats presentation</li>

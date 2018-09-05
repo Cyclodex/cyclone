@@ -3,9 +3,10 @@ angular.module('cycloneApp').component('navigation', {
     bindings: {
         user: '<'
     },
-    controller: ['stateService', function navCtrl(stateService) {
+    controller: ['stateService', 'ProfileService', function navCtrl(stateService, ProfileService) {
         var $ctrl = this;
 
+        $ctrl.features = ProfileService.getFeatureStates();
         var currentDate = stateService.getCurrentDate();
         $ctrl.pageType = stateService.getPageType();
 
