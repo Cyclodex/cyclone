@@ -1,2 +1,2 @@
-// The version 1.0.0-beta5 was generated on 08.03.2018
-export const appDate = '08.03.2018';
+// The version 1.0.0 was generated on 06.09.2018
+export const appDate = '06.09.2018';

@@ -1,11 +1,16 @@
 <div flex="nogrow">
     <div class="version right">
         <a ng-href="{{::$ctrl.changelogUrl}}" title="Go to github page" target="_blank">
-            {{ ::$ctrl.version }}
+            {{ ::$ctrl.version.number }}
+            <br>
+            {{ ::$ctrl.version.date }}
+            <br>
+            {{ ::$ctrl.version.db }}
         </a>
         <br>
-        <a ng-href="{{::$ctrl.issuesUrl}}" title="Go to github issues" target="_blank">
+        <br>
+        <!-- <a ng-href="{{::$ctrl.issuesUrl}}" title="Go to github issues" target="_blank">
             Github issues
-        </a>
+        </a> -->
     </div>
 </div>

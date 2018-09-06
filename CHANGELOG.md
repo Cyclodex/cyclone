@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.0 - 06.07.2018 - Report calendar
+
+* New feature: Report as rough monthly calendar overview
+* You can enable / disable the report/calendar feature in your profile
+
 ## 1.0.0-beta5 - 08.03.2018 - Link issues
 
 * New feature: Detects URLs in the Task/Issue field

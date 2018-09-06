@@ -3,14 +3,14 @@ const appDate = require('./lastModified.js').appDate;
 angular.module('cycloneApp').factory('versionService', [function() {
     'use strict';
 
-    function VersionService() {
-    }
+    function VersionService() {}
 
     VersionService.prototype.getVersion = function() {
-        var version = 'V ' + appVersion + ' ' + appDate;
-        if (FIREBASE_DB_INSTANCE !== '') {
-            version = version + ' (DB ' + FIREBASE_DB_INSTANCE + ')';
-        }
+        const version = {
+            number: 'V ' + appVersion,
+            date: appDate,
+            db: ' (DB ' + FIREBASE_DB_INSTANCE + ')'
+        };
         return version;
     }
 
