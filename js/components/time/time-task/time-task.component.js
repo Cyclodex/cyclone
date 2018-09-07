@@ -31,28 +31,24 @@ angular
                     }
                 },
                 resolve: {
-                    currentUser:
-                        ["userPromise", "$state", function(userPromise, $state) {
-                            return userPromise.getPromise().then(function(success){
-                                return success;
-                            }, function(reason){
-                                console.log("userPromise Failed: " + reason);
-                                // $state.transitionTo('login');
-                            }, function(notification){
-                                console.log("notification: " + notification);
-                            });
-                        }]
-                    ,
-                    timeTypesService: function(timeTypesService) {
+                    currentUser: ["userPromise", function(userPromise) {
+                        return userPromise.getPromise().then(function(success){
+                            return success;
+                        }, function(reason){
+                            console.log("userPromise Failed: " + reason);
+                        }, function(notification){
+                            console.log("notification: " + notification);
+                        });
+                    }],
+                    timeTypesService: ["timeTypesService", function(timeTypesService) {
                         return timeTypesService.getTimeTypes();
-                    }
-                    ,
-                    firebaseRef: function(firebaseRef) {
+                    }],
+                    firebaseRef: ["firebaseRef", function(firebaseRef) {
                         return firebaseRef;
-                    },
-                    helperService: function(helperService) {
+                    }],
+                    helperService: ["helperService", function(helperService) {
                         return helperService;
-                    }
+                    }]
                 }
             });
     });

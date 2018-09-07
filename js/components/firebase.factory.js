@@ -1,6 +1,6 @@
 // let's create a re-usable factory that generates the $firebaseAuth instance
-angular.module('cycloneApp').factory("firebaseRef", ['moment', '$stateParams', 'stateService',
-    function(moment, $stateParams, stateService) {
+angular.module('cycloneApp').factory("firebaseRef", ['stateService',
+    function(stateService) {
 
         function getTimeReference(user){
             // Load the current date (from stateService = URL) to load correct data

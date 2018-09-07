@@ -13,8 +13,8 @@ angular.module("cycloneApp")
   .constant('randomColor', require('randomcolor')) // Loads the randomColor plugin
   .component('stats', {
   template: require('./stats.tpl.html'),
-  controller: ["$scope", "userPromise", "Auth", "$firebaseArray", "$rootScope", "randomColor", "timeTypesService", "firebaseRef",
-    function($scope, userPromise, Auth, $firebaseArray, $rootScope, randomColor, timeTypesService, firebaseRef) {
+  controller: ["$scope", "userPromise", "Auth", "$firebaseArray", "randomColor", "timeTypesService", "firebaseRef",
+    function($scope, userPromise, Auth, $firebaseArray, randomColor, timeTypesService, firebaseRef) {
       var $ctrl = this;
 
       // collect the projects colors

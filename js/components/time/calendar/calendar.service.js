@@ -114,7 +114,7 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
         },
     };
 }
-
+CalendarService.$inject = ['firebaseRef', 'AuthService', 'timeTypesService', 'moment' ,'$q'];
 angular
     .module('components.calendar')
     .factory('CalendarService', CalendarService);

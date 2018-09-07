@@ -19,7 +19,7 @@ module.exports = {
             "./js/cyclone.js"
         ],
         vendors: [
-            'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
+            'angular', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
             'firebase', 'firebaseui', 'firebase/auth', 'firebase/database', 'angularfire', 'angular-ui-router', 'angular-loading-bar',
             'angulartics', 'randomcolor', 'angulartics-google-analytics', 'angular-logger'
         ]
@@ -60,6 +60,13 @@ module.exports = {
                         exclude: /node_modules/
                     }
                 }],
+            },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                }
             }
         ]
     },

@@ -27,7 +27,7 @@ function ProjectDetailController(timeTypesService) {
         });
     };
 }
-
+ProjectDetailController.$inject = ['timeTypesService'];
 angular
     .module('components.project')
     .controller('ProjectDetailController', ProjectDetailController);

@@ -1,4 +1,4 @@
-function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthService, stateService, moment, $q, helperService, firebaseRef, $timeout, cfpLoadingBar){
+function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthService, stateService, moment, $q, helperService){
     //
     // Factory code which runs once, as preparing the service
     //
@@ -464,6 +464,8 @@ function AddTimeService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
     // TODO: Refactor this to a correct factory return
     return service;
 }
+
+AddTimeService.$inject = ['firebaseRef', '$firebaseArray', '$firebaseObject', 'AuthService', 'stateService', 'moment', '$q', 'helperService'];
 
 angular
     .module('components.time')

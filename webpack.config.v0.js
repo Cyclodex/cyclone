@@ -19,8 +19,8 @@ module.exports = {
             "./js/cyclone.js"
             ],
         vendors: [
-            'angular', 'angular-route', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
             'angulartics',
+            'angular', 'angular-animate', 'angular-aria', 'angular-messages', 'angular-material', 'angular-clipboard', 'angular-moment',
             'firebase/auth', 'firebase/database', 'angularfire'
         ]
     },
