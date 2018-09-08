@@ -55,6 +55,13 @@ module.exports = {
                     'raw-loader'
                 ],
                 exclude: /node_modules/
+            },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                }
             }
         ]
     },
@@ -89,7 +96,7 @@ module.exports = {
             minimize: true, // Does this exist still?
             extractComments: false,
             sourceMap: false,
-            mangle: false, // was true - but fails because of injection issues since new components
+            mangle: true, // was true - but fails because of injection issues since new components
             // TODO: fix this, or update webpack builder to maybe include it directly automatically
         }),
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
