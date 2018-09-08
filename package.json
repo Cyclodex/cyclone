@@ -1,28 +1,28 @@
 {
   "name": "cyclone",
-  "author": "Fabian Gander <cyclodex@jumps.ch>",
   "version": "1.0.0",
   "description": "Time tracking",
-  "scripts": {
-    "version": "./version.sh $npm_package_version",
-    "start": "node_modules/webpack/bin/webpack.js --watch",
-    "dev-build": "node_modules/webpack/bin/webpack.js",
-    "dev-deploy": "firebase use dev; firebase deploy",
-    "v1-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v1.js --progress",
-    "v1-deploy": "firebase use v1; firebase deploy",
-    "v0-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v0.js --progress",
-    "v0-deploy": "firebase use v0; firebase deploy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "homepage": "https://github.com/Cyclodex/cyclone#readme",
+  "bugs": {
+    "url": "https://github.com/Cyclodex/cyclone/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Cyclodex/cyclone.git"
   },
   "license": "GPL-3.0+",
-  "bugs": {
-    "url": "https://github.com/Cyclodex/cyclone/issues"
+  "author": "Fabian Gander <cyclodex@jumps.ch>",
+  "scripts": {
+    "dev-build": "node_modules/webpack/bin/webpack.js",
+    "dev-deploy": "firebase use dev; firebase deploy",
+    "start": "node_modules/webpack/bin/webpack.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "v0-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v0.js --progress",
+    "v0-deploy": "firebase use v0; firebase deploy",
+    "v1-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v1.js --progress",
+    "v1-deploy": "firebase use v1; firebase deploy",
+    "version": "./version.sh $npm_package_version"
   },
-  "homepage": "https://github.com/Cyclodex/cyclone#readme",
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.3",
@@ -35,6 +35,8 @@
     "angular-moment": "^1.3.0",
     "angular-ui-router": "1.0.0-rc.1",
     "angularfire": "2.0.2",
+    "angulartics": "^1.6.0",
+    "angulartics-google-analytics": "^0.4.0",
     "firebaseui": "^1.0.0",
     "randomcolor": "^0.4.4"
   },
@@ -42,8 +44,6 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "angulartics": "^1.6.0",
-    "angulartics-google-analytics": "^0.4.0",
     "babel-loader": "^8.0.2",
     "babel-plugin-angularjs-annotate": "^0.9.0",
     "browser-sync": "^2.24.7",
