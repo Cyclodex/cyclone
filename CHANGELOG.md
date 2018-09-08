@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.0.0 - 06.07.2018 - Report calendar
+## 1.0.0 - 08.09.2018 - Report calendar
 
 * New feature: Report as rough monthly calendar overview
 * You can enable / disable the report/calendar feature in your profile
