@@ -13,13 +13,13 @@
   "license": "GPL-3.0+",
   "author": "Fabian Gander <cyclodex@jumps.ch>",
   "scripts": {
-    "dev-build": "node_modules/webpack/bin/webpack.js",
+    "dev-build": "webpack",
     "dev-deploy": "firebase use dev; firebase deploy",
-    "start": "node_modules/webpack/bin/webpack.js --watch",
+    "start": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "v0-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v0.js --progress",
+    "v0-build": "webpack --config webpack.config.v0.js --progress",
     "v0-deploy": "firebase use v0; firebase deploy",
-    "v1-build": "node_modules/webpack/bin/webpack.js --config webpack.config.v1.js --progress",
+    "v1-build": "webpack --config webpack.config.v1.js --progress",
     "v1-deploy": "firebase use v1; firebase deploy",
     "version": "./version.sh $npm_package_version"
   },
