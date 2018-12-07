@@ -54,9 +54,22 @@
                         <div class="calendar__warning" ng-if="DayData.uncheckedWarning">⚠️</div>
                     </md-chip>
                     <div class="calendar__text" layout-align="center">
-                        <div ng-repeat="entry in DayData.projects"
-                             class="calendar__entry">
-                            {{ entry }}
+                        <div ng-if="8 <= DayData.sumHours"
+                            ng-repeat="project in DayData.projects"
+                            class="calendar__entry"
+                            ng-style="{'flex-grow': project.amount}">
+                           {{ project.name }}
+                       </div>
+
+                        <div ng-if="8 > DayData.sumHours"
+                             ng-repeat="project in DayData.projects"
+                             class="calendar__entry"
+                             ng-style="{'height': project.amount * 12 + '%'}">
+                            {{ project.name }}
+                        </div>
+                        <div class="calendar__nowork"
+                             ng-if="8 > DayData.sumHours"
+                             ng-style="{'height': (8 - DayData.sumHours) * 12 + '%'}">
                         </div>
                     </div>
                 </div>

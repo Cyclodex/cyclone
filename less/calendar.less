@@ -23,6 +23,7 @@
     box-sizing: border-box;
     overflow: auto;
     flex: 1 1 auto;
+    display: flex;
 }
 
 .calendar__footer {
@@ -38,10 +39,14 @@
     margin: 2px 0;
     padding: 2px 5px;
     border-radius: 5px;
+    min-height: 12px;
 }
 
 .calendar__text {
     font-size: 10px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .calendar__link {
