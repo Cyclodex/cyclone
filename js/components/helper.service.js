@@ -47,8 +47,12 @@ angular.module('cycloneApp').factory('helperService', [
 
     HelperService.prototype.getWeeksOfMonth = function(date) {
         const startWeek = date.clone().startOf('month').weeks();
-        const endWeek = date.clone().endOf('month').weeks();
+        let endWeek = date.clone().endOf('month').weeks();
         const weeks = [];
+        // Special case for lasth month in year (endWeek = 1)
+        if (startWeek > endWeek) {
+            endWeek = 52;
+        }
         for (var weekNumber = startWeek; weekNumber <= endWeek; weekNumber++) {
             weeks.push(weekNumber);
         }
