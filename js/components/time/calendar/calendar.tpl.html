@@ -56,16 +56,18 @@
                     <div class="calendar__text" layout-align="center">
                         <div ng-if="8 <= DayData.sumHours"
                             ng-repeat="project in DayData.projects"
-                            class="calendar__entry"
-                            ng-style="{'flex-grow': project.amount}">
-                           {{ project.name }}
+                            class="calendar__entry project-type--{{project.type}}"
+                            ng-style="{'flex-grow':'' + project.amount + ''}"
+                            >
+                           {{ project.name }} : {{ project.amount | decimalHours }}
                        </div>
 
                         <div ng-if="8 > DayData.sumHours"
                              ng-repeat="project in DayData.projects"
-                             class="calendar__entry"
-                             ng-style="{'height': project.amount * 12 + '%'}">
-                            {{ project.name }}
+                             class="calendar__entry project-type--{{project.type}}"
+                             ng-style="{'height':'' + project.amount * 12 + '%'}"
+                             >
+                            {{ project.name }} : {{ project.amount | decimalHours }}
                         </div>
                         <div class="calendar__nowork"
                              ng-if="8 > DayData.sumHours"
@@ -80,14 +82,4 @@
         </md-grid-list>
     </div>
     <!-- END: cyclone-table-->
-
-    <!--<pre>
-        {{ $ctrl.entriesCurrentGroups | json }}
-    </pre>-->
-
-
-    
-    <pre>{{ $ctrl.entries | json }}</pre>
-    <!-- <pre>{{ profile | json }}</pre> -->
-   
 </div>

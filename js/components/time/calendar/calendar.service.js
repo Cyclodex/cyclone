@@ -92,7 +92,8 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
                             output[dayKey].projects[data.project] =
                                 {
                                     name: data.project,
-                                    amount: decimalDuration
+                                    amount: decimalDuration,
+                                    type: data.type
                                 };
                         }else {
                             // Sum up project hours
