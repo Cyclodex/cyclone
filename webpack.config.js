@@ -39,27 +39,12 @@ module.exports = {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: [{
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            minimize: false
-                        }
-                    }, {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }],
+                    use: ['css-loader', 'less-loader']
                 })
             },
             {
                 test: /\.tpl\.html$/,
-                use: [{
-                    loader: "raw-loader", options: {
-                        exclude: /node_modules/
-                    }
-                }],
+                use: 'raw-loader',
             },
             {
                 test: /\.js$/,
