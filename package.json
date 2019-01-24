@@ -54,7 +54,6 @@
     "css-loader": "^2.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "firebase": "^3.3.2",
-    "firebase-cli": "^1.2.0",
     "firebase-tools": "^6.3.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
