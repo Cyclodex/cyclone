@@ -1,5 +1,4 @@
-function AuthService($firebaseAuth) {
-    var auth = $firebaseAuth();
+function AuthService(Auth) {
     var authData = null;
 
     function storeAuthData(response) {
@@ -10,10 +9,10 @@ function AuthService($firebaseAuth) {
     }
     function onSignIn(user){
         authData = user;
-        return auth.$requireSignIn();
+        return Auth.$requireSignIn();
     }
 
-    $firebaseAuth().$onAuthStateChanged(function(user) {
+    Auth.$onAuthStateChanged(function(user) {
         // If user is not logged in, user = null
         if (user){
             storeAuthData(user);
@@ -24,7 +23,7 @@ function AuthService($firebaseAuth) {
     // No login here
 
     this.requireAuthentication = function () {
-        return auth.$waitForSignIn().then(onSignIn);
+        return Auth.$waitForSignIn().then(onSignIn);    
     };
     this.isAuthenticated = function () {
         return !!authData; // null || {user}
@@ -36,7 +35,7 @@ function AuthService($firebaseAuth) {
         }
     };
 }
-
+AuthService.$inject = ['Auth'];
 angular
     .module('components.auth')
     .service('AuthService', AuthService);
