@@ -8,5 +8,6 @@ angular.module('components', [
     'components.auth',
     'components.time',
     'components.calendar',
+    'components.todo',
     'components.date'
 ]);
