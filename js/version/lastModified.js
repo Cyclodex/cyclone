@@ -1,2 +1,2 @@
-// The version 1.0.0 was generated on 06.09.2018
-export const appDate = '06.09.2018';
+// The version 1.2.0 was generated on 17.04.2020
+export const appDate = '17.04.2020';

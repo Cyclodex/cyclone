@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 1.2.0 - 17.04.2020 - TODO beta
+
+* New beta feature: Simpel Todo list
+* Package Updates and Fixes
+
+## 1.1.0 - 21.01.2019 - Report calendar updates
+
+* Some fixes / improvements to the report calendar
+
 ## 1.0.0 - 08.09.2018 - Report calendar
 
 * New feature: Report as rough monthly calendar overview

@@ -43,13 +43,23 @@ angular.module('cycloneApp').filter('humanizeDateShort', ['$filter', 'moment', f
         return duration.format(format);
     };
 }]);
+
 // Helps to render timestamp into decimal hours (x.xx)
-angular.module('cycloneApp').filter('timestampInDecimalHours', ['$filter', 'moment', function ($filter, moment) {
+angular.module('cycloneApp').filter('timestampInDecimalHours', [function () {
     return function (input, units) {
         var decimal = (input / 1000 / 60 / 60 ).toFixed(2);
         return decimal;
     };
 }]);
+
+// Helps to render decimal hours (x.xx)
+angular.module('cycloneApp').filter('decimalHours', [function () {
+    return function (input, units) {
+        var decimal = input.toFixed(2) + 'h';
+        return decimal;
+    };
+}]);
+
 // Helps to render a time value in the user selected format (feature)
 angular.module('cycloneApp').filter('timeInUserSelectedFormat', ['$filter', '$log', function ($filter, $log) {
     //var log = $log.getInstance('filter');

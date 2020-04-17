@@ -124,3 +124,13 @@ require('./components/profile/profile-detail/profile-detail.controller');
 
 // Auth
 require('./components/auth/auth.service'); // Auth components
+
+// Todo
+require('./components/todo/todo.module');
+require('./components/todo/todo.service');
+require('./components/todo/todo-detail/todo-detail.component');
+require('./components/todo/todo-detail/todo-detail.controller');
+require('./components/todo/todo-new/todo-new.component');
+require('./components/todo/todo-new/todo-new.controller');
+require('./components/todo/todos-crud/todos-crud.component');
+require('./components/todo/todos-crud/todos-crud.controller');

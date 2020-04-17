@@ -1,6 +1,7 @@
-function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileService) {
+function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileService, AuthService, firebaseRef, helperService) {
     var ctrl = this;
     var features = ProfileService.getFeatureStates();
+    ctrl.user = AuthService.getUser();
 
     // ng-change can't get $event! We need workaround with focusCallback
     ctrl.clipboardCopy = function (GroupData) {
@@ -46,7 +47,7 @@ function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileServi
     // TODO: Of course it would be even better to not have to reference the user
     // But we have it already, seems to be strange to promise again the userPromise...
     // Because we have the user here already.
-    var queryRef = ctrl.firebaseRef.getTimeReference(ctrl.user);
+    var queryRef = firebaseRef.getTimeReference(ctrl.user);
     // Order the query, from recent to older entries
     var query = queryRef.orderByChild("order");
     // TODO: We could get rid of the ordering, if we save every entry into the "order" timestamp instead the firebase one.
@@ -129,7 +130,7 @@ function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileServi
 
             // This is probably only a fallback scenario.
             if (!groupIdentifaction){
-                groupId = ctrl.helperService.getGroupId(groupsNew,
+                groupId = helperService.getGroupId(groupsNew,
                     projectName,
                     taskName,
                     groupType,
@@ -276,7 +277,7 @@ function TimeTaskController($q, AddTimeService, clipboard, $filter, ProfileServi
     ctrl.updateGroupData = function (taskData) {
         // // Check if there is a group id we need to apply
         var entries = ctrl.entries;
-        var groupId = ctrl.helperService.getGroupId(entries,
+        var groupId = helperService.getGroupId(entries,
             taskData.project,
             taskData.task,
             taskData.type,

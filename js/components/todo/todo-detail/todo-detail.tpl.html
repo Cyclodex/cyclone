@@ -1,0 +1,70 @@
+<div class="todo">
+    <form name="todoDetailForm" novalidate layout="row" class="ui-form">
+        <div ng-if="!$ctrl.isNewTodo" class="task__checkbox" layout="row" layout-align="center center">
+            <md-checkbox aria-label="TodoChecked" ng-model="$ctrl.todo.done" ng-change="$ctrl.updateTodo()"
+                class="md-primary show-on-hover hide-6">
+            </md-checkbox>
+        </div>
+        <md-input-container>
+            <label>
+                Todoname
+            </label>
+            <input type="text" name="name" required="required" ng-change="$ctrl.updateTodo();" ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }" ng-model="$ctrl.todo.name">
+        </md-input-container>
+        <!-- <md-input-container class="entry__info__select entry__info__select--type">
+            <label>Type</label>
+            <md-select ng-model="$ctrl.todo.type" ng-change="$ctrl.updateTodo();" aria-label="Type of entry">
+                <md-option ng-repeat="type in $ctrl.timeTypes" ng-value="type.value">
+                    <span style="display: none">{{type.name}}</span>
+                    <md-icon>{{type.icon}}</md-icon> <span class="option__name">{{type.name}}</span>
+                </md-option>
+            </md-select>
+        </md-input-container> -->
+        <md-input-container>
+            <label>
+                Tags
+            </label>
+            <input type="text" name="tags" ng-change="$ctrl.updateTodo();" ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }" ng-model="$ctrl.todo.tags">
+        </md-input-container>
+        <md-input-container>
+            <label>
+                Prio
+            </label>
+            <input type="text" name="prio" ng-change="$ctrl.updateTodo();" ng-model-options="{
+                    'updateOn': 'default blur',
+                    'debounce': {
+                        'default': 250,
+                        'blur': 0
+                    }
+                }" ng-model="$ctrl.todo.prio">
+        </md-input-container>
+
+        <a class="" ng-if="$ctrl.isNewTodo" ng-click="$ctrl.saveTodo();" ng-disabled="todoDetailForm.$invalid">
+            <md-button class="md-fab md-accent" aria-label="Add todo">
+                <md-icon>add</md-icon>
+            </md-button>
+        </a>
+        <div class="actions" ng-if="!$ctrl.isNewTodo">
+            <!-- DELETE BUTTON -->
+            <md-button ng-click="$ctrl.deleteTodo();" class="md-fab md-mini show-on-hover" aria-label="Delete entry">
+                <md-tooltip md-direction="top">
+                    Delete
+                </md-tooltip>
+                <md-icon>delete_forever</md-icon>
+            </md-button>
+        </div>
+    </form>
+
+</div>

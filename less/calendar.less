@@ -23,6 +23,7 @@
     box-sizing: border-box;
     overflow: auto;
     flex: 1 1 auto;
+    display: flex;
 }
 
 .calendar__footer {
@@ -38,10 +39,29 @@
     margin: 2px 0;
     padding: 2px 5px;
     border-radius: 5px;
+    min-height: 12px;
+}
+.calendar__entry {
+    color: black;
+    &.project-type--work {
+        background-color: @colorWork !important;
+    }
+    &.project-type--internal {
+        background-color: @colorInternal !important;
+    }
+    &.project-type--trust {
+        background-color: @colorTrust !important;
+    }
+    &.project-type--private {
+        background-color: @colorPrivate !important;
+    }
 }
 
 .calendar__text {
     font-size: 10px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .calendar__link {

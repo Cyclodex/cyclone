@@ -1,4 +1,6 @@
-<h1><md-icon>account_circle</md-icon> Profile</h1>
+<h1>
+    <md-icon>account_circle</md-icon> Profile
+</h1>
 <br>
 <p>
     Feel free to customize your Cyclone experience with the following settings:
@@ -9,11 +11,14 @@
     <md-nav-item md-nav-sref="profile-crud({group: 'copy'})" name="copy">Copy format</md-nav-item>
     <md-nav-item md-nav-sref="projects" name="projects">Projects</md-nav-item>
     <md-nav-item md-nav-sref="profile-crud({group: 'calendar'})" name="calendar">Calendar</md-nav-item>
+    <!-- TODO beta feature -->
+    <md-nav-item ng-if="$ctrl.user.email == 'gander@jumps.ch'" md-nav-sref="profile-crud({group: 'todo'})" name="todo">
+        Todo</md-nav-item>
     <md-nav-item class="hide" md-nav-sref="profile" name="profile">Profile</md-nav-item>
 </md-nav-bar>
 
 <md-card class="profile-content md-padding">
     <ui-view>
-            <h3>Maybe we show some user info here at some point...</h3>
+        <h3>Maybe we show some user info here at some point...</h3>
     </ui-view>
 </md-card>

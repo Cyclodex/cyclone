@@ -10,7 +10,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 const FileChanger = require('webpack-file-changer');
 
 module.exports = {
@@ -35,33 +34,17 @@ module.exports = {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: [{
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            minimize: true
-                        }
-                    }, {
-                        loader: 'less-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    }],
+                    use: ['css-loader', 'less-loader']
                 })
             },
             {
                 test: /\.tpl\.html$/,
-                use: [
-                    'raw-loader'
-                ],
-                exclude: /node_modules/
+                use: 'raw-loader',
             },
             {
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader',
-                }
+                use: ['babel-loader']
             }
         ]
     },
@@ -80,9 +63,6 @@ module.exports = {
                 'NODE_ENV': JSON.stringify('staging'),
                 'FIREBASE_DB_INSTANCE': JSON.stringify('v1')
             }
-        }),
-        new ngAnnotatePlugin({
-            add: true
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {

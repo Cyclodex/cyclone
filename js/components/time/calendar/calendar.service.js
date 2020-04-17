@@ -84,15 +84,25 @@ function CalendarService(firebaseRef, AuthService, timeTypesService, moment, $q)
 
                         // Save the projects
                         if (!output[dayKey].projects) {
-                            output[dayKey].projects = [];
+                            output[dayKey].projects = {};
                         }
-                        if (output[dayKey].projects.indexOf(data.project) === -1) {
-                            output[dayKey].projects.push(data.project);
+                        const decimalDuration = data.timestampDuration / milisecondsOfOneHour;
+                        // Add project
+                        if (!output[dayKey].projects[data.project]) {
+                            output[dayKey].projects[data.project] =
+                                {
+                                    name: data.project,
+                                    amount: decimalDuration,
+                                    type: data.type
+                                };
+                        }else {
+                            // Sum up project hours
+                            output[dayKey].projects[data.project].amount += decimalDuration;
                         }
 
                         // Sum up every work type
                         types[data.type]['timeSum'] += data.timestampDuration;
-                        types[data.type]['timeSumHours'] += data.timestampDuration  / milisecondsOfOneHour;
+                        types[data.type]['timeSumHours'] += decimalDuration;
                     });
                     
                     if (output[day.dayNumber]){
