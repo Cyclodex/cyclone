@@ -111,7 +111,7 @@ function ProfileService(firebaseRef, $firebaseArray, $firebaseObject, AuthServic
                 'description': 'A rough monthly calendar overview.',
                 'icon': 'date_range'
             },
-            // Calendar / Report
+            // TODO
             'todo': {
                 'name': 'TODO',
                 'key': 'todo',
