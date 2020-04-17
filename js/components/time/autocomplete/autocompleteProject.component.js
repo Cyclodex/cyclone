@@ -6,15 +6,15 @@ var autocompleteProject = {
         onUpdate: '&',
         onSetFocus: '&'
     },
-    controller: function($log, $document, ProjectService, $timeout) {
+    controller: function ($log, $document, ProjectService, $timeout) {
         var ctrl = this;
 
         ctrl.projects = null;
 
         // Initial values
-        this.$onInit = function() {
+        this.$onInit = function () {
             // Get project list
-            ProjectService.getProjectList().$loaded().then(function(list){
+            ProjectService.getProjectList().$loaded().then(function (list) {
                 ctrl.projects = list;
             });
         };
@@ -23,10 +23,10 @@ var autocompleteProject = {
          * Create filter function for a query string
          */
         function createFilterFor(query) {
-            var lowercaseQuery = angular.lowercase(query);
+            var lowercaseQuery = query.toLowerCase();
 
             return function filterFn(project) {
-                var projectSearch = angular.lowercase(project.name);
+                var projectSearch = project.name.toLowerCase();
                 // Return all entries which contain the query somewhere
                 return (projectSearch.indexOf(lowercaseQuery) !== -1);
             };
@@ -35,8 +35,9 @@ var autocompleteProject = {
         /**
          * Search for projects...
          */
-        ctrl.querySearch = function(query) {
-            var results = query ? ctrl.projects.filter( createFilterFor(query) ) : ctrl.projects;
+        ctrl.querySearch = function (query) {
+            if (ctrl.projects === null) return false;
+            var results = query ? ctrl.projects.filter(createFilterFor(query)) : ctrl.projects;
             return results;
         };
 
@@ -47,7 +48,7 @@ var autocompleteProject = {
 
         // This is the event when a project matches (so its selected)
         ctrl.selectedItemChange = function selectedItemChange(item) {
-            if (item){
+            if (item) {
                 //$log.info('Item changed to ' + JSON.stringify(item));
                 // Send out the selected project (as object)
                 ctrl.onUpdate({
@@ -62,7 +63,7 @@ var autocompleteProject = {
          * When leaving the autocomplete with a value which is not in the list, we need to send this back
          * @param event
          */
-        ctrl.onBlur = function (event){
+        ctrl.onBlur = function (event) {
             ctrl.onUpdate({
                 $event: {
                     project: {
