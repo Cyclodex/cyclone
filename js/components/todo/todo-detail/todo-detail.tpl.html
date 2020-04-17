@@ -1,6 +1,6 @@
 <div class="todo">
     <form name="todoDetailForm" novalidate layout="row" class="ui-form">
-        <div class="task__checkbox">
+        <div ng-if="!$ctrl.isNewTodo" class="task__checkbox" layout="row" layout-align="center center">
             <md-checkbox aria-label="TodoChecked" ng-model="$ctrl.todo.done" ng-change="$ctrl.updateTodo()"
                 class="md-primary show-on-hover hide-6">
             </md-checkbox>

@@ -1,8 +1,13 @@
-<ui-view name="head"></ui-view>
+<div class="cyclone-toolbar add-todo">
+  <md-card layout-align="center center">
+    <ui-view name="head" flex="100" flex-gt-md="80" class="layout-fill"></ui-view>
+  </md-card>
+</div>
 <br>
 <div class="todos todos--crud">
   <div class="todos-list">
-    <md-card ng-repeat="todo in $ctrl.todos" class="ui-row ui-row--animation activate--show-on-hover">
+    <md-card ng-repeat="todo in $ctrl.todos | orderObjectBy:'prio':false"
+      class="ui-row ui-row--animation activate--show-on-hover">
       <todo-detail todo="todo" on-delete="$ctrl.deleteTodo($event)" on-update="$ctrl.updateTodo($event)">
       </todo-detail>
     </md-card>
